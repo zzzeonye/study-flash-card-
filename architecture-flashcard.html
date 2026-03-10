@@ -1,0 +1,1976 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>건축구조 플래시카드</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#141414;--surface:#1c1c1c;--card:#222;--border:#333;
+  --accent:#d4c17a;--accent2:#7ab8d4;
+  --green:#6abf7b;--red:#bf6a6a;--text:#f0ece0;--muted:#888070;--sub:#444;
+  --ox-o:rgba(106,191,123,.15);--ox-x:rgba(191,106,106,.15);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{min-height:100%;}
+body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-serif;
+  display:flex;flex-direction:column;align-items:center;padding:16px 14px 40px;}
+
+/* HEADER */
+header{width:100%;max-width:580px;display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.title{font-size:1rem;font-weight:700;color:var(--accent);letter-spacing:.04em;}
+.subtitle{font-size:.63rem;color:var(--muted);font-family:'DM Mono',monospace;margin-top:2px;}
+.hstats{display:flex;gap:12px;font-family:'DM Mono',monospace;}
+.hsn{font-size:1.05rem;font-weight:500;text-align:center;}
+.hsn.g{color:var(--green);}.hsn.r{color:var(--red);}.hsn.a{color:var(--accent);}
+.hsl{font-size:.58rem;color:var(--muted);text-align:center;margin-top:1px;}
+
+/* TABS */
+.tabs{width:100%;max-width:580px;display:flex;gap:3px;background:var(--surface);
+  border-radius:9px;padding:3px;border:1px solid var(--border);margin-bottom:12px;flex-shrink:0;}
+.tab{flex:1;padding:7px 2px;text-align:center;font-size:.68rem;color:var(--muted);cursor:pointer;
+  border-radius:6px;border:none;background:transparent;font-family:'DM Mono',monospace;transition:all .18s;}
+.tab.active{background:var(--card);color:var(--accent);border:1px solid var(--border);}
+
+/* CAT ROW — collapsible PART groups */
+.cat-row{width:100%;max-width:580px;display:flex;flex-direction:column;gap:4px;margin-bottom:12px;flex-shrink:0;}
+.cat-part-group{width:100%;}
+.cat-part-header{display:flex;align-items:center;justify-content:space-between;
+  padding:5px 10px;background:var(--surface);border:1px solid var(--border);border-radius:8px;
+  cursor:pointer;user-select:none;transition:border-color .18s;}
+.cat-part-header:hover{border-color:var(--accent);}
+.cat-part-header.has-active{border-color:var(--accent);background:rgba(212,193,122,.07);}
+.cat-part-label{font-family:'DM Mono',monospace;font-size:.68rem;color:var(--muted);font-weight:500;}
+.cat-part-label.has-active{color:var(--accent);}
+.cat-part-arrow{font-size:.65rem;color:var(--muted);transition:transform .2s;}
+.cat-part-arrow.open{transform:rotate(180deg);}
+.cat-part-items{display:none;flex-wrap:wrap;gap:5px;padding:6px 2px 2px;}
+.cat-part-items.open{display:flex;}
+/* 전체 버튼은 항상 상단에 */
+.cat-all-btn{padding:5px 14px;font-size:.68rem;border-radius:20px;border:1px solid var(--border);
+  background:transparent;color:var(--muted);cursor:pointer;font-family:'DM Mono',monospace;transition:all .18s;
+  align-self:flex-start;}
+.cat-all-btn.active{background:var(--accent);color:#141414;border-color:var(--accent);font-weight:500;}
+.cat-btn{padding:4px 10px;font-size:.67rem;border-radius:20px;border:1px solid var(--border);
+  background:transparent;color:var(--muted);cursor:pointer;font-family:'DM Mono',monospace;transition:all .18s;}
+.cat-btn.active{background:var(--accent);color:#141414;border-color:var(--accent);font-weight:500;}
+
+/* OX next button — sticky at bottom */
+.btn-next{width:100%;padding:13px;border-radius:11px;border:1px solid var(--border);
+  background:var(--surface);color:var(--text);font-size:.9rem;font-weight:700;
+  font-family:'Noto Sans KR',sans-serif;cursor:pointer;transition:all .16s;flex-shrink:0;
+  position:sticky;bottom:12px;z-index:10;box-shadow:0 4px 20px rgba(0,0,0,.4);}
+.btn-next:hover{border-color:var(--accent);color:var(--accent);}
+
+/* download button */
+.dl-btn{padding:5px 12px;font-size:.68rem;font-family:'DM Mono',monospace;
+  background:transparent;border:1px solid var(--border);color:var(--muted);
+  border-radius:7px;cursor:pointer;transition:all .16s;text-decoration:none;display:inline-block;}
+.dl-btn:hover{border-color:var(--accent);color:var(--accent);}
+
+
+/* STUDY VIEW */
+#study-view{width:100%;max-width:580px;display:flex;flex-direction:column;flex-shrink:0;}
+
+/* CAT MULTI-SELECT PANEL */
+.cat-select-toggle{width:100%;padding:9px 14px;background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;color:var(--muted);font-family:'DM Mono',monospace;font-size:.72rem;
+  cursor:pointer;text-align:left;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;
+  transition:all .16s;}
+.cat-select-toggle.active{border-color:var(--accent);color:var(--accent);}
+.cat-select-panel{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:12px;margin-bottom:10px;display:none;flex-direction:column;gap:8px;}
+.cat-select-panel.open{display:flex;}
+.cat-select-part{display:flex;flex-direction:column;gap:4px;}
+.cat-select-part-label{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--accent);
+  letter-spacing:.08em;padding-bottom:3px;border-bottom:1px solid var(--border);margin-bottom:2px;}
+.cat-select-items{display:flex;flex-wrap:wrap;gap:5px;}
+.cat-check-btn{padding:5px 10px;border-radius:7px;border:1px solid var(--border);
+  background:transparent;color:var(--muted);font-family:'Noto Sans KR',sans-serif;font-size:.72rem;
+  cursor:pointer;transition:all .15s;}
+.cat-check-btn.checked{border-color:var(--accent);color:var(--accent);background:rgba(212,193,122,.1);}
+.cat-select-actions{display:flex;gap:6px;margin-top:4px;}
+.cat-select-actions button{flex:1;padding:7px;border-radius:8px;border:1px solid var(--border);
+  background:transparent;color:var(--muted);font-family:'DM Mono',monospace;font-size:.7rem;cursor:pointer;}
+.cat-select-actions button:last-child{border-color:var(--accent);color:var(--accent);}
+
+
+/* PROGRESS */
+.prog-wrap{width:100%;flex-shrink:0;}
+.prog-bar{height:2px;background:var(--border);border-radius:1px;overflow:hidden;margin-bottom:6px;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .4s ease;}
+.prog-label{font-family:'DM Mono',monospace;font-size:.67rem;color:var(--muted);
+  display:flex;justify-content:space-between;margin-bottom:10px;}
+.prog-label .ql{color:var(--accent2);}
+
+/* MODE BADGE */
+.mbadge{font-family:'DM Mono',monospace;font-size:.62rem;padding:3px 10px;border-radius:10px;
+  margin-bottom:9px;display:inline-block;flex-shrink:0;}
+.mb-new{background:rgba(106,191,123,.12);color:var(--green);border:1px solid rgba(106,191,123,.25);}
+.mb-review{background:rgba(212,193,122,.12);color:var(--accent);border:1px solid rgba(212,193,122,.25);}
+
+/* CARD */
+.card-scene{width:100%;margin-bottom:11px;flex-shrink:0;}
+.card-face{width:100%;border-radius:13px;border:1px solid var(--border);
+  padding:24px 20px 20px;background:var(--card);
+  display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;
+  animation:cardIn .22s ease;}
+.card-front{background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(212,193,122,.07) 0%,transparent 70%),var(--card);}
+.card-back{background:radial-gradient(ellipse 80% 50% at 50% 100%,rgba(122,184,212,.07) 0%,transparent 70%),var(--card);}
+.card-cat{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--accent);
+  letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;opacity:.8;}
+.card-q{font-size:.98rem;font-weight:500;color:var(--text);line-height:1.7;word-break:keep-all;}
+.card-hint{font-size:.65rem;color:var(--sub);font-family:'DM Mono',monospace;margin-top:12px;}
+.card-ans-label{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--accent2);letter-spacing:.1em;margin-bottom:10px;}
+.card-ans{font-size:1.28rem;font-weight:700;color:var(--accent);line-height:1.5;word-break:keep-all;}
+.card-note{margin-top:12px;font-size:.75rem;color:var(--muted);line-height:1.7;padding:8px 12px;
+  background:rgba(122,184,212,.07);border-radius:8px;border-left:2px solid var(--accent2);
+  text-align:left;width:100%;word-break:keep-all;}
+.card-edit-btn{margin-top:12px;padding:4px 12px;font-size:.65rem;font-family:'DM Mono',monospace;
+  background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:6px;cursor:pointer;transition:all .15s;}
+.card-edit-btn:hover{border-color:var(--accent);color:var(--accent);}
+
+/* OX CARD */
+.ox-card{width:100%;border-radius:13px;border:1px solid var(--border);
+  padding:28px 20px 22px;background:var(--card);
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+  background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(212,193,122,.05) 0%,transparent 70%),var(--card);}
+.ox-type-badge{font-family:'DM Mono',monospace;font-size:.58rem;padding:2px 9px;border-radius:8px;
+  background:rgba(122,184,212,.15);color:var(--accent2);border:1px solid rgba(122,184,212,.2);margin-bottom:10px;}
+.ox-statement{font-size:.98rem;font-weight:500;color:var(--text);line-height:1.75;word-break:keep-all;margin-bottom:18px;}
+/* answer reveal */
+.ox-result{display:none;flex-direction:column;align-items:center;gap:8px;margin-top:4px;width:100%;}
+.ox-result.show{display:flex;}
+.ox-result-badge{font-size:2rem;font-weight:700;}
+.ox-result-badge.correct{color:var(--green);}
+.ox-result-badge.wrong{color:var(--red);}
+.ox-result-text{font-size:.82rem;color:var(--muted);line-height:1.65;word-break:keep-all;}
+.ox-result-note{margin-top:6px;font-size:.75rem;color:var(--muted);line-height:1.7;padding:8px 12px;
+  background:rgba(122,184,212,.07);border-radius:8px;border-left:2px solid var(--accent2);
+  text-align:left;width:100%;word-break:keep-all;}
+
+/* CLOZE CARD */
+.cloze-card{width:100%;border-radius:13px;border:1px solid var(--border);
+  padding:24px 20px 20px;background:var(--card);
+  display:flex;flex-direction:column;align-items:flex-start;
+  background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(212,193,122,.05) 0%,transparent 70%),var(--card);}
+.cloze-title{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--accent);
+  letter-spacing:.1em;margin-bottom:6px;opacity:.8;align-self:center;}
+.cloze-type-badge{font-family:'DM Mono',monospace;font-size:.58rem;padding:2px 9px;border-radius:8px;
+  background:rgba(212,193,122,.12);color:var(--accent);border:1px solid rgba(212,193,122,.2);
+  margin-bottom:12px;align-self:center;}
+.cloze-table{width:100%;border-collapse:collapse;margin-bottom:6px;}
+.cloze-table tr{border-bottom:1px solid var(--border);}
+.cloze-table tr:last-child{border-bottom:none;}
+.cloze-table td{padding:8px 6px;font-size:.88rem;line-height:1.5;vertical-align:middle;}
+.cloze-table td:first-child{color:var(--muted);font-size:.82rem;width:60%;}
+.cloze-table td:last-child{text-align:right;white-space:nowrap;}
+.cloze-blank{display:inline-block;background:var(--accent);color:#141414;
+  border-radius:5px;padding:2px 10px;font-weight:700;font-family:'DM Mono',monospace;
+  cursor:pointer;font-size:.88rem;transition:all .2s;user-select:none;min-width:36px;text-align:center;}
+.cloze-blank:hover{opacity:.85;}
+.cloze-blank.revealed{background:rgba(212,193,122,.15);color:var(--accent);cursor:default;}
+.cloze-hint{font-size:.63rem;color:var(--sub);font-family:'DM Mono',monospace;
+  margin-top:10px;align-self:center;}
+
+
+.btn-row{width:100%;display:flex;gap:7px;flex-shrink:0;}
+.btn{flex:1;padding:14px 6px;border-radius:11px;border:1px solid;font-size:.85rem;
+  font-family:'Noto Sans KR',sans-serif;cursor:pointer;transition:all .16s;font-weight:700;}
+.btn-know    {background:rgba(106,191,123,.1);border-color:rgba(106,191,123,.3);color:var(--green);}
+.btn-know:hover{background:rgba(106,191,123,.2);border-color:var(--green);}
+.btn-dontknow{background:rgba(191,106,106,.1);border-color:rgba(191,106,106,.3);color:var(--red);}
+.btn-dontknow:hover{background:rgba(191,106,106,.2);border-color:var(--red);}
+.btn-flip{background:transparent;border-color:var(--border);color:var(--muted);flex:0 0 auto;padding:14px 16px;}
+.btn-flip:hover{border-color:var(--accent);color:var(--accent);}
+/* OX answer buttons */
+.ox-btn-row{width:100%;display:flex;gap:10px;flex-shrink:0;}
+.ox-btn{flex:1;padding:16px;border-radius:12px;border:1px solid;font-size:1.4rem;
+  cursor:pointer;transition:all .18s;font-weight:700;font-family:'Noto Sans KR',sans-serif;}
+.ox-btn-o{background:var(--ox-o);border-color:rgba(106,191,123,.35);color:var(--green);}
+.ox-btn-o:hover{background:rgba(106,191,123,.25);border-color:var(--green);}
+.ox-btn-x{background:var(--ox-x);border-color:rgba(191,106,106,.35);color:var(--red);}
+.ox-btn-x:hover{background:rgba(191,106,106,.25);border-color:var(--red);}
+.ox-btn.selected-o{background:rgba(106,191,123,.3);border-color:var(--green);box-shadow:0 0 0 2px rgba(106,191,123,.3);}
+.ox-btn.selected-x{background:rgba(191,106,106,.3);border-color:var(--red);box-shadow:0 0 0 2px rgba(191,106,106,.3);}
+/* next button after OX answer */
+.btn-next{width:100%;padding:13px;border-radius:11px;border:1px solid var(--border);
+  background:var(--surface);color:var(--text);font-size:.9rem;font-weight:700;
+  font-family:'Noto Sans KR',sans-serif;cursor:pointer;transition:all .16s;flex-shrink:0;}
+.btn-next:hover{border-color:var(--accent);color:var(--accent);}
+
+/* START SCREEN */
+.start-screen{display:none;flex-direction:column;align-items:center;padding:20px 0;gap:14px;width:100%;}
+.start-title{font-size:1rem;font-weight:700;color:var(--text);text-align:center;}
+.start-sub{font-size:.78rem;color:var(--muted);text-align:center;line-height:1.6;}
+.count-row{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;}
+.count-btn{padding:8px 16px;border-radius:8px;border:1px solid var(--border);background:var(--surface);
+  color:var(--muted);font-family:'DM Mono',monospace;font-size:.8rem;cursor:pointer;transition:all .18s;}
+.count-btn.sel{background:var(--accent);color:#141414;border-color:var(--accent);font-weight:500;}
+.start-go{padding:13px 32px;background:var(--accent);color:#141414;border:none;border-radius:10px;
+  font-family:'Noto Sans KR',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;transition:opacity .18s;}
+.start-go:hover{opacity:.85;}
+.weight-info{font-size:.7rem;color:var(--muted);font-family:'DM Mono',monospace;text-align:center;line-height:1.6;
+  padding:10px 14px;background:var(--surface);border-radius:8px;border:1px solid var(--border);width:100%;max-width:380px;}
+
+/* COMPLETE */
+.complete-screen{display:none;flex-direction:column;align-items:center;text-align:center;padding:28px 12px;}
+.complete-icon{font-size:2.4rem;margin-bottom:10px;}
+.complete-title{font-size:1.25rem;font-weight:700;color:var(--accent);margin-bottom:6px;}
+.complete-sub{font-size:.8rem;color:var(--muted);line-height:1.7;margin-bottom:20px;white-space:pre-line;}
+.complete-stats{display:flex;gap:16px;margin-bottom:20px;}
+.btn-action{padding:11px 20px;border-radius:9px;font-family:'Noto Sans KR',sans-serif;
+  font-size:.86rem;font-weight:700;cursor:pointer;transition:opacity .18s;margin:3px;border:none;}
+.btn-primary{background:var(--accent);color:#141414;}
+.btn-secondary{background:var(--surface);color:var(--text);border:1px solid var(--border);}
+.btn-action:hover{opacity:.82;}
+
+/* LIST VIEW */
+.list-view{width:100%;max-width:580px;display:none;flex-direction:column;gap:6px;}
+.list-item{background:var(--surface);border:1px solid var(--border);border-radius:9px;
+  padding:11px 14px;display:flex;justify-content:space-between;align-items:center;transition:all .18s;position:relative;}
+.list-item.known{border-left:3px solid var(--green);}
+.list-item.unknown{border-left:3px solid var(--red);}
+.list-item.selected{background:rgba(212,193,122,.07);border-color:var(--accent);}
+.list-cb{width:18px;height:18px;border-radius:5px;border:1.5px solid var(--border);background:var(--card);
+  cursor:pointer;flex-shrink:0;margin-right:10px;display:none;align-items:center;justify-content:center;transition:all .16s;}
+.list-cb.show{display:flex;}
+.list-cb.checked{background:var(--accent);border-color:var(--accent);}
+.list-cb.checked::after{content:'✓';font-size:.7rem;color:#141414;font-weight:700;}
+.list-q{font-size:.86rem;font-weight:500;}
+.list-a{font-size:.7rem;color:var(--accent);margin-top:2px;font-family:'DM Mono',monospace;}
+.list-type-ox{font-size:.6rem;color:var(--accent2);font-family:'DM Mono',monospace;margin-top:1px;}
+.list-right{display:flex;align-items:center;gap:6px;flex-shrink:0;margin-left:8px;}
+.lbadge{font-family:'DM Mono',monospace;font-size:.6rem;padding:2px 7px;border-radius:7px;white-space:nowrap;}
+.lbadge-g{background:rgba(106,191,123,.15);color:var(--green);}
+.lbadge-r{background:rgba(191,106,106,.15);color:var(--red);}
+.lbadge-n{background:var(--card);color:var(--muted);}
+.list-edit-btn{padding:3px 8px;font-size:.6rem;font-family:'DM Mono',monospace;
+  background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:5px;cursor:pointer;
+  white-space:nowrap;transition:all .15s;}
+.list-edit-btn:hover{border-color:var(--accent);color:var(--accent);}
+
+/* LIST TOOLBAR */
+.list-toolbar{width:100%;max-width:580px;display:none;align-items:center;justify-content:space-between;
+  margin-bottom:8px;gap:8px;flex-shrink:0;}
+.list-toolbar.show{display:flex;}
+.sel-info{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--muted);}
+.sel-info span{color:var(--accent);font-weight:500;}
+.toolbar-btns{display:flex;gap:6px;}
+.tbtn{padding:6px 12px;border-radius:7px;font-family:'DM Mono',monospace;font-size:.7rem;
+  cursor:pointer;border:1px solid;transition:all .16s;font-weight:500;}
+.tbtn-del{background:rgba(191,106,106,.1);border-color:rgba(191,106,106,.3);color:var(--red);}
+.tbtn-del:hover{background:rgba(191,106,106,.2);border-color:var(--red);}
+.tbtn-sel{background:transparent;border-color:var(--border);color:var(--muted);}
+.tbtn-sel:hover{border-color:var(--accent);color:var(--accent);}
+.tbtn-sel.active{background:rgba(212,193,122,.1);border-color:var(--accent);color:var(--accent);}
+
+/* TRASH */
+.trash-view{width:100%;max-width:580px;display:none;flex-direction:column;gap:6px;}
+.trash-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
+.trash-title{font-family:'DM Mono',monospace;font-size:.75rem;color:var(--muted);}
+.tbtn-empty{padding:6px 12px;border-radius:7px;font-family:'DM Mono',monospace;font-size:.7rem;
+  cursor:pointer;background:rgba(191,106,106,.1);border:1px solid rgba(191,106,106,.3);color:var(--red);transition:all .16s;}
+.tbtn-empty:hover{background:rgba(191,106,106,.2);}
+.trash-item{background:var(--surface);border:1px dashed var(--border);border-radius:9px;
+  padding:11px 14px;display:flex;justify-content:space-between;align-items:center;opacity:.7;}
+.trash-item:hover{opacity:1;}
+.tbtn-restore{padding:4px 10px;font-size:.65rem;font-family:'DM Mono',monospace;
+  background:rgba(106,191,123,.1);border:1px solid rgba(106,191,123,.3);color:var(--green);
+  border-radius:5px;cursor:pointer;white-space:nowrap;transition:all .15s;}
+.tbtn-restore:hover{background:rgba(106,191,123,.2);}
+.trash-del-btn{padding:4px 10px;font-size:.65rem;font-family:'DM Mono',monospace;
+  background:transparent;border:1px solid rgba(191,106,106,.3);color:var(--red);
+  border-radius:5px;cursor:pointer;white-space:nowrap;margin-left:4px;transition:all .15s;}
+.trash-del-btn:hover{background:rgba(191,106,106,.15);}
+
+/* EDIT MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;
+  align-items:center;justify-content:center;padding:16px;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:14px;
+  padding:22px 20px;width:100%;max-width:480px;display:flex;flex-direction:column;gap:12px;}
+.modal-title{font-size:.95rem;font-weight:700;color:var(--accent);}
+.modal label{font-size:.68rem;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:3px;display:block;}
+.modal input,.modal textarea,.modal select{background:var(--card);border:1px solid var(--border);border-radius:7px;
+  color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:.88rem;
+  padding:9px 12px;outline:none;width:100%;resize:vertical;transition:border-color .18s;}
+.modal input:focus,.modal textarea:focus,.modal select:focus{border-color:var(--accent);}
+.modal select option{background:var(--card);}
+.modal-btns{display:flex;gap:8px;justify-content:flex-end;margin-top:4px;}
+.modal-btn{padding:9px 18px;border-radius:8px;font-family:'Noto Sans KR',sans-serif;
+  font-size:.84rem;font-weight:700;cursor:pointer;border:none;transition:opacity .18s;}
+.modal-btn:hover{opacity:.82;}
+.modal-save{background:var(--accent);color:#141414;}
+.modal-del{background:rgba(191,106,106,.2);color:var(--red);border:1px solid rgba(191,106,106,.3);}
+.modal-cancel{background:var(--card);color:var(--muted);border:1px solid var(--border);}
+
+/* ADD VIEW */
+.add-view{display:none;flex-direction:column;gap:10px;width:100%;max-width:580px;}
+.add-view label{font-size:.68rem;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:3px;display:block;}
+.add-view input,.add-view textarea,.add-view select{background:var(--surface);border:1px solid var(--border);
+  border-radius:7px;color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:.88rem;
+  padding:9px 12px;outline:none;width:100%;resize:vertical;transition:border-color .18s;}
+.add-view input:focus,.add-view textarea:focus,.add-view select:focus{border-color:var(--accent);}
+.add-view select option{background:var(--surface);}
+.btn-add-sub{padding:12px;background:var(--accent);color:#141414;border:none;border-radius:8px;
+  font-family:'Noto Sans KR',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;}
+.type-toggle{display:flex;gap:6px;margin-bottom:2px;}
+.type-btn{flex:1;padding:9px;border-radius:8px;border:1px solid var(--border);background:var(--card);
+  color:var(--muted);font-family:'DM Mono',monospace;font-size:.78rem;cursor:pointer;transition:all .18s;text-align:center;}
+.type-btn.active{background:var(--accent);color:#141414;border-color:var(--accent);font-weight:600;}
+
+@keyframes cardIn{from{opacity:0;transform:translateY(7px) scale(.985);}to{opacity:1;transform:translateY(0) scale(1);}}
+.card-scene,.ox-card-wrap{animation:cardIn .25s ease;}
+.ox-card-wrap{width:100%;margin-bottom:11px;flex-shrink:0;}
+
+/* SUBJECT SWITCHER */
+.subject-row{width:100%;max-width:580px;display:flex;gap:6px;margin-bottom:10px;flex-shrink:0;}
+.subject-btn{flex:1;padding:8px;border-radius:9px;border:1px solid var(--border);
+  background:var(--surface);color:var(--muted);font-family:'DM Mono',monospace;
+  font-size:.75rem;cursor:pointer;transition:all .18s;text-align:center;}
+.subject-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(212,193,122,.08);font-weight:600;}
+
+/* EXAMPLE sentence on card */
+.card-example{margin-top:10px;font-size:.78rem;color:var(--accent2);line-height:1.65;
+  font-style:italic;padding:7px 11px;background:rgba(122,184,212,.06);
+  border-radius:7px;border-left:2px solid var(--accent2);text-align:left;width:100%;}
+
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="title" id="app-title">플래시카드</div>
+    <div class="subtitle" id="app-subtitle">9급 건축직 공무원 시험 대비</div>
+  </div>
+  <div class="hstats">
+    <div><div class="hsn g" id="st-know">0</div><div class="hsl">완료</div></div>
+    <div><div class="hsn r" id="st-left">0</div><div class="hsl">남은것</div></div>
+    <div><div class="hsn a" id="st-total">0</div><div class="hsl">전체</div></div>
+  </div>
+</header>
+
+<div class="subject-row">
+  <button class="subject-btn active" id="subj-arch" onclick="switchSubject('arch')">🏗 건축구조</button>
+  <button class="subject-btn" id="subj-eng" onclick="switchSubject('eng')">📚 영단어</button>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('study')">학습</button>
+  <button class="tab"        onclick="switchTab('review')">복습</button>
+  <button class="tab"        onclick="switchTab('list')">목록</button>
+  <button class="tab"        onclick="switchTab('add')">추가</button>
+  <button class="tab"        onclick="switchTab('trash')" id="tab-trash">🗑<span id="trash-badge"></span></button>
+  <button class="tab"        onclick="switchTab('settings')">⚙</button>
+</div>
+
+<div class="cat-row" id="cat-row"></div>
+
+<!-- STUDY VIEW -->
+<div id="study-view">
+  <!-- 단원 다중 선택 -->
+  <button class="cat-select-toggle" id="cat-select-toggle" onclick="toggleCatSelectPanel()">
+    <span id="cat-select-label">📚 단원 선택</span>
+    <span>▾</span>
+  </button>
+  <div class="cat-select-panel" id="cat-select-panel">
+    <div id="cat-check-groups"></div>
+    <div class="cat-select-actions">
+      <button onclick="catCheckAll(false)">전체 해제</button>
+      <button onclick="catCheckAll(true)">전체 선택</button>
+      <button onclick="applyCatSelect()" style="background:rgba(212,193,122,.1)!important;">적용 →</button>
+    </div>
+  </div>
+
+  <div class="prog-wrap" id="prog-wrap">
+    <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+    <div class="prog-label"><span id="prog-text">0/0</span><span class="ql" id="ql"></span></div>
+  </div>
+  <div id="mbadge-wrap"></div>
+
+  <!-- FLIP card (type=flash) -->
+  <div class="card-scene" id="card-scene">
+    <div class="card-face card-front" id="card-front" onclick="flipCard()"></div>
+    <div class="card-face card-back"  id="card-back"  style="display:none;" onclick="flipCard()"></div>
+  </div>
+  <div class="btn-row" id="btn-row">
+    <button class="btn btn-dontknow" onclick="answer(false)">모르겠어 ✕</button>
+    <button class="btn btn-flip" id="btn-flip" onclick="flipCard()">답 보기</button>
+    <button class="btn btn-know"     onclick="answer(true)">알겠어 ✓</button>
+  </div>
+
+  <!-- OX card (type=ox) -->
+  <div class="ox-card-wrap" id="ox-card-wrap" style="display:none;">
+    <div class="ox-card" id="ox-card"></div>
+  </div>
+  <div class="ox-btn-row" id="ox-btn-row" style="display:none;">
+    <button class="ox-btn ox-btn-o" id="ox-o" onclick="answerOX('O')">○</button>
+    <button class="ox-btn ox-btn-x" id="ox-x" onclick="answerOX('X')">✕</button>
+  </div>
+
+  <!-- CLOZE card (type=cloze) -->
+  <div class="ox-card-wrap" id="cloze-card-wrap" style="display:none;">
+    <div class="cloze-card" id="cloze-card"></div>
+  </div>
+  <div class="btn-row" id="cloze-btn-row" style="display:none;">
+    <button class="btn btn-dontknow" onclick="answer(false)">모르겠어 ✕</button>
+    <button class="btn btn-know"     onclick="answer(true)">알겠어 ✓</button>
+  </div>
+
+  <button class="btn-next" id="btn-next" style="display:none;" onclick="answer(lastOXCorrect)">다음 →</button>
+
+  <!-- COMPLETE -->
+  <div class="complete-screen" id="complete-screen">
+    <div class="complete-icon" id="ci">🎉</div>
+    <div class="complete-title" id="ct">완료!</div>
+    <div class="complete-sub" id="cs"></div>
+    <div class="complete-stats">
+      <div><div class="hsn g" id="cc-k">0</div><div class="hsl">맞음</div></div>
+      <div><div class="hsn r" id="cc-d">0</div><div class="hsl">틀림</div></div>
+    </div>
+    <div id="complete-btns"></div>
+  </div>
+</div>
+
+<!-- REVIEW VIEW -->
+<div id="review-view" style="display:none;width:100%;max-width:580px;">
+  <div class="start-screen" id="review-start">
+    <div class="start-title">복습 모드</div>
+    <div class="start-sub">본 적 있는 카드 중 랜덤 출제<br>모르겠어 이력 많을수록 더 자주 나와요</div>
+
+    <!-- 단원 선택 -->
+    <button class="cat-select-toggle" id="review-cat-toggle" onclick="toggleReviewCatPanel()" style="margin-bottom:0;">
+      <span id="review-cat-label">📚 단원 선택 (전체)</span>
+      <span>▾</span>
+    </button>
+    <div class="cat-select-panel" id="review-cat-panel">
+      <div id="review-cat-groups"></div>
+      <div class="cat-select-actions">
+        <button onclick="reviewCatCheckAll(false)">전체 해제</button>
+        <button onclick="reviewCatCheckAll(true)">전체 선택</button>
+        <button onclick="applyReviewCatSelect()">적용 →</button>
+      </div>
+    </div>
+
+    <div class="weight-info" id="weight-info"></div>
+    <div style="font-size:.78rem;color:var(--muted);font-weight:500;">몇 개 볼까요?</div>
+    <div class="count-row" id="count-row"></div>
+    <button class="start-go" onclick="startReview()">복습 시작</button>
+  </div>
+</div>
+
+<!-- LIST VIEW -->
+<div id="list-search-wrap" style="display:none;width:100%;max-width:580px;margin-bottom:8px;">
+  <input id="list-search" type="text" placeholder="🔍  조건·답·키워드 검색..."
+    oninput="renderList()"
+    style="width:100%;background:var(--surface);border:1px solid var(--border);border-radius:9px;
+      color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:.88rem;
+      padding:10px 14px;outline:none;transition:border-color .18s;"
+    onfocus="this.style.borderColor='var(--accent)'"
+    onblur="this.style.borderColor='var(--border)'">
+</div>
+<div class="list-toolbar" id="list-toolbar">
+  <div class="sel-info">선택됨 <span id="sel-count">0</span>개</div>
+  <div class="toolbar-btns">
+    <button class="tbtn tbtn-sel" id="btn-selall" onclick="toggleSelectAll()">전체 선택</button>
+    <button class="tbtn tbtn-sel" id="btn-move-sel" onclick="openMoveModal()" style="display:none">이동</button>
+    <button class="tbtn tbtn-del" id="btn-del-sel" onclick="deleteSelected()" style="display:none">삭제</button>
+  </div>
+</div>
+<div class="list-view" id="list-view"></div>
+
+<!-- MOVE MODAL -->
+<div class="modal-overlay" id="move-modal-overlay" onclick="closeMoveModal(event)">
+  <div class="modal" onclick="event.stopPropagation()" style="max-width:360px;">
+    <div class="modal-title">📂 카테고리 이동</div>
+    <div style="font-size:.78rem;color:var(--muted);font-family:'DM Mono',monospace;" id="move-count-label"></div>
+    <div><label>이동할 카테고리</label>
+      <select id="move-cat-select"></select>
+    </div>
+    <div class="modal-btns">
+      <button class="modal-btn modal-cancel" onclick="closeMoveModal()">취소</button>
+      <button class="modal-btn modal-save"   onclick="moveSelected()">이동</button>
+    </div>
+  </div>
+</div>
+
+<!-- TRASH VIEW -->
+<div class="trash-view" id="trash-view">
+  <div class="trash-header">
+    <div class="trash-title">🗑 휴지통</div>
+    <button class="tbtn-empty" onclick="emptyTrash()">전체 영구삭제</button>
+  </div>
+  <div id="trash-list"></div>
+</div>
+
+<!-- ADD VIEW -->
+<div class="add-view" id="add-view">
+  <div>
+    <label>카드 타입</label>
+    <div class="type-toggle">
+      <div class="type-btn active" id="type-flash-btn" onclick="setAddType('flash')">📋 플래시카드 (조건→답)</div>
+      <div class="type-btn" id="type-ox-btn" onclick="setAddType('ox')">⭕ OX 문제</div>
+    </div>
+  </div>
+  <div><label>카테고리</label>
+    <select id="add-cat">
+      <option>PART1 · 역학개념</option>
+      <option>PART1 · 단면 및 재료</option>
+      <option>PART1 · 정정구조 해석</option>
+      <option>PART1 · 정정구조 부재단면설계</option>
+      <option>PART1 · 부정정구조 해석</option>
+      <option>PART2 · 구조계획</option>
+      <option>PART2 · 기초구조</option>
+      <option>PART2 · 목구조</option>
+      <option>PART2 · 조적구조</option>
+      <option>PART3 · RC 총론 일반사항</option>
+      <option>PART3 · RC 총론 재료</option>
+      <option>PART3 · RC 사용성 및 내구성</option>
+      <option>PART3 · RC 설계하중</option>
+      <option>PART3 · RC 보 설계</option>
+      <option>PART3 · RC 압축재 설계</option>
+      <option>PART3 · RC 슬래브 설계</option>
+      <option>PART3 · RC 기초판 설계</option>
+      <option>PART3 · RC 정착 및 이음</option>
+      <option>PART3 · RC 콘크리트용 앵커</option>
+      <option>PART3 · RC 프리스트레스트 콘크리트</option>
+      <option>PART3 · RC 프리캐스트 콘크리트</option>
+      <option>PART3 · RC 내진설계</option>
+      <option>PART4 · 강구조 총론</option>
+      <option>PART4 · 강구조 접합부</option>
+      <option>PART4 · 강구조 부재설계</option>
+      <option>PART4 · 강구조 합성부재</option>
+    </select>
+  </div>
+  <div id="add-q-wrap"><label id="add-q-label">조건 / 질문</label>
+    <input id="add-q" type="text" placeholder="예: 보·리브 있는 1방향슬래브 — 캔틸레버">
+  </div>
+  <div id="add-a-wrap"><label>답</label>
+    <input id="add-a" type="text" placeholder="예: ℓ/8">
+  </div>
+  <div id="add-ox-wrap" style="display:none;">
+    <label>OX 정답</label>
+    <div class="type-toggle">
+      <div class="type-btn" id="ox-ans-o" onclick="setOXAns('O')">○ 맞다</div>
+      <div class="type-btn" id="ox-ans-x" onclick="setOXAns('X')">✕ 틀리다</div>
+    </div>
+  </div>
+  <div><label id="add-note-label">보충 설명 (선택 · OX 틀렸을 때 표시)</label>
+    <textarea id="add-note" rows="2" placeholder="예: 피복두께는 50mm가 아니라 40mm"></textarea>
+  </div>
+  <button class="btn-add-sub" onclick="addCard()">카드 추가하기</button>
+
+  <!-- AI 영단어 자동생성 (영단어 과목일 때만 표시) -->
+  <div id="ai-word-section" style="display:none;width:100%;border-top:1px solid var(--border);padding-top:14px;margin-top:4px;">
+    <div style="font-size:.8rem;font-weight:700;color:var(--accent2);margin-bottom:8px;">✨ AI 영단어 자동 생성</div>
+    <div style="display:flex;gap:6px;">
+      <input id="ai-word-input" type="text" placeholder="단어 입력 (예: ambiguous)"
+        style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:8px;
+          color:var(--text);font-size:.88rem;padding:9px 12px;outline:none;"
+        onkeydown="if(event.key==='Enter')generateWordCard()">
+      <button onclick="generateWordCard()" id="ai-word-btn"
+        style="padding:9px 14px;background:rgba(122,184,212,.15);border:1px solid var(--accent2);
+          color:var(--accent2);border-radius:8px;font-family:'DM Mono',monospace;font-size:.75rem;
+          cursor:pointer;white-space:nowrap;">생성</button>
+    </div>
+    <div id="ai-word-result" style="margin-top:8px;"></div>
+  </div>
+</div>
+
+<!-- SETTINGS VIEW -->
+<div class="add-view" id="settings-view" style="display:none;">
+  <div style="font-size:.85rem;font-weight:700;color:var(--accent);padding-bottom:4px;border-bottom:1px solid var(--border);">⚙ 목차 카테고리 관리</div>
+
+  <!-- rename category -->
+  <div>
+    <label>카테고리 이름 변경</label>
+    <select id="rename-cat-select" style="background:var(--surface);border:1px solid var(--border);border-radius:7px;color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:.88rem;padding:9px 12px;outline:none;width:100%;"></select>
+  </div>
+  <div>
+    <label>새 이름</label>
+    <input id="rename-cat-input" type="text" placeholder="새 카테고리 이름 입력">
+  </div>
+  <button class="btn-add-sub" onclick="renameCat()" style="background:var(--accent2);">이름 변경</button>
+
+  <div style="height:1px;background:var(--border);margin:4px 0;"></div>
+
+  <!-- merge categories -->
+  <div>
+    <label>카테고리 합치기 (A → B로 이동)</label>
+    <div style="display:flex;gap:6px;align-items:center;">
+      <select id="merge-from" style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:7px;color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:.85rem;padding:8px 10px;outline:none;"></select>
+      <span style="color:var(--muted);font-size:.8rem;">→</span>
+      <select id="merge-to" style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:7px;color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:.85rem;padding:8px 10px;outline:none;"></select>
+    </div>
+  </div>
+  <button class="btn-add-sub" onclick="mergeCats()" style="background:var(--surface);color:var(--text);border:1px solid var(--border);">합치기</button>
+
+  <div style="height:1px;background:var(--border);margin:4px 0;"></div>
+
+  <!-- stats per category -->
+  <div style="font-size:.8rem;font-weight:700;color:var(--muted);">카테고리별 카드 수</div>
+  <div id="cat-stats-list" style="display:flex;flex-direction:column;gap:5px;"></div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" onclick="event.stopPropagation()" style="max-height:90vh;overflow-y:auto;">
+    <div class="modal-title">카드 수정</div>
+    <div><label>카테고리</label>
+      <select id="modal-cat"></select>
+    </div>
+    <div><label>타입</label>
+      <select id="modal-type" onchange="toggleModalType()">
+        <option value="flash">플래시카드</option>
+        <option value="ox">OX 문제</option>
+        <option value="cloze">빈칸 채우기</option>
+      </select>
+    </div>
+    <div><label id="modal-q-label">조건 / 질문 / 제목</label><textarea id="modal-q" rows="2"></textarea></div>
+    <div id="modal-a-wrap"><label>답</label><input id="modal-a" type="text"></div>
+    <div id="modal-ox-wrap" style="display:none;">
+      <label>OX 정답</label>
+      <select id="modal-ox-ans"><option value="O">○ 맞다</option><option value="X">✕ 틀리다</option></select>
+    </div>
+    <div id="modal-cloze-wrap" style="display:none;">
+      <label>빈칸 행 목록</label>
+      <div id="modal-cloze-rows" style="display:flex;flex-direction:column;gap:6px;margin-bottom:6px;"></div>
+      <button onclick="addClozeRow()" style="padding:6px 12px;background:var(--surface);border:1px solid var(--border);border-radius:7px;color:var(--muted);font-family:'DM Mono',monospace;font-size:.7rem;cursor:pointer;width:100%;">+ 행 추가</button>
+    </div>
+    <div><label>보충 설명</label><textarea id="modal-note" rows="2"></textarea></div>
+    <div class="modal-btns">
+      <button class="modal-btn modal-del"    onclick="deleteCard()">삭제→휴지통</button>
+      <button class="modal-btn modal-cancel" onclick="closeModal()">취소</button>
+      <button class="modal-btn modal-save"   onclick="saveModal()">저장</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════ DATA ═══════════════════
+// type: 'flash' (앞면=조건, 뒷면=답) | 'ox' (진술문, answer:'O'|'X')
+const DEFAULT_CARDS = [
+  // ── PART1 역학개념
+  {id:1001,cat:"PART1 · 역학개념",type:"ox",q:"정역학적으로 안정한 구조물은 외력에 의해 위치나 형태가 변하지 않는다.",a:"O"},
+  {id:1002,cat:"PART1 · 역학개념",type:"ox",q:"단순보의 지점 반력은 정역학 조건만으로 구할 수 있다.",a:"O"},
+  {id:1003,cat:"PART1 · 역학개념",type:"ox",q:"캔틸레버보는 정정구조물이다.",a:"O"},
+  {id:1004,cat:"PART1 · 역학개념",type:"ox",q:"트러스 부재는 축력만 받고 휨모멘트는 발생하지 않는다.",a:"O",note:"핀 접합 + 절점에만 하중 작용 조건 시"},
+  {id:1005,cat:"PART1 · 역학개념",type:"ox",q:"정정구조물은 부정정구조물보다 지지점 침하에 더 취약하다.",a:"X",note:"정정구조물은 지점 침하 시 내력 변화 없음. 부정정구조물이 내력 재분배로 영향받음"},
+  {id:1006,cat:"PART1 · 역학개념",type:"flash",q:"보의 지지 조건 — 부정정 차수 계산",a:"반력 수 - 정역학 방정식 수(3)",note:"평면구조 기준"},
+
+  // ── PART1 단면 및 재료
+  {id:1101,cat:"PART1 · 단면 및 재료",type:"flash",q:"직사각형 단면\n단면2차모멘트 I",a:"I = bh³/12",note:"b: 폭, h: 높이"},
+  {id:1102,cat:"PART1 · 단면 및 재료",type:"flash",q:"원형 단면\n단면2차모멘트 I",a:"I = πd⁴/64"},
+  {id:1103,cat:"PART1 · 단면 및 재료",type:"flash",q:"단면계수 S (탄성)",a:"S = I / y",note:"y: 중립축에서 최외단까지 거리"},
+  {id:1104,cat:"PART1 · 단면 및 재료",type:"flash",q:"회전반경 r",a:"r = √(I/A)"},
+  {id:1105,cat:"PART1 · 단면 및 재료",type:"ox",q:"단면2차모멘트가 클수록 보의 처짐은 커진다.",a:"X",note:"I가 클수록 굽힘 강성(EI)이 커서 처짐이 작아짐"},
+  {id:1106,cat:"PART1 · 단면 및 재료",type:"ox",q:"콘크리트의 탄성계수는 압축강도가 높을수록 크다.",a:"O",note:"Ec = 8500∛fck (MPa, 일반콘크리트 근사식)"},
+
+  // ── PART1 정정구조 해석
+  {id:1201,cat:"PART1 · 정정구조 해석",type:"flash",q:"단순보 중앙 집중하중 P\n최대 휨모멘트",a:"M_max = PL/4",note:"경간 중앙"},
+  {id:1202,cat:"PART1 · 정정구조 해석",type:"flash",q:"단순보 등분포하중 w\n최대 휨모멘트",a:"M_max = wL²/8"},
+  {id:1203,cat:"PART1 · 정정구조 해석",type:"flash",q:"캔틸레버보 집중하중 P (자유단)\n최대 휨모멘트",a:"M_max = PL",note:"고정단에서 발생"},
+  {id:1204,cat:"PART1 · 정정구조 해석",type:"flash",q:"캔틸레버보 등분포하중 w\n최대 휨모멘트",a:"M_max = wL²/2"},
+  {id:1205,cat:"PART1 · 정정구조 해석",type:"ox",q:"전단력이 0인 지점에서 휨모멘트가 최대가 된다.",a:"O"},
+  {id:1206,cat:"PART1 · 정정구조 해석",type:"ox",q:"단순보에서 등분포하중 작용 시 최대 전단력은 경간 중앙에서 발생한다.",a:"X",note:"최대 전단력은 지점(받침점)에서 발생"},
+
+  // ── PART1 정정구조 부재단면설계
+  {id:1301,cat:"PART1 · 정정구조 부재단면설계",type:"flash",q:"휨응력 σ",a:"σ = M / S = M·y / I"},
+  {id:1302,cat:"PART1 · 정정구조 부재단면설계",type:"flash",q:"전단응력 τ (일반식)",a:"τ = VQ / Ib",note:"V: 전단력, Q: 정적모멘트, I: 단면2차모멘트, b: 폭"},
+  {id:1303,cat:"PART1 · 정정구조 부재단면설계",type:"flash",q:"오일러 좌굴하중 Pe",a:"Pe = π²EI / (kL)²",note:"k: 유효길이계수"},
+  {id:1304,cat:"PART1 · 정정구조 부재단면설계",type:"flash",q:"유효좌굴길이계수 k\n양단 핀",a:"k = 1.0"},
+  {id:1305,cat:"PART1 · 정정구조 부재단면설계",type:"flash",q:"유효좌굴길이계수 k\n일단 고정 / 일단 자유",a:"k = 2.0"},
+  {id:1306,cat:"PART1 · 정정구조 부재단면설계",type:"flash",q:"유효좌굴길이계수 k\n양단 고정",a:"k = 0.5"},
+  {id:1307,cat:"PART1 · 정정구조 부재단면설계",type:"ox",q:"세장비(kL/r)가 클수록 좌굴에 취약하다.",a:"O"},
+
+  // ── PART1 부정정구조 해석
+  {id:1401,cat:"PART1 · 부정정구조 해석",type:"ox",q:"부정정 구조물은 하중 재분배 능력이 있어 일부 부재 파괴 후에도 붕괴하지 않을 수 있다.",a:"O"},
+  {id:1402,cat:"PART1 · 부정정구조 해석",type:"ox",q:"부정정구조물은 지점 침하가 발생해도 내력이 변하지 않는다.",a:"X",note:"지점 침하 → 내력(반력/모멘트) 재분배 발생"},
+
+  // ── PART2 구조계획
+  {id:2001,cat:"PART2 · 구조계획",type:"ox",q:"강성이 불균일하면 수평하중 작용 시 비틀림이 발생한다.",a:"O"},
+  {id:2002,cat:"PART2 · 구조계획",type:"ox",q:"연성(Ductility)이 클수록 지진에 취약하다.",a:"X",note:"연성이 클수록 에너지 흡수 능력이 커 지진에 유리"},
+  {id:2003,cat:"PART2 · 구조계획",type:"flash",q:"반응수정계수 R\n값이 클수록 의미",a:"연성이 좋고 초과내력이 큰 시스템\n→ 설계지진력 감소 가능"},
+  {id:2004,cat:"PART2 · 구조계획",type:"ox",q:"같은 층에 서로 다른 횡력저항시스템이 혼재할 때는 작은 R값을 적용한다.",a:"O"},
+  {id:2005,cat:"PART2 · 구조계획",type:"flash",q:"밑면전단력 V",a:"V = Cs × W",note:"Cs: 지진응답계수, W: 유효건물중량"},
+
+  // ── PART2 기초구조
+  {id:2101,cat:"PART2 · 기초구조",type:"ox",q:"독립기초는 2개 이상의 기둥 하중을 하나의 기초판으로 지지하는 기초이다.",a:"X",note:"2개 이상 기둥 지지는 복합기초. 독립기초는 기둥 1개당 1개의 기초판"},
+  {id:2102,cat:"PART2 · 기초구조",type:"ox",q:"말뚝기초에서 선단지지말뚝은 마찰력으로 하중을 지지한다.",a:"X",note:"선단지지말뚝은 선단 지지층에 하중 전달. 마찰로 지지하는 것은 마찰말뚝"},
+  {id:2103,cat:"PART2 · 기초구조",type:"ox",q:"부동침하는 기초 각 부분의 침하량이 균일하지 않아 발생한다.",a:"O"},
+  {id:2104,cat:"PART2 · 기초구조",type:"flash",q:"부동침하 원인 (주요 3가지)",a:"① 불균일 지반\n② 편심 하중\n③ 인접 구조물 영향"},
+
+  // ── PART2 목구조
+  {id:2201,cat:"PART2 · 목구조",type:"ox",q:"목재의 섬유방향 압축강도는 섬유에 직각방향보다 크다.",a:"O"},
+  {id:2202,cat:"PART2 · 목구조",type:"ox",q:"목재의 함수율이 높아지면 강도가 증가한다.",a:"X",note:"함수율이 섬유포화점 이하에서 낮아질수록 강도 증가"},
+  {id:2203,cat:"PART2 · 목구조",type:"ox",q:"목재의 크리프(Creep)는 장기 하중 하에서 변형이 계속 증가하는 현상이다.",a:"O"},
+
+  // ── PART2 조적구조
+  {id:2301,cat:"PART2 · 조적구조",type:"ox",q:"조적조는 압축력에 강하고 인장력에 약하다.",a:"O"},
+  {id:2302,cat:"PART2 · 조적구조",type:"ox",q:"벽돌쌓기에서 영식쌓기는 한 켜는 길이쌓기, 다음 켜는 마구리쌓기로 교대한다.",a:"O"},
+  {id:2303,cat:"PART2 · 조적구조",type:"flash",q:"표준형 벽돌 치수 (mm)",a:"190 × 90 × 57",note:"길이 × 너비 × 높이"},
+
+  // ── PART3 RC 총론 일반사항
+  {id:3001,cat:"PART3 · RC 총론 일반사항",type:"ox",q:"철근콘크리트는 콘크리트의 인장 취약점을 철근이 보완한 복합구조이다.",a:"O"},
+  {id:3002,cat:"PART3 · RC 총론 일반사항",type:"ox",q:"철근과 콘크리트의 열팽창계수는 서로 달라 온도변화 시 균열이 불가피하다.",a:"X",note:"철근과 콘크리트의 열팽창계수는 거의 동일(약 10×10⁻⁶/℃)"},
+  {id:3003,cat:"PART3 · RC 총론 일반사항",type:"flash",q:"나선철근·띠철근 배근된 압축부재\n축방향철근 최소 순간격 (3조건)",a:"① 40mm 이상\n② 공칭지름 × 1.5배 이상\n③ 굵은골재 공칭최대치수 규정 만족"},
+  {id:3004,cat:"PART3 · RC 총론 일반사항",type:"flash",q:"주철근 최소 수평 순간격\n(셋 중 최댓값)",a:"25mm / db / 굵은골재×4/3",note:"세 값 중 가장 큰 값 적용"},
+  {id:3005,cat:"PART3 · RC 총론 일반사항",type:"flash",q:"벽체·슬래브 횡주철근 간격 제한\n(2조건 모두)",a:"① 두께의 3배 이하\n② 450mm 이하"},
+
+  // ── PART3 RC 총론 재료
+  {id:3101,cat:"PART3 · RC 총론 재료",type:"ox",q:"물-시멘트비(W/C)가 낮을수록 콘크리트 압축강도는 높아진다.",a:"O"},
+  {id:3102,cat:"PART3 · RC 총론 재료",type:"ox",q:"슬럼프(Slump)값이 클수록 워커빌리티(시공성)가 좋고 강도도 높아진다.",a:"X",note:"슬럼프↑ → 워커빌리티↑ 이나 물↑ → W/C↑ → 강도↓"},
+  {id:3103,cat:"PART3 · RC 총론 재료",type:"flash",q:"콘크리트 설계기준압축강도 fck\n표준 재령",a:"28일"},
+  {id:3104,cat:"PART3 · RC 총론 재료",type:"ox",q:"AE제(공기연행제)는 콘크리트의 동결융해 저항성을 향상시킨다.",a:"O"},
+
+  // ── PART3 RC 사용성 및 내구성
+  {id:3201,cat:"PART3 · RC 사용성 및 내구성",type:"cloze",q:"피복두께 — 실내",
+    a:JSON.stringify([
+      {label:"슬래브·벽체·장선 D35 이하",value:"20mm"},
+      {label:"슬래브·벽체·장선 D35 초과",value:"40mm"},
+      {label:"보·기둥 (모든 철근)",value:"40mm"},
+    ])},
+  {id:3202,cat:"PART3 · RC 사용성 및 내구성",type:"cloze",q:"피복두께 — 실외·특수",
+    a:JSON.stringify([
+      {label:"실외 D16 이하",value:"40mm"},
+      {label:"실외 D19 이상",value:"50mm"},
+      {label:"흙에 접하는 부재 (현장타설)",value:"75mm"},
+      {label:"수중 타설",value:"100mm"},
+    ])},
+  {id:3203,cat:"PART3 · RC 사용성 및 내구성",type:"flash",q:"피복두께 감소 조건\n보·기둥 fck ≥ 40MPa",a:"기존값에서 10mm 감소 가능"},
+  {id:3209,cat:"PART3 · RC 사용성 및 내구성",type:"ox",q:"피복두께는 철근 부식을 방지하고 내화성능을 확보하기 위해 필요하다.",a:"O"},
+  {id:3210,cat:"PART3 · RC 사용성 및 내구성",type:"cloze",q:"처짐 한계값",
+    a:JSON.stringify([
+      {label:"즉시처짐 · 비구조요소 미지지 지붕·바닥",value:"ℓ/180"},
+      {label:"즉시처짐 · 비구조요소 지지 바닥 (활하중)",value:"ℓ/360"},
+      {label:"장기처짐 · 비구조요소 미지지",value:"ℓ/240"},
+      {label:"장기처짐 · 칸막이벽 등 비구조요소 지지",value:"ℓ/480"},
+    ])},
+
+  // ── PART3 RC 설계하중
+  {id:3301,cat:"PART3 · RC 설계하중",type:"flash",q:"LRFD 기본 하중조합\n고정하중 + 활하중",a:"1.2D + 1.6L"},
+  {id:3302,cat:"PART3 · RC 설계하중",type:"flash",q:"LRFD 하중조합\n고정하중 + 지진하중",a:"1.2D + 1.0E + 0.5L"},
+  {id:3303,cat:"PART3 · RC 설계하중",type:"flash",q:"구조물 평가 시 하중조합\n고정하중·활하중 하중계수",a:"각각 5% 감소"},
+  {id:3304,cat:"PART3 · RC 설계하중",type:"ox",q:"활하중(L)은 건물 사용 목적에 따라 크기가 달라진다.",a:"O"},
+  {id:3305,cat:"PART3 · RC 설계하중",type:"cloze",q:"강도감소계수 φ",
+    a:JSON.stringify([
+      {label:"인장지배단면",value:"0.85"},
+      {label:"압축지배 — 나선철근",value:"0.70"},
+      {label:"압축지배 — 띠철근",value:"0.65"},
+      {label:"전단 및 비틀림",value:"0.75"},
+      {label:"무근콘크리트",value:"0.55"},
+    ])},
+
+  // ── PART3 RC 보 설계
+  {id:3401,cat:"PART3 · RC 보 설계",type:"cloze",q:"보 최소두께",
+    a:JSON.stringify([
+      {label:"단순지지",value:"ℓ/16"},
+      {label:"1단연속",value:"ℓ/18.5"},
+      {label:"양단연속",value:"ℓ/21"},
+      {label:"캔틸레버",value:"ℓ/8"},
+    ])},
+  {id:3405,cat:"PART3 · RC 보 설계",type:"flash",q:"스터럽 최대 간격\nVs ≤ 0.33√fck·bw·d",a:"min(d/2, 600mm)"},
+  {id:3406,cat:"PART3 · RC 보 설계",type:"flash",q:"스터럽 최대 간격\nVs > 0.33√fck·bw·d",a:"min(d/4, 300mm)"},
+  {id:3407,cat:"PART3 · RC 보 설계",type:"ox",q:"T형보에서 유효플랜지 폭은 복부 폭보다 크게 설계된다.",a:"O"},
+  {id:3408,cat:"PART3 · RC 보 설계",type:"ox",q:"단근보에서 인장철근비가 최대철근비를 초과하면 연성파괴가 발생한다.",a:"X",note:"인장철근비가 최대철근비 초과 시 취성파괴(압축파괴) 위험"},
+
+  // ── PART3 RC 압축재 설계
+  {id:3501,cat:"PART3 · RC 압축재 설계",type:"ox",q:"나선철근 기둥은 띠철근 기둥보다 연성이 크다.",a:"O"},
+  {id:3502,cat:"PART3 · RC 압축재 설계",type:"flash",q:"기둥 축방향철근 최소 개수\n사각형 띠철근 기둥",a:"4개"},
+  {id:3503,cat:"PART3 · RC 압축재 설계",type:"flash",q:"기둥 축방향철근 최소 개수\n나선철근 기둥",a:"6개"},
+  {id:3504,cat:"PART3 · RC 압축재 설계",type:"flash",q:"기둥 최소 철근비 ρ_min",a:"1% (0.01)"},
+  {id:3505,cat:"PART3 · RC 압축재 설계",type:"flash",q:"기둥 최대 철근비 ρ_max",a:"8% (0.08)"},
+
+  // ── PART3 RC 슬래브 설계
+  {id:3601,cat:"PART3 · RC 슬래브 설계",type:"cloze",q:"1방향 슬래브 최소두께",
+    a:JSON.stringify([
+      {label:"단순지지",value:"ℓ/20"},
+      {label:"1단연속",value:"ℓ/24"},
+      {label:"양단연속",value:"ℓ/28"},
+      {label:"캔틸레버",value:"ℓ/10"},
+    ])},
+  {id:3605,cat:"PART3 · RC 슬래브 설계",type:"cloze",q:"보·리브 있는 1방향슬래브 최소두께",
+    a:JSON.stringify([
+      {label:"단순지지",value:"ℓ/16"},
+      {label:"1단연속",value:"ℓ/18.5"},
+      {label:"양단연속",value:"ℓ/21"},
+      {label:"캔틸레버",value:"ℓ/8"},
+    ])},
+  {id:3609,cat:"PART3 · RC 슬래브 설계",type:"ox",q:"2방향슬래브는 장변/단변 비가 2 이하일 때 적용한다.",a:"O"},
+  {id:3610,cat:"PART3 · RC 슬래브 설계",type:"flash",q:"벽체·슬래브 주철근 최대 간격\n(D35 이하)",a:"min(3h, 450mm)",note:"h: 부재 두께"},
+
+  // ── PART3 RC 기초판 설계
+  {id:3701,cat:"PART3 · RC 기초판 설계",type:"ox",q:"기초판 설계에서 펀칭전단(2방향전단)은 기둥 주위에서 발생한다.",a:"O"},
+  {id:3702,cat:"PART3 · RC 기초판 설계",type:"ox",q:"독립기초판의 두께는 최소 150mm 이상이어야 한다.",a:"O"},
+
+  // ── PART3 RC 정착 및 이음
+  {id:3801,cat:"PART3 · RC 정착 및 이음",type:"ox",q:"인장 이음부의 위치는 최대 응력이 발생하는 곳을 피해야 한다.",a:"O"},
+  {id:3802,cat:"PART3 · RC 정착 및 이음",type:"ox",q:"압축철근의 정착길이는 인장철근보다 짧다.",a:"O"},
+  {id:3803,cat:"PART3 · RC 정착 및 이음",type:"flash",q:"다발철근 — 최대 개수 및 보강",a:"4개 이하\n스터럽이나 띠철근으로 둘러싸야 함"},
+  {id:3804,cat:"PART3 · RC 정착 및 이음",type:"flash",q:"다발철근 — 보에서의 사용 제한",a:"D35 초과 철근은 다발로 사용 불가"},
+  {id:3805,cat:"PART3 · RC 정착 및 이음",type:"flash",q:"다발철근 — 엇갈림 조건",a:"40db 이상 서로 엇갈리게 끝남"},
+  {id:3806,cat:"PART3 · RC 정착 및 이음",type:"flash",q:"다발철근 — 지름 계산법",a:"등가단면적으로 환산된\n1개의 철근지름으로 적용"},
+
+  // ── PART3 RC 내진설계
+  {id:3901,cat:"PART3 · RC 내진설계",type:"ox",q:"내진설계에서 강성이 클수록 지진력을 더 많이 받는다.",a:"O"},
+  {id:3902,cat:"PART3 · RC 내진설계",type:"ox",q:"내진벽(전단벽)은 수평하중에 저항하는 주요 구조요소이다.",a:"O"},
+  {id:3903,cat:"PART3 · RC 내진설계",type:"flash",q:"층간변위비 한계 (일반건물)",a:"0.5~2%",note:"용도 및 중요도에 따라 상이"},
+
+  // ── PART4 강구조 총론
+  {id:4001,cat:"PART4 · 강구조 총론",type:"ox",q:"강재는 콘크리트에 비해 인장강도가 크게 우수하다.",a:"O"},
+  {id:4002,cat:"PART4 · 강구조 총론",type:"ox",q:"강재의 항복강도는 탄성한계 내에서의 최대 응력이다.",a:"O"},
+  {id:4003,cat:"PART4 · 강구조 총론",type:"ox",q:"강재의 탄성계수 E는 약 200,000MPa이다.",a:"O"},
+  {id:4004,cat:"PART4 · 강구조 총론",type:"flash",q:"강재 인장강도 Fu와\n항복강도 Fy 관계",a:"Fu > Fy",note:"SS275 기준: Fy=275MPa, Fu=410MPa"},
+  {id:4005,cat:"PART4 · 강구조 총론",type:"ox",q:"강재는 고온(약 250℃ 이상)에서 크리프가 발생하기 시작한다.",a:"O"},
+
+  // ── PART4 강구조 접합부
+  {id:4101,cat:"PART4 · 강구조 접합부",type:"ox",q:"완전용입 맞대기 용접은 모재와 동등한 강도를 발휘할 수 있다.",a:"O"},
+  {id:4102,cat:"PART4 · 강구조 접합부",type:"ox",q:"고장력볼트 마찰접합에서 하중은 볼트의 전단력으로 전달된다.",a:"X",note:"마찰접합은 접합면의 마찰력으로 하중 전달. 볼트 전단은 지압접합"},
+  {id:4103,cat:"PART4 · 강구조 접합부",type:"flash",q:"필릿용접 유효목두께",a:"필릿 사이즈(S)의 0.707배\n= S × sin45°"},
+  {id:4104,cat:"PART4 · 강구조 접합부",type:"ox",q:"용접부의 언더컷(Undercut)은 용접 결함의 일종이다.",a:"O"},
+
+  // ── PART4 강구조 부재설계
+  {id:4201,cat:"PART4 · 강구조 부재설계",type:"ox",q:"압축재의 세장비(kL/r)는 200 이하로 제한하는 것이 일반적이다.",a:"O"},
+  {id:4202,cat:"PART4 · 강구조 부재설계",type:"ox",q:"강재 보의 횡좌굴은 압축플랜지가 횡방향으로 불안정해지는 현상이다.",a:"O"},
+  {id:4203,cat:"PART4 · 강구조 부재설계",type:"flash",q:"합성보 — 콘크리트 슬래브와 강재 보\n연결부재",a:"전단연결재 (Shear Connector)\n주로 스터드 볼트 사용"},
+  {id:4204,cat:"PART4 · 강구조 부재설계",type:"ox",q:"플레이트거더(Plate Girder)는 공장 제작 압연 H형강을 사용한다.",a:"X",note:"플레이트거더는 강판을 용접·조립한 형강. 압연 H형강은 일반 H형강 보"},
+
+  // ── PART3 RC 사용성 · 균열
+  {id:3251,cat:"PART3 · RC 사용성 및 내구성",type:"ox",q:"균열폭은 철근 응력이 클수록, 피복두께가 두꺼울수록 커진다.",a:"O"},
+  {id:3252,cat:"PART3 · RC 사용성 및 내구성",type:"ox",q:"휨균열은 인장측에서 발생하여 압축측으로 진행된다.",a:"O"},
+  {id:3253,cat:"PART3 · RC 사용성 및 내구성",type:"ox",q:"전단균열은 보의 복부에서 45° 방향으로 발생하는 것이 일반적이다.",a:"O"},
+  {id:3254,cat:"PART3 · RC 사용성 및 내구성",type:"ox",q:"콘크리트의 크리프(Creep)는 지속하중 하에서 탄성변형 이후에도 변형이 증가하는 현상이다.",a:"O"},
+  {id:3255,cat:"PART3 · RC 사용성 및 내구성",type:"ox",q:"콘크리트의 건조수축은 수분이 증발하면서 부피가 팽창하는 현상이다.",a:"X",note:"건조수축은 수분 증발 시 부피가 수축(감소)하는 현상"},
+  {id:3256,cat:"PART3 · RC 사용성 및 내구성",type:"flash",q:"장기처짐 계산 시\n추가 장기처짐 계수 λ",a:"λ = ξ / (1 + 50ρ')",note:"ξ: 시간의존계수(5년 이상=2.0), ρ': 압축철근비"},
+  {id:3257,cat:"PART3 · RC 사용성 및 내구성",type:"flash",q:"시간의존계수 ξ\n5년 이상 재하",a:"2.0"},
+  {id:3258,cat:"PART3 · RC 사용성 및 내구성",type:"flash",q:"시간의존계수 ξ\n12개월",a:"1.4"},
+  {id:3259,cat:"PART3 · RC 사용성 및 내구성",type:"flash",q:"시간의존계수 ξ\n6개월",a:"1.2"},
+  {id:3260,cat:"PART3 · RC 사용성 및 내구성",type:"flash",q:"시간의존계수 ξ\n3개월",a:"1.0"},
+
+  // ── PART3 RC 앵커 설계
+  {id:3851,cat:"PART3 · RC 콘크리트용 앵커",type:"ox",q:"콘크리트용 앵커의 파괴모드에는 콘크리트 파열파괴, 철근 인발파괴, 측면파열파괴 등이 있다.",a:"O"},
+  {id:3852,cat:"PART3 · RC 콘크리트용 앵커",type:"ox",q:"선설치 앵커(cast-in anchor)는 후설치 앵커보다 일반적으로 내력이 크다.",a:"O"},
+  {id:3853,cat:"PART3 · RC 콘크리트용 앵커",type:"flash",q:"앵커 파괴 모드 5가지",a:"① 강재 파단\n② 콘크리트 파열(콘 파괴)\n③ 인발 파괴\n④ 측면파열\n⑤ 콘크리트 쪼갬"},
+  {id:3854,cat:"PART3 · RC 콘크리트용 앵커",type:"ox",q:"앵커의 연성파괴 모드는 강재 파단이다.",a:"O",note:"콘크리트 파열·인발 등은 취성파괴 모드"},
+
+  // ── PART3 프리스트레스트 콘크리트 (PSC)
+  {id:3861,cat:"PART3 · RC 프리스트레스트 콘크리트",type:"ox",q:"PSC 구조물은 콘크리트에 미리 압축력을 도입하여 인장 균열을 억제한다.",a:"O"},
+  {id:3862,cat:"PART3 · RC 프리스트레스트 콘크리트",type:"ox",q:"프리텐션 방식은 콘크리트 타설 후 PS 강재를 인장한다.",a:"X",note:"프리텐션: 콘크리트 타설 전 PS강재 인장 → 경화 후 긴장력 전달. 포스트텐션이 타설 후 인장"},
+  {id:3863,cat:"PART3 · RC 프리스트레스트 콘크리트",type:"flash",q:"PSC 프리스트레스 손실 원인\n즉시 손실 3가지",a:"① 탄성변형 손실\n② 마찰 손실\n③ 정착장치 활동 손실"},
+  {id:3864,cat:"PART3 · RC 프리스트레스트 콘크리트",type:"flash",q:"PSC 프리스트레스 손실 원인\n시간적 손실 3가지",a:"① 크리프\n② 건조수축\n③ PS강재 릴랙세이션"},
+  {id:3865,cat:"PART3 · RC 프리스트레스트 콘크리트",type:"ox",q:"PSC에서 사용하는 PS강재는 일반 철근보다 항복강도가 훨씬 높다.",a:"O",note:"PS강선 인장강도 1,600~1,900MPa 수준"},
+  {id:3866,cat:"PART3 · RC 프리스트레스트 콘크리트",type:"ox",q:"포스트텐션 방식에서는 쉬스(sheath)관을 사용하여 PS강재를 배치한다.",a:"O"},
+
+  // ── PART3 프리캐스트 콘크리트
+  {id:3871,cat:"PART3 · RC 프리캐스트 콘크리트",type:"ox",q:"프리캐스트 콘크리트는 공장 제작으로 품질관리가 유리하다.",a:"O"},
+  {id:3872,cat:"PART3 · RC 프리캐스트 콘크리트",type:"ox",q:"프리캐스트 부재의 접합부는 현장타설 콘크리트 부재의 접합부보다 강성이 높다.",a:"X",note:"접합부는 일반적으로 현장타설보다 강성이 낮아 취약부가 됨"},
+  {id:3873,cat:"PART3 · RC 프리캐스트 콘크리트",type:"flash",q:"프리캐스트 부재 접합 방식 종류",a:"건식 접합 (볼트·클립)\n습식 접합 (그라우트·현장타설)\n기계적 접합"},
+
+  // ── PART4 강구조 합성부재
+  {id:4211,cat:"PART4 · 강구조 합성부재",type:"ox",q:"합성보는 강재 보와 콘크리트 슬래브가 일체로 거동하도록 전단연결재를 사용한다.",a:"O"},
+  {id:4212,cat:"PART4 · 강구조 합성부재",type:"ox",q:"완전합성보는 부분합성보보다 전단연결재 수가 적다.",a:"X",note:"완전합성은 슬래브의 전체 압축강도 활용 → 전단연결재 더 많이 필요"},
+  {id:4213,cat:"PART4 · 강구조 합성부재",type:"flash",q:"합성기둥 종류 2가지",a:"① 충전형 (CFT): 강관 내부에 콘크리트 충전\n② 매입형 (SRC): H형강을 콘크리트로 감싼 형태"},
+  {id:4214,cat:"PART4 · 강구조 합성부재",type:"ox",q:"CFT(콘크리트 충전 강관) 기둥에서 강관은 콘크리트의 구속효과로 압축강도를 증가시킨다.",a:"O"},
+
+  // ── PART4 강구조 구조부재 설계 추가
+  {id:4205,cat:"PART4 · 강구조 부재설계",type:"flash",q:"강재 보의 전소성모멘트 Mp",a:"Mp = Fy × Zp",note:"Zp: 소성단면계수"},
+  {id:4206,cat:"PART4 · 강구조 부재설계",type:"ox",q:"국부좌굴을 방지하기 위해 판폭두께비(b/t)를 제한한다.",a:"O"},
+  {id:4207,cat:"PART4 · 강구조 부재설계",type:"flash",q:"인장재 설계 — 유효순단면적\n볼트 구멍 공제 시",a:"Ae = An × U",note:"An: 순단면적, U: 전단지연계수"},
+  {id:4208,cat:"PART4 · 강구조 부재설계",type:"ox",q:"강재 용접 시 예열은 수소취화 방지와 균열 억제를 위해 필요하다.",a:"O"},
+];
+
+// ═══════════════════ STATE ═══════════════════
+let cards   = [];
+let history = {};
+let trash   = [];
+
+let queue    = [];
+let cleared  = new Set();
+let isReview = false;
+let flipped  = false;
+let activeCat   = "전체";
+let currentTab  = 'study';
+let sessK = 0, sessD = 0;
+let selectedCount = 10;
+let editingId = null;
+let selectMode = false;
+let selectedIds = new Set();
+let lastOXCorrect = false;
+let addType = 'flash';
+let addOXAns = 'O';
+let currentSubject = 'arch';
+let selectedCats = new Set();
+let reviewSelectedCats = new Set();
+
+// ═══════════════════ ENGLISH CARDS ═══════════════════
+const DEFAULT_ENG_CARDS = [
+  {id:9001,cat:"영단어",type:"flash",q:"forged",a:"위조된 / 단조된(금속을 두드려 만든)",note:"The document was forged to deceive the authorities."},
+  {id:9002,cat:"영단어",type:"flash",q:"firmly",a:"단호하게 / 확고히 / 꽉(물리적으로 단단히)",note:"She firmly refused to change her decision."},
+  {id:9003,cat:"영단어",type:"flash",q:"insider",a:"내부자 / 사정을 아는 사람\n↔ outsider",note:"The leak came from an insider who had access to confidential files."},
+  {id:9004,cat:"영단어",type:"flash",q:"admiral",a:"해군 제독 / 함대 사령관",note:"The admiral commanded the fleet during the naval operation."},
+  {id:9005,cat:"영단어",type:"flash",q:"fabrication",a:"날조·거짓말 / 제작·제조\n(fab = 만들다)",note:"The entire story turned out to be a fabrication."},
+  {id:9006,cat:"영단어",type:"flash",q:"rigid",a:"딱딱한·경직된(물리) / 엄격한·융통성 없는(태도)",note:"The school enforced a rigid dress code for all students."},
+  {id:9007,cat:"영단어",type:"flash",q:"inherently",a:"본질적으로 / 태생적으로\n(inherent = 내재된)",note:"The system is inherently flawed and needs to be redesigned."},
+  {id:9008,cat:"영단어",type:"flash",q:"interplay",a:"상호작용 / 서로 영향을 주고받음\n(inter = 사이, play = 작용)",note:"The interplay between light and shadow created a dramatic effect."},
+  {id:9009,cat:"영단어",type:"flash",q:"state",a:"상태(명) / 국가·주(명) / 진술하다(동)\n→ 문맥으로 구분",note:"He was in a state of shock after hearing the news."},
+  {id:9010,cat:"영단어",type:"flash",q:"spark",a:"불꽃(명) / 촉발하다·일으키다(동)\nspark debate = 논쟁을 일으키다",note:"The speech sparked a nationwide debate on education reform."},
+  {id:9011,cat:"영단어",type:"flash",q:"transcend",a:"초월하다 / 능가하다 / 범위를 넘어서다",note:"True art transcends cultural and language barriers."},
+  {id:9012,cat:"영단어",type:"flash",q:"armed",a:"무장한(군사) / 준비된·갖춘\narmed with data = 데이터로 무장한",note:"The armed soldiers surrounded the building."},
+  {id:9013,cat:"영단어",type:"flash",q:"anguish",a:"극심한 정신적 고통·괴로움\n(주로 감정적 고통, 신체 통증은 pain)",note:"She cried out in anguish when she heard the tragic news."},
+  {id:9014,cat:"영단어",type:"flash",q:"sublime",a:"숭고한·장엄한(형) / 최고의·탁월한(형)\n명사: 숭고함",note:"The view from the mountaintop was truly sublime."},
+  {id:9015,cat:"영단어",type:"flash",q:"implement",a:"시행하다·실행하다(동) / 도구·수단(명)\nimplement a plan = 계획을 실행하다",note:"The company plans to implement the new policy next month."},
+  {id:9016,cat:"영단어",type:"flash",q:"undergo",a:"겪다·받다·경험하다\nundergo surgery/changes/treatment",note:"The patient had to undergo surgery after the accident."},
+  {id:9017,cat:"영단어",type:"flash",q:"fasting",a:"단식(명) / 금식 중인(형)\nfasting period = 공복 시간",note:"Blood tests are more accurate after fasting overnight."},
+  {id:9018,cat:"영단어",type:"flash",q:"vomiting",a:"구토(명) / 구역질\nvomit(동)의 명사형",note:"The patient reported nausea and vomiting after the medication."},
+  {id:9019,cat:"영단어",type:"flash",q:"exacerbate",a:"악화시키다 / 심화시키다\n(상황·증상을 더 나쁘게 만들다)",note:"Stress can exacerbate existing health problems."},
+  {id:9020,cat:"영단어",type:"flash",q:"fatigue",a:"피로(명) / 피로감\nmental fatigue = 정신적 피로\nfatigue = exhaustion보다 만성적 뉘앙스",note:"Chronic fatigue can be a symptom of various medical conditions."},
+];
+
+// ═══════════════════ PERSIST ═══════════════════
+function getKeys() {
+  return currentSubject === 'arch'
+    ? {cards:'arch5_cards', history:'arch5_history', trash:'arch5_trash'}
+    : {cards:'eng1_cards',  history:'eng1_history',  trash:'eng1_trash'};
+}
+function getDefaultCards() {
+  return currentSubject === 'arch' ? DEFAULT_CARDS : DEFAULT_ENG_CARDS;
+}
+function load() {
+  const k = getKeys();
+  try {
+    const sc = localStorage.getItem(k.cards);
+    cards   = sc ? JSON.parse(sc) : JSON.parse(JSON.stringify(getDefaultCards()));
+    const sh = localStorage.getItem(k.history);
+    history = sh ? JSON.parse(sh) : {};
+    const st = localStorage.getItem(k.trash);
+    trash   = st ? JSON.parse(st) : [];
+  } catch(e) {
+    cards = JSON.parse(JSON.stringify(getDefaultCards())); history = {}; trash = [];
+  }
+}
+function save() {
+  const k = getKeys();
+  try {
+    localStorage.setItem(k.cards,   JSON.stringify(cards));
+    localStorage.setItem(k.history, JSON.stringify(history));
+    localStorage.setItem(k.trash,   JSON.stringify(trash));
+  } catch(e) {}
+}
+
+// ═══════════════════ WEIGHT ═══════════════════
+function getWeight(id) {
+  const h = history[id];
+  if (!h || h.know+h.dont === 0) return 1;
+  const dontRatio = h.dont / (h.know + h.dont);
+  const raw = 1 + dontRatio * 4;
+  const recovery = h.know > 0 ? Math.min(1, h.dont / (h.know * 0.5 + 0.001)) : 1;
+  return 1 + (raw - 1) * recovery;
+}
+function weightedShuffle(pool) {
+  const weighted = [];
+  pool.forEach(c => {
+    const w = Math.max(1, Math.round(getWeight(c.id) * 10));
+    for (let i = 0; i < w; i++) weighted.push(c);
+  });
+  shuffle(weighted);
+  const seen = new Set(), result = [];
+  for (const c of weighted) {
+    if (!seen.has(c.id)) { seen.add(c.id); result.push(c); }
+    if (result.length >= pool.length) break;
+  }
+  pool.forEach(c => { if (!seen.has(c.id)) result.push(c); });
+  return result;
+}
+
+// ═══════════════════ CATEGORY ═══════════════════
+function getCats() { return ["전체", ...new Set(cards.map(c => c.cat))]; }
+function filtered() {
+  if (selectedCats.size > 0) return cards.filter(c => selectedCats.has(c.cat));
+  return activeCat === "전체" ? [...cards] : cards.filter(c => c.cat === activeCat);
+}
+
+// which PART groups are open
+const openParts = new Set();
+
+function renderCats() {
+  const row = document.getElementById('cat-row');
+  row.innerHTML = '';
+
+  // 전체 버튼
+  const allBtn = document.createElement('button');
+  allBtn.className = 'cat-all-btn' + (activeCat === '전체' ? ' active' : '');
+  allBtn.textContent = '전체';
+  allBtn.onclick = () => { activeCat = '전체'; renderCats(); onCatChange(); };
+  row.appendChild(allBtn);
+
+  const cats = [...new Set(cards.map(c => c.cat))];
+
+  // 영단어 과목 — flat 버튼
+  if (currentSubject === 'eng') {
+    cats.sort().forEach(cat => {
+      const b = document.createElement('button');
+      b.className = 'cat-btn' + (cat === activeCat ? ' active' : '');
+      b.textContent = cat;
+      b.onclick = () => { activeCat = cat; renderCats(); onCatChange(); };
+      row.appendChild(b);
+    });
+    return;
+  }
+
+  // group cats by PART
+  const parts = {};
+  cats.forEach(cat => {
+    const m = cat.match(/^(PART\d+)/);
+    const partKey = m ? m[1] : '기타';
+    if (!parts[partKey]) parts[partKey] = [];
+    parts[partKey].push(cat);
+  });
+
+  const partLabels = {
+    'PART1': 'PART 1 · 구조역학',
+    'PART2': 'PART 2 · 일반구조',
+    'PART3': 'PART 3 · 철근콘크리트',
+    'PART4': 'PART 4 · 강구조',
+    '기타':  '기타',
+  };
+
+  Object.keys(parts).sort().forEach(partKey => {
+    const cats = parts[partKey];
+    const isOpen = openParts.has(partKey);
+    const hasActive = cats.includes(activeCat);
+    if (hasActive) openParts.add(partKey);
+
+    const group = document.createElement('div');
+    group.className = 'cat-part-group';
+
+    const hdr = document.createElement('div');
+    hdr.className = 'cat-part-header' + (hasActive ? ' has-active' : '');
+    hdr.innerHTML = `
+      <span class="cat-part-label${hasActive?' has-active':''}">${partLabels[partKey]||partKey}</span>
+      <span class="cat-part-arrow${(isOpen||hasActive)?' open':''}">▾</span>`;
+    hdr.onclick = () => {
+      if (openParts.has(partKey)) openParts.delete(partKey);
+      else openParts.add(partKey);
+      renderCats();
+    };
+
+    const items = document.createElement('div');
+    items.className = 'cat-part-items' + ((isOpen||hasActive) ? ' open' : '');
+    cats.forEach(cat => {
+      const short = cat.replace(/^PART\d+ · /,'');
+      const b = document.createElement('button');
+      b.className = 'cat-btn' + (cat === activeCat ? ' active' : '');
+      b.textContent = short;
+      b.title = cat;
+      b.onclick = (e) => { e.stopPropagation(); activeCat = cat; renderCats(); onCatChange(); };
+      items.appendChild(b);
+    });
+
+    group.appendChild(hdr);
+    group.appendChild(items);
+    row.appendChild(group);
+  });
+}
+
+function onCatChange() {
+  if (currentTab==='study') startNew();
+  else if (currentTab==='review') renderReviewStart();
+  else if (currentTab==='list') renderList();
+}
+
+
+// ═══════════════════ STUDY ═══════════════════
+function startNew() {
+  isReview = false; sessK = 0; sessD = 0; cleared.clear();
+  queue = shuffle([...filtered()]);
+  showStudyUI(); renderCard();
+}
+
+function showStudyUI() {
+  document.getElementById('complete-screen').style.display = 'none';
+  document.getElementById('card-scene').style.display = '';
+  document.getElementById('btn-row').style.display = '';
+  document.getElementById('ox-card-wrap').style.display = 'none';
+  document.getElementById('ox-btn-row').style.display = 'none';
+  document.getElementById('cloze-card-wrap').style.display = 'none';
+  document.getElementById('cloze-btn-row').style.display = 'none';
+  document.getElementById('btn-next').style.display = 'none';
+  document.getElementById('prog-wrap').style.display = '';
+}
+
+function renderCard() {
+  if (!queue.length) { showComplete(); return; }
+  const c = queue[0];
+  flipped = false;
+
+  document.getElementById('mbadge-wrap').innerHTML =
+    `<span class="mbadge ${isReview?'mb-review':'mb-new'}">${isReview?'🔁 복습':'✦ 학습'}</span>`;
+
+  const total = cleared.size + queue.length;
+  const pct = total > 0 ? Math.round(cleared.size/total*100) : 0;
+  document.getElementById('prog-fill').style.width = pct+'%';
+  document.getElementById('prog-text').textContent = `${cleared.size}/${total}`;
+  document.getElementById('ql').textContent = queue.length>1 ? `큐 ${queue.length-1}개` : '';
+
+  if (c.type === 'ox') {
+    renderOXCard(c);
+  } else if (c.type === 'cloze') {
+    renderClozeCard(c);
+  } else {
+    renderFlashCard(c);
+  }
+  updateHeader();
+  const el = c.type==='ox' ? document.getElementById('ox-card-wrap')
+           : c.type==='cloze' ? document.getElementById('cloze-card-wrap')
+           : document.getElementById('card-scene');
+  el.style.animation='none'; void el.offsetWidth; el.style.animation='';
+}
+
+function renderFlashCard(c) {
+  document.getElementById('card-scene').style.display = '';
+  document.getElementById('btn-row').style.display = '';
+  document.getElementById('ox-card-wrap').style.display = 'none';
+  document.getElementById('ox-btn-row').style.display = 'none';
+  document.getElementById('cloze-card-wrap').style.display = 'none';
+  document.getElementById('cloze-btn-row').style.display = 'none';
+  document.getElementById('btn-next').style.display = 'none';
+  document.getElementById('btn-flip').textContent = '답 보기';
+  flipped = false;
+
+  // 앞면 보이기, 뒷면 숨기기
+  document.getElementById('card-front').style.display = '';
+  document.getElementById('card-back').style.display = 'none';
+
+  document.getElementById('card-front').innerHTML = `
+    <div class="card-cat">${esc(c.cat)}</div>
+    <div class="card-q">${esc(c.q).replace(/\n/g,'<br>')}</div>
+    <div class="card-hint">탭하면 답 확인 · 알면 바로 ✓</div>`;
+  document.getElementById('card-back').innerHTML = `
+    <div class="card-ans-label">ANSWER</div>
+    <div class="card-ans">${esc(c.a).replace(/\n/g,'<br>')}</div>
+    ${c.note && currentSubject==='eng'
+      ? `<div class="card-example">💬 ${esc(c.note)}</div>`
+      : c.note ? `<div class="card-note">📌 ${esc(c.note)}</div>` : ''}
+    <div style="display:flex;gap:8px;margin-top:16px;width:100%;">
+      <button onclick="event.stopPropagation();answer(false)"
+        style="flex:1;padding:10px;border-radius:10px;border:1px solid var(--red);
+          background:rgba(191,106,106,.1);color:var(--red);font-weight:700;
+          font-family:'Noto Sans KR',sans-serif;font-size:.85rem;cursor:pointer;">모르겠어 ✕</button>
+      <button onclick="event.stopPropagation();answer(true)"
+        style="flex:1;padding:10px;border-radius:10px;border:1px solid var(--green);
+          background:rgba(106,191,123,.1);color:var(--green);font-weight:700;
+          font-family:'Noto Sans KR',sans-serif;font-size:.85rem;cursor:pointer;">알겠어 ✓</button>
+    </div>
+    <button class="card-edit-btn" onclick="event.stopPropagation();openEdit(${c.id})" style="margin-top:8px;">✏ 수정</button>`;
+}
+
+function renderOXCard(c) {
+  document.getElementById('card-scene').style.display = 'none';
+  document.getElementById('btn-row').style.display = 'none';
+  document.getElementById('ox-card-wrap').style.display = '';
+  document.getElementById('ox-btn-row').style.display = '';
+  document.getElementById('cloze-card-wrap').style.display = 'none';
+  document.getElementById('cloze-btn-row').style.display = 'none';
+  document.getElementById('btn-next').style.display = 'none';
+  document.getElementById('ox-o').className = 'ox-btn ox-btn-o';
+  document.getElementById('ox-x').className = 'ox-btn ox-btn-x';
+
+  document.getElementById('ox-card').innerHTML = `
+    <div class="ox-type-badge">OX 문제</div>
+    <div class="card-cat">${esc(c.cat)}</div>
+    <div class="ox-statement">${esc(c.q).replace(/\n/g,'<br>')}</div>
+    <div class="ox-result" id="ox-result"></div>
+    <button class="card-edit-btn" onclick="openEdit(${c.id})" style="margin-top:10px">✏ 수정</button>`;
+}
+
+// cloze 카드: q=제목, a=행 배열 [{label, value}] JSON
+function renderClozeCard(c) {
+  document.getElementById('card-scene').style.display = 'none';
+  document.getElementById('btn-row').style.display = 'none';
+  document.getElementById('ox-card-wrap').style.display = 'none';
+  document.getElementById('ox-btn-row').style.display = 'none';
+  document.getElementById('cloze-card-wrap').style.display = '';
+  document.getElementById('cloze-btn-row').style.display = '';
+  document.getElementById('btn-next').style.display = 'none';
+
+  let rows = [];
+  try { rows = JSON.parse(c.a); } catch(e) { rows = []; }
+
+  const tableRows = rows.map((r, i) => `
+    <tr>
+      <td>${esc(r.label)}</td>
+      <td><span class="cloze-blank" id="cb-${i}" onclick="revealBlank(${i},'${esc(r.value)}')">?</span></td>
+    </tr>`).join('');
+
+  document.getElementById('cloze-card').innerHTML = `
+    <div class="cloze-type-badge">빈칸 채우기</div>
+    <div class="cloze-title">${esc(c.cat)}</div>
+    <div style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:14px;align-self:center;">${esc(c.q)}</div>
+    <table class="cloze-table">${tableRows}</table>
+    <div class="cloze-hint">블록 탭하면 답 공개</div>
+    <button class="card-edit-btn" onclick="openEdit(${c.id})" style="align-self:center;margin-top:8px">✏ 수정</button>`;
+}
+
+function revealBlank(i, val) {
+  const el = document.getElementById('cb-'+i);
+  if (!el || el.classList.contains('revealed')) return;
+  el.textContent = val;
+  el.classList.add('revealed');
+}
+
+function answerOX(chosen) {
+  const c = queue[0];
+  const correct = chosen === c.a;
+  lastOXCorrect = correct;
+
+  document.getElementById('ox-o').className = 'ox-btn ox-btn-o' + (chosen==='O'?' selected-o':'');
+  document.getElementById('ox-x').className = 'ox-btn ox-btn-x' + (chosen==='X'?' selected-x':'');
+  document.getElementById('ox-o').disabled = true;
+  document.getElementById('ox-x').disabled = true;
+
+  const res = document.getElementById('ox-result');
+  res.innerHTML = `
+    <div class="ox-result-badge ${correct?'correct':'wrong'}">${correct?'✓ 정답!':'✕ 오답'}</div>
+    <div class="ox-result-text">정답: <b style="color:var(--accent)">${c.a}</b></div>
+    ${c.note?`<div class="ox-result-note">📌 ${esc(c.note)}</div>`:''}
+    <button onclick="generateOXExplanation(${c.id})" id="ox-ai-btn"
+      style="margin-top:8px;padding:7px 14px;background:rgba(122,184,212,.12);border:1px solid var(--accent2);
+        color:var(--accent2);border-radius:8px;font-family:'DM Mono',monospace;font-size:.72rem;cursor:pointer;">
+      ✨ AI 풀이 보기</button>
+    <div id="ox-ai-result" style="margin-top:6px;width:100%;"></div>`;
+  res.classList.add('show');
+
+  document.getElementById('btn-next').style.display = '';
+}
+
+function flipCard() {
+  flipped = !flipped;
+  document.getElementById('card-front').style.display = flipped ? 'none' : '';
+  document.getElementById('card-back').style.display  = flipped ? '' : 'none';
+  document.getElementById('btn-flip').textContent = flipped ? '↩ 질문' : '답 보기';
+  // 뒤집혔을 때 외부 버튼 숨기기 (카드 안 버튼으로 대체)
+  document.getElementById('btn-row').style.display = flipped ? 'none' : '';
+}
+
+function answer(know) {
+  // re-enable OX buttons for next card
+  document.getElementById('ox-o').disabled = false;
+  document.getElementById('ox-x').disabled = false;
+
+  const c = queue.shift();
+  if (!history[c.id]) history[c.id] = {know:0, dont:0};
+  if (know) {
+    history[c.id].know++; cleared.add(c.id); sessK++;
+  } else {
+    history[c.id].dont++; sessD++;
+    const pos = queue.length<=1 ? queue.length : 1+Math.floor(Math.random()*queue.length);
+    queue.splice(pos, 0, c);
+  }
+  save(); renderCard();
+}
+
+function showComplete() {
+  document.getElementById('card-scene').style.display='none';
+  document.getElementById('btn-row').style.display='none';
+  document.getElementById('ox-card-wrap').style.display='none';
+  document.getElementById('ox-btn-row').style.display='none';
+  document.getElementById('btn-next').style.display='none';
+  document.getElementById('mbadge-wrap').innerHTML='';
+  document.getElementById('prog-wrap').style.display='none';
+
+  const sc = document.getElementById('complete-screen');
+  sc.style.display='flex';
+  document.getElementById('cc-k').textContent=sessK;
+  document.getElementById('cc-d').textContent=sessD;
+  const heavy = filtered().filter(c=>{const h=history[c.id];return h&&h.dont>h.know;}).length;
+  document.getElementById('ci').textContent = sessD===0?'🌟':'✅';
+  document.getElementById('ct').textContent = sessD===0?'완벽해요!':'완료!';
+  document.getElementById('cs').textContent = heavy>0
+    ? `가중치 높은 카드 ${heavy}개 있어요.\n복습으로 집중 반복해봐요!`
+    : '전체 클리어! 복습으로 유지해봐요.';
+
+  const btns=document.getElementById('complete-btns');
+  btns.innerHTML='';
+  const b1=document.createElement('button');
+  b1.className='btn-action btn-primary'; b1.textContent='복습 모드로';
+  b1.onclick=()=>switchTab('review'); btns.appendChild(b1);
+  const b2=document.createElement('button');
+  b2.className='btn-action btn-secondary'; b2.textContent='처음부터';
+  b2.onclick=()=>{sc.style.display='none';document.getElementById('prog-wrap').style.display='';startNew();};
+  btns.appendChild(b2);
+}
+
+// ═══════════════════ REVIEW ═══════════════════
+const COUNT_OPTIONS=[5,10,15,20,30,'전체'];
+
+function reviewFiltered() {
+  if (reviewSelectedCats.size > 0) return cards.filter(c => reviewSelectedCats.has(c.cat));
+  return activeCat === '전체' ? [...cards] : cards.filter(c => c.cat === activeCat);
+}
+function getReviewPool(){ return reviewFiltered().filter(c=>history[c.id]&&(history[c.id].know+history[c.id].dont)>0); }
+
+function toggleReviewCatPanel() {
+  const panel = document.getElementById('review-cat-panel');
+  const toggle = document.getElementById('review-cat-toggle');
+  const isOpen = panel.classList.contains('open');
+  if (!isOpen) renderReviewCatGroups();
+  panel.classList.toggle('open', !isOpen);
+  toggle.classList.toggle('active', !isOpen);
+}
+function renderReviewCatGroups() {
+  const wrap = document.getElementById('review-cat-groups');
+  const allCats = [...new Set(cards.map(c => c.cat))].sort();
+
+  if (currentSubject === 'eng') {
+    wrap.innerHTML = `<div class="cat-select-items">${
+      allCats.map(cat => `<button class="cat-check-btn${reviewSelectedCats.has(cat)||reviewSelectedCats.size===0?' checked':''}"
+        onclick="toggleReviewCatCheck('${cat.replace(/'/g,"\\'")}',this)">${cat}</button>`).join('')
+    }</div>`;
+    return;
+  }
+  const partLabels = {'PART1':'PART 1 · 역학','PART2':'PART 2 · 일반구조','PART3':'PART 3 · RC','PART4':'PART 4 · 강구조','기타':'기타'};
+  const parts = {};
+  allCats.forEach(cat => {
+    const m = cat.match(/^(PART\d+)/);
+    const key = m ? m[1] : '기타';
+    if (!parts[key]) parts[key] = [];
+    parts[key].push(cat);
+  });
+  wrap.innerHTML = Object.keys(parts).sort().map(pk => `
+    <div class="cat-select-part">
+      <div class="cat-select-part-label">${partLabels[pk]||pk}</div>
+      <div class="cat-select-items">${parts[pk].map(cat => {
+        const short = cat.replace(/^PART\d+ · /,'');
+        const checked = reviewSelectedCats.has(cat) || reviewSelectedCats.size === 0;
+        return `<button class="cat-check-btn${checked?' checked':''}"
+          onclick="toggleReviewCatCheck('${cat.replace(/'/g,"\\'")}',this)">${short}</button>`;
+      }).join('')}</div>
+    </div>`).join('');
+}
+function toggleReviewCatCheck(cat, btn) {
+  if (reviewSelectedCats.size === 0) {
+    const allCats = [...new Set(cards.map(c => c.cat))];
+    allCats.forEach(c => reviewSelectedCats.add(c));
+    document.querySelectorAll('#review-cat-groups .cat-check-btn').forEach(b => b.classList.add('checked'));
+  }
+  if (reviewSelectedCats.has(cat)) { reviewSelectedCats.delete(cat); btn.classList.remove('checked'); }
+  else { reviewSelectedCats.add(cat); btn.classList.add('checked'); }
+}
+function reviewCatCheckAll(val) {
+  const allCats = [...new Set(cards.map(c => c.cat))];
+  if (val) allCats.forEach(c => reviewSelectedCats.add(c));
+  else reviewSelectedCats.clear();
+  renderReviewCatGroups();
+}
+function applyReviewCatSelect() {
+  const allCats = [...new Set(cards.map(c => c.cat))];
+  if (reviewSelectedCats.size === allCats.length) reviewSelectedCats.clear();
+  updateReviewCatLabel();
+  document.getElementById('review-cat-panel').classList.remove('open');
+  document.getElementById('review-cat-toggle').classList.remove('active');
+  renderReviewStart();
+}
+function updateReviewCatLabel() {
+  const label = document.getElementById('review-cat-label');
+  label.textContent = reviewSelectedCats.size === 0
+    ? '📚 단원 선택 (전체)'
+    : `📚 ${reviewSelectedCats.size}개 단원 선택됨`;
+}
+
+function renderReviewStart(){
+  const pool=getReviewPool();
+  const wi=document.getElementById('weight-info');
+  if(!pool.length){wi.textContent='먼저 학습 모드에서 카드를 봐주세요.';return;}
+  const heavy=pool.filter(c=>getWeight(c.id)>2).length;
+  wi.innerHTML=`열람 <b style="color:var(--accent)">${pool.length}</b>개 · 가중치 높음 <b style="color:var(--red)">${heavy}</b>개`;
+  const cr=document.getElementById('count-row'); cr.innerHTML='';
+  COUNT_OPTIONS.forEach(opt=>{
+    const max=pool.length; const num=opt==='전체'?max:opt;
+    if(num>max&&opt!=='전체') return;
+    const b=document.createElement('button');
+    b.className='count-btn'+(selectedCount===opt?' sel':'');
+    b.textContent=opt==='전체'?`전체(${max})`:`${opt}개`;
+    b.onclick=()=>{selectedCount=opt;renderReviewStart();};
+    cr.appendChild(b);
+  });
+}
+function startReview(){
+  const pool=getReviewPool();
+  if(!pool.length){alert('먼저 학습 모드에서 카드를 봐주세요.');return;}
+  const count=selectedCount==='전체'?pool.length:Math.min(selectedCount,pool.length);
+  isReview=true; sessK=0; sessD=0; cleared.clear();
+  queue=weightedShuffle(pool).slice(0,count);
+  document.getElementById('review-view').style.display='none';
+  document.getElementById('study-view').style.display='flex';
+  document.querySelectorAll('.tab').forEach((el,i)=>el.classList.toggle('active',i===1));
+  showStudyUI(); renderCard();
+}
+
+// ═══════════════════ LIST VIEW ═══════════════════
+function renderList(){
+  const lv=document.getElementById('list-view');
+  const query=(document.getElementById('list-search')?.value||'').trim().toLowerCase();
+  let pool=filtered();
+  if(query) pool=pool.filter(c=>c.q.toLowerCase().includes(query)||c.a.toLowerCase().includes(query)||(c.note||'').toLowerCase().includes(query)||c.cat.toLowerCase().includes(query));
+  if(!pool.length){lv.innerHTML=`<div style="text-align:center;padding:36px;color:var(--muted);font-size:.85rem;">${query?'검색 결과 없음':'카드 없음'}</div>`;updateSelToolbar();return;}
+  lv.innerHTML=pool.map(c=>{
+    const h=history[c.id]||{know:0,dont:0};
+    const cls=h.dont>h.know?'unknown':h.know>0?'known':'';
+    const badge=h.dont>h.know?`<span class="lbadge lbadge-r">✕${h.dont}/✓${h.know}</span>`:h.know>0?`<span class="lbadge lbadge-g">✓${h.know}/✕${h.dont}</span>`:`<span class="lbadge lbadge-n">미확인</span>`;
+    const isSel=selectedIds.has(c.id);
+    const typeTag=c.type==='ox'?`<div class="list-type-ox">⭕ OX</div>`:'';
+    return `<div class="list-item ${cls}${isSel?' selected':''}" onclick="onListItemClick(event,${c.id})">
+      <div class="list-cb ${selectMode?'show':''} ${isSel?'checked':''}" onclick="event.stopPropagation();toggleSelect(${c.id})"></div>
+      <div style="flex:1;min-width:0;">
+        <div class="list-q">${esc(c.q).replace(/\n/g,' · ')}</div>
+        ${typeTag}
+        <div class="list-a">${esc(c.a).replace(/\n/g,' ')}</div>
+      </div>
+      <div class="list-right">${badge}${selectMode?'':`<button class="list-edit-btn" onclick="event.stopPropagation();openEdit(${c.id})">수정</button>`}</div>
+    </div>`;
+  }).join('');
+  updateSelToolbar();
+}
+function onListItemClick(e,id){if(selectMode)toggleSelect(id);}
+function toggleSelect(id){if(selectedIds.has(id))selectedIds.delete(id);else selectedIds.add(id);renderList();}
+function toggleSelectAll(){const pool=filtered();if(selectedIds.size===pool.length)selectedIds.clear();else pool.forEach(c=>selectedIds.add(c.id));renderList();}
+function enterSelectMode(){selectMode=true;selectedIds.clear();renderList();}
+function exitSelectMode(){selectMode=false;selectedIds.clear();renderList();}
+function updateSelToolbar(){
+  const tb=document.getElementById('list-toolbar');
+  if(currentTab!=='list')return;
+  tb.classList.toggle('show',selectMode);
+  document.getElementById('sel-count').textContent=selectedIds.size;
+  const pool=filtered();
+  document.getElementById('btn-selall').textContent=selectedIds.size===pool.length&&pool.length>0?'전체 해제':'전체 선택';
+  const hasSelected = selectedIds.size>0;
+  document.getElementById('btn-move-sel').style.display=hasSelected?'':'none';
+  document.getElementById('btn-del-sel').style.display=hasSelected?'':'none';
+  const bsm=document.getElementById('btn-select-mode');
+  if(bsm)bsm.classList.toggle('active',selectMode);
+}
+function deleteSelected(){
+  if(!selectedIds.size)return;
+  cards.filter(c=>selectedIds.has(c.id)).forEach(c=>trash.push({...c,deletedAt:Date.now()}));
+  cards=cards.filter(c=>!selectedIds.has(c.id));
+  selectedIds.clear(); selectMode=false;
+  save();renderCats();updateHeader();renderList();updateTrashBadge();
+}
+
+// ═══════════════════ MOVE MODAL ═══════════════════
+function openMoveModal(){
+  if(!selectedIds.size)return;
+  const cats=[...new Set(cards.map(c=>c.cat))].sort();
+  const sel=document.getElementById('move-cat-select');
+  sel.innerHTML=cats.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');
+  document.getElementById('move-count-label').textContent=`${selectedIds.size}개 카드 이동`;
+  document.getElementById('move-modal-overlay').classList.add('open');
+}
+function closeMoveModal(e){
+  if(e&&e.target!==document.getElementById('move-modal-overlay'))return;
+  document.getElementById('move-modal-overlay').classList.remove('open');
+}
+function moveSelected(){
+  const newCat=document.getElementById('move-cat-select').value;
+  cards.forEach(c=>{if(selectedIds.has(c.id))c.cat=newCat;});
+  selectedIds.clear(); selectMode=false;
+  save();renderCats();updateHeader();renderList();
+  document.getElementById('move-modal-overlay').classList.remove('open');
+}
+
+// ═══════════════════ EDIT MODAL ═══════════════════
+function openEdit(id){
+  editingId=id;
+  const c=cards.find(x=>x.id===id); if(!c)return;
+  const catSel=document.getElementById('modal-cat');
+  const cats=[...new Set(cards.map(x=>x.cat))].sort();
+  catSel.innerHTML=cats.map(cat=>`<option value="${esc(cat)}"${cat===c.cat?' selected':''}>${esc(cat)}</option>`).join('');
+  document.getElementById('modal-type').value=c.type||'flash';
+  document.getElementById('modal-q').value=c.q||'';
+  document.getElementById('modal-note').value=c.note||'';
+  if(c.type==='ox'){
+    document.getElementById('modal-ox-ans').value=c.a;
+  } else if(c.type==='cloze'){
+    let rows=[];
+    try{rows=JSON.parse(c.a);}catch(e){}
+    renderClozeModalRows(rows);
+  } else {
+    document.getElementById('modal-a').value=c.a||'';
+  }
+  toggleModalType();
+  document.getElementById('modal-overlay').classList.add('open');
+}
+function toggleModalType(){
+  const t=document.getElementById('modal-type').value;
+  document.getElementById('modal-a-wrap').style.display=t==='flash'?'':'none';
+  document.getElementById('modal-ox-wrap').style.display=t==='ox'?'':'none';
+  document.getElementById('modal-cloze-wrap').style.display=t==='cloze'?'':'none';
+  if(t==='cloze'){
+    const rows=document.getElementById('modal-cloze-rows');
+    if(!rows.children.length) renderClozeModalRows([{label:'',value:''}]);
+  }
+}
+function renderClozeModalRows(rows){
+  const wrap=document.getElementById('modal-cloze-rows');
+  wrap.innerHTML='';
+  rows.forEach((r,i)=>wrap.appendChild(makeClozeRowEl(r.label,r.value,i)));
+}
+function makeClozeRowEl(label,value,i){
+  const row=document.createElement('div');
+  row.style.cssText='display:flex;gap:5px;align-items:center;';
+  row.dataset.idx=i;
+  row.innerHTML=`
+    <input type="text" value="${esc(label)}" placeholder="조건 (예: 실내 D35이하)"
+      style="flex:2;background:var(--card);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:.82rem;padding:7px 9px;outline:none;" class="cloze-row-label">
+    <input type="text" value="${esc(value)}" placeholder="값"
+      style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:.82rem;padding:7px 9px;outline:none;" class="cloze-row-value">
+    <button onclick="removeClozeRow(this)" style="padding:5px 8px;background:transparent;border:1px solid rgba(191,106,106,.3);color:var(--red);border-radius:5px;cursor:pointer;font-size:.75rem;flex-shrink:0;">✕</button>`;
+  return row;
+}
+function addClozeRow(){
+  const wrap=document.getElementById('modal-cloze-rows');
+  const i=wrap.children.length;
+  wrap.appendChild(makeClozeRowEl('','',i));
+}
+function removeClozeRow(btn){
+  btn.closest('div[data-idx]').remove();
+}
+function getClozeRowsFromModal(){
+  const rows=[];
+  document.querySelectorAll('#modal-cloze-rows > div').forEach(row=>{
+    const label=row.querySelector('.cloze-row-label').value.trim();
+    const value=row.querySelector('.cloze-row-value').value.trim();
+    if(label||value) rows.push({label,value});
+  });
+  return rows;
+}
+function closeModal(e){
+  if(e&&e.target!==document.getElementById('modal-overlay'))return;
+  document.getElementById('modal-overlay').classList.remove('open');editingId=null;
+}
+function saveModal(){
+  if(!editingId)return;
+  const c=cards.find(x=>x.id===editingId); if(!c)return;
+  const t=document.getElementById('modal-type').value;
+  c.cat=document.getElementById('modal-cat').value;
+  c.type=t; c.q=document.getElementById('modal-q').value.trim();
+  if(t==='ox') c.a=document.getElementById('modal-ox-ans').value;
+  else if(t==='cloze') c.a=JSON.stringify(getClozeRowsFromModal());
+  else c.a=document.getElementById('modal-a').value.trim();
+  c.note=document.getElementById('modal-note').value.trim()||undefined;
+  save();
+  document.getElementById('modal-overlay').classList.remove('open');editingId=null;
+  if(currentTab==='list')renderList();else renderCard();
+  updateHeader(); renderCats();
+}
+function deleteCard(){
+  if(!editingId)return;
+  const c=cards.find(x=>x.id===editingId);if(!c)return;
+  trash.push({...c,deletedAt:Date.now()});
+  cards=cards.filter(x=>x.id!==editingId);
+  save();renderCats();updateHeader();updateTrashBadge();
+  document.getElementById('modal-overlay').classList.remove('open');editingId=null;
+  if(currentTab==='list')renderList();else startNew();
+}
+
+// ═══════════════════ TRASH ═══════════════════
+function renderTrash(){
+  const tl=document.getElementById('trash-list');
+  if(!trash.length){tl.innerHTML='<div style="text-align:center;padding:36px;color:var(--muted);font-size:.85rem;">휴지통이 비어있어요</div>';return;}
+  tl.innerHTML=[...trash].reverse().map(c=>`
+    <div class="trash-item">
+      <div style="flex:1;min-width:0;">
+        <div class="list-q" style="opacity:.7">${esc(c.q).replace(/\n/g,' · ')}</div>
+        <div class="list-a">${esc(c.a).replace(/\n/g,' ')}</div>
+      </div>
+      <div style="display:flex;gap:4px;flex-shrink:0;margin-left:8px;">
+        <button class="tbtn-restore" onclick="restoreCard(${c.id})">복구</button>
+        <button class="trash-del-btn" onclick="permDeleteCard(${c.id})">영구삭제</button>
+      </div>
+    </div>`).join('');
+}
+function restoreCard(id){
+  const idx=trash.findIndex(c=>c.id===id);if(idx===-1)return;
+  const c={...trash[idx]};delete c.deletedAt;cards.push(c);trash.splice(idx,1);
+  save();renderCats();updateHeader();renderTrash();updateTrashBadge();
+}
+function permDeleteCard(id){trash=trash.filter(c=>c.id!==id);delete history[id];save();renderTrash();updateTrashBadge();}
+function emptyTrash(){
+  if(!trash.length)return;
+  if(!confirm(`휴지통의 카드 ${trash.length}개를 영구삭제할까요?`))return;
+  trash.forEach(c=>delete history[c.id]);trash=[];save();renderTrash();updateTrashBadge();
+}
+function updateTrashBadge(){
+  const b=document.getElementById('trash-badge');
+  if(b)b.textContent=trash.length>0?` ${trash.length}`:'';
+}
+
+// ═══════════════════ ADD CARD ═══════════════════
+function setAddType(t){
+  addType=t;
+  document.getElementById('type-flash-btn').classList.toggle('active',t==='flash');
+  document.getElementById('type-ox-btn').classList.toggle('active',t==='ox');
+  document.getElementById('add-a-wrap').style.display=t==='flash'?'':'none';
+  document.getElementById('add-ox-wrap').style.display=t==='ox'?'':'none';
+  document.getElementById('add-q-label').textContent=t==='ox'?'진술문 (O 또는 X인지 판단하는 문장)':'조건 / 질문';
+}
+function setOXAns(v){
+  addOXAns=v;
+  document.getElementById('ox-ans-o').classList.toggle('active',v==='O');
+  document.getElementById('ox-ans-x').classList.toggle('active',v==='X');
+}
+function addCard(){
+  const cat=document.getElementById('add-cat').value.trim();
+  const q=document.getElementById('add-q').value.trim();
+  const note=document.getElementById('add-note').value.trim();
+  if(!q){alert('질문/진술문을 입력해주세요.');return;}
+  let a;
+  if(addType==='ox'){a=addOXAns;}
+  else{a=document.getElementById('add-a').value.trim();if(!a){alert('답을 입력해주세요.');return;}}
+  cards.push({id:Date.now(),cat,type:addType,q,a,...(note?{note}:{})});
+  save();renderCats();updateHeader();
+  document.getElementById('add-q').value='';
+  document.getElementById('add-a').value='';
+  document.getElementById('add-note').value='';
+  alert('카드 추가됐어요!');
+}
+
+// ═══════════════════ TAB SWITCH ═══════════════════
+function switchTab(t){
+  currentTab=t;
+  document.querySelectorAll('.tab').forEach((el,i)=>el.classList.toggle('active',['study','review','list','add','trash','settings'][i]===t));
+  document.getElementById('study-view').style.display='none';
+  document.getElementById('review-view').style.display='none';
+  document.getElementById('list-search-wrap').style.display='none';
+  document.getElementById('list-toolbar').classList.remove('show');
+  document.getElementById('list-view').style.display='none';
+  document.getElementById('trash-view').style.display='none';
+  document.getElementById('add-view').style.display='none';
+  document.getElementById('settings-view').style.display='none';
+  document.getElementById('cat-row').style.display=(t==='add'||t==='trash'||t==='settings')?'none':'';
+
+  if(t==='study'){
+    document.getElementById('study-view').style.display='flex';
+    isReview=false; startNew();
+  } else if(t==='review'){
+    document.getElementById('review-view').style.display='block';
+    document.getElementById('review-start').style.display='flex';
+    renderReviewStart();
+  } else if(t==='list'){
+    document.getElementById('list-search-wrap').style.display='';
+    document.getElementById('list-search').value='';
+    if(!document.getElementById('btn-select-mode')){
+      const sw=document.getElementById('list-search-wrap');
+      const row=document.createElement('div');
+      row.style.cssText='display:flex;justify-content:flex-end;margin-top:6px;';
+      row.innerHTML=`<button id="btn-select-mode" class="tbtn tbtn-sel" onclick="toggleSelectModeBtn()">선택 모드</button>`;
+      sw.appendChild(row);
+    }
+    selectMode=false;selectedIds.clear();
+    document.getElementById('list-view').style.display='flex';
+    renderList();
+  } else if(t==='add'){
+    document.getElementById('add-view').style.display='flex';
+    // 카테고리 목록 현재 과목 기준으로 업데이트
+    const addCatSel = document.getElementById('add-cat');
+    const existingCats = [...new Set(cards.map(c=>c.cat))].sort();
+    const archCats = ['PART1 · 역학개념','PART1 · 단면 및 재료','PART1 · 정정구조 해석','PART1 · 정정구조 부재단면설계','PART1 · 부정정구조 해석','PART2 · 구조계획','PART2 · 기초구조','PART2 · 목구조','PART2 · 조적구조','PART3 · RC 총론 일반사항','PART3 · RC 총론 재료','PART3 · RC 사용성 및 내구성','PART3 · RC 설계하중','PART3 · RC 보 설계','PART3 · RC 압축재 설계','PART3 · RC 슬래브 설계','PART3 · RC 기초판 설계','PART3 · RC 정착 및 이음','PART3 · RC 내진설계','PART4 · 강구조 총론','PART4 · 강구조 접합부','PART4 · 강구조 부재설계'];
+    const catList = currentSubject==='eng' ? existingCats : [...new Set([...archCats, ...existingCats])];
+    addCatSel.innerHTML = catList.map(c=>`<option>${esc(c)}</option>`).join('');
+    // 노트 레이블
+    document.getElementById('add-note-label').textContent = currentSubject==='eng'
+      ? '예문 (선택)' : '보충 설명 (선택 · OX 틀렸을 때 표시)';
+    // AI 영단어 섹션
+    document.getElementById('ai-word-section').style.display = currentSubject==='eng' ? '' : 'none';
+  } else if(t==='trash'){
+    document.getElementById('trash-view').style.display='flex';
+    renderTrash();
+  } else if(t==='settings'){
+    document.getElementById('settings-view').style.display='flex';
+    renderSettings();
+  }
+}
+
+// ═══════════════════ SETTINGS ═══════════════════
+function renderSettings(){
+  const cats = [...new Set(cards.map(c=>c.cat))].sort();
+
+  // rename select
+  const rs = document.getElementById('rename-cat-select');
+  rs.innerHTML = cats.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');
+
+  // merge selects
+  const mf = document.getElementById('merge-from');
+  const mt = document.getElementById('merge-to');
+  const opts = cats.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');
+  mf.innerHTML = opts; mt.innerHTML = opts;
+  if(cats.length>1) mt.selectedIndex=1;
+
+  // cat stats
+  const sl = document.getElementById('cat-stats-list');
+  sl.innerHTML = cats.map(cat=>{
+    const total = cards.filter(c=>c.cat===cat).length;
+    const seen  = cards.filter(c=>c.cat===cat&&history[c.id]&&(history[c.id].know+history[c.id].dont)>0).length;
+    return `<div style="display:flex;justify-content:space-between;align-items:center;
+      background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:8px 12px;">
+      <span style="font-size:.8rem;color:var(--text)">${esc(cat.replace(/^PART\d+ · /,''))}</span>
+      <span style="font-family:'DM Mono',monospace;font-size:.7rem;color:var(--muted)">${seen}/${total} 열람</span>
+    </div>`;
+  }).join('');
+}
+
+function renameCat(){
+  const oldCat = document.getElementById('rename-cat-select').value;
+  const newCat = document.getElementById('rename-cat-input').value.trim();
+  if(!newCat){alert('새 이름을 입력해주세요.');return;}
+  if(newCat===oldCat){alert('같은 이름이에요.');return;}
+  cards.forEach(c=>{if(c.cat===oldCat)c.cat=newCat;});
+  save(); renderCats(); renderSettings();
+  alert(`"${oldCat}" → "${newCat}" 변경됐어요!`);
+}
+
+function mergeCats(){
+  const from = document.getElementById('merge-from').value;
+  const to   = document.getElementById('merge-to').value;
+  if(from===to){alert('같은 카테고리예요.');return;}
+  if(!confirm(`"${from}"의 카드를 전부 "${to}"로 옮길까요?`))return;
+  cards.forEach(c=>{if(c.cat===from)c.cat=to;});
+  save(); renderCats(); renderSettings();
+  alert('합치기 완료!');
+}
+function toggleSelectModeBtn(){
+  if(selectMode)exitSelectMode();else enterSelectMode();
+  const b=document.getElementById('btn-select-mode');
+  if(b)b.classList.toggle('active',selectMode);
+  updateSelToolbar();
+}
+
+// ═══════════════════ HEADER ═══════════════════
+function updateHeader(){
+  const seen=filtered().filter(c=>history[c.id]&&(history[c.id].know+history[c.id].dont)>0).length;
+  const heavy=filtered().filter(c=>{const h=history[c.id];return h&&h.dont>h.know;}).length;
+  document.getElementById('st-know').textContent=seen-heavy;
+  document.getElementById('st-left').textContent=heavy;
+  document.getElementById('st-total').textContent=cards.length;
+}
+
+// ═══════════════════ UTIL ═══════════════════
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function esc(s=''){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+// ═══════════════════ CAT SELECT PANEL ═══════════════════
+function toggleCatSelectPanel() {
+  const panel = document.getElementById('cat-select-panel');
+  const toggle = document.getElementById('cat-select-toggle');
+  const isOpen = panel.classList.contains('open');
+  if (!isOpen) renderCatCheckGroups();
+  panel.classList.toggle('open', !isOpen);
+  toggle.classList.toggle('active', !isOpen);
+}
+
+function renderCatCheckGroups() {
+  const wrap = document.getElementById('cat-check-groups');
+  const allCats = [...new Set(cards.map(c => c.cat))].sort();
+
+  if (currentSubject === 'eng') {
+    wrap.innerHTML = `<div class="cat-select-items">${
+      allCats.map(cat => `<button class="cat-check-btn${selectedCats.has(cat)||selectedCats.size===0?' checked':''}"
+        onclick="toggleCatCheck('${cat.replace(/'/g,"\\'")}',this)">${cat}</button>`).join('')
+    }</div>`;
+    return;
+  }
+
+  // 건축구조 — PART별 그룹
+  const partLabels = {'PART1':'PART 1 · 역학','PART2':'PART 2 · 일반구조','PART3':'PART 3 · RC','PART4':'PART 4 · 강구조','기타':'기타'};
+  const parts = {};
+  allCats.forEach(cat => {
+    const m = cat.match(/^(PART\d+)/);
+    const key = m ? m[1] : '기타';
+    if (!parts[key]) parts[key] = [];
+    parts[key].push(cat);
+  });
+
+  wrap.innerHTML = Object.keys(parts).sort().map(pk => `
+    <div class="cat-select-part">
+      <div class="cat-select-part-label">${partLabels[pk]||pk}</div>
+      <div class="cat-select-items">${parts[pk].map(cat => {
+        const short = cat.replace(/^PART\d+ · /,'');
+        const checked = selectedCats.has(cat) || selectedCats.size === 0;
+        return `<button class="cat-check-btn${checked?' checked':''}"
+          onclick="toggleCatCheck('${cat.replace(/'/g,"\\'")}',this)">${short}</button>`;
+      }).join('')}</div>
+    </div>`).join('');
+}
+
+function toggleCatCheck(cat, btn) {
+  // 처음 클릭 시 selectedCats가 비어있으면 (=전체) → 전체를 채우고 시작
+  if (selectedCats.size === 0) {
+    const allCats = [...new Set(cards.map(c => c.cat))];
+    allCats.forEach(c => selectedCats.add(c));
+    // 모든 버튼 checked로
+    document.querySelectorAll('.cat-check-btn').forEach(b => b.classList.add('checked'));
+  }
+  if (selectedCats.has(cat)) {
+    selectedCats.delete(cat);
+    btn.classList.remove('checked');
+  } else {
+    selectedCats.add(cat);
+    btn.classList.add('checked');
+  }
+}
+
+function catCheckAll(val) {
+  const allCats = [...new Set(cards.map(c => c.cat))];
+  if (val) allCats.forEach(c => selectedCats.add(c));
+  else selectedCats.clear();
+  renderCatCheckGroups();
+}
+
+function applyCatSelect() {
+  // selectedCats가 전체랑 같으면 clear해서 "전체"로 처리
+  const allCats = [...new Set(cards.map(c => c.cat))];
+  if (selectedCats.size === allCats.length) selectedCats.clear();
+  updateCatSelectLabel();
+  document.getElementById('cat-select-panel').classList.remove('open');
+  document.getElementById('cat-select-toggle').classList.remove('active');
+  startNew();
+}
+
+function updateCatSelectLabel() {
+  const label = document.getElementById('cat-select-label');
+  if (selectedCats.size === 0) {
+    label.textContent = '📚 단원 선택 (전체)';
+  } else {
+    label.textContent = `📚 ${selectedCats.size}개 단원 선택됨`;
+  }
+}
+
+// ═══════════════════ AI 자동생성 ═══════════════════
+async function callClaude(prompt) {
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 500,
+      messages: [{role:'user', content: prompt}]
+    })
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data?.error?.message || `HTTP ${res.status}`);
+  return data.content?.[0]?.text?.trim() || '';
+}
+
+async function generateWordCard() {
+  const word = document.getElementById('ai-word-input').value.trim();
+  if (!word) return;
+  const btn = document.getElementById('ai-word-btn');
+  const result = document.getElementById('ai-word-result');
+  btn.textContent = '생성중...'; btn.disabled = true;
+  result.innerHTML = `<div style="color:var(--muted);font-size:.78rem;">잠깐만요...</div>`;
+  try {
+    const text = await callClaude(
+      `영단어 "${word}"의 한국어 뜻과 예문을 알려줘. 반드시 아래 형식 그대로만 답해, 다른 말 절대 없이:
+MEANING: 한국어 뜻 (다의어면 / 로 구분)
+EXAMPLE: 영어 예문 1개`
+    );
+    // 라인 파싱 방식 — JSON 파싱 안 씀
+    const meaningMatch = text.match(/MEANING:\s*(.+)/);
+    const exampleMatch = text.match(/EXAMPLE:\s*(.+)/);
+    if (!meaningMatch) throw new Error('응답 형식 오류');
+    const meaning = meaningMatch[1].trim();
+    const example = exampleMatch ? exampleMatch[1].trim() : '';
+    result.innerHTML = `
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:9px;padding:12px;font-size:.82rem;">
+        <div style="font-weight:700;color:var(--accent);margin-bottom:4px;">${esc(word)}</div>
+        <div style="color:var(--text);margin-bottom:6px;line-height:1.6;">${esc(meaning)}</div>
+        ${example?`<div style="color:var(--accent2);font-style:italic;font-size:.75rem;">${esc(example)}</div>`:''}
+        <button onclick="addAIWordCard('${word.replace(/'/g,"\\'")}','${meaning.replace(/'/g,"\\'")}','${example.replace(/'/g,"\\'")}')"
+          style="margin-top:10px;width:100%;padding:8px;background:rgba(212,193,122,.12);border:1px solid var(--accent);
+            color:var(--accent);border-radius:7px;font-family:'DM Mono',monospace;font-size:.72rem;cursor:pointer;">
+          + 카드로 추가</button>
+      </div>`;
+  } catch(e) {
+    result.innerHTML = `<div style="color:var(--red);font-size:.78rem;">생성 실패: ${esc(e.message)}</div>`;
+  }
+  btn.textContent = '생성'; btn.disabled = false;
+}
+
+function addAIWordCard(word, meaning, note) {
+  const newId = Date.now();
+  cards.push({id:newId, cat:'영단어', type:'flash', q:word, a:meaning, note:note});
+  save(); renderCats(); updateHeader();
+  document.getElementById('ai-word-result').innerHTML =
+    `<div style="color:var(--green);font-size:.78rem;padding:6px;">✓ "${word}" 카드 추가됨!</div>`;
+  document.getElementById('ai-word-input').value = '';
+}
+
+async function generateOXExplanation(cardId) {
+  const c = cards.find(x => x.id === cardId);
+  if (!c) return;
+  const btn = document.getElementById('ox-ai-btn');
+  const result = document.getElementById('ox-ai-result');
+  if (!btn || !result) return;
+  btn.textContent = '생성중...'; btn.disabled = true;
+  try {
+    const text = await callClaude(
+      `건축구조 OX 문제 풀이를 2-3문장으로 간결하게 한국어로만 설명해줘. 왜 맞는지/틀린지 핵심 이유 포함. 다른 말 없이 풀이만.
+
+문제: ${c.q}
+정답: ${c.a === 'O' ? '맞다(O)' : '틀리다(X)'}`
+    );
+    result.innerHTML = `
+      <div style="background:rgba(122,184,212,.07);border:1px solid rgba(122,184,212,.2);
+        border-radius:8px;padding:10px 12px;font-size:.78rem;color:var(--text);
+        line-height:1.7;text-align:left;">
+        🤖 ${esc(text)}
+        <button onclick="saveOXNote(${cardId}, this)"
+          style="display:block;margin-top:8px;padding:5px 10px;background:transparent;
+            border:1px solid var(--border);color:var(--muted);border-radius:6px;
+            font-family:'DM Mono',monospace;font-size:.65rem;cursor:pointer;">
+          💾 이 풀이를 카드에 저장</button>
+      </div>`;
+  } catch(e) {
+    result.innerHTML = `<div style="color:var(--red);font-size:.75rem;">생성 실패: ${esc(e.message)}</div>`;
+  }
+  if (btn) { btn.textContent = '✨ AI 풀이 보기'; btn.disabled = false; }
+}
+
+function saveOXNote(cardId, btn) {
+  const c = cards.find(x => x.id === cardId);
+  if (!c) return;
+  const textEl = btn.closest('div').firstChild;
+  const note = (btn.closest('div').textContent || '').replace('💾 이 풀이를 카드에 저장','').replace('🤖','').trim();
+  c.note = note;
+  save();
+  btn.textContent = '✓ 저장됨'; btn.disabled = true;
+}
+
+// ═══════════════════ SUBJECT SWITCH ═══════════════════
+function switchSubject(subj) {
+  currentSubject = subj;
+  document.getElementById('subj-arch').classList.toggle('active', subj==='arch');
+  document.getElementById('subj-eng').classList.toggle('active', subj==='eng');
+  document.getElementById('app-title').textContent = subj==='arch' ? '건축구조 플래시카드' : '영단어 플래시카드';
+  document.getElementById('app-subtitle').textContent = subj==='arch' ? '9급 건축직 공무원 시험 대비' : '영어 어휘 학습';
+  activeCat = '전체';
+  selectedCats.clear();
+  reviewSelectedCats.clear();
+  updateCatSelectLabel();
+  updateReviewCatLabel();
+  load();
+  renderCats();
+  updateTrashBadge();
+  switchTab('study');
+}
+
+// ═══════════════════ INIT ═══════════════════
+document.getElementById('modal-type').addEventListener('change', toggleModalType);
+load(); renderCats(); updateTrashBadge(); updateCatSelectLabel(); updateReviewCatLabel(); switchTab('study');
+</script>
+</body>
+</html>
