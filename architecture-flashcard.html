@@ -1908,11 +1908,24 @@ function switchTab(t){
 
   if(t==='study'){
     document.getElementById('study-view').style.display='flex';
-    isReview=false; startNew();
+    // 진행 중이면 이어서, 아니면 새로 시작
+    if(isReview || queue.length===0){
+      isReview=false; startNew();
+    } else {
+      // 이어서 — UI만 복원
+      showStudyUI(); renderCard();
+    }
   } else if(t==='review'){
     document.getElementById('review-view').style.display='block';
-    document.getElementById('review-start').style.display='flex';
-    renderReviewStart();
+    // 복습 진행 중이면 학습뷰로 이어서
+    if(isReview && queue.length>0){
+      document.getElementById('review-view').style.display='none';
+      document.getElementById('study-view').style.display='flex';
+      showStudyUI(); renderCard();
+    } else {
+      document.getElementById('review-start').style.display='flex';
+      renderReviewStart();
+    }
   } else if(t==='stats'){
     document.getElementById('stats-view').style.display='block';
     renderStats();
