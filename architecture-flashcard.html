@@ -307,6 +307,28 @@ header{width:100%;max-width:580px;display:flex;justify-content:space-between;ali
 .modal-del{background:rgba(191,106,106,.2);color:var(--red);border:1px solid rgba(191,106,106,.3);}
 .modal-cancel{background:var(--card);color:var(--muted);border:1px solid var(--border);}
 
+/* DICTIONARY POPUP */
+.dict-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;
+  align-items:flex-end;justify-content:center;padding:0;}
+.dict-overlay.open{display:flex;}
+.dict-popup{background:var(--surface);border:1px solid var(--border);border-radius:18px 18px 0 0;
+  padding:20px 20px 36px;width:100%;max-width:580px;max-height:75vh;overflow-y:auto;}
+.dict-word{font-size:1.4rem;font-weight:700;color:var(--accent);margin-bottom:2px;}
+.dict-phonetic{font-size:.8rem;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:12px;}
+.dict-pos{font-size:.65rem;font-family:'DM Mono',monospace;color:var(--accent2);
+  background:rgba(122,184,212,.12);border:1px solid rgba(122,184,212,.2);
+  border-radius:6px;padding:2px 8px;display:inline-block;margin-bottom:6px;}
+.dict-def{font-size:.84rem;color:var(--text);line-height:1.65;margin-bottom:4px;padding-left:10px;
+  border-left:2px solid var(--border);}
+.dict-example{font-size:.75rem;color:var(--muted);font-style:italic;margin-top:2px;padding-left:10px;}
+.dict-section{margin-bottom:14px;}
+.dict-close{width:100%;padding:11px;background:var(--card);border:1px solid var(--border);
+  border-radius:10px;color:var(--muted);font-family:'DM Mono',monospace;font-size:.8rem;
+  cursor:pointer;margin-top:6px;}
+.dict-btn{display:inline-block;margin-top:8px;padding:5px 12px;background:rgba(122,184,212,.1);
+  border:1px solid var(--accent2);color:var(--accent2);border-radius:7px;
+  font-family:'DM Mono',monospace;font-size:.7rem;cursor:pointer;}
+
 /* ADD VIEW */
 .add-view{display:none;flex-direction:column;gap:10px;width:100%;max-width:580px;}
 .add-view label{font-size:.68rem;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:3px;display:block;}
@@ -614,6 +636,14 @@ header{width:100%;max-width:580px;display:flex;justify-content:space-between;ali
   <!-- stats per category -->
   <div style="font-size:.8rem;font-weight:700;color:var(--muted);">카테고리별 카드 수</div>
   <div id="cat-stats-list" style="display:flex;flex-direction:column;gap:5px;"></div>
+</div>
+
+<!-- DICTIONARY POPUP -->
+<div class="dict-overlay" id="dict-overlay" onclick="closeDictPopup(event)">
+  <div class="dict-popup" id="dict-popup" onclick="event.stopPropagation()">
+    <div id="dict-content"></div>
+    <button class="dict-close" onclick="closeDictPopup()">닫기</button>
+  </div>
 </div>
 
 <!-- EDIT MODAL -->
@@ -1148,7 +1178,10 @@ function renderFlashCard(c) {
   document.getElementById('card-front').innerHTML = `
     <div class="card-cat">${esc(c.cat)}</div>
     <div class="card-q">${esc(c.q).replace(/\n/g,'<br>')}</div>
-    <div class="card-hint">탭하면 답 확인 · 알면 바로 ✓</div>`;
+    <div class="card-hint">탭하면 답 확인 · 알면 바로 ✓</div>
+    ${currentSubject==='eng'
+      ? `<button onclick="event.stopPropagation();lookupWord('${c.q.replace(/'/g,"\\'")}')"
+          class="dict-btn">📖 사전 보기</button>` : ''}`;
   document.getElementById('card-back').innerHTML = `
     <div class="card-ans-label">ANSWER</div>
     <div class="card-ans">${esc(c.a).replace(/\n/g,'<br>')}</div>
@@ -1847,6 +1880,39 @@ function updateCatSelectLabel() {
   } else {
     label.textContent = `📚 ${selectedCats.size}개 단원 선택됨`;
   }
+}
+
+// ═══════════════════ DICTIONARY ═══════════════════
+async function lookupWord(word) {
+  const overlay = document.getElementById('dict-overlay');
+  const content = document.getElementById('dict-content');
+  overlay.classList.add('open');
+  content.innerHTML = `<div style="color:var(--muted);font-size:.85rem;text-align:center;padding:20px;">검색 중...</div>`;
+  try {
+    const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`);
+    if (!res.ok) throw new Error('단어를 찾을 수 없어요');
+    const data = await res.json();
+    const entry = data[0];
+    const phonetic = entry.phonetics?.find(p=>p.text)?.text || '';
+    let html = `<div class="dict-word">${esc(entry.word)}</div>`;
+    if (phonetic) html += `<div class="dict-phonetic">${esc(phonetic)}</div>`;
+    entry.meanings?.slice(0,4).forEach(m => {
+      html += `<div class="dict-section">
+        <span class="dict-pos">${esc(m.partOfSpeech)}</span>`;
+      m.definitions?.slice(0,3).forEach(d => {
+        html += `<div class="dict-def">• ${esc(d.definition)}</div>`;
+        if (d.example) html += `<div class="dict-example">"${esc(d.example)}"</div>`;
+      });
+      html += `</div>`;
+    });
+    content.innerHTML = html;
+  } catch(e) {
+    content.innerHTML = `<div style="color:var(--red);font-size:.85rem;text-align:center;padding:20px;">${esc(e.message)}</div>`;
+  }
+}
+function closeDictPopup(e) {
+  if (e && e.target !== document.getElementById('dict-overlay')) return;
+  document.getElementById('dict-overlay').classList.remove('open');
 }
 
 // ═══════════════════ AI 자동생성 ═══════════════════
