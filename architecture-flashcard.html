@@ -603,6 +603,14 @@ header{width:100%;max-width:580px;display:flex;justify-content:space-between;ali
   <div style="font-size:.78rem;color:var(--muted);line-height:1.5;">DEFAULT_CARDS에 없는 카테고리의 카드를 삭제합니다. (도장·영단어·새 카드는 유지)</div>
   <button class="btn-add-sub" onclick="cleanOldCards()" style="background:#c0392b;color:#fff;">구 카드 삭제</button>
   <div style="height:1px;background:var(--border);margin:4px 0;"></div>
+  <div style="font-size:.8rem;font-weight:700;color:var(--muted);">🔄 학습기록 초기화</div>
+  <div style="font-size:.78rem;color:var(--muted);line-height:1.5;">알겠어/모르겠어 기록만 초기화합니다. 카드 내용은 유지됩니다.</div>
+  <button class="btn-add-sub" onclick="resetHistory()" style="background:#e67e22;color:#fff;">학습기록 초기화</button>
+  <div style="height:1px;background:var(--border);margin:4px 0;"></div>
+  <div style="font-size:.8rem;font-weight:700;color:var(--muted);">🗑️ 전체 초기화</div>
+  <div style="font-size:.78rem;color:var(--muted);line-height:1.5;">카테고리 선택·학습기록·추가카드 전부 초기화합니다. 목차가 안 맞을 때 사용하세요.</div>
+  <button class="btn-add-sub" onclick="resetAll()" style="background:#c0392b;color:#fff;">전체 초기화</button>
+  <div style="height:1px;background:var(--border);margin:4px 0;"></div>
   <div style="font-size:.8rem;font-weight:700;color:var(--muted);">카테고리별 카드 수</div>
   <div id="cat-stats-list" style="display:flex;flex-direction:column;gap:5px;"></div>
 </div>
@@ -920,7 +928,7 @@ const DEFAULT_CARDS = [
 {id:6101,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S03 압축재·벽체 설계',q:'[옹벽의 안정조건] 전도에 대한 안전율은 ___ 이상 요구 / 활동에 대한 저항력은 옹벽에 작용하는 수평력의 ___배 이상 / 침하에 대한 저항은 지반에 유발되는 최대 지반반력이 지반의 허용지지력을 초과하지 않아야 한다.',a:'2.0 / 1.5'},
 {id:6102,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S03 압축재·벽체 설계',q:'[옹벽의 구조해석] 저판의 뒷굽판은 정확한 방법이 사용되지 않는 한, 뒷굽판 상부에 재하되는 모든 하중을 지지하도록 설계 / 저판의 깊이는 동결심도보다 깊어야 하며 최소한 ___m 이상 / 부벽식 옹벽의 전면벽은 3변 지지된 ___슬래브로 설계 / 뒷부벽은 ___로 설계하여야 하고, 앞부벽은 ___로 설계하여야 한다.',a:'1.0 / 2방향 / T형보 / 직사각형보'},
 {id:6103,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 슬래브 설계',q:'[슬래브] 중간대는 2개의 주열대 사이에 구획된 설계대 / 1방향 슬래브는 마주보는 2슬래브로서 슬래브나 장변경간이 단변경간의 ___ 인 4변이 지지된 직사각형 슬래브 하중의 ___이상이 단변방향으로 전달되므로 하중이 1방향으로만 전달되고, 주근은 단변에 평행한 방향으로 배근, 장변방향에는 온도조절철근을 배근한다.',a:'2배 초과 / 90%'},
-{id:6104,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 슬래브 설계',q:'[1방향 슬래브]의 두께는 최소 ___mm 이상 / 슬래브의 정모멘트 철근 및 부모멘트 철근 단면인 경우 슬래브 두께의 ___배 이하, 또한 ___mm 이하로 하고, 기타 단면인 경우 슬래브 두께의 ___배 이하, 또한 ___mm 이하',a:'100 / 2 / 300 / 3 / 450'},
+{id:6104,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 슬래브 설계',q:'[1방향 슬래브]의 두께는 최소 ___mm 이상 / 슬래브의 정모멘트 철근 및 부모멘트 철근 단면인 경우 슬래브 두께의 ___배 이하, 또한 ___mm 이하로 하고, 기타 단면인 경우 슬래브 두께의 ___배 이하, 또한 ___mm 이하 / 부모멘트 철근의 중심간격은 위험단면인 경우 슬래브 두께의 ___배 이하 / 수축·온도철근의 간격은 슬래브 두께의 ___배 이하, 또한 ___mm 이하',a:'100 / 2 / 300 / 3 / 450 / 2 / 5 / 450'},
 {id:6105,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 슬래브 설계',q:'[수축·온도철근의 최소철근비] 0.0014 이상 또한 설계기준항복강도가 400MPa 이하인 이형철근을 사용한 슬래브에서 ___ 이상이어야 하고, 설계기준항복강도가 400MPa를 초과하는 이형철근 또는 용접철망을 사용한 슬래브에서 ___×400/fy 이상이어야 한다.',a:'0.0020 / 0.0020'},
 {id:6106,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 슬래브 설계',q:'[수축·온도철근] 슬래브에서 휨철근이 1방향으로만 배치되는 경우 휨철근에 ___방향으로 배치 / 설계기준항복강도를 발휘할 수 있도록 정착 / 수축·온도철근은 강도설계법이 적용되는 휨부재에 적용되는 최소철근량이므로 심하게 구속된 부재에 대해서는 하중계수와 하중조합을 고려하여 최소철근량을 ___시켜야 한다.',a:'직각 / 증가'},
 {id:6107,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 슬래브 설계',q:'[1방향 슬래브의 근사해법 적용 조건] 2경간(Span) 이상 연속인 경우 / 인접 2개 경간의 차이가 짧은 경간의 ___이상 차이가 나지 않을 경우 / 등분포하중이 작용하는 경우 / 활하중이 고정하중의 ___배를 초과하지 않는 경우 / 부재 단면의 크기가 일정한 경우이다.',a:'20% / 3'},
@@ -2087,6 +2095,21 @@ function setSoundTheme(t) {
   playWood('know'); // 미리 듣기
 }
 
+function resetHistory(){
+  if(!confirm('알겠어/모르겠어 기록을 전부 초기화할까요?\n카드 내용은 유지됩니다.')) return;
+  history = {};
+  const key = currentSubject==='eng' ? 'eng1_history' : 'arch5_history';
+  localStorage.removeItem(key);
+  updateHeader(); renderCats();
+  if(currentTab==='list') renderList();
+  alert('학습기록 초기화 완료!');
+}
+function resetAll(){
+  if(!confirm('카테고리 선택·학습기록·추가카드 전부 초기화할까요?\n기본 카드는 유지됩니다.')) return;
+  const prefix = currentSubject==='eng' ? 'eng1' : 'arch5';
+  ['_cards','_history','_trash','_cats'].forEach(s => localStorage.removeItem(prefix+s));
+  location.reload();
+}
 function cleanOldCards(){
   // DEFAULT_CARDS의 카테고리 목록 추출
   const defaultCats = new Set(DEFAULT_CARDS.map(c=>c.cat));
