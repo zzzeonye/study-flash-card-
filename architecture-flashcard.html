@@ -14,9 +14,16 @@
   --green:#2e7d40;--red:#c0392b;--text:#1a1814;--muted:#888070;--sub:#ccc;
   --ox-o:rgba(46,125,64,.12);--ox-x:rgba(192,57,43,.12);
 }
+[data-theme="dark"]{
+  color-scheme: dark;
+  --bg:#1a1a1e;--surface:#26262c;--card:#2c2c34;--border:#3a3a44;
+  --accent:#c9a84c;--accent2:#4aabcf;
+  --green:#4caf70;--red:#e05c5c;--text:#e8e4dc;--muted:#888888;--sub:#555;
+  --ox-o:rgba(76,175,112,.15);--ox-x:rgba(224,92,92,.15);
+}
 *{box-sizing:border-box;margin:0;padding:0;}
-html,body{min-height:100%;background:#f5f4f0 !important;color:#1a1814 !important;}
-body{background:#f5f4f0;color:#1a1814;font-family:'Noto Sans KR',sans-serif;
+html,body{min-height:100%;background:var(--bg) !important;color:var(--text) !important;}
+body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-serif;
   display:flex;flex-direction:column;align-items:center;padding:16px 14px 40px;}
 header{width:100%;max-width:580px;display:flex;justify-content:space-between;align-items:center;
   margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border);flex-shrink:0;}
@@ -110,7 +117,8 @@ header{width:100%;max-width:580px;display:flex;justify-content:space-between;ali
 .card-face{width:100%;border-radius:13px;border:1px solid var(--border);
   padding:24px 20px 20px;background:var(--card);
   display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;
-  animation:cardIn .22s ease;}
+  animation:cardIn .22s ease;
+  max-height:48vh;overflow-y:auto;}
 .card-front{background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(212,193,122,.07) 0%,transparent 70%),var(--card);}
 .card-back{background:radial-gradient(ellipse 80% 50% at 50% 100%,rgba(122,184,212,.07) 0%,transparent 70%),var(--card);}
 .card-cat{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--accent);
@@ -162,7 +170,7 @@ header{width:100%;max-width:580px;display:flex;justify-content:space-between;ali
 .cloze-blank:hover{opacity:.85;}
 .cloze-blank.revealed{background:rgba(212,193,122,.15);color:var(--accent);cursor:default;}
 .cloze-hint{font-size:.63rem;color:var(--sub);font-family:'DM Mono',monospace;margin-top:10px;align-self:center;}
-.btn-row{width:100%;display:flex;gap:7px;flex-shrink:0;}
+.btn-row{width:100%;display:flex;gap:7px;flex-shrink:0;position:sticky;bottom:0;background:var(--bg);padding:6px 0 2px;z-index:10;}
 .btn{flex:1;padding:14px 6px;border-radius:11px;border:1px solid;font-size:.85rem;
   font-family:'Noto Sans KR',sans-serif;cursor:pointer;transition:all .16s;font-weight:700;}
 .btn-know{background:rgba(106,191,123,.1);border-color:rgba(106,191,123,.3);color:var(--green);}
@@ -171,7 +179,7 @@ header{width:100%;max-width:580px;display:flex;justify-content:space-between;ali
 .btn-dontknow:hover{background:rgba(191,106,106,.2);border-color:var(--red);}
 .btn-flip{background:transparent;border-color:var(--border);color:var(--muted);flex:0 0 auto;padding:14px 16px;}
 .btn-flip:hover{border-color:var(--accent);color:var(--accent);}
-.ox-btn-row{width:100%;display:flex;gap:10px;flex-shrink:0;}
+.ox-btn-row{width:100%;display:flex;gap:10px;flex-shrink:0;position:sticky;bottom:0;background:var(--bg);padding:6px 0 2px;z-index:10;}
 .ox-btn{flex:1;padding:16px;border-radius:12px;border:1px solid;font-size:1.4rem;
   cursor:pointer;transition:all .18s;font-weight:700;font-family:'Noto Sans KR',sans-serif;}
 .ox-btn-o{background:var(--ox-o);border-color:rgba(106,191,123,.35);color:var(--green);}
@@ -335,9 +343,32 @@ header{width:100%;max-width:580px;display:flex;justify-content:space-between;ali
 .card-example{margin-top:10px;font-size:.78rem;color:var(--accent2);line-height:1.65;
   font-style:italic;padding:7px 11px;background:rgba(122,184,212,.06);
   border-radius:7px;border-left:2px solid var(--accent2);text-align:left;width:100%;}
+
+/* ── 둥둥 이모지 ── */
+#floaty-field {
+  position: fixed;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+.floaty {
+  position: absolute;
+  font-size: 1.6rem;
+  animation: floaty-up 4s ease-out forwards;
+  user-select: none;
+}
+@keyframes floaty-up {
+  0%   { transform: translateY(0) rotate(0deg) scale(1);   opacity: 1; }
+  30%  { transform: translateY(-60px) rotate(15deg) scale(1.15); opacity: 1; }
+  60%  { transform: translateY(-110px) rotate(-10deg) scale(1); opacity: 0.9; }
+  100% { transform: translateY(-180px) rotate(5deg) scale(0.8); opacity: 0; }
+}
 </style>
 </head>
 <body>
+<div id="floaty-field"></div>
 <header>
   <div>
     <div class="title" id="app-title">플래시카드</div>
@@ -536,6 +567,26 @@ header{width:100%;max-width:580px;display:flex;justify-content:space-between;ali
     </div>
   </div>
   <button class="btn-add-sub" onclick="mergeCats()" style="background:var(--surface);color:var(--text);border:1px solid var(--border);">합치기</button>
+  <div style="height:1px;background:var(--border);margin:4px 0;"></div>
+  <div style="font-size:.8rem;font-weight:700;color:var(--muted);">🌙 화면 테마</div>
+  <div style="display:flex;gap:8px;">
+    <button id="theme-light" class="btn-add-sub" onclick="setTheme('light')" style="flex:1;">☀️ 라이트</button>
+    <button id="theme-dark"  class="btn-add-sub" onclick="setTheme('dark')"  style="flex:1;background:var(--surface);color:var(--text);border:1px solid var(--border);">🌙 다크</button>
+  </div>
+  <div style="height:1px;background:var(--border);margin:4px 0;"></div>
+  <div style="font-size:.8rem;font-weight:700;color:var(--muted);">🔊 소리 테마</div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;">
+    <button id="snd-game"   class="btn-add-sub" onclick="setSoundTheme('game')"   style="flex:1;">🎮 게임</button>
+    <button id="snd-bubble" class="btn-add-sub" onclick="setSoundTheme('bubble')" style="flex:1;background:var(--surface);color:var(--text);border:1px solid var(--border);">🫧 버블</button>
+    <button id="snd-off"    class="btn-add-sub" onclick="setSoundTheme('off')"    style="flex:1;background:var(--surface);color:var(--text);border:1px solid var(--border);">🔇 끄기</button>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px;margin-top:4px;">
+    <span style="font-size:.78rem;color:var(--muted);white-space:nowrap;">🔉 볼륨</span>
+    <input id="vol-slider" type="range" min="0" max="100" value="50"
+      style="flex:1;accent-color:var(--accent);"
+      oninput="setVolume(this.value)">
+    <span id="vol-label" style="font-size:.75rem;color:var(--muted);font-family:'DM Mono',monospace;width:28px;text-align:right;">50</span>
+  </div>
   <div style="height:1px;background:var(--border);margin:4px 0;"></div>
   <div style="font-size:.8rem;font-weight:700;color:var(--muted);">🧹 구 카드 정리</div>
   <div style="font-size:.78rem;color:var(--muted);line-height:1.5;">DEFAULT_CARDS에 없는 카테고리의 카드를 삭제합니다. (도장·영단어·새 카드는 유지)</div>
@@ -747,6 +798,7 @@ const DEFAULT_CARDS = [
   {id:5167,cat:'PART1 · 구조계획',type:'ox',q:'비구조요소의 내진설계는 구조체 내진설계와 분리하여 수행할 수 있다',a:'O'},
   {id:5168,cat:'PART1 · 구조계획',type:'ox',q:'건축비구조요소는 캔틸레버 형식에서 발생하는\n지점회전에 의한 수직 방향 변위를 고려해야 한다',a:'O'},
   {id:5169,cat:'PART1 · 구조계획',type:'ox',q:'설계하중에 의한 비구조요소의 횡방향·면외방향\n휨·변형이 변형한계를 초과하지 않아야 한다',a:'O'},
+  {id:5170,cat:'PART1 · 구조계획',type:'normal',q:'[반응수정계수 R값 크기 순서] 지진력저항시스템별 R값 순위',a:'특수·편심가새 > 중간(RC>S) > 보통(S>RC) > 철근보강조적(3~2.5) > 역추형 특수(2.5) > 무보강 조적(1.5) > 역추형 보통(1.25)'},
 
 // ===== PART2 철근콘크리트구조 =====
 // ===================== CH01 총론 200~229 =====================
@@ -919,6 +971,13 @@ const DEFAULT_ENG_CARDS = [
   {id:9018,cat:"영단어",type:"flash",q:"vomiting",a:"구토(명) / 구역질\nvomit(동)의 명사형",note:"The patient reported nausea and vomiting after the medication."},
   {id:9019,cat:"영단어",type:"flash",q:"exacerbate",a:"악화시키다 / 심화시키다\n(상황·증상을 더 나쁘게 만들다)",note:"Stress can exacerbate existing health problems."},
   {id:9020,cat:"영단어",type:"flash",q:"fatigue",a:"피로(명) / 피로감\nmental fatigue = 정신적 피로\nfatigue = exhaustion보다 만성적 뉘앙스",note:"Chronic fatigue can be a symptom of various medical conditions."},
+  {id:9021,cat:"영단어",type:"flash",q:"operation",a:"작전·군사작전(명) / 수술(명) / 운영·가동(명)\nmilitary operation / undergo an operation",note:"The military launched a covert operation to rescue the hostages."},
+  {id:9022,cat:"영단어",type:"flash",q:"convenience",a:"편의·편리함(명)\nat your convenience = 편한 시간에\nconvenience store = 편의점",note:"The app was designed for the convenience of its users."},
+  {id:9023,cat:"영단어",type:"flash",q:"bud",a:"싹·봉오리(명) / 친구(명, 구어)\ntaste bud = 미뢰\nnip in the bud = 싹을 자르다",note:"The flowers were just beginning to bud in early spring."},
+  {id:9024,cat:"영단어",type:"flash",q:"brag",a:"자랑하다·으스대다(동)\nbrag about = ~을 자랑하다\n≒ boast, show off",note:"He bragged about his promotion to anyone who would listen."},
+  {id:9025,cat:"영단어",type:"flash",q:"contradict",a:"반박하다·부정하다(동) / 모순되다(동)\ncontradict oneself = 자기모순\ncontradiction(명)",note:"The witness's testimony contradicted the evidence presented in court."},
+  {id:9026,cat:"영단어",type:"flash",q:"be subject to",a:"~의 대상이다 / ~을 받다 / ~에 종속되다\nbe subject to change = 변경될 수 있다\nbe subject to tax = 세금 부과 대상이다",note:"All prices are subject to change without notice."},
+  {id:9027,cat:"영단어",type:"flash",q:"encompass",a:"포함하다·아우르다(동) / 둘러싸다(동)\n≒ include, cover, embrace\nencompass a wide range = 광범위하게 포괄하다",note:"The curriculum encompasses a wide range of subjects."},
 ];
 
 // ═══════════════════ STATE ═══════════════════
@@ -1353,6 +1412,7 @@ function answerOX(chosen) {
 
 function flipCard() {
   flipped = !flipped;
+  playWood('flip');
   document.getElementById('card-front').style.display = flipped ? 'none' : '';
   document.getElementById('card-back').style.display  = flipped ? '' : 'none';
   document.getElementById('btn-flip').textContent = flipped ? '↩ 질문' : '답 보기';
@@ -1369,8 +1429,10 @@ function answer(know) {
   stampToday();
   if (know) {
     history[c.id].know++; cleared.add(c.id); sessK++;
+    spawnFloaty();
   } else {
     history[c.id].dont++; sessD++;
+    clearFloaties();
     const minPos = Math.min(3, queue.length);
     const pos = queue.length <= minPos ? queue.length : minPos + Math.floor(Math.random() * (queue.length - minPos));
     queue.splice(pos, 0, c);
@@ -1916,6 +1978,28 @@ function switchTab(t){
 
 // ═══════════════════ SETTINGS ═══════════════════
 function renderSettings(){
+  // 소리 테마 버튼 상태 반영
+  const sg = document.getElementById('snd-game');
+  const sb = document.getElementById('snd-bubble');
+  ['game','bubble','off'].forEach(id => {
+    const el = document.getElementById('snd-'+id);
+    if(!el) return;
+    el.style.background = soundTheme===id ? 'var(--accent)' : 'var(--surface)';
+    el.style.color      = soundTheme===id ? '#fff' : 'var(--text)';
+    el.style.border     = soundTheme===id ? 'none' : '1px solid var(--border)';
+  });
+  const curTheme = document.documentElement.getAttribute('data-theme') || 'light';
+  ['light','dark'].forEach(id => {
+    const el = document.getElementById('theme-'+id);
+    if(!el) return;
+    el.style.background = curTheme===id ? 'var(--accent)' : 'var(--surface)';
+    el.style.color      = curTheme===id ? '#fff' : 'var(--text)';
+    el.style.border     = curTheme===id ? 'none' : '1px solid var(--border)';
+  });
+  const vs = document.getElementById('vol-slider');
+  const vl = document.getElementById('vol-label');
+  if(vs){ vs.value = Math.round(globalVolume * 100); }
+  if(vl){ vl.textContent = Math.round(globalVolume * 100); }
   const cats = [...new Set(cards.map(c=>c.cat))].sort();
   const rs = document.getElementById('rename-cat-select');
   rs.innerHTML = cats.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');
@@ -1953,6 +2037,19 @@ function mergeCats(){
   save(); renderCats(); renderSettings();
   alert('합치기 완료!');
 }
+function setSoundTheme(t) {
+  soundTheme = t;
+  localStorage.setItem('soundTheme', t);
+  ['game','bubble','off'].forEach(id => {
+    const el = document.getElementById('snd-'+id);
+    if(!el) return;
+    el.style.background = t===id ? 'var(--accent)' : 'var(--surface)';
+    el.style.color      = t===id ? '#fff' : 'var(--text)';
+    el.style.border     = t===id ? 'none' : '1px solid var(--border)';
+  });
+  playWood('know'); // 미리 듣기
+}
+
 function cleanOldCards(){
   // DEFAULT_CARDS의 카테고리 목록 추출
   const defaultCats = new Set(DEFAULT_CARDS.map(c=>c.cat));
@@ -2069,16 +2166,235 @@ function updateCatSelectLabel() {
 }
 
 // ═══════════════════ SUBJECT SWITCH ═══════════════════
+// 과목별 학습 상태 저장소
+const subjState = { arch: null, eng: null };
+
+function saveSubjState() {
+  subjState[currentSubject] = {
+    queue: [...queue],
+    isReview,
+    activeCat,
+    sessK, sessD,
+    cleared: [...cleared],
+    currentTab
+  };
+}
+
+function restoreSubjState(subj) {
+  const s = subjState[subj];
+  if (s && (s.queue.length > 0 || s.isReview)) {
+    queue     = s.queue;
+    isReview  = s.isReview;
+    activeCat = s.activeCat;
+    sessK     = s.sessK;
+    sessD     = s.sessD;
+    cleared   = new Set(s.cleared);
+    return true;
+  }
+  return false;
+}
+
 function switchSubject(subj) {
+  if (subj === currentSubject) return;
+  saveSubjState();
   currentSubject = subj;
-  queue = []; isReview = false;
   document.getElementById('subj-arch').classList.toggle('active', subj==='arch');
   document.getElementById('subj-eng').classList.toggle('active', subj==='eng');
   document.getElementById('app-title').textContent = subj==='arch' ? '건축구조 플래시카드' : '영단어 플래시카드';
   document.getElementById('app-subtitle').textContent = subj==='arch' ? '9급 건축직 공무원 시험 대비' : '영어 어휘 학습';
   load(); loadCats();
   renderCats(); updateTrashBadge(); updateCatSelectLabel();
-  switchTab('study');
+  const restored = restoreSubjState(subj);
+  if (restored) {
+    // 이전 상태 복원 - 현재 탭으로 이동
+    const t = subjState[subj].currentTab;
+    switchTab((t==='study'||t==='review') ? t : 'study');
+  } else {
+    queue = []; isReview = false;
+    switchTab('study');
+  }
+}
+
+
+// ═══════════════════ SOUND & FLOATY ═══════════════════
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+// ── 소리 테마 ──
+let soundTheme = localStorage.getItem('soundTheme') || 'game';
+let globalVolume = parseFloat(localStorage.getItem('globalVolume') || '0.5');
+
+function setVolume(v) {
+  globalVolume = v / 100;
+  localStorage.setItem('globalVolume', globalVolume);
+  const vl = document.getElementById('vol-label');
+  if(vl) vl.textContent = v;
+}
+
+function setTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  localStorage.setItem('appTheme', t);
+  ['light','dark'].forEach(id => {
+    const el = document.getElementById('theme-'+id);
+    if(!el) return;
+    el.style.background = t===id ? 'var(--accent)' : 'var(--surface)';
+    el.style.color      = t===id ? '#fff' : 'var(--text)';
+    el.style.border     = t===id ? 'none' : '1px solid var(--border)';
+  });
+}
+
+// 초기 테마 적용
+(function(){
+  const saved = localStorage.getItem('appTheme');
+  if(saved) document.documentElement.setAttribute('data-theme', saved);
+})();
+
+function playBubble(type) {
+  const ctx = audioCtx;
+  const now = ctx.currentTime;
+
+  function bubble(freq, dur, vol=0.09) { vol *= globalVolume * 2;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(freq * 1.3, now);
+    osc.frequency.exponentialRampToValueAtTime(freq, now + dur * 0.3);
+    osc.frequency.exponentialRampToValueAtTime(freq * 0.6, now + dur);
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(vol, now + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + dur);
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(now); osc.stop(now + dur);
+  }
+
+  if (type === 'know') {
+    // 뽀글뽀글 상승 3연타
+    [0, 0.08, 0.16].forEach((d, i) => {
+      setTimeout(() => {
+        const f = [500, 650, 820][i];
+        const o = ctx.createOscillator(), g = ctx.createGain();
+        const t = ctx.currentTime;
+        o.type = 'sine';
+        o.frequency.setValueAtTime(f*1.2, t);
+        o.frequency.exponentialRampToValueAtTime(f*0.7, t+0.12);
+        g.gain.setValueAtTime(0.18, t);
+        g.gain.exponentialRampToValueAtTime(0.001, t+0.13);
+        o.connect(g); g.connect(ctx.destination);
+        o.start(t); o.stop(t+0.13);
+      }, d * 1000);
+    });
+  } else if (type === 'dont') {
+    // 뿌직 터지는 버블
+    bubble(180, 0.2, 0.2);
+    setTimeout(() => { const t=ctx.currentTime; bubble(120, 0.15, 0.08); }, 80);
+  } else if (type === 'flip') {
+    bubble(700, 0.08, 0.1);
+  } else {
+    bubble(500, 0.06, 0.08);
+  }
+}
+
+// ── 게임 효과음 ──
+function playGame(type) {
+  const ctx = audioCtx;
+  const now = ctx.currentTime;
+
+  if (type === 'know') {
+    // 맞췄을 때: 밝은 상승 코인 소리
+    [0, 0.07, 0.14].forEach((delay, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'square';
+      osc.frequency.setValueAtTime([523, 659, 784][i], now + delay);
+      gain.gain.setValueAtTime(0.07 * globalVolume * 2, now + delay);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + delay + 0.12);
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.start(now + delay); osc.stop(now + delay + 0.12);
+    });
+
+  } else if (type === 'dont') {
+    // 틀렸을 때: 낮은 bzzzt
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(120, now);
+    osc.frequency.exponentialRampToValueAtTime(60, now + 0.15);
+    gain.gain.setValueAtTime(0.08 * globalVolume * 2, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(now); osc.stop(now + 0.18);
+
+  } else if (type === 'flip') {
+    // 카드 뒤집기: 짧은 틱
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(900, now);
+    osc.frequency.exponentialRampToValueAtTime(400, now + 0.05);
+    gain.gain.setValueAtTime(0.05 * globalVolume * 2, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(now); osc.stop(now + 0.06);
+
+  } else {
+    // 일반 탭: 짧은 클릭
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(600, now);
+    gain.gain.setValueAtTime(0.04 * globalVolume * 2, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(now); osc.stop(now + 0.04);
+  }
+}
+
+// ── 둥둥 이모지 ──
+const FLOATY_EMOJIS = ['⭐','🌟','✨','💫','🎯','🔥','💥','🎉','🌈','🍀','🦋','🌸','🎈','💎','🪄','🐣','🐥','🍭','🫧','🌙'];
+let floatyCount = 0;
+
+function spawnFloaty() {
+  const field = document.getElementById('floaty-field');
+  const emoji = FLOATY_EMOJIS[Math.floor(Math.random() * FLOATY_EMOJIS.length)];
+  const el = document.createElement('div');
+  el.className = 'floaty';
+  el.textContent = emoji;
+  // 화면 양옆 여백에 랜덤 위치 (카드 밖)
+  const side = Math.random() < 0.5 ? 'left' : 'right';
+  const x = side === 'left'
+    ? Math.random() * 60 + 5   // 5~65px
+    : window.innerWidth - (Math.random() * 60 + 60); // 우측
+  const y = Math.random() * (window.innerHeight * 0.5) + window.innerHeight * 0.25;
+  el.style.left = x + 'px';
+  el.style.top  = y + 'px';
+  field.appendChild(el);
+  floatyCount++;
+  setTimeout(() => { el.remove(); floatyCount--; }, 4100);
+}
+
+function clearFloaties() {
+  const field = document.getElementById('floaty-field');
+  field.innerHTML = '';
+  floatyCount = 0;
+}
+
+// 버튼 클릭 소리
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('button, .list-item, .ox-btn, .tab, .subject-btn, .drawer-btn, .cat-chip');
+  if (!btn) return;
+  if (btn.classList.contains('btn-know') || btn.id === 'ox-o') { playWood('know'); return; }
+  if (btn.classList.contains('btn-dontknow') || btn.id === 'ox-x') { playWood('dont'); return; }
+  if (btn.classList.contains('btn-flip') || btn.id === 'btn-next') { playWood('flip'); return; }
+  playWood('tap');
+}, { passive: true });
+
+function applyVol(gainNode, baseVol) {
+  gainNode.gain.setValueAtTime(baseVol * globalVolume * 2, audioCtx.currentTime);
+}
+
+function playWood(type) {
+  if (soundTheme === 'off') return;
+  if (soundTheme === 'bubble') playBubble(type);
+  else playGame(type);
 }
 
 // ═══════════════════ INIT ═══════════════════
