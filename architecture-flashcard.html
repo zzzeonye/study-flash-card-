@@ -1195,7 +1195,7 @@ function renderCats() {
     const items = document.createElement('div');
     items.className = 'cat-part-items' + ((isOpen||hasActive) ? ' open' : '');
     cats.forEach(cat => {
-      const short = cat.replace(/^PART\d+ · /,'');
+      const short = cat.includes('>') ? cat.split('>').pop().trim() : cat;
       const b = document.createElement('button');
       b.className = 'cat-btn' + (cat === activeCat ? ' active' : '');
       b.textContent = short;
@@ -1983,7 +1983,7 @@ function switchTab(t){
     const lcf = document.getElementById('list-cat-filter');
     if(lcf){
       const cats=[...new Set(filtered().map(c=>c.cat))].sort();
-      lcf.innerHTML='<option value="">📚 전체 단원</option>'+cats.map(c=>`<option value="${esc(c)}">${esc(c.replace(/^PART\d+ · /,''))}</option>`).join('');
+      lcf.innerHTML='<option value="">📚 전체 단원</option>'+cats.map(c=>`<option value="${esc(c)}">${esc(c.includes('>')? c.split('>').pop().trim() : c)}</option>`).join('');
     }
     if(!document.getElementById('btn-select-mode')){
       const sw=document.getElementById('list-search-wrap');
