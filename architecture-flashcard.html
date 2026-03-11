@@ -476,14 +476,25 @@ header{width:100%;max-width:580px;display:flex;justify-content:space-between;ali
     </div>
   </div>
 </div>
-<div id="list-search-wrap" style="display:none;width:100%;max-width:580px;margin-bottom:8px;">
-  <input id="list-search" type="text" placeholder="🔍  조건·답·키워드 검색..."
-    oninput="renderList()"
+<div id="list-search-wrap" style="display:none;width:100%;max-width:580px;margin-bottom:8px;display:none;flex-direction:column;gap:6px;">
+  <div style="position:relative;width:100%;">
+    <input id="list-search" type="text" placeholder="🔍  조건·답·키워드 검색..."
+      oninput="renderList();updateListSearchClear()"
+      style="width:100%;background:var(--surface);border:1px solid var(--border);border-radius:9px;
+        color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:.88rem;
+        padding:10px 40px 10px 14px;outline:none;transition:border-color .18s;"
+      onfocus="this.style.borderColor='var(--accent)'"
+      onblur="this.style.borderColor='var(--border)'">
+    <button id="list-search-clear" onclick="clearListSearch()"
+      style="display:none;position:absolute;right:10px;top:50%;transform:translateY(-50%);
+        background:none;border:none;cursor:pointer;color:var(--muted);font-size:1rem;padding:2px 4px;line-height:1;">✕</button>
+  </div>
+  <select id="list-cat-filter" onchange="renderList()"
     style="width:100%;background:var(--surface);border:1px solid var(--border);border-radius:9px;
-      color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:.88rem;
-      padding:10px 14px;outline:none;transition:border-color .18s;"
-    onfocus="this.style.borderColor='var(--accent)'"
-    onblur="this.style.borderColor='var(--border)'">
+      color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:.85rem;
+      padding:9px 12px;outline:none;">
+    <option value="">📚 전체 단원</option>
+  </select>
 </div>
 <div class="list-toolbar" id="list-toolbar">
   <div class="sel-info">선택됨 <span id="sel-count">0</span>개</div>
@@ -1548,7 +1559,9 @@ function startReview(weakFirst=false){
 function renderList(){
   const lv=document.getElementById('list-view');
   const query=(document.getElementById('list-search')?.value||'').trim().toLowerCase();
+  const catFilter=(document.getElementById('list-cat-filter')?.value||'');
   let pool=filtered();
+  if(catFilter) pool=pool.filter(c=>c.cat===catFilter);
   if(query) pool=pool.filter(c=>c.q.toLowerCase().includes(query)||c.a.toLowerCase().includes(query)||(c.note||'').toLowerCase().includes(query)||c.cat.toLowerCase().includes(query));
   if(currentSubject==='eng') pool=[...pool].sort((a,b)=>a.q.localeCompare(b.q,'en'));
   if(!pool.length){lv.innerHTML=`<div style="text-align:center;padding:36px;color:var(--muted);font-size:.85rem;">${query?'검색 결과 없음':'카드 없음'}</div>`;updateSelToolbar();return;}
@@ -1569,6 +1582,17 @@ function renderList(){
     </div>`;
   }).join('');
   updateSelToolbar();
+}
+function clearListSearch(){
+  const inp=document.getElementById('list-search');
+  if(inp){ inp.value=''; inp.focus(); }
+  document.getElementById('list-search-clear').style.display='none';
+  renderList();
+}
+function updateListSearchClear(){
+  const inp=document.getElementById('list-search');
+  const btn=document.getElementById('list-search-clear');
+  if(btn) btn.style.display=(inp&&inp.value)?'':'none';
 }
 function onListItemClick(e,id){if(selectMode)toggleSelect(id);}
 function toggleSelect(id){if(selectedIds.has(id))selectedIds.delete(id);else selectedIds.add(id);renderList();}
@@ -1952,8 +1976,15 @@ function switchTab(t){
     document.getElementById('calendar-view').style.display='block';
     renderCalendar();
   } else if(t==='list'){
-    document.getElementById('list-search-wrap').style.display='';
+    document.getElementById('list-search-wrap').style.display='flex';
     document.getElementById('list-search').value='';
+    document.getElementById('list-search-clear').style.display='none';
+    // 단원 드롭다운 업데이트
+    const lcf = document.getElementById('list-cat-filter');
+    if(lcf){
+      const cats=[...new Set(filtered().map(c=>c.cat))].sort();
+      lcf.innerHTML='<option value="">📚 전체 단원</option>'+cats.map(c=>`<option value="${esc(c)}">${esc(c.replace(/^PART\d+ · /,''))}</option>`).join('');
+    }
     if(!document.getElementById('btn-select-mode')){
       const sw=document.getElementById('list-search-wrap');
       const row=document.createElement('div');
