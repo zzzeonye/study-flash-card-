@@ -537,6 +537,10 @@ header{width:100%;max-width:580px;display:flex;justify-content:space-between;ali
   </div>
   <button class="btn-add-sub" onclick="mergeCats()" style="background:var(--surface);color:var(--text);border:1px solid var(--border);">합치기</button>
   <div style="height:1px;background:var(--border);margin:4px 0;"></div>
+  <div style="font-size:.8rem;font-weight:700;color:var(--muted);">🧹 구 카드 정리</div>
+  <div style="font-size:.78rem;color:var(--muted);line-height:1.5;">DEFAULT_CARDS에 없는 카테고리의 카드를 삭제합니다. (도장·영단어·새 카드는 유지)</div>
+  <button class="btn-add-sub" onclick="cleanOldCards()" style="background:#c0392b;color:#fff;">구 카드 삭제</button>
+  <div style="height:1px;background:var(--border);margin:4px 0;"></div>
   <div style="font-size:.8rem;font-weight:700;color:var(--muted);">카테고리별 카드 수</div>
   <div id="cat-stats-list" style="display:flex;flex-direction:column;gap:5px;"></div>
 </div>
@@ -1949,6 +1953,18 @@ function mergeCats(){
   save(); renderCats(); renderSettings();
   alert('합치기 완료!');
 }
+function cleanOldCards(){
+  // DEFAULT_CARDS의 카테고리 목록 추출
+  const defaultCats = new Set(DEFAULT_CARDS.map(c=>c.cat));
+  // localStorage 카드 중 defaultCats에 없는 카테고리 카드만 필터
+  const oldCards = cards.filter(c=>!defaultCats.has(c.cat));
+  if(oldCards.length===0){alert('정리할 구 카드가 없어요!');return;}
+  if(!confirm(`구 카테고리 카드 ${oldCards.length}개를 삭제할까요?\n(도장·영단어·새로 추가한 카드는 유지됩니다)`))return;
+  cards = cards.filter(c=>defaultCats.has(c.cat));
+  save(); loadCats(); renderCats(); renderSettings();
+  alert(`${oldCards.length}개 삭제 완료!`);
+}
+
 function toggleSelectModeBtn(){
   if(selectMode)exitSelectMode();else enterSelectMode();
   const b=document.getElementById('btn-select-mode');
