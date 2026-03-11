@@ -2187,7 +2187,7 @@ function renderCatCheckGroups() {
     <div class="cat-select-part">
       <div class="cat-select-part-label">${partLabels[pk]||pk}</div>
       <div class="cat-select-items">${parts[pk].map(cat => {
-        const short = cat.replace(/^PART\d+ · /,'');
+        const short = cat.includes('>') ? cat.split('>').pop().trim() : cat;
         const checked = selectedCats.has(cat) || selectedCats.size === 0;
         return `<button class="cat-check-btn${checked?' checked':''}"
           onclick="toggleCatCheck('${cat.replace(/'/g,"\\'")}',this)">${short}</button>`;
