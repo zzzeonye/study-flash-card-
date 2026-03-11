@@ -2106,9 +2106,17 @@ function resetHistory(){
 }
 function resetAll(){
   if(!confirm('카테고리 선택·학습기록·추가카드 전부 초기화할까요?\n기본 카드는 유지됩니다.')) return;
-  const prefix = currentSubject==='eng' ? 'eng1' : 'arch5';
-  ['_cards','_history','_trash','_cats'].forEach(s => localStorage.removeItem(prefix+s));
-  location.reload();
+  // 두 과목 다 초기화
+  ['arch5','eng1'].forEach(prefix => {
+    ['_cards','_history','_trash','_cats'].forEach(s => localStorage.removeItem(prefix+s));
+  });
+  // 직접 재초기화 (reload 없이)
+  cards = JSON.parse(JSON.stringify(getDefaultCards()));
+  history = {}; trash = [];
+  selectedCats = new Set(cards.map(c=>c.cat));
+  save(); loadCats(); renderCats(); updateHeader(); updateTrashBadge(); updateCatSelectLabel();
+  switchTab('study');
+  alert('초기화 완료! 카드 ' + cards.length + '장 복구됐어요.');
 }
 function cleanOldCards(){
   // DEFAULT_CARDS의 카테고리 목록 추출
