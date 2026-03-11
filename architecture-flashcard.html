@@ -1070,11 +1070,13 @@ function load() {
       defaults.forEach(def => {
         if (!stored.find(c=>c.id===def.id)) result.push(storedMap[def.id]);
       });
-      cards = result;
+      cards = result.filter(c => c && c.cat);
     }
   } catch(e) {
     cards = JSON.parse(JSON.stringify(getDefaultCards())); history = {}; trash = [];
   }
+  // null 카드 방어
+  cards = cards.filter(c => c && c.cat);
 }
 function save() {
   const k = getKeys();
