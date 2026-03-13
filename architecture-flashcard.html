@@ -856,6 +856,8 @@ const DEFAULT_CARDS = [
 {id:6033,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'[콘크리트 강도시험용 시료채취] 각 날짜에 친 각 등급의 콘크리트 강도시험용 시료는 하루에 1회 이상, ___m³당 1회 이상, 슬래브나 벽체의 표면적 ___m²마다 1회 이상, 배합이 변경될 때마다 1회 이상일 때 채취',a:'120 / 500'},
 {id:6034,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'[시험실에서 양생한 공시체의 강도평가] 콘크리트 각 등급의 강도는 3번의 연속강도 시험의 결과 그 평균값이 fck 이상일 때와 〈개개의 강도시험 값이 fck가 35MPa 이하인 경우에는 fck-___MPa 이상, 또한 fck가 35MPa 초과인 경우에는 ___fck 이상〉인 경우, 두 요건이 충족되면 만족할 만한 것으로 간주할 수 있다.',a:'3.5 / 0.9'},
 {id:6035,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'[슬럼프시험] 슬럼프콘의 상부지경 100mm·하부지경 ___mm·높이 ___mm의 철제 형틀을 평평한 수밀판 위에 놓고, 비빈 콘크리트를 3회로 나누어 넣고 매회 다짐막대로 ___회 다져서 시험 / 콘크리트의 ___을 측정하고 워커빌리티를 비교하는 데 이용된다.',a:'200 / 300 / 25 / 반죽질기'},
+{id:6152,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'[할선탄성계수] Ec = 8,500 × ∛(fck + Δf)\nΔf: fck ≤ 40MPa → ___ / fck ≥ 60MPa → ___ / 사이는 직선보간',a:'4MPa / 6MPa'},
+{id:6153,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'[초기접선탄성계수] Eci = ___ × Ec',a:'1.18'},
 
 // ===================== CH02 사용성 및 내구성 230~240 =====================
 {id:6036,type:'cloze',cat:'PART3 · RC구조 > CH02 사용성 및 내구성',q:'[사용성 설계] 사용성 검토는 균열, 처짐, 피로의 영향 등을 고려 / 부재의 안전성은 ___하중에 의하여 검토하지만, 처짐이나 균열 또는 피로 등 사용성은 ___하중에 의하여 검토한다.',a:'계수 / 사용'},
@@ -971,7 +973,11 @@ const DEFAULT_CARDS = [
   {id:6144,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[균형철근비] ρb = 0.85×β₁×(fck/fy) × ___\n= 0.85×β₁×(fck/fy) × 600/(600+fy)\n균형변형률 상태: 인장철근 항복과 콘크리트 압축파괴가 ___ 발생\n최대철근비: εt ≥ ___ 조건 만족해야 함',a:'600/(600+fy) / 동시 / 0.004'},
   {id:6145,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[전단강도] Vu ≤ ϕ(Vc + Vs)\nϕ = ___ (전단)\nVu = 계수전단력 / Vc = 콘크리트 전단강도 / Vs = ___',a:'0.75 / 스터럽 전단강도'},
   {id:6146,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[콘크리트 전단강도] Vc = (1/6)×λ×√fck × bw × d\nλ = 경량콘크리트계수 (보통콘크리트 = ___)\nbw = ___ / d = ___\n※ 0.17λ√fck×bw×d 와 동일 (1/6 ≈ 0.167)',a:'1.0 / 복부폭(보 폭) / 유효깊이'},
-  {id:6147,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[스터럽 전단강도] Vs = Av×fyt×d / s\nAv = ___ / fyt = 스터럽 항복강도 / d = 유효깊이 / s = ___\nVs 최댓값: ___ × bw × d 초과 불가',a:'스터럽 단면적(양쪽 합) / 스터럽 간격 / (2/3)√fck'}
+  {id:6147,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[스터럽 전단강도] Vs = Av×fyt×d / s\nAv = ___ / fyt = 스터럽 항복강도 / d = 유효깊이 / s = ___\nVs 최댓값: ___ × bw × d 초과 불가',a:'스터럽 단면적(양쪽 합) / 스터럽 간격 / (2/3)√fck'},
+{id:6148,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[탄성계수 공식] fs = Es × εs\n응력(fs) = ___ × ___ ',a:'Es(탄성계수) / εs(변형률)'},
+{id:6149,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[철근량 공식] As = ρ·b·d\nAs = ___ × ___ × ___',a:'ρ(철근비) / b(폭) / d(유효깊이)'},
+{id:6150,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[균열모멘트] Mcr = fr·Ig / yt\nfr(파괴계수) = ___ × √fck',a:'0.63λ'},
+{id:6151,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[경량콘크리트 계수 λ]\n보통 콘크리트: ___\n경량 콘크리트(모래): ___\n경량 콘크리트(전체): ___',a:'1.0 / 0.85 / 0.75'}
 ];
 
 // ═══════════════════ ENGLISH CARDS ═══════════════════
@@ -1583,7 +1589,11 @@ function renderList(){
   const catFilter=(document.getElementById('list-cat-filter')?.value||'');
   let pool=filtered();
   if(catFilter) pool=pool.filter(c=>c.cat===catFilter);
-  if(query) pool=pool.filter(c=>c.q.toLowerCase().includes(query)||c.a.toLowerCase().includes(query)||(c.note||'').toLowerCase().includes(query)||c.cat.toLowerCase().includes(query));
+  if(query) {
+    const norm = s => s.toLowerCase().replace(/\s+/g,'');
+    const q2 = norm(query);
+    pool=pool.filter(c=>norm(c.q).includes(q2)||norm(c.a).includes(q2)||norm(c.note||'').includes(q2)||norm(c.cat).includes(q2));
+  }
   if(currentSubject==='eng') pool=[...pool].sort((a,b)=>a.q.localeCompare(b.q,'en'));
   if(!pool.length){lv.innerHTML=`<div style="text-align:center;padding:36px;color:var(--muted);font-size:.85rem;">${query?'검색 결과 없음':'카드 없음'}</div>`;updateSelToolbar();return;}
   lv.innerHTML=pool.map(c=>{
@@ -1676,7 +1686,14 @@ function openEdit(id){
     document.getElementById('modal-ox-ans').value=c.a;
   } else if(c.type==='cloze'){
     let rows=[];
-    try{rows=JSON.parse(c.a);}catch(e){}
+    try{
+      const parsed=JSON.parse(c.a);
+      if(Array.isArray(parsed)) rows=parsed;
+      else throw new Error();
+    }catch(e){
+      // 슬래시 구분 문자열 처리
+      rows=(c.a||'').split('/').map(s=>({label:'',value:s.trim()})).filter(r=>r.value);
+    }
     renderClozeModalRows(rows);
   } else {
     document.getElementById('modal-a').value=c.a||'';
