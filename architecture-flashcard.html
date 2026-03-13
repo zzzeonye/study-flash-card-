@@ -356,14 +356,30 @@ header{width:100%;max-width:580px;display:flex;justify-content:space-between;ali
 .floaty {
   position: absolute;
   font-size: 1.6rem;
-  animation: floaty-up 4s ease-out forwards;
+  animation: floaty-up 2s ease-in-out infinite alternate;
+  user-select: none;
+}
+.floaty-poop {
+  position: absolute;
+  font-size: 1.6rem;
+  animation: poop-fly 1.2s ease-out forwards;
   user-select: none;
 }
 @keyframes floaty-up {
-  0%   { transform: translateY(0) rotate(0deg) scale(1);   opacity: 1; }
-  30%  { transform: translateY(-60px) rotate(15deg) scale(1.15); opacity: 1; }
-  60%  { transform: translateY(-110px) rotate(-10deg) scale(1); opacity: 0.9; }
-  100% { transform: translateY(-180px) rotate(5deg) scale(0.8); opacity: 0; }
+  0%   { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+  50%  { transform: translateY(-18px) rotate(8deg) scale(1.08); opacity: 1; }
+  100% { transform: translateY(0px) rotate(-5deg) scale(1); opacity: 1; }
+}
+@keyframes floaty-drift {
+  0%   { transform: translateY(0) rotate(-5deg) scale(1); opacity: 1; }
+  50%  { transform: translateY(-22px) rotate(6deg) scale(1.06); opacity: 1; }
+  100% { transform: translateY(0px) rotate(-5deg) scale(1); opacity: 1; }
+}
+@keyframes poop-fly {
+  0%   { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+  30%  { transform: translateY(-50px) rotate(20deg) scale(1.2); opacity: 1; }
+  70%  { transform: translateY(-120px) rotate(-15deg) scale(0.9); opacity: 0.7; }
+  100% { transform: translateY(-200px) rotate(10deg) scale(0.6); opacity: 0; }
 }
 </style>
 </head>
@@ -856,6 +872,8 @@ const DEFAULT_CARDS = [
 {id:6033,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'[콘크리트 강도시험용 시료채취] 각 날짜에 친 각 등급의 콘크리트 강도시험용 시료는 하루에 1회 이상, ___m³당 1회 이상, 슬래브나 벽체의 표면적 ___m²마다 1회 이상, 배합이 변경될 때마다 1회 이상일 때 채취',a:'120 / 500'},
 {id:6034,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'[시험실에서 양생한 공시체의 강도평가] 콘크리트 각 등급의 강도는 3번의 연속강도 시험의 결과 그 평균값이 fck 이상일 때와 〈개개의 강도시험 값이 fck가 35MPa 이하인 경우에는 fck-___MPa 이상, 또한 fck가 35MPa 초과인 경우에는 ___fck 이상〉인 경우, 두 요건이 충족되면 만족할 만한 것으로 간주할 수 있다.',a:'3.5 / 0.9'},
 {id:6035,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'[슬럼프시험] 슬럼프콘의 상부지경 100mm·하부지경 ___mm·높이 ___mm의 철제 형틀을 평평한 수밀판 위에 놓고, 비빈 콘크리트를 3회로 나누어 넣고 매회 다짐막대로 ___회 다져서 시험 / 콘크리트의 ___을 측정하고 워커빌리티를 비교하는 데 이용된다.',a:'200 / 300 / 25 / 반죽질기'},
+{id:6152,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'[콘크리트 탄성계수]\n할선탄성계수 Ec = 8,500 × ∛(___)\n초기접선탄성계수 Eci = ___ × Ec',a:'fcm(=fck+Δf) / 1.18'},
+{id:6153,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'[콘크리트 탄성계수 Δf]\nfck ≤ 40MPa → Δf = ___MPa\nfck ≥ 60MPa → Δf = ___MPa\n중간값은 직선보간',a:'4 / 6'},
 {id:6152,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'[할선탄성계수] Ec = 8,500 × ∛(fck + Δf)\nΔf: fck ≤ 40MPa → ___ / fck ≥ 60MPa → ___ / 사이는 직선보간',a:'4MPa / 6MPa'},
 {id:6153,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'[초기접선탄성계수] Eci = ___ × Ec',a:'1.18'},
 
@@ -1467,6 +1485,8 @@ function answer(know) {
   document.getElementById('ox-o').disabled = false;
   document.getElementById('ox-x').disabled = false;
 
+  playWood(know ? 'know' : 'dont');
+
   const c = queue.shift();
   if (!history[c.id]) history[c.id] = {know:0, dont:0};
   history[c.id].lastSeen = Date.now();
@@ -1476,7 +1496,7 @@ function answer(know) {
     spawnFloaty();
   } else {
     history[c.id].dont++; sessD++;
-    clearFloaties();
+    spawnPoop();
     const minPos = Math.min(3, queue.length);
     const pos = queue.length <= minPos ? queue.length : minPos + Math.floor(Math.random() * (queue.length - minPos));
     queue.splice(pos, 0, c);
@@ -2403,7 +2423,7 @@ function playGame(type) {
       const gain = ctx.createGain();
       osc.type = 'square';
       osc.frequency.setValueAtTime([523, 659, 784][i], now + delay);
-      gain.gain.setValueAtTime(0.07 * globalVolume * 2, now + delay);
+      gain.gain.setValueAtTime(0.07 * globalVolume, now + delay);
       gain.gain.exponentialRampToValueAtTime(0.001, now + delay + 0.12);
       osc.connect(gain); gain.connect(ctx.destination);
       osc.start(now + delay); osc.stop(now + delay + 0.12);
@@ -2416,7 +2436,7 @@ function playGame(type) {
     osc.type = 'sawtooth';
     osc.frequency.setValueAtTime(120, now);
     osc.frequency.exponentialRampToValueAtTime(60, now + 0.15);
-    gain.gain.setValueAtTime(0.08 * globalVolume * 2, now);
+    gain.gain.setValueAtTime(0.08 * globalVolume, now);
     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
     osc.connect(gain); gain.connect(ctx.destination);
     osc.start(now); osc.stop(now + 0.18);
@@ -2464,9 +2484,31 @@ function spawnFloaty() {
   const y = Math.random() * (window.innerHeight * 0.5) + window.innerHeight * 0.25;
   el.style.left = x + 'px';
   el.style.top  = y + 'px';
+  // 랜덤 drift delay로 자연스럽게
+  el.style.animationDelay = (Math.random() * 1.5) + 's';
+  el.style.animationDuration = (2 + Math.random()) + 's';
   field.appendChild(el);
   floatyCount++;
-  setTimeout(() => { el.remove(); floatyCount--; }, 4100);
+}
+
+function spawnPoop() {
+  const field = document.getElementById('floaty-field');
+  // 기존 floaty들 제거
+  [...field.querySelectorAll('.floaty')].forEach(e => e.remove());
+  floatyCount = 0;
+  // 💩 여러 개 날려보내기
+  for (let i = 0; i < 3; i++) {
+    const el = document.createElement('div');
+    el.className = 'floaty-poop';
+    el.textContent = '💩';
+    const x = Math.random() * (window.innerWidth - 60) + 10;
+    const y = Math.random() * (window.innerHeight * 0.5) + window.innerHeight * 0.2;
+    el.style.left = x + 'px';
+    el.style.top  = y + 'px';
+    el.style.animationDelay = (i * 0.15) + 's';
+    field.appendChild(el);
+    setTimeout(() => el.remove(), 1500);
+  }
 }
 
 function clearFloaties() {
