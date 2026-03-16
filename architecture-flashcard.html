@@ -873,7 +873,7 @@ const DEFAULT_CARDS = [
 {id:6033,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'[콘크리트 강도시험용 시료채취] 각 날짜에 친 각 등급의 콘크리트 강도시험용 시료는 하루에 1회 이상, ___m³당 1회 이상, 슬래브나 벽체의 표면적 ___m²마다 1회 이상, 배합이 변경될 때마다 1회 이상일 때 채취',a:'120 | 500'},
 {id:6034,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'[시험실에서 양생한 공시체의 강도평가] 콘크리트 각 등급의 강도는 3번의 연속강도 시험의 결과 그 평균값이 fck 이상일 때와 〈개개의 강도시험 값이 fck가 35MPa 이하인 경우에는 fck-___MPa 이상, 또한 fck가 35MPa 초과인 경우에는 ___fck 이상〉인 경우, 두 요건이 충족되면 만족할 만한 것으로 간주할 수 있다.',a:'3.5 | 0.9'},
 {id:6035,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'[슬럼프시험] 슬럼프콘의 상부지경 100mm·하부지경 ___mm·높이 ___mm의 철제 형틀을 평평한 수밀판 위에 놓고, 비빈 콘크리트를 3회로 나누어 넣고 매회 다짐막대로 ___회 다져서 시험 / 콘크리트의 ___을 측정하고 워커빌리티를 비교하는 데 이용된다.',a:'200 | 300 | 25 | 반죽질기'},
-{id:6152,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'[콘크리트 탄성계수]\n할선탄성계수 Ec = 8,500 × ∛(___)\n초기접선탄성계수 Eci = ___ × Ec',a:'fcm(=fck+Δf) | 1.18'},
+{id:6152,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'[콘크리트 탄성계수]\n할선탄성계수 Ec = 8,500 × ∛(___)\nEci = ___ × Ec',a:'fcm(=fck+Δf) | 1.18'},
 {id:6153,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'[콘크리트 탄성계수 Δf]\nfck ≤ 40MPa → Δf = ___MPa\nfck ≥ 60MPa → Δf = ___MPa\n중간값은 직선보간',a:'4 | 6'},
 {id:6152,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'[할선탄성계수] Ec = 8,500 × ∛(fck + Δf)\nΔf: fck ≤ 40MPa → ___ / fck ≥ 60MPa → ___ / 사이는 직선보간',a:'4MPa | 6MPa'},
 {id:6153,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'[초기접선탄성계수] Eci = ___ × Ec',a:'1.18'},
@@ -989,15 +989,15 @@ const DEFAULT_CARDS = [
 {id:6139,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S08 프리스트레스트 콘크리트 설계',q:'[프리스트레스트 콘크리트 설계] 프리스트레스를 도입할 때 변형률은 중립축으로부터 거리에 ___ / 균열단면에서 콘크리트는 인장력에 저항할 수 ___ / 프리스트레싱에 의해 콘크리트는 ___ 을, 긴장재는 ___을 각각 받음 / 프리스트레싱에 의하여 발생되는 응력집중을 고려 / 프리스트레싱을 하는 방법으로 프리텐션방식과 포스트텐션방식 등이 있다.',a:'비례 | 없음 | 압축력 | 인장력'},
 {id:6140,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S08 프리스트레스트 콘크리트 설계',q:'[PSC 프리스트레싱 방법] 프리텐션 방식은 콘크리트를 타설하기 전에 미리 긴장재에 인장력을 가하여 긴장재가 늘어난 상태에서 콘크리트를 타설하여 프리스트레스를 주는 방식 / 포스트텐션 방식은 콘크리트가 굳은 후에 긴장재를 인장하고 단부정착장치가 중요하기 때문에 그 끝부분을 콘크리트에 정착시켜서 프리스트레스를 부재에 도입시키는 방법으로 PS강재를 곡선으로 배치하는 것이 ___ / 연속경간에 적용할 수 있으며, 일반적으로 ___구조물에 적합하며 프리캐스트 부재의 결합에도 편리하다.',a:'용이 | 대형'},
 {id:6141,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S08 프리스트레스트 콘크리트 설계',q:'[PSC 프리스트레스의 손실 원인] 도입 시 즉시손실은 정착 장치의 ___ 에 의한 감소, PS강재와 시스의 ___ 에 의한 감소, 콘크리트의 ___ 에 의한 감소, 콘크리트의 ___ 에 의한 감소 / 도입 후 시간적 손실은 콘크리트의 ___ 에 의한 감소, PS강재의 ___으로 나눠진다.',a:'활동 | 마찰 | 탄성수축 | 건조수축 | 크리프 | 응력이완'},
-  {id:6142,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[설계휨강도] ϕMn = ϕ × As × fy × (d - a/2)\nϕ = ___ (인장지배단면)\nAs = 인장철근 단면적 / fy = 항복강도 / d = 유효깊이 / a = 등가응력블록 깊이',a:'0.85'},
-  {id:6143,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[등가응력블록 깊이] a = As×fy / (0.85×fck×b)\nb = ___ / fck = ___ / 중립축 깊이 c = a/β₁\nβ₁: fck ≤ 28MPa → ___ / fck > 28MPa → 0.85에서 초과 7MPa당 0.05씩 감소 (최소 0.65)',a:'보 폭 | 콘크리트 설계기준강도 | 0.85'},,
+  {id:6142,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[설계휨강도] ϕMn = ___ × As × fy × (d - a/2)\nϕ = ___ (인장지배단면)',a:'ϕ(강도감소계수) | 0.85'},
+  {id:6143,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[등가응력블록 깊이] a = As×fy / (___ × fck × ___)\nβ₁: fck ≤ 28MPa → ___ / 초과 7MPa당 0.05 감소 (최소 0.65)',a:'0.85 | b(보 폭) | 0.85'},,
   {id:6144,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[균형철근비] ρb = 0.85×β₁×(fck/fy) × ___\n= 0.85×β₁×(fck/fy) × 600/(600+fy)\n균형변형률 상태: 인장철근 항복과 콘크리트 압축파괴가 ___ 발생\n최대철근비: εt ≥ ___ 조건 만족해야 함',a:'600/(600+fy) | 동시 | 0.004'},
   {id:6145,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[전단강도] Vu ≤ ϕ(Vc + Vs)\nϕ = ___ (전단)\nVu = 계수전단력 / Vc = 콘크리트 전단강도 / Vs = ___',a:'0.75 | 스터럽 전단강도'},
-  {id:6146,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[콘크리트 전단강도] Vc = (1/6)×λ×√fck × bw × d\nλ = 경량콘크리트계수 (보통콘크리트 = ___)\nbw = ___ / d = ___\n※ 0.17λ√fck×bw×d 와 동일 (1/6 ≈ 0.167)',a:'1.0 | 복부폭(보 폭) | 유효깊이'},
-  {id:6147,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[스터럽 전단강도] Vs = Av×fyt×d / s\nAv = ___ / fyt = 스터럽 항복강도 / d = 유효깊이 / s = ___\nVs 최댓값: ___ × bw × d 초과 불가',a:'스터럽 단면적(양쪽 합) | 스터럽 간격 | (2/3)√fck'},
-{id:6148,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[탄성계수 공식] fs = Es × εs\n응력(fs) = ___ × ___ ',a:'Es(탄성계수) | εs(변형률)'},
-{id:6149,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[철근량 공식] As = ρ·b·d\nAs = ___ × ___ × ___',a:'ρ(철근비) | b(폭) | d(유효깊이)'},
-{id:6150,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[균열모멘트] Mcr = fr·Ig / yt\nfr(파괴계수) = ___ × √fck',a:'0.63λ'},
+  {id:6146,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[콘크리트 전단강도] Vc = (1/6) × ___ × √fck × ___ × ___\n보통콘크리트 λ = ___',a:'λ(경량콘크리트계수) | bw(복부폭) | d(유효깊이) | 1.0'},
+  {id:6147,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[스터럽 전단강도] Vs = ___ × fyt × d / ___\nVs 최댓값: ___ × bw × d 초과 불가',a:'Av(스터럽 단면적) | s(스터럽 간격) | (2/3)√fck'},
+{id:6148,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[탄성계수 공식] 응력(fs) = ___ × ___ ',a:'Es(탄성계수) | εs(변형률)'},
+{id:6149,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[철근량 공식] As = ___ × ___ × ___',a:'ρ(철근비) | b(폭) | d(유효깊이)'},
+{id:6150,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[균열모멘트] Mcr = fr·Ig / yt\nfr = ___ × √fck',a:'0.63λ'},
 {id:6151,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[경량콘크리트 계수 λ]\n보통 콘크리트: ___\n경량 콘크리트(모래): ___\n경량 콘크리트(전체): ___',a:'1.0 | 0.85 | 0.75'}
 ];
 
@@ -1498,6 +1498,23 @@ function revealBlank(i, val) {
   if (!el || el.classList.contains('revealed')) return;
   el.textContent = val;
   el.classList.add('revealed');
+  playReveal();
+}
+
+function playReveal() {
+  if (soundTheme === 'off') return;
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.08);
+    gain.gain.setValueAtTime(0.06 * globalVolume, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.12);
+    osc.start(); osc.stop(audioCtx.currentTime + 0.12);
+  } catch(e) {}
 }
 
 function answerOX(chosen) {
