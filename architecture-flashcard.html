@@ -487,8 +487,8 @@ header{width:100%;max-width:580px;display:flex;justify-content:space-between;ali
     <div class="start-sub" id="review-sub">오늘 복습할 카드를 자동으로 선별해요<br>마지막으로 본 날짜·오답률 기반</div>
     <div class="weight-info" id="weight-info"></div>
     <div style="display:flex;gap:8px;width:100%;margin-top:4px;">
-      <button class="start-go" style="flex:1;" onclick="startReview(false)">복습 시작</button>
-      <button class="start-go" style="flex:1;background:rgba(192,57,43,.1);border:1px solid var(--red);color:var(--red);" onclick="startReview(true)">🎯 취약 우선</button>
+      <button class="start-go" style="flex:1;" onclick="startReview(false,20)">📖 20개 시작</button>
+      <button class="start-go" style="flex:1;background:rgba(192,57,43,.1);border:1px solid var(--red);color:var(--red);" onclick="startReview(true,20)">🎯 취약 우선</button>
     </div>
   </div>
 </div>
@@ -891,6 +891,8 @@ const DEFAULT_CARDS = [
 {id:6045,type:'normal',cat:'PART3 · RC구조 > CH02 사용성 및 내구성',q:'[처짐을 계산하지 않는 경우] 보 또는 1방향 슬래브의 최소두께 (캔틸레버/단순지지/1단연속/양단연속)',a:'보·리브있는1방향슬래브: L/8, L/16, L/18.5, L/21\n1방향슬래브: L/10, L/20, L/24, L/28\n※구조용경량콘크리트: 1.09보다 작지않아야\n※fy 400MPa이외: 위 최소두께×[0.43+fy/700]'},
 {id:6046,type:'cloze',cat:'PART3 · RC구조 > CH02 사용성 및 내구성',q:'[유효단면2차모멘트와 장기처짐 효과를 고려하여 계산한 처짐량] 과도한 처짐에 의해 손상되기 쉬운 비구조 요소를 지지 또는 부착하지 않은 평지붕구조인 경우 활하중에 의한 순간처짐의 한계값은 ___ / 과도한 처짐에 의해 손상되기 쉬운 비구조 요소를 지지 또는 부착한 바닥구조인 경우 ___',a:'l/180 | l/360'},
 {id:6047,type:'cloze',cat:'PART3 · RC구조 > CH02 사용성 및 내구성',q:'[허용 처짐한계] 과도한 처짐에 의해 손상될 염려가 없는 비구조 요소를 지지 또는 부착한 지붕 또는 바닥구조인 경우 ___ / 과도한 처짐에 의해 손상되기 쉬운 비구조 요소를 지지 또는 부착한 지붕 또는 바닥구조인 경우 ___',a:'l/240 | l/480'},
+{id:6154,type:'cloze',cat:'PART3 · RC구조 > CH02 사용성 및 내구성',q:'[장기추가처짐 계수] λ△ = ___ / (1 + 50ρ\')',a:'ξ(시간의존계수)'},
+{id:6155,type:'cloze',cat:'PART3 · RC구조 > CH02 사용성 및 내구성',q:'[시간의존계수 ξ]\n3개월: ___ / 6개월: ___ / 12개월: ___ / 5년 이상(10년 포함): ___',a:'1.0 | 1.2 | 1.4 | 2.0'},
 
 // ===================== CH03 부재의 해석 및 설계 241~324 =====================
 {id:6048,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S01 설계하중·강도감소계수',q:'[용어정리] 공칭강도는 하중에 대한 구조체나 구조부재 또는 단면의 저항능력을 말하며 강도감소계수 또는 저항계수를 적용하지 않은 강도 / 설계강도는 단면 또는 부재의 공칭강도에 ___ 또는 저항계수를 곱한 강도 / 사용하중은 하중계수를 적용하지 않은 하중 / 계수하중은 강도설계법 또는 한계상태설계법으로 설계할 때 사용하중에 ___를 곱한 하중을 말한다.',a:'강도감소계수 | 하중계수'},
@@ -1086,6 +1088,7 @@ let queue    = [];
 let cleared  = new Set();
 let isReview = false;
 let flipped  = false;
+let reviewLimit = 0;
 let activeCat   = "전체";
 let currentTab  = 'study';
 let sessK = 0, sessD = 0;
@@ -1566,6 +1569,18 @@ function showComplete() {
   const b1=document.createElement('button');
   b1.className='btn-action btn-primary'; b1.textContent='복습 모드로';
   b1.onclick=()=>switchTab('review'); btns.appendChild(b1);
+  if(isReview && reviewLimit > 0){
+    const bMore=document.createElement('button');
+    bMore.className='start-go';
+    bMore.textContent='+10개 더';
+    bMore.style.cssText='background:rgba(138,111,46,.1);border:1px solid var(--accent);color:var(--accent);';
+    bMore.onclick=()=>{
+      sc.style.display='none';
+      document.getElementById('prog-wrap').style.display='';
+      startReview(false, reviewLimit+10);
+    };
+    btns.appendChild(bMore);
+  }
   const b2=document.createElement('button');
   b2.className='btn-action btn-secondary'; b2.textContent='처음부터';
   b2.onclick=()=>{sc.style.display='none';document.getElementById('prog-wrap').style.display='';startNew();};
@@ -1625,14 +1640,17 @@ function renderReviewStart(){
     return h && h.dont / (h.know + h.dont) >= 0.4;
   }).length;
   sub.innerHTML = `오늘 복습할 카드를 자동 선별해요<br>마지막으로 본 날짜 · 오답률 기반`;
-  wi.innerHTML = `복습 대상 <b style="color:var(--accent2)">${pool.length}</b>개 · 긴급 <b style="color:var(--accent)">${urgent}</b>개 · 취약 <b style="color:var(--red)">${weak}</b>개`;
+  const showCount = Math.min(20, pool.length);
+  wi.innerHTML = `전체 ${pool.length}개 중 <b style="color:var(--accent2)">${showCount}개</b> 시작 · 긴급 <b style="color:var(--accent)">${urgent}</b>개 · 취약 <b style="color:var(--red)">${weak}</b>개`;
 }
 
-function startReview(weakFirst=false){
+function startReview(weakFirst=false, limit=0){
   const pool = getReviewPool(weakFirst);
   if (!pool.length) { alert('먼저 학습 모드에서 카드를 봐주세요.'); return; }
   isReview=true; sessK=0; sessD=0; cleared.clear();
-  queue = currentSubject==='arch' ? interleaveShuffle(weightedShuffle(pool)) : weightedShuffle(pool);
+  reviewLimit = limit;
+  const limited = limit > 0 ? pool.slice(0, limit) : pool;
+  queue = currentSubject==='arch' ? interleaveShuffle(weightedShuffle(limited)) : weightedShuffle(limited);
   document.getElementById('review-view').style.display='none';
   document.getElementById('study-view').style.display='flex';
   document.querySelectorAll('.tab').forEach((el,i)=>el.classList.toggle('active',i===1));
@@ -2415,7 +2433,7 @@ function playBubble(type) {
   const ctx = audioCtx;
   const now = ctx.currentTime;
 
-  function bubble(freq, dur, vol=0.09) { vol *= globalVolume * 2;
+  function bubble(freq, dur, vol=0.09) { vol *= globalVolume;
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.type = 'sine';
@@ -2493,7 +2511,7 @@ function playGame(type) {
     osc.type = 'sine';
     osc.frequency.setValueAtTime(900, now);
     osc.frequency.exponentialRampToValueAtTime(400, now + 0.05);
-    gain.gain.setValueAtTime(0.05 * globalVolume * 2, now);
+    gain.gain.setValueAtTime(0.05 * globalVolume, now);
     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
     osc.connect(gain); gain.connect(ctx.destination);
     osc.start(now); osc.stop(now + 0.06);
@@ -2504,7 +2522,7 @@ function playGame(type) {
     const gain = ctx.createGain();
     osc.type = 'sine';
     osc.frequency.setValueAtTime(600, now);
-    gain.gain.setValueAtTime(0.04 * globalVolume * 2, now);
+    gain.gain.setValueAtTime(0.04 * globalVolume, now);
     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
     osc.connect(gain); gain.connect(ctx.destination);
     osc.start(now); osc.stop(now + 0.04);
@@ -2573,7 +2591,7 @@ document.addEventListener('click', (e) => {
 }, { passive: true });
 
 function applyVol(gainNode, baseVol) {
-  gainNode.gain.setValueAtTime(baseVol * globalVolume * 2, audioCtx.currentTime);
+  gainNode.gain.setValueAtTime(baseVol * globalVolume, audioCtx.currentTime);
 }
 
 function playWood(type) {
