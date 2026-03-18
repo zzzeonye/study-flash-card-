@@ -3912,8 +3912,15 @@ function applyVol(gainNode, baseVol) {
 
 function playWood(type) {
   if (soundTheme === 'off') return;
-  if (soundTheme === 'bubble') playBubble(type);
-  else playGame(type);
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume().then(() => {
+      if (soundTheme === 'bubble') playBubble(type);
+      else playGame(type);
+    });
+  } else {
+    if (soundTheme === 'bubble') playBubble(type);
+    else playGame(type);
+  }
 }
 
 // ═══════════════════ INIT ═══════════════════
