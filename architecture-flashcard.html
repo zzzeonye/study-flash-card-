@@ -17,7 +17,7 @@
   --card: rgba(255,253,249,0.98);
   --border: rgba(247,202,201,0.6);
   --accent: #c9838a;
-  --accent2: #7a9cc5;
+  --accent2: #82a898;
   --gold: #d4a5a5;
   --gold2: #b07878;
   --green: #a8c5b5;
@@ -26,8 +26,8 @@
   --muted: #8a7068;
   --sub: #d4b8b0;
   --pink: #f7cac9;
-  --blue: #92a8d1;
-  --ox-o: rgba(146,168,209,.18);
+  --blue: #a8c5b5;
+  --ox-o: rgba(130,168,152,.18);
   --ox-x: rgba(201,131,138,.15);
   --glow: rgba(247,202,201,0.4);
   --star: #d4a5a5;
@@ -40,7 +40,7 @@
   --card: rgba(52,38,25,0.98);
   --border: rgba(212,165,165,0.3);
   --accent: #e8b0a8;
-  --accent2: #a8c0e0;
+  --accent2: #a0c8b8;
   --gold: #e8c0b0;
   --gold2: #c89880;
   --green: #90b8a8;
@@ -49,8 +49,8 @@
   --muted: #c8b0a0;
   --sub: #6a4838;
   --pink: #f0c0b8;
-  --blue: #b0c8e8;
-  --ox-o: rgba(160,192,224,.2);
+  --blue: #a8c8b8;
+  --ox-o: rgba(130,180,160,.2);
   --ox-x: rgba(224,160,152,.18);
   --glow: rgba(232,176,168,0.4);
 }
@@ -591,7 +591,7 @@ header{
 .cloze-table{width:100%;border-collapse:collapse;margin-bottom:6px;}
 .cloze-table tr{border-bottom:1px solid rgba(255,110,180,0.12);}
 .cloze-table tr:last-child{border-bottom:none;}
-.cloze-table td{padding:9px 6px;font-size:.9rem;line-height:1.5;vertical-align:middle;}
+.cloze-table td{padding:9px 6px;font-size:.9rem;line-height:1.8;vertical-align:middle;}
 .cloze-table td:first-child{color:var(--muted);font-size:.84rem;width:60%;}
 .cloze-table td:last-child{text-align:right;white-space:nowrap;}
 .cloze-blank{
@@ -631,22 +631,22 @@ header{
   cursor:pointer;transition:all .25s cubic-bezier(.34,1.56,.64,1);font-weight:700;
 }
 .btn-know{
-  background: linear-gradient(135deg, #2ecc71, #27ae60);
-  color:#fff;
-  box-shadow: 0 4px 20px rgba(46,204,113,0.4);
+  background: linear-gradient(135deg, #d4ede6, #b8d8cc, #8bbfb0, #6aaa98);
+  color: #1a3d34;
+  box-shadow: 0 4px 18px rgba(106,170,152,0.38), 0 0 0 1px rgba(255,255,255,0.5) inset;
 }
 .btn-know:hover{
-  transform:translateY(-2px);
-  box-shadow: 0 8px 25px rgba(46,204,113,0.5);
+  transform:translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 26px rgba(106,170,152,0.5);
 }
 .btn-dontknow{
-  background: linear-gradient(135deg, #e74c3c, #c0392b);
-  color:#fff;
-  box-shadow: 0 4px 20px rgba(231,76,60,0.35);
+  background: linear-gradient(135deg, #fde8e8, #f7cac9, #e8a5a8, #c9838a);
+  color: #5a2028;
+  box-shadow: 0 4px 18px rgba(201,131,138,0.38), 0 0 0 1px rgba(255,255,255,0.5) inset;
 }
 .btn-dontknow:hover{
-  transform:translateY(-2px);
-  box-shadow: 0 8px 25px rgba(231,76,60,0.5);
+  transform:translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 26px rgba(201,131,138,0.5);
 }
 .btn-flip{
   background: linear-gradient(135deg, rgba(255,110,180,0.15), rgba(123,94,167,0.15));
@@ -1314,34 +1314,34 @@ body::before {
 /* ── 알겠어: 로즈쿼츠 ── */
 .btn-know {
   background: linear-gradient(135deg,
-    #fde8e8 0%, #f7cac9 30%, #e8a5a8 70%, #c9838a 100%) !important;
-  color: #5a2028 !important;
+    #d4ede6 0%, #b8d8cc 30%, #8bbfb0 70%, #6aaa98 100%) !important;
+  color: #1a3d34 !important;
   border: none !important;
   border-radius: 14px !important;
   font-weight: 700 !important;
   box-shadow:
-    0 4px 18px rgba(201,131,138,0.38),
+    0 4px 18px rgba(106,170,152,0.38),
     0 0 0 1px rgba(255,255,255,0.5) inset,
-    0 1px 0 rgba(255,235,235,0.8) inset !important;
+    0 1px 0 rgba(210,245,235,0.8) inset !important;
   text-shadow: 0 1px 2px rgba(255,255,255,0.4) !important;
   transition: all .2s cubic-bezier(.34,1.56,.64,1) !important;
 }
 .btn-know:hover {
   transform: translateY(-2px) scale(1.02) !important;
-  box-shadow: 0 8px 26px rgba(201,131,138,0.5) !important;
+  box-shadow: 0 8px 26px rgba(106,170,152,0.5) !important;
 }
 .btn-know:active { transform: translateY(1px) !important; }
 
 /* ── 모르겠어: 세레니티 ── */
 .btn-dontknow {
   background: linear-gradient(135deg,
-    #deeaf8 0%, #b8cde8 30%, #92a8d1 70%, #6a88ba 100%) !important;
+    #daeee6 0%, #b8d5c8 30%, #a8c5b5 70%, #6a9e8a 100%) !important;
   color: #1a2840 !important;
   border: none !important;
   border-radius: 14px !important;
   font-weight: 700 !important;
   box-shadow:
-    0 4px 18px rgba(122,156,197,0.38),
+    0 4px 18px rgba(100,160,135,0.35),
     0 0 0 1px rgba(255,255,255,0.5) inset,
     0 1px 0 rgba(220,235,255,0.8) inset !important;
   text-shadow: 0 1px 2px rgba(255,255,255,0.4) !important;
@@ -1349,7 +1349,7 @@ body::before {
 }
 .btn-dontknow:hover {
   transform: translateY(-2px) scale(1.02) !important;
-  box-shadow: 0 8px 26px rgba(122,156,197,0.5) !important;
+  box-shadow: 0 8px 26px rgba(100,160,135,0.48) !important;
 }
 .btn-dontknow:active { transform: translateY(1px) !important; }
 
@@ -1379,16 +1379,16 @@ body::before {
 /* O: 세레니티 */
 .ox-btn-o {
   background: linear-gradient(135deg,
-    #deeaf8, #b8cde8, #92a8d1, #6a88ba) !important;
+    #daeee6, #b8d5c8, #a8c5b5, #6a9e8a) !important;
   color: #1a2840 !important;
   box-shadow:
-    0 6px 22px rgba(122,156,197,0.42),
+    0 6px 22px rgba(100,160,135,0.4),
     0 0 0 1px rgba(255,255,255,0.5) inset,
     0 1px 0 rgba(220,240,255,0.7) inset !important;
 }
 .ox-btn-o:hover {
   transform: translateY(-3px) scale(1.03) !important;
-  box-shadow: 0 10px 28px rgba(122,156,197,0.55) !important;
+  box-shadow: 0 10px 28px rgba(100,160,135,0.52) !important;
 }
 /* X: 로즈쿼츠 */
 .ox-btn-x {
@@ -1405,9 +1405,9 @@ body::before {
   box-shadow: 0 10px 28px rgba(201,131,138,0.55) !important;
 }
 .ox-btn.selected-o {
-  background: linear-gradient(135deg, #92a8d1, #6a88ba) !important;
-  box-shadow: 0 0 0 3px rgba(122,156,197,0.4),
-    0 4px 16px rgba(122,156,197,0.4) !important;
+  background: linear-gradient(135deg, #a8c5b5, #6a9e8a) !important;
+  box-shadow: 0 0 0 3px rgba(100,160,135,0.38),
+    0 4px 16px rgba(100,160,135,0.38) !important;
   transform: scale(0.97) !important;
 }
 .ox-btn.selected-x {
@@ -1420,12 +1420,12 @@ body::before {
 /* ── 카드 뒤집기 안에 있는 알겠어/모르겠어도 동일하게 ── */
 #card-back button:first-of-type {
   background: linear-gradient(135deg,
-    #deeaf8, #b8cde8, #92a8d1, #6a88ba) !important;
+    #daeee6, #b8d5c8, #a8c5b5, #6a9e8a) !important;
   color: #1a2840 !important;
   border: none !important;
   border-radius: 14px !important;
   font-weight: 700 !important;
-  box-shadow: 0 4px 18px rgba(122,156,197,0.35) !important;
+  box-shadow: 0 4px 18px rgba(100,160,135,0.32) !important;
 }
 #card-back button:last-of-type {
   background: linear-gradient(135deg,
@@ -1439,8 +1439,9 @@ body::before {
 
 /* ── cloze 빈칸: 민트+로즈쿼츠 보석 ── */
 .cloze-blank {
+  vertical-align: middle !important;
   background: linear-gradient(135deg,
-    #fde0e0, #f7cac9, #d4b8d8, #b8c8e8) !important;
+    #fde0e0, #f7cac9, #d4b8d8, #a8c5b5) !important;
   color: #3a1525 !important;
   border-radius: 10px !important;
   border: none !important;
@@ -1488,7 +1489,7 @@ body::before {
 .btn-next {
   border-radius: 14px !important;
   background: linear-gradient(135deg,
-    #fde8e8, #f7cac9, #d4b8d8, #92a8d1) !important;
+    #fde8e8, #f7cac9, #d4b8d8, #a8c5b5) !important;
   border: none !important;
   color: #3a1828 !important;
   font-weight: 700 !important;
@@ -1509,7 +1510,7 @@ body::before {
 
 /* ── 탭 ── */
 .tab.active {
-  background: linear-gradient(135deg, #f7cac9, #b8cde8) !important;
+  background: linear-gradient(135deg, #f7cac9, #b8d5c8) !important;
   color: #3a1828 !important;
   box-shadow: 0 4px 16px rgba(201,131,138,0.28),
     0 0 0 1px rgba(255,255,255,0.4) inset !important;
@@ -1518,7 +1519,7 @@ body::before {
 /* ── 진행바 ── */
 .prog-fill {
   background: linear-gradient(90deg,
-    #f7cac9, #d4b8d8, #92a8d1, #a8c5b5, #f7cac9) !important;
+    #f7cac9, #d4b8d8, #a8c5b5, #a8c5b5, #f7cac9) !important;
   background-size: 250% 100% !important;
   animation: shimmer 2.5s linear infinite !important;
 }
@@ -1527,7 +1528,7 @@ body::before {
 .start-go {
   border-radius: 14px !important;
   background: linear-gradient(135deg,
-    #fde8e8, #f7cac9, #d4b8d8, #92a8d1) !important;
+    #fde8e8, #f7cac9, #d4b8d8, #a8c5b5) !important;
   border: none !important;
   color: #3a1828 !important;
   box-shadow: 0 6px 22px rgba(201,131,138,0.35),
@@ -1541,7 +1542,7 @@ body::before {
 
 /* ── btn-primary / modal-save / btn-add-sub ── */
 .btn-primary, .modal-save, .btn-add-sub {
-  background: linear-gradient(135deg, #f7cac9, #b8cde8) !important;
+  background: linear-gradient(135deg, #f7cac9, #b8d5c8) !important;
   border: none !important;
   border-radius: 14px !important;
   color: #3a1828 !important;
@@ -1550,7 +1551,7 @@ body::before {
 
 /* ── cat 버튼 ── */
 .cat-btn.active, .cat-all-btn.active {
-  background: linear-gradient(135deg, #f7cac9, #b8cde8) !important;
+  background: linear-gradient(135deg, #f7cac9, #b8d5c8) !important;
   border-color: transparent !important;
   color: #3a1828 !important;
   box-shadow: 0 3px 12px rgba(201,131,138,0.3) !important;
@@ -1581,6 +1582,17 @@ body::before {
   background: linear-gradient(135deg, rgba(247,202,201,0.2), rgba(212,184,216,0.15)) !important;
   color: #9a6060 !important;
   border-color: rgba(247,202,201,0.4) !important;
+}
+
+
+/* ── 빈칸 세로정렬 fix ── */
+.cloze-blank {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  vertical-align: middle !important;
+  line-height: 1 !important;
+  min-height: 28px !important;
 }
 
 </style>
