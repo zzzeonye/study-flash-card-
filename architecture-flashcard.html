@@ -1310,7 +1310,7 @@ body::before {
 }
 .btn:hover::after, .ox-btn:hover::after { left: 125% !important; }
 
-/* ── 알겠어: 로즈쿼츠 ── */
+/* ── 알겠어: 세이지 초록 ── */
 .btn-know {
   background: linear-gradient(135deg,
     #d4ede6 0%, #b8d8cc 30%, #8bbfb0 70%, #6aaa98 100%) !important;
@@ -1592,6 +1592,23 @@ body::before {
   min-height: 28px !important;
 }
 
+
+/* 카드 본문 영어 필기체 제거 — 읽기 쉽게 */
+.card-q, .card-note, .card-example, .ox-statement, .cloze-table td,
+.card-hint, .list-q, .list-a {
+  font-family: 'Noto Sans KR', 'Quicksand', sans-serif !important;
+}
+/* card-ans만 Pacifico 유지하되 영어는 Quicksand로 fallback */
+.card-ans {
+  font-family: 'Quicksand', 'Noto Sans KR', sans-serif !important;
+  font-weight: 700 !important;
+}
+/* 단원명·타이틀·카테고리는 Pacifico 유지 */
+.card-cat, .title, .complete-title, .start-title,
+.cal-month-title, .modal-title, .drawer-title, .stats-section-title {
+  font-family: 'Pacifico', cursive !important;
+}
+
 </style>
 </head>
 <body>
@@ -1651,28 +1668,35 @@ body::before {
     <div class="prog-label"><span id="prog-text">0/0</span><span class="ql" id="ql"></span></div>
   </div>
   <div id="mbadge-wrap"></div>
+  <div style="display:flex;justify-content:flex-end;width:100%;margin-bottom:4px;">
+    <button id="btn-prev" onclick="prevCard()" style="display:none;
+      padding:5px 14px;border-radius:20px;border:1.5px solid rgba(247,202,201,0.5);
+      background:rgba(250,247,242,0.8);color:var(--muted);
+      font-family:'Noto Sans KR',sans-serif;font-size:.72rem;font-weight:600;
+      cursor:pointer;backdrop-filter:blur(6px);transition:all .18s;">← 이전 카드</button>
+  </div>
   <div class="card-scene" id="card-scene">
     <div class="card-face card-front" id="card-front" onclick="flipCard()"></div>
     <div class="card-face card-back"  id="card-back"  style="display:none;" onclick="flipCard()"></div>
   </div>
   <div class="btn-row" id="btn-row">
-    <button class="btn btn-dontknow" onclick="answer(false)">모르겠어 ✕</button>
+    <button class="btn btn-dontknow" onclick="answer(false)" style="background:linear-gradient(135deg,#fde8e8,#f7cac9,#e8a5a8,#c9838a)!important;color:#5a2028!important;">모르겠어 ✕</button>
     <button class="btn btn-flip" id="btn-flip" onclick="flipCard()">답 보기</button>
-    <button class="btn btn-know"     onclick="answer(true)">알겠어 ✓</button>
+    <button class="btn btn-know"     onclick="answer(true)"  style="background:linear-gradient(135deg,#d4ede6,#b8d8cc,#8bbfb0,#6aaa98)!important;color:#1a3d34!important;">알겠어 ✓</button>
   </div>
   <div class="ox-card-wrap" id="ox-card-wrap" style="display:none;">
     <div class="ox-card" id="ox-card"></div>
   </div>
   <div class="ox-btn-row" id="ox-btn-row" style="display:none;">
-    <button class="ox-btn ox-btn-o" id="ox-o" onclick="answerOX('O')">○</button>
     <button class="ox-btn ox-btn-x" id="ox-x" onclick="answerOX('X')">✕</button>
+    <button class="ox-btn ox-btn-o" id="ox-o" onclick="answerOX('O')">○</button>
   </div>
   <div class="ox-card-wrap" id="cloze-card-wrap" style="display:none;">
     <div class="cloze-card" id="cloze-card"></div>
   </div>
   <div class="btn-row" id="cloze-btn-row" style="display:none;">
-    <button class="btn btn-dontknow" onclick="answer(false)">모르겠어 ✕</button>
-    <button class="btn btn-know"     onclick="answer(true)">알겠어 ✓</button>
+    <button class="btn btn-dontknow" onclick="answer(false)" style="background:linear-gradient(135deg,#fde8e8,#f7cac9,#e8a5a8,#c9838a)!important;color:#5a2028!important;">모르겠어 ✕</button>
+    <button class="btn btn-know"     onclick="answer(true)"  style="background:linear-gradient(135deg,#d4ede6,#b8d8cc,#8bbfb0,#6aaa98)!important;color:#1a3d34!important;">알겠어 ✓</button>
   </div>
   <button class="btn-next" id="btn-next" style="display:none;" onclick="answer(lastOXCorrect)">다음 →</button>
   <div class="complete-screen" id="complete-screen">
@@ -2140,7 +2164,7 @@ const DEFAULT_CARDS = [
 {id:6079,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[스트럿-타이 모델의 구성요소] 스트럿은 ___ 요소로서, 프리즘 모양 또는 부채꼴 모양의 압축응력장을 이상화한 요소 / 타이는 인장력 전달요소로 철근이나 긴장재가 배치되는 인장부재 / 절점은 3개 이상 스트럿과 타이의 연결점 또는 스트럿과 타이 그리고 집중하중의 중심선이 교차하는 점',a:'압축'},
 {id:6080,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[전단마찰설계] 전단마찰철근이 전단력 전달면에 수직한 경우 공칭전단강도는 Vn=Avf×fy×μ / 전단마찰계수(μ)는 일체로 타설된 콘크리트는 ___λ, 규정에 따라 표면을 거칠게 만든 굳은 콘크리트에 새로 친 콘크리트는 ___λ, 전단연결재에 의하거나 철근에 의해 구조용 강재에 정착된 콘크리트는 ___λ, 일부러 거칠게 하지 않은 굳은 콘크리트에 새로 친 콘크리트는 ___λ',a:'1.4 | 1.0 | 0.7 | 0.6'},
 {id:6081,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[전단마찰철근] 전단마찰철근의 설계기준항복강도는 ___MPa 이하로 하여야 한다.',a:'500'},
-{id:6082,type:'normal',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S03 압축재·벽체 설계',q:'[기둥 용어정리] 띠철근/나선철근 vs 옵셋 굽힘철근의 정의',a:'띠철근·나선철근: 종방향 철근의 위치를 확보하고 전단력에 저항하도록 정해진 간격으로 배치된 횡방향 보강철근 또는 철선\n옵셋 굽힘철근: 기둥 연결부에서 단면치수가 변하는 경우에 배치되는 구부린 주철근'},
+{id:6082,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S03 압축재·벽체 설계',q:'[기둥 용어정리] ___·___: 종방향 철근의 위치를 확보하고 전단력에 저항하도록 정해진 간격으로 배치된 횡방향 보강철근 또는 철선 / ___: 기둥 연결부에서 단면치수가 변하는 경우에 배치되는 구부린 주철근',a:'띠철근 | 나선철근 | 옵셋 굽힘철근'},
 {id:6083,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S03 압축재·벽체 설계',q:'[압축부재의 설계단면치수] 나선철근 기둥은 띠철근 기둥보다 큰 하중을 받도록 한 기둥이므로 경제적인 구조로 하기 위해 콘크리트 강도는 ___MPa 이상 / 콘크리트 벽체나 교각구조와 일체로 시공되는 나선철근 또는 띠철근 압축부재의 유효단면의 한계는 나선철근이나 띠철근 외측에서 ___mm보다 크지 않게 취하여야 한다.',a:'21 | 40'},
 {id:6084,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S03 압축재·벽체 설계',q:'[압축부재의 설계단면치수] 하중에 의해 요구되는 단면보다 큰 단면으로 설계된 압축 부재의 경우, 감소된 유효단면적을 사용하여 최소 철근량과 설계강도를 결정할 수 있다. 이때 감소된 유효단면적은 전체 단면적의 ___이상이어야 한다.',a:'1/2'},
 {id:6085,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S03 압축재·벽체 설계',q:'[기둥 종방향 철근] 순간격은 ___mm 이상, 철근지름의 ___배 이상, 굵은 골재의 최대치수 수규정 중 큰 값으로 함 / 최소철근비는 ___%, 최대철근비는 ___%이고, 축방향 철근이 겹침이음되는 경우의 철근비는 ___을 초과하지 않도록 하여야 함',a:'40 | 1.5 | 1 | 8 | 0.04'},
@@ -2316,6 +2340,18 @@ const DEFAULT_ENG_CARDS = [
 {id:9100,cat:"영단어",type:"flash",q:"reform",a:"개혁(명) / 개혁하다(동) / 개선\neducation reform = 교육 개혁\nreform a system = 시스템을 개혁하다\n≒ overhaul, restructure",note:"The government announced a major reform of the tax system."},
 {id:9101,cat:"영단어",type:"flash",q:"instruction",a:"지시·명령(명) / 설명서 / 교육·수업\nfollow instructions = 지시에 따르다\ninstruction manual = 사용 설명서\nunder the instruction of = ~의 지도하에",note:"Please read the instructions carefully before assembling the product."},
 {id:9102,cat:"영단어",type:"flash",q:"transformative",a:"변혁적인 / 획기적인 / 근본적으로 바꾸는\ntransform(변형하다) + ative\ntransformative experience = 인생을 바꾸는 경험\n≒ revolutionary, groundbreaking",note:"The new technology had a transformative impact on the industry."},
+{id:9103,cat:"영단어",type:"flash",q:"assignment",a:"과제 / 임무 / 배정\n⚠ 배치(arrangement)와 혼동 주의\non assignment = 임무 중\nassignment due = 과제 마감",note:"The students submitted their assignment before the deadline."},
+{id:9104,cat:"영단어",type:"flash",q:"be concerned with",a:"~에 관한 / ~와 관련된 / ~에 관심을 갖다\nbe concerned about = ~을 걱정하다 (구분!)\nThis report is concerned with climate change.",note:"The study is concerned with the effects of stress on health."},
+{id:9105,cat:"영단어",type:"flash",q:"portray",a:"묘사하다 / 그리다 / 연기하다\nportrait(초상화)와 같은 어원\nportray A as B = A를 B로 묘사하다",note:"The film portrays the life of a famous scientist."},
+{id:9106,cat:"영단어",type:"flash",q:"luxury",a:"사치(품)(명) / 호화로움(명)\n⚠ 형용사형은 luxurious\na life of luxury = 사치스러운 삶\nafford the luxury of = ~하는 사치를 누리다",note:"They stayed in a luxury hotel overlooking the ocean."},
+{id:9107,cat:"영단어",type:"flash",q:"retail",a:"소매(명) / 소매하다(동) / 소매의(형)\n⚠ 수반하다는 accompany\nretail price = 소매가\nretail store = 소매점\n↔ wholesale(도매)",note:"The product retails for about 50 dollars in stores."},
+{id:9108,cat:"영단어",type:"flash",q:"suppress",a:"억압하다 / 억제하다 / 진압하다\n⚠ 늘리다는 increase\nsuppress emotions = 감정을 억제하다\nsuppress a rebellion = 반란을 진압하다",note:"He tried to suppress his laughter during the serious meeting."},
+{id:9109,cat:"영단어",type:"flash",q:"impede",a:"방해하다 / 저해하다\n⚠ 손상시키다는 damage / impair\nimpede progress = 진전을 방해하다\n≒ hinder, obstruct",note:"The heavy snow impeded traffic throughout the city."},
+{id:9110,cat:"영단어",type:"flash",q:"comprise",a:"구성하다 / 이루다 / 포함하다\nbe comprised of = ~로 구성되다\ncomprise + 구성요소 (목적어로 바로)\n≒ consist of, make up",note:"The committee comprises representatives from ten countries."},
+{id:9111,cat:"영단어",type:"flash",q:"probe",a:"조사하다 / 탐색하다(동) / 탐침 / 조사(명)\nprobe into = ~을 깊이 조사하다\nspace probe = 우주 탐사선",note:"Investigators probed the cause of the accident for weeks."},
+{id:9112,cat:"영단어",type:"flash",q:"eminent",a:"저명한 / 뛰어난 / 탁월한\n⚠ imminent(임박한)과 혼동 주의\nan eminent scholar = 저명한 학자\n≒ distinguished, prominent",note:"She is an eminent researcher in the field of genetics."},
+{id:9113,cat:"영단어",type:"flash",q:"shelf",a:"선반(명) / 책장\non the shelf = 선반 위에 / 보류된\nshelf life = 유통기한\nshelves(복수형)",note:"He placed the books neatly on the shelf."},
+{id:9114,cat:"영단어",type:"flash",q:"underestimate",a:"과소평가하다(동) / 과소평가(명)\n⚠ under(아래) + estimate(추정)\n↔ overestimate(과대평가하다)\nnever underestimate = 절대 얕보지 마라",note:"Don't underestimate the difficulty of the exam."},
 ];
 
 // ═══════════════════ STATE ═══════════════════
@@ -2594,6 +2630,24 @@ function showStudyUI() {
   document.getElementById('prog-wrap').style.display = '';
 }
 
+let lastCard = null; // 이전 카드 저장
+
+function prevCard() {
+  if (!lastCard) return;
+  // 이전 카드를 큐 맨 앞에 다시 넣고
+  queue.unshift(lastCard);
+  // 히스토리 되돌리기 (마지막 기록 취소)
+  const h = history[lastCard.id];
+  if (h) {
+    if (lastCard._wasKnow) { h.know = Math.max(0, h.know-1); sessK = Math.max(0,sessK-1); cleared.delete(lastCard.id); }
+    else { h.dont = Math.max(0, h.dont-1); sessD = Math.max(0,sessD-1); }
+    delete lastCard._wasKnow;
+  }
+  lastCard = null;
+  document.getElementById('btn-prev').style.display = 'none';
+  renderCard();
+}
+
 function renderCard() {
   if (!queue.length) { showComplete(); return; }
   const c = queue[0];
@@ -2650,11 +2704,11 @@ function renderFlashCard(c) {
       <button onclick="event.stopPropagation();answer(false)"
         style="flex:1;padding:10px;border-radius:10px;border:1px solid var(--red);
           background:rgba(191,106,106,.1);color:var(--red);font-weight:700;
-          font-family:'Noto Sans KR',sans-serif;font-size:.85rem;cursor:pointer;">모르겠어 ✕</button>
+          font-family:'Noto Sans KR',sans-serif;font-size:.85rem;cursor:pointer;background:linear-gradient(135deg,#fde8e8,#f7cac9,#e8a5a8,#c9838a);color:#5a2028;">모르겠어 ✕</button>
       <button onclick="event.stopPropagation();answer(true)"
         style="flex:1;padding:10px;border-radius:10px;border:1px solid var(--green);
           background:rgba(106,191,123,.1);color:var(--green);font-weight:700;
-          font-family:'Noto Sans KR',sans-serif;font-size:.85rem;cursor:pointer;">알겠어 ✓</button>
+          font-family:'Noto Sans KR',sans-serif;font-size:.85rem;cursor:pointer;background:linear-gradient(135deg,#d4ede6,#b8d8cc,#8bbfb0,#6aaa98);color:#1a3d34;">알겠어 ✓</button>
     </div>
     <button class="card-edit-btn" onclick="event.stopPropagation();openEdit(${c.id})" style="margin-top:8px;">✏ 수정</button>`;
 }
@@ -2784,13 +2838,20 @@ function answer(know) {
   document.getElementById('ox-o').disabled = false;
   document.getElementById('ox-x').disabled = false;
 
-  if (know) {
-    playWood('know');
-  } else {
-    playWood('dont');
+  // 소리
+  if (soundTheme !== 'off') {
+    const _play = () => {
+      if (soundTheme === 'bubble') playBubble(know ? 'know' : 'dont');
+      else playGame(know ? 'know' : 'dont');
+    };
+    if (audioCtx.state === 'suspended') audioCtx.resume().then(_play);
+    else _play();
   }
 
   const c = queue.shift();
+  c._wasKnow = know;
+  lastCard = c;
+  document.getElementById('btn-prev').style.display = '';
   if (!history[c.id]) history[c.id] = {know:0, dont:0};
   history[c.id].lastSeen = Date.now();
   stampToday();
@@ -3737,27 +3798,19 @@ function playBubble(type) {
       }, i * 80);
     });
   } else if (type === 'dont') {
-    // 마법 실패 — 아래로 가라앉는 느낌
-    const o = ctx.createOscillator(), g = ctx.createGain();
-    o.type = 'sine';
-    o.frequency.setValueAtTime(520, now);
-    o.frequency.exponentialRampToValueAtTime(280, now + 0.22);
-    g.gain.setValueAtTime(0.11 * globalVolume, now);
-    g.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
-    o.connect(g); g.connect(ctx.destination);
-    o.start(now); o.stop(now + 0.25);
-    // 여운
-    setTimeout(() => {
-      const o2 = ctx.createOscillator(), g2 = ctx.createGain();
-      const t = ctx.currentTime;
-      o2.type = 'sine';
-      o2.frequency.setValueAtTime(220, t);
-      o2.frequency.exponentialRampToValueAtTime(160, t + 0.18);
-      g2.gain.setValueAtTime(0.06 * globalVolume, t);
-      g2.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
-      o2.connect(g2); g2.connect(ctx.destination);
-      o2.start(t); o2.stop(t + 0.2);
-    }, 120);
+    // 마법 실패 — 3단 하강
+    [440, 349, 262].forEach((freq, i) => {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      const t = now + i * 0.1;
+      o.type = 'sine';
+      o.frequency.setValueAtTime(freq, t);
+      o.frequency.exponentialRampToValueAtTime(freq * 0.72, t + 0.18);
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(0.40 * globalVolume, t + 0.015);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.26);
+      o.connect(g); g.connect(ctx.destination);
+      o.start(t); o.stop(t + 0.26);
+    });
   } else if (type === 'flip') {
     // 카드 뒤집기 — 반짝 튀는 느낌
     gem(1200, 0.07, 0.06);
@@ -3774,71 +3827,94 @@ function playGame(type) {
   const now = ctx.currentTime;
 
   if (type === 'know') {
-    // 보석 획득! — 슈가슈가룬 변신음 느낌, 맑은 상승
-    const notes = [659, 784, 988, 1319];
-    notes.forEach((freq, i) => {
+    // 크리스탈 보석 획득 — 맑은 하프 아르페지오 상승
+    const chord = [523, 659, 784, 1047, 1319];
+    chord.forEach((freq, i) => {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
-      osc.type = i < 2 ? 'sine' : 'triangle';
-      osc.frequency.setValueAtTime(freq, now + i * 0.06);
-      osc.frequency.exponentialRampToValueAtTime(freq * 1.4, now + i * 0.06 + 0.05);
-      gain.gain.setValueAtTime(0.09 * globalVolume, now + i * 0.06);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.06 + 0.18);
+      const t = now + i * 0.055;
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, t);
+      osc.frequency.exponentialRampToValueAtTime(freq * 1.35, t + 0.04);
+      osc.frequency.exponentialRampToValueAtTime(freq * 1.1, t + 0.15);
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.11 * globalVolume, t + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.22);
       osc.connect(gain); gain.connect(ctx.destination);
-      osc.start(now + i * 0.06);
-      osc.stop(now + i * 0.06 + 0.18);
+      osc.start(t); osc.stop(t + 0.22);
+      // 고배음 반짝임
+      const osc2 = ctx.createOscillator();
+      const gain2 = ctx.createGain();
+      osc2.type = 'triangle';
+      osc2.frequency.setValueAtTime(freq * 2.5, t);
+      gain2.gain.setValueAtTime(0.03 * globalVolume, t);
+      gain2.gain.exponentialRampToValueAtTime(0.001, t + 0.1);
+      osc2.connect(gain2); gain2.connect(ctx.destination);
+      osc2.start(t); osc2.stop(t + 0.1);
     });
-    // 마지막에 반짝 글리터 효과
+    // 마지막 별빛 글리터
     setTimeout(() => {
-      [2000, 2400, 2800].forEach((f, i) => {
+      [2093, 2637, 3136].forEach((f, i) => {
         const o = ctx.createOscillator(), g = ctx.createGain();
-        const t = ctx.currentTime;
+        const t = ctx.currentTime + i * 0.04;
         o.type = 'sine';
-        o.frequency.setValueAtTime(f, t + i*0.03);
-        g.gain.setValueAtTime(0.04 * globalVolume, t + i*0.03);
-        g.gain.exponentialRampToValueAtTime(0.001, t + i*0.03 + 0.1);
+        o.frequency.setValueAtTime(f, t);
+        g.gain.setValueAtTime(0.05 * globalVolume, t);
+        g.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
         o.connect(g); g.connect(ctx.destination);
-        o.start(t + i*0.03); o.stop(t + i*0.03 + 0.1);
+        o.start(t); o.stop(t + 0.12);
       });
-    }, 240);
+    }, 280);
 
   } else if (type === 'dont') {
-    // 마법 풀림 — 아련하게 가라앉는 음
-    const notes = [440, 370, 294];
-    notes.forEach((freq, i) => {
+    // 마법 깨짐 — 3단 하강 + 여운
+    const falls = [440, 349, 262];
+    falls.forEach((freq, i) => {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
+      const t = now + i * 0.11;
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(freq, now + i * 0.1);
-      osc.frequency.exponentialRampToValueAtTime(freq * 0.75, now + i * 0.1 + 0.15);
-      gain.gain.setValueAtTime(0.08 * globalVolume, now + i * 0.1);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.1 + 0.2);
+      osc.frequency.setValueAtTime(freq, t);
+      osc.frequency.exponentialRampToValueAtTime(freq * 0.7, t + 0.18);
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.40 * globalVolume, t + 0.015);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.25);
       osc.connect(gain); gain.connect(ctx.destination);
-      osc.start(now + i * 0.1);
-      osc.stop(now + i * 0.1 + 0.22);
+      osc.start(t); osc.stop(t + 0.25);
     });
+    // 낮은 여운음
+    const sub = ctx.createOscillator();
+    const subG = ctx.createGain();
+    sub.type = 'sine';
+    sub.frequency.setValueAtTime(130, now + 0.3);
+    sub.frequency.exponentialRampToValueAtTime(90, now + 0.7);
+    subG.gain.setValueAtTime(0.22 * globalVolume, now + 0.3);
+    subG.gain.exponentialRampToValueAtTime(0.001, now + 0.75);
+    sub.connect(subG); subG.connect(ctx.destination);
+    sub.start(now + 0.3); sub.stop(now + 0.75);
 
   } else if (type === 'flip') {
-    // 카드 뒤집기 — 영롱한 보석 튕기기
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(1100, now);
-    osc.frequency.exponentialRampToValueAtTime(1600, now + 0.04);
-    osc.frequency.exponentialRampToValueAtTime(900, now + 0.1);
-    gain.gain.setValueAtTime(0.07 * globalVolume, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
-    osc.connect(gain); gain.connect(ctx.destination);
-    osc.start(now); osc.stop(now + 0.12);
+    // 카드 뒤집기 — 마법진 소환 느낌
+    [1047, 1319, 1568].forEach((f, i) => {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      const t = now + i * 0.04;
+      o.type = 'sine';
+      o.frequency.setValueAtTime(f, t);
+      o.frequency.exponentialRampToValueAtTime(f * 1.2, t + 0.03);
+      g.gain.setValueAtTime(0.08 * globalVolume, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.1);
+      o.connect(g); g.connect(ctx.destination);
+      o.start(t); o.stop(t + 0.1);
+    });
 
   } else {
     // 일반 탭 — 작은 보석 톡
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.type = 'sine';
-    osc.frequency.setValueAtTime(800, now);
-    osc.frequency.exponentialRampToValueAtTime(1100, now + 0.03);
-    gain.gain.setValueAtTime(0.05 * globalVolume, now);
+    osc.frequency.setValueAtTime(880, now);
+    osc.frequency.exponentialRampToValueAtTime(1100, now + 0.025);
+    gain.gain.setValueAtTime(0.06 * globalVolume, now);
     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
     osc.connect(gain); gain.connect(ctx.destination);
     osc.start(now); osc.stop(now + 0.07);
