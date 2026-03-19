@@ -3089,9 +3089,32 @@ function renderList(){
   let pool=filtered();
   if(catFilter) pool=pool.filter(c=>c.cat===catFilter);
   if(query) {
-    const norm = s => s.toLowerCase().replace(/\s+/g,'');
+    // 공백 제거 + 빈칸(___) 제거 정규화
+    const norm = s => s.toLowerCase().replace(/\s+/g,'').replace(/_{2,}/g,'');
     const q2 = norm(query);
-    pool=pool.filter(c=>norm(c.q).includes(q2)||norm(c.a).includes(q2)||norm(c.note||'').includes(q2)||norm(c.cat).includes(q2));
+
+    // 초성 추출
+    const CHO = ['ㄱ','ㄲ','ㄴ','ㄷ','ㄸ','ㄹ','ㅁ','ㅂ','ㅃ','ㅅ','ㅆ','ㅇ','ㅈ','ㅉ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
+    const getCho = s => [...s].map(ch => {
+      const code = ch.charCodeAt(0) - 0xAC00;
+      if (code < 0 || code > 11171) return ch;
+      return CHO[Math.floor(code / 28 / 21)];
+    }).join('');
+
+    const isChosungOnly = /^[ㄱ-ㅎ]+$/.test(query.replace(/\s/g,''));
+
+    pool = pool.filter(c => {
+      const fields = [c.q, c.a, c.note||'', c.cat];
+      // q+a 이어붙인 통합 필드도 추가
+      const combined = c.q.replace(/_{2,}/g,'') + c.a;
+      const allFields = [...fields, combined];
+      if (isChosungOnly) {
+        const qCho = query.replace(/\s/g,'');
+        return allFields.some(f => getCho(f.replace(/\s/g,'')).includes(qCho));
+      } else {
+        return allFields.some(f => norm(f).includes(q2));
+      }
+    });
   }
   if(currentSubject==='eng') pool=[...pool].sort((a,b)=>a.q.localeCompare(b.q,'en'));
   if(!pool.length){lv.innerHTML=`<div style="text-align:center;padding:36px;color:var(--muted);font-size:.85rem;">${query?'검색 결과 없음':'카드 없음'}</div>`;updateSelToolbar();return;}
