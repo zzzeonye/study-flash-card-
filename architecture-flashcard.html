@@ -426,7 +426,7 @@ header{
   backdrop-filter: blur(16px);
   box-shadow: 0 8px 40px rgba(233,30,140,0.1), 0 0 0 1px rgba(255,255,255,0.5) inset;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 }
 .card-face::before {
   content: '';
@@ -1722,8 +1722,8 @@ body::before {
     <div class="start-sub" id="review-sub">오늘 복습할 카드를 자동으로 선별해요<br>마지막으로 본 날짜·오답률 기반</div>
     <div class="weight-info" id="weight-info"></div>
     <div style="display:flex;gap:8px;width:100%;margin-top:4px;">
-      <button class="start-go" style="flex:1;" onclick="startReview(false,20)">🌸 20개 시작</button>
-      <button class="start-go" style="flex:1;background:linear-gradient(135deg,rgba(192,57,43,.8),rgba(142,30,100,.8));border:none;" onclick="startReview(true,20)">💫 취약 우선</button>
+      <button class="start-go" style="flex:1;" onclick="startReview(false,30)">🌸 30개 시작</button>
+      <button class="start-go" style="flex:1;background:linear-gradient(135deg,rgba(192,57,43,.8),rgba(142,30,100,.8));border:none;" onclick="startReview(true,30)">💫 취약 우선</button>
     </div>
   </div>
 </div>
@@ -2242,121 +2242,121 @@ const DEFAULT_CARDS = [
 
 // ═══════════════════ ENGLISH CARDS ═══════════════════
 const DEFAULT_ENG_CARDS = [
-  {id:9001,cat:"영단어",type:"flash",q:"forged",a:"위조된 / 단조된(금속을 두드려 만든)",note:"The document was forged to deceive the authorities."},
-  {id:9002,cat:"영단어",type:"flash",q:"firmly",a:"단호하게 / 확고히 / 꽉(물리적으로 단단히)",note:"She firmly refused to change her decision."},
-  {id:9003,cat:"영단어",type:"flash",q:"insider",a:"내부자 / 사정을 아는 사람\n↔ outsider",note:"The leak came from an insider who had access to confidential files."},
-  {id:9004,cat:"영단어",type:"flash",q:"admiral",a:"해군 제독 / 함대 사령관",note:"The admiral commanded the fleet during the naval operation."},
-  {id:9005,cat:"영단어",type:"flash",q:"fabrication",a:"날조·거짓말 / 제작·제조\n(fab = 만들다)",note:"The entire story turned out to be a fabrication."},
-  {id:9006,cat:"영단어",type:"flash",q:"rigid",a:"딱딱한·경직된(물리) / 엄격한·융통성 없는(태도)",note:"The school enforced a rigid dress code for all students."},
-  {id:9007,cat:"영단어",type:"flash",q:"inherently",a:"본질적으로 / 태생적으로\n(inherent = 내재된)",note:"The system is inherently flawed and needs to be redesigned."},
-  {id:9008,cat:"영단어",type:"flash",q:"interplay",a:"상호작용 / 서로 영향을 주고받음\n(inter = 사이, play = 작용)",note:"The interplay between light and shadow created a dramatic effect."},
-  {id:9009,cat:"영단어",type:"flash",q:"state",a:"상태(명) / 국가·주(명) / 진술하다(동)\n→ 문맥으로 구분",note:"He was in a state of shock after hearing the news."},
-  {id:9010,cat:"영단어",type:"flash",q:"spark",a:"불꽃(명) / 촉발하다·일으키다(동)\nspark debate = 논쟁을 일으키다",note:"The speech sparked a nationwide debate on education reform."},
-  {id:9011,cat:"영단어",type:"flash",q:"transcend",a:"초월하다 / 능가하다 / 범위를 넘어서다",note:"True art transcends cultural and language barriers."},
-  {id:9012,cat:"영단어",type:"flash",q:"armed",a:"무장한(군사) / 준비된·갖춘\narmed with data = 데이터로 무장한",note:"The armed soldiers surrounded the building."},
-  {id:9013,cat:"영단어",type:"flash",q:"anguish",a:"극심한 정신적 고통·괴로움\n(주로 감정적 고통, 신체 통증은 pain)",note:"She cried out in anguish when she heard the tragic news."},
-  {id:9014,cat:"영단어",type:"flash",q:"sublime",a:"숭고한·장엄한(형) / 최고의·탁월한(형)\n명사: 숭고함",note:"The view from the mountaintop was truly sublime."},
-  {id:9015,cat:"영단어",type:"flash",q:"implement",a:"시행하다·실행하다(동) / 도구·수단(명)\nimplement a plan = 계획을 실행하다",note:"The company plans to implement the new policy next month."},
-  {id:9016,cat:"영단어",type:"flash",q:"undergo",a:"겪다·받다·경험하다\nundergo surgery/changes/treatment",note:"The patient had to undergo surgery after the accident."},
-  {id:9017,cat:"영단어",type:"flash",q:"fasting",a:"단식(명) / 금식 중인(형)\nfasting period = 공복 시간",note:"Blood tests are more accurate after fasting overnight."},
-  {id:9018,cat:"영단어",type:"flash",q:"vomiting",a:"구토(명) / 구역질\nvomit(동)의 명사형",note:"The patient reported nausea and vomiting after the medication."},
-  {id:9019,cat:"영단어",type:"flash",q:"exacerbate",a:"악화시키다 / 심화시키다\n(상황·증상을 더 나쁘게 만들다)",note:"Stress can exacerbate existing health problems."},
-  {id:9020,cat:"영단어",type:"flash",q:"fatigue",a:"피로(명) / 피로감\nmental fatigue = 정신적 피로\nfatigue = exhaustion보다 만성적 뉘앙스",note:"Chronic fatigue can be a symptom of various medical conditions."},
-  {id:9021,cat:"영단어",type:"flash",q:"operation",a:"작전·군사작전(명) / 수술(명) / 운영·가동(명)\nmilitary operation / undergo an operation",note:"The military launched a covert operation to rescue the hostages."},
-  {id:9022,cat:"영단어",type:"flash",q:"convenience",a:"편의·편리함(명)\nat your convenience = 편한 시간에\nconvenience store = 편의점",note:"The app was designed for the convenience of its users."},
-  {id:9023,cat:"영단어",type:"flash",q:"bud",a:"싹·봉오리(명) / 친구(명, 구어)\ntaste bud = 미뢰\nnip in the bud = 싹을 자르다",note:"The flowers were just beginning to bud in early spring."},
-  {id:9024,cat:"영단어",type:"flash",q:"brag",a:"자랑하다·으스대다(동)\nbrag about = ~을 자랑하다\n≒ boast, show off",note:"He bragged about his promotion to anyone who would listen."},
-  {id:9025,cat:"영단어",type:"flash",q:"contradict",a:"반박하다·부정하다(동) / 모순되다(동)\ncontradict oneself = 자기모순\ncontradiction(명)",note:"The witness's testimony contradicted the evidence presented in court."},
-  {id:9026,cat:"영단어",type:"flash",q:"be subject to",a:"~의 대상이다 / ~을 받다 / ~에 종속되다\nbe subject to change = 변경될 수 있다\nbe subject to tax = 세금 부과 대상이다",note:"All prices are subject to change without notice."},
-  {id:9027,cat:"영단어",type:"flash",q:"encompass",a:"포함하다·아우르다(동) / 둘러싸다(동)\n≒ include, cover, embrace\nencompass a wide range = 광범위하게 포괄하다",note:"The curriculum encompasses a wide range of subjects."},
-{id:9028,cat:"영단어",type:"flash",q:"be supposed to",a:"~해야 한다 / ~하기로 되어 있다",note:"You are supposed to submit the report by Friday."},
-{id:9029,cat:"영단어",type:"flash",q:"plagiarize",a:"표절하다",note:"He was expelled for plagiarizing his thesis."},
-{id:9030,cat:"영단어",type:"flash",q:"intensify",a:"강화하다 / 심화되다",note:"The storm is expected to intensify overnight."},
-{id:9031,cat:"영단어",type:"flash",q:"mortgage",a:"주택담보대출 / 저당잡히다",note:"They took out a mortgage to buy their first home."},
-{id:9032,cat:"영단어",type:"flash",q:"down payment",a:"계약금 / 선불금",note:"She saved for years to make a down payment on the house."},
-{id:9033,cat:"영단어",type:"flash",q:"interest rate",a:"이자율 / 금리",note:"The central bank raised the interest rate to control inflation."},
-{id:9034,cat:"영단어",type:"flash",q:"property",a:"부동산 / 재산 / 속성",note:"The property value has increased significantly this year."},
-{id:9035,cat:"영단어",type:"flash",q:"discipline",a:"훈련 / 규율 / 학문 분야",note:"Self-discipline is key to achieving long-term goals."},
-{id:9036,cat:"영단어",type:"flash",q:"appropriate",a:"적절한 / 적합한",note:"It is not appropriate to use informal language in a report."},
-{id:9037,cat:"영단어",type:"flash",q:"enactment",a:"제정 / 법률 제정",note:"The enactment of the new law took several years."},
-{id:9038,cat:"영단어",type:"flash",q:"progress",a:"진전 / 발전 / 진행되다",note:"The project is making steady progress despite the challenges."},
-{id:9039,cat:"영단어",type:"flash",q:"heredity",a:"유전, 유전적 특성",note:"Heredity plays a major role in determining a person's traits."},
-{id:9040,cat:"영단어",type:"flash",q:"eligibility",a:"자격, 적격성",note:"You must meet the eligibility requirements to apply."},
-{id:9041,cat:"영단어",type:"flash",q:"authority",a:"권위 / 권한 / 당국",note:"The authority to approve the budget lies with the director."},
-{id:9042,cat:"영단어",type:"flash",q:"authorize",a:"권한을 부여하다 / 승인하다",note:"The manager authorized the payment."},
-{id:9043,cat:"영단어",type:"flash",q:"embargo",a:"금수 조치 / 통상 금지",note:"The government imposed an embargo on oil exports."},
-{id:9044,cat:"영단어",type:"flash",q:"resonate",a:"공명하다 / 울려 퍼지다 / 반향을 일으키다",note:"His speech resonated with the audience."},
-{id:9045,cat:"영단어",type:"flash",q:"criteria",a:"기준, 조건 (criterion의 복수형)",note:"The criteria for selection were clearly stated."},
-{id:9046,cat:"영단어",type:"flash",q:"household",a:"가정 / 가구 / 잘 알려진",note:"Her name became a household word after the show."},
-{id:9047,cat:"영단어",type:"flash",q:"monopolize",a:"독점하다 / 전용하다",note:"The company tried to monopolize the market."},
-{id:9048,cat:"영단어",type:"flash",q:"journalism",a:"저널리즘 / 언론 / 신문방송학",note:"She studied journalism at university."},
-{id:9049,cat:"영단어",type:"flash",q:"sensitivity",a:"민감성 / 감수성 / 예민함",note:"The issue requires great sensitivity."},
-{id:9050,cat:"영단어",type:"flash",q:"instinct",a:"본능 / 직감",note:"She had an instinct for finding the right answer."},
-{id:9051,cat:"영단어",type:"flash",q:"assess",a:"평가하다 / 사정하다 / 조사하다",note:"Experts were called in to assess the damage."},
-{id:9052,cat:"영단어",type:"flash",q:"devastate",a:"황폐화시키다 / 엄청난 충격을 주다",note:"The earthquake devastated the entire region."},
-{id:9053,cat:"영단어",type:"flash",q:"remnant",a:"잔재 / 나머지 / 유물",note:"Only a remnant of the ancient wall remains."},
-{id:9054,cat:"영단어",type:"flash",q:"appoint",a:"임명하다 / 지정하다",note:"She was appointed as the new director."},
-{id:9055,cat:"영단어",type:"flash",q:"confirm",a:"확인하다 / 확정하다 / 승인하다",note:"Please confirm your reservation by email."},
-{id:9056,cat:"영단어",type:"flash",q:"affiliation",a:"소속 / 제휴 / 가입",note:"He listed his university affiliation on the form."},
-{id:9057,cat:"영단어",type:"flash",q:"announce",a:"발표하다 / 알리다",note:"The company announced a new product launch."},
-{id:9058,cat:"영단어",type:"flash",q:"institution",a:"기관 / 제도 / 단체",note:"The hospital is a well-respected institution."},
-{id:9059,cat:"영단어",type:"flash",q:"erode",a:"침식하다 / 부식시키다 / 약화시키다",note:"The cliffs were slowly eroded by the sea."},
-{id:9060,cat:"영단어",type:"flash",q:"break down",a:"고장나다 / 무너지다 / 분류하다",note:"The car broke down on the highway."},
-{id:9061,cat:"영단어",type:"flash",q:"be crammed with",a:"~로 가득 차다",note:"The hall was crammed with people."},
-{id:9062,cat:"영단어",type:"flash",q:"buckle down",a:"열심히 하다 / 본격적으로 달려들다",note:"It's time to buckle down and study."},
-{id:9063,cat:"영단어",type:"flash",q:"restrict",a:"제한하다 / 규제하다",note:"Access to the area is restricted."},
-{id:9064,cat:"영단어",type:"flash",q:"contingent",a:"조건부의 / 가능성 있는 / 파견단(명)",note:"The plan is contingent on the weather."},
-{id:9065,cat:"영단어",type:"flash",q:"coercive",a:"강압적인 / 강제적인",note:"The regime used coercive measures to control people."},
-{id:9066,cat:"영단어",type:"flash",q:"aversive",a:"혐오스러운 / 회피적인",note:"Aversive stimuli can change behavior."},
-{id:9067,cat:"영단어",type:"flash",q:"elicit",a:"끌어내다 / 유도하다",note:"The question elicited an unexpected response."},
-{id:9068,cat:"영단어",type:"flash",q:"perpetuate",a:"영속시키다 / 영구화하다",note:"The policy perpetuates inequality."},
-{id:9069,cat:"영단어",type:"flash",q:"attenuate",a:"약화시키다 / 희석하다",note:"The drug attenuates the effects of the virus."},
-{id:9070,cat:"영단어",type:"flash",q:"inconsiderate",a:"사려없는 / 배려없는",note:"It was inconsiderate of him to make noise at night."},
-{id:9071,cat:"영단어",type:"flash",q:"distinct",a:"뚜렷한 / 명확한 / 별개의",note:"The two cultures are quite distinct from each other."},
-{id:9072,cat:"영단어",type:"flash",q:"distinctive",a:"독특한 / 구별되는 / 특징적인",note:"She has a very distinctive voice."},
-{id:9073,cat:"영단어",type:"flash",q:"distinguish",a:"구별하다 / 식별하다",note:"Can you distinguish between the two sounds?"},
-{id:9074,cat:"영단어",type:"flash",q:"distinguished",a:"저명한 / 뛰어난",note:"He is a distinguished professor of law."},
-{id:9075,cat:"영단어",type:"flash",q:"neutral",a:"중립적인 / 중성의",note:"Switzerland remained neutral during the war."},
-{id:9076,cat:"영단어",type:"flash",q:"spacious",a:"넓은 / 광활한",note:"The apartment has a spacious living room."},
-{id:9077,cat:"영단어",type:"flash",q:"perform",a:"수행하다 / 공연하다",note:"The surgeon performed a complex operation."},
-{id:9078,cat:"영단어",type:"flash",q:"anxious",a:"걱정스러운 / 열망하는",note:"She was anxious to hear the results."},
-{id:9079,cat:"영단어",type:"flash",q:"distant",a:"거리가 먼 / 냉담한 / 먼 옛날의",note:"He seemed distant and distracted at the meeting."},
-{id:9080,cat:"영단어",type:"flash",q:"identify",a:"식별하다 / 확인하다 / 동일시하다",note:"Can you identify the person in this photo?"},
-{id:9081,cat:"영단어",type:"flash",q:"identity",a:"정체성 / 신원",note:"She struggled with her cultural identity."},
-{id:9082,cat:"영단어",type:"flash",q:"identical",a:"동일한 / 똑같은",note:"The two signatures were identical."},
-{id:9083,cat:"영단어",type:"flash",q:"identification",a:"신분증 / 식별 / 확인",note:"Please show your identification at the entrance."},
-{id:9084,cat:"영단어",type:"flash",q:"priceless",a:"매우 귀중한 / 값을 매길 수 없는\n⚠ price+less ≠ 가격없음 → 반어적으로 엄청 소중한\n↔ worthless(가치없는)",note:"The painting is priceless and cannot be sold at any price."},
-{id:9085,cat:"영단어",type:"flash",q:"medieval",a:"중세의 / 중세 시대의\n⚠ neutral(중립적인)과 혼동 주의",note:"The medieval castle was built in the 12th century."},
-{id:9086,cat:"영단어",type:"flash",q:"spell",a:"철자를 쓰다(동) / 주문(명) / 한동안(명)\nspell out = 자세히 설명하다\na spell of rain = 한동안의 비",note:"Can you spell your name for me, please?"},
-{id:9087,cat:"영단어",type:"flash",q:"affair",a:"일·사건(명) / 불륜(명) / (pl.) 업무·일\ncurrent affairs = 시사\nhave an affair = 불륜을 저지르다",note:"The scandal became a public affair that shocked everyone."},
-{id:9088,cat:"영단어",type:"flash",q:"nail",a:"손톱·발톱(명) / 못(명) / 완벽히 해내다(동, 구어)\nnail it = 완벽하게 해내다\non the nail = 즉시",note:"She nailed the presentation and impressed everyone in the room."},
-{id:9089,cat:"영단어",type:"flash",q:"input",a:"입력(명) / 투입·기여(명) / 입력하다(동)\n⚠ 개입은 intervention\nvaluable input = 귀중한 의견",note:"We need your input before making the final decision."},
-{id:9090,cat:"영단어",type:"flash",q:"uncertainty",a:"불확실성(명)\n⚠ uncertain(형용사)와 구분\neconomic uncertainty = 경제적 불확실성",note:"There is a lot of uncertainty about the outcome of the election."},
-{id:9091,cat:"영단어",type:"flash",q:"grant",a:"주다·허가하다(동) / 보조금(명)\n⚠ guarantee(보장하다)와 혼동 주의\ntake for granted = 당연히 여기다\ngrant permission = 허가를 주다",note:"The government granted funds to support small businesses."},
-{id:9092,cat:"영단어",type:"flash",q:"correlation",a:"상관관계 / 연관성\ncorrelation between A and B = A와 B의 상관관계\n≠ causation(인과관계)",note:"There is a strong correlation between exercise and mental health."},
-{id:9093,cat:"영단어",type:"flash",q:"causality",a:"인과관계 / 인과율\ncause(원인) + ality(성질)\n⚠ correlation(상관관계)과 혼동 주의\ncorrelation ≠ causality",note:"Scientists debated whether the data showed causality or mere correlation."},
-{id:9094,cat:"영단어",type:"flash",q:"reduction",a:"감소 / 축소 / 절감\nreduce(줄이다)의 명사형\ncost reduction = 비용 절감\nreduce → reduction",note:"The new policy led to a significant reduction in carbon emissions."},
-{id:9095,cat:"영단어",type:"flash",q:"transfer",a:"이동·이전(명/동) / 전학·전근 / 송금\ntransfer to = ~로 이동하다\nbank transfer = 계좌이체",note:"She requested a transfer to the company's overseas office."},
-{id:9096,cat:"영단어",type:"flash",q:"poverty",a:"빈곤 / 가난\npoverty line = 빈곤선\nin poverty = 가난하게\n↔ wealth(부)",note:"Many organizations work to eradicate poverty around the world."},
-{id:9097,cat:"영단어",type:"flash",q:"conversation",a:"대화 / 회화\nhave a conversation = 대화를 나누다\nconversation starter = 대화 시작거리\n↔ monologue(독백)",note:"We had a long conversation about our future plans."},
-{id:9098,cat:"영단어",type:"flash",q:"invitation",a:"초대 / 초청(명)\ninvite(초대하다)의 명사형\naccepted/declined the invitation = 초대를 받아들이다/거절하다",note:"She received an invitation to the ceremony."},
-{id:9099,cat:"영단어",type:"flash",q:"additive",a:"첨가물(명) / 첨가하는(형)\nfood additive = 식품 첨가물\nadditive effect = 부가적 효과\nadd(더하다) + itive",note:"The product contains no artificial additives or preservatives."},
-{id:9100,cat:"영단어",type:"flash",q:"reform",a:"개혁(명) / 개혁하다(동) / 개선\neducation reform = 교육 개혁\nreform a system = 시스템을 개혁하다\n≒ overhaul, restructure",note:"The government announced a major reform of the tax system."},
-{id:9101,cat:"영단어",type:"flash",q:"instruction",a:"지시·명령(명) / 설명서 / 교육·수업\nfollow instructions = 지시에 따르다\ninstruction manual = 사용 설명서\nunder the instruction of = ~의 지도하에",note:"Please read the instructions carefully before assembling the product."},
-{id:9102,cat:"영단어",type:"flash",q:"transformative",a:"변혁적인 / 획기적인 / 근본적으로 바꾸는\ntransform(변형하다) + ative\ntransformative experience = 인생을 바꾸는 경험\n≒ revolutionary, groundbreaking",note:"The new technology had a transformative impact on the industry."},
-{id:9103,cat:"영단어",type:"flash",q:"assignment",a:"과제 / 임무 / 배정\n⚠ 배치(arrangement)와 혼동 주의\non assignment = 임무 중\nassignment due = 과제 마감",note:"The students submitted their assignment before the deadline."},
-{id:9104,cat:"영단어",type:"flash",q:"be concerned with",a:"~에 관한 / ~와 관련된 / ~에 관심을 갖다\nbe concerned about = ~을 걱정하다 (구분!)\nThis report is concerned with climate change.",note:"The study is concerned with the effects of stress on health."},
-{id:9105,cat:"영단어",type:"flash",q:"portray",a:"묘사하다 / 그리다 / 연기하다\nportrait(초상화)와 같은 어원\nportray A as B = A를 B로 묘사하다",note:"The film portrays the life of a famous scientist."},
-{id:9106,cat:"영단어",type:"flash",q:"luxury",a:"사치(품)(명) / 호화로움(명)\n⚠ 형용사형은 luxurious\na life of luxury = 사치스러운 삶\nafford the luxury of = ~하는 사치를 누리다",note:"They stayed in a luxury hotel overlooking the ocean."},
-{id:9107,cat:"영단어",type:"flash",q:"retail",a:"소매(명) / 소매하다(동) / 소매의(형)\n⚠ 수반하다는 accompany\nretail price = 소매가\nretail store = 소매점\n↔ wholesale(도매)",note:"The product retails for about 50 dollars in stores."},
-{id:9108,cat:"영단어",type:"flash",q:"suppress",a:"억압하다 / 억제하다 / 진압하다\n⚠ 늘리다는 increase\nsuppress emotions = 감정을 억제하다\nsuppress a rebellion = 반란을 진압하다",note:"He tried to suppress his laughter during the serious meeting."},
-{id:9109,cat:"영단어",type:"flash",q:"impede",a:"방해하다 / 저해하다\n⚠ 손상시키다는 damage / impair\nimpede progress = 진전을 방해하다\n≒ hinder, obstruct",note:"The heavy snow impeded traffic throughout the city."},
-{id:9110,cat:"영단어",type:"flash",q:"comprise",a:"구성하다 / 이루다 / 포함하다\nbe comprised of = ~로 구성되다\ncomprise + 구성요소 (목적어로 바로)\n≒ consist of, make up",note:"The committee comprises representatives from ten countries."},
-{id:9111,cat:"영단어",type:"flash",q:"probe",a:"조사하다 / 탐색하다(동) / 탐침 / 조사(명)\nprobe into = ~을 깊이 조사하다\nspace probe = 우주 탐사선",note:"Investigators probed the cause of the accident for weeks."},
-{id:9112,cat:"영단어",type:"flash",q:"eminent",a:"저명한 / 뛰어난 / 탁월한\n⚠ imminent(임박한)과 혼동 주의\nan eminent scholar = 저명한 학자\n≒ distinguished, prominent",note:"She is an eminent researcher in the field of genetics."},
-{id:9113,cat:"영단어",type:"flash",q:"shelf",a:"선반(명) / 책장\non the shelf = 선반 위에 / 보류된\nshelf life = 유통기한\nshelves(복수형)",note:"He placed the books neatly on the shelf."},
-{id:9114,cat:"영단어",type:"flash",q:"underestimate",a:"과소평가하다(동) / 과소평가(명)\n⚠ under(아래) + estimate(추정)\n↔ overestimate(과대평가하다)\nnever underestimate = 절대 얕보지 마라",note:"Don't underestimate the difficulty of the exam."},
-{id:9115,cat:"영단어",type:"flash",q:"ailment",a:"(가벼운) 질병·병환\n≒ illness, condition\n↔ disease보다 가벼운 뉘앙스\na minor ailment = 가벼운 질환",note:"The patient suffered from a chronic ailment that affected his daily life."},
+  {id:9001,cat:"영단어",type:"flash",q:"forged",a:"위조된 / 단조된(금속을 두드려 만든)",pron:"fɔːrdʒd",note:"The document was forged to deceive the authorities."},
+  {id:9002,cat:"영단어",type:"flash",q:"firmly",a:"단호하게 / 확고히 / 꽉(물리적으로 단단히)",pron:"ˈfɜːrmli",note:"She firmly refused to change her decision."},
+  {id:9003,cat:"영단어",type:"flash",q:"insider",a:"내부자 / 사정을 아는 사람\n↔ outsider",pron:"ˈɪnsaɪdər",note:"The leak came from an insider who had access to confidential files."},
+  {id:9004,cat:"영단어",type:"flash",q:"admiral",a:"해군 제독 / 함대 사령관",pron:"ˈædmərəl",note:"The admiral commanded the fleet during the naval operation."},
+  {id:9005,cat:"영단어",type:"flash",q:"fabrication",a:"날조·거짓말 / 제작·제조\n(fab = 만들다)",pron:"ˌfæbrɪˈkeɪʃən",note:"The entire story turned out to be a fabrication."},
+  {id:9006,cat:"영단어",type:"flash",q:"rigid",a:"딱딱한·경직된(물리) / 엄격한·융통성 없는(태도)",pron:"ˈrɪdʒɪd",note:"The school enforced a rigid dress code for all students."},
+  {id:9007,cat:"영단어",type:"flash",q:"inherently",a:"본질적으로 / 태생적으로\n(inherent = 내재된)",pron:"ɪnˈhɪərəntli",note:"The system is inherently flawed and needs to be redesigned."},
+  {id:9008,cat:"영단어",type:"flash",q:"interplay",a:"상호작용 / 서로 영향을 주고받음\n(inter = 사이, play = 작용)",pron:"ˈɪntərpleɪ",note:"The interplay between light and shadow created a dramatic effect."},
+  {id:9009,cat:"영단어",type:"flash",q:"state",a:"상태(명) / 국가·주(명) / 진술하다(동)\n→ 문맥으로 구분",pron:"steɪt",note:"He was in a state of shock after hearing the news."},
+  {id:9010,cat:"영단어",type:"flash",q:"spark",a:"불꽃(명) / 촉발하다·일으키다(동)\nspark debate = 논쟁을 일으키다",pron:"spɑːrk",note:"The speech sparked a nationwide debate on education reform."},
+  {id:9011,cat:"영단어",type:"flash",q:"transcend",a:"초월하다 / 능가하다 / 범위를 넘어서다",pron:"trænsˈsend",note:"True art transcends cultural and language barriers."},
+  {id:9012,cat:"영단어",type:"flash",q:"armed",a:"무장한(군사) / 준비된·갖춘\narmed with data = 데이터로 무장한",pron:"ɑːrmd",note:"The armed soldiers surrounded the building."},
+  {id:9013,cat:"영단어",type:"flash",q:"anguish",a:"극심한 정신적 고통·괴로움\n(주로 감정적 고통, 신체 통증은 pain)",pron:"ˈæŋɡwɪʃ",note:"She cried out in anguish when she heard the tragic news."},
+  {id:9014,cat:"영단어",type:"flash",q:"sublime",a:"숭고한·장엄한(형) / 최고의·탁월한(형)\n명사: 숭고함",pron:"səˈblaɪm",note:"The view from the mountaintop was truly sublime."},
+  {id:9015,cat:"영단어",type:"flash",q:"implement",a:"시행하다·실행하다(동) / 도구·수단(명)\nimplement a plan = 계획을 실행하다",pron:"ˈɪmplɪment",note:"The company plans to implement the new policy next month."},
+  {id:9016,cat:"영단어",type:"flash",q:"undergo",a:"겪다·받다·경험하다\nundergo surgery/changes/treatment",pron:"ˌʌndərˈɡoʊ",note:"The patient had to undergo surgery after the accident."},
+  {id:9017,cat:"영단어",type:"flash",q:"fasting",a:"단식(명) / 금식 중인(형)\nfasting period = 공복 시간",pron:"ˈfæstɪŋ",note:"Blood tests are more accurate after fasting overnight."},
+  {id:9018,cat:"영단어",type:"flash",q:"vomiting",a:"구토(명) / 구역질\nvomit(동)의 명사형",pron:"ˈvɒmɪtɪŋ",note:"The patient reported nausea and vomiting after the medication."},
+  {id:9019,cat:"영단어",type:"flash",q:"exacerbate",a:"악화시키다 / 심화시키다\n(상황·증상을 더 나쁘게 만들다)",pron:"ɪɡˈzæsərbeɪt",note:"Stress can exacerbate existing health problems."},
+  {id:9020,cat:"영단어",type:"flash",q:"fatigue",a:"피로(명) / 피로감\nmental fatigue = 정신적 피로\nfatigue = exhaustion보다 만성적 뉘앙스",pron:"fəˈtiːɡ",note:"Chronic fatigue can be a symptom of various medical conditions."},
+  {id:9021,cat:"영단어",type:"flash",q:"operation",a:"작전·군사작전(명) / 수술(명) / 운영·가동(명)\nmilitary operation / undergo an operation",pron:"ˌɒpəˈreɪʃən",note:"The military launched a covert operation to rescue the hostages."},
+  {id:9022,cat:"영단어",type:"flash",q:"convenience",a:"편의·편리함(명)\nat your convenience = 편한 시간에\nconvenience store = 편의점",pron:"kənˈviːniəns",note:"The app was designed for the convenience of its users."},
+  {id:9023,cat:"영단어",type:"flash",q:"bud",a:"싹·봉오리(명) / 친구(명, 구어)\ntaste bud = 미뢰\nnip in the bud = 싹을 자르다",pron:"bʌd",note:"The flowers were just beginning to bud in early spring."},
+  {id:9024,cat:"영단어",type:"flash",q:"brag",a:"자랑하다·으스대다(동)\nbrag about = ~을 자랑하다\n≒ boast, show off",pron:"bræɡ",note:"He bragged about his promotion to anyone who would listen."},
+  {id:9025,cat:"영단어",type:"flash",q:"contradict",a:"반박하다·부정하다(동) / 모순되다(동)\ncontradict oneself = 자기모순\ncontradiction(명)",pron:"ˌkɒntrəˈdɪkt",note:"The witness's testimony contradicted the evidence presented in court."},
+  {id:9026,cat:"영단어",type:"flash",q:"be subject to",a:"~의 대상이다 / ~을 받다 / ~에 종속되다\nbe subject to change = 변경될 수 있다\nbe subject to tax = 세금 부과 대상이다",pron:"biː ˈsʌbdʒɪkt tuː",note:"All prices are subject to change without notice."},
+  {id:9027,cat:"영단어",type:"flash",q:"encompass",a:"포함하다·아우르다(동) / 둘러싸다(동)\n≒ include, cover, embrace\nencompass a wide range = 광범위하게 포괄하다",pron:"ɪnˈkʌmpəs",note:"The curriculum encompasses a wide range of subjects."},
+{id:9028,cat:"영단어",type:"flash",q:"be supposed to",a:"~해야 한다 / ~하기로 되어 있다",pron:"biː səˈpoʊzd tuː",note:"You are supposed to submit the report by Friday."},
+{id:9029,cat:"영단어",type:"flash",q:"plagiarize",a:"표절하다",pron:"ˈpleɪdʒəraɪz",note:"He was expelled for plagiarizing his thesis."},
+{id:9030,cat:"영단어",type:"flash",q:"intensify",a:"강화하다 / 심화되다",pron:"ɪnˈtensɪfaɪ",note:"The storm is expected to intensify overnight."},
+{id:9031,cat:"영단어",type:"flash",q:"mortgage",a:"주택담보대출 / 저당잡히다",pron:"ˈmɔːrɡɪdʒ",note:"They took out a mortgage to buy their first home."},
+{id:9032,cat:"영단어",type:"flash",q:"down payment",a:"계약금 / 선불금",pron:"daʊn ˈpeɪmənt",note:"She saved for years to make a down payment on the house."},
+{id:9033,cat:"영단어",type:"flash",q:"interest rate",a:"이자율 / 금리",pron:"ˈɪntrəst reɪt",note:"The central bank raised the interest rate to control inflation."},
+{id:9034,cat:"영단어",type:"flash",q:"property",a:"부동산 / 재산 / 속성",pron:"ˈprɒpərti",note:"The property value has increased significantly this year."},
+{id:9035,cat:"영단어",type:"flash",q:"discipline",a:"훈련 / 규율 / 학문 분야",pron:"ˈdɪsɪplɪn",note:"Self-discipline is key to achieving long-term goals."},
+{id:9036,cat:"영단어",type:"flash",q:"appropriate",a:"적절한 / 적합한",pron:"əˈproʊpriət",note:"It is not appropriate to use informal language in a report."},
+{id:9037,cat:"영단어",type:"flash",q:"enactment",a:"제정 / 법률 제정",pron:"ɪˈnæktmənt",note:"The enactment of the new law took several years."},
+{id:9038,cat:"영단어",type:"flash",q:"progress",a:"진전 / 발전 / 진행되다",pron:"ˈprɒɡres",note:"The project is making steady progress despite the challenges."},
+{id:9039,cat:"영단어",type:"flash",q:"heredity",a:"유전, 유전적 특성",pron:"həˈredɪti",note:"Heredity plays a major role in determining a person's traits."},
+{id:9040,cat:"영단어",type:"flash",q:"eligibility",a:"자격, 적격성",pron:"ˌelɪdʒəˈbɪlɪti",note:"You must meet the eligibility requirements to apply."},
+{id:9041,cat:"영단어",type:"flash",q:"authority",a:"권위 / 권한 / 당국",pron:"ɔːˈθɒrɪti",note:"The authority to approve the budget lies with the director."},
+{id:9042,cat:"영단어",type:"flash",q:"authorize",a:"권한을 부여하다 / 승인하다",pron:"ˈɔːθəraɪz",note:"The manager authorized the payment."},
+{id:9043,cat:"영단어",type:"flash",q:"embargo",a:"금수 조치 / 통상 금지",pron:"ɪmˈbɑːrɡoʊ",note:"The government imposed an embargo on oil exports."},
+{id:9044,cat:"영단어",type:"flash",q:"resonate",a:"공명하다 / 울려 퍼지다 / 반향을 일으키다",pron:"ˈrezəneɪt",note:"His speech resonated with the audience."},
+{id:9045,cat:"영단어",type:"flash",q:"criteria",a:"기준, 조건 (criterion의 복수형)",pron:"kraɪˈtɪəriə",note:"The criteria for selection were clearly stated."},
+{id:9046,cat:"영단어",type:"flash",q:"household",a:"가정 / 가구 / 잘 알려진",pron:"ˈhaʊshoʊld",note:"Her name became a household word after the show."},
+{id:9047,cat:"영단어",type:"flash",q:"monopolize",a:"독점하다 / 전용하다",pron:"ˈmɒnəpəlaɪz",note:"The company tried to monopolize the market."},
+{id:9048,cat:"영단어",type:"flash",q:"journalism",a:"저널리즘 / 언론 / 신문방송학",pron:"ˈdʒɜːrnəlɪzəm",note:"She studied journalism at university."},
+{id:9049,cat:"영단어",type:"flash",q:"sensitivity",a:"민감성 / 감수성 / 예민함",pron:"ˌsensɪˈtɪvɪti",note:"The issue requires great sensitivity."},
+{id:9050,cat:"영단어",type:"flash",q:"instinct",a:"본능 / 직감",pron:"ˈɪnstɪŋkt",note:"She had an instinct for finding the right answer."},
+{id:9051,cat:"영단어",type:"flash",q:"assess",a:"평가하다 / 사정하다 / 조사하다",pron:"əˈses",note:"Experts were called in to assess the damage."},
+{id:9052,cat:"영단어",type:"flash",q:"devastate",a:"황폐화시키다 / 엄청난 충격을 주다",pron:"ˈdevəsteɪt",note:"The earthquake devastated the entire region."},
+{id:9053,cat:"영단어",type:"flash",q:"remnant",a:"잔재 / 나머지 / 유물",pron:"ˈremnənt",note:"Only a remnant of the ancient wall remains."},
+{id:9054,cat:"영단어",type:"flash",q:"appoint",a:"임명하다 / 지정하다",pron:"əˈpɔɪnt",note:"She was appointed as the new director."},
+{id:9055,cat:"영단어",type:"flash",q:"confirm",a:"확인하다 / 확정하다 / 승인하다",pron:"kənˈfɜːrm",note:"Please confirm your reservation by email."},
+{id:9056,cat:"영단어",type:"flash",q:"affiliation",a:"소속 / 제휴 / 가입",pron:"əˌfɪliˈeɪʃən",note:"He listed his university affiliation on the form."},
+{id:9057,cat:"영단어",type:"flash",q:"announce",a:"발표하다 / 알리다",pron:"əˈnaʊns",note:"The company announced a new product launch."},
+{id:9058,cat:"영단어",type:"flash",q:"institution",a:"기관 / 제도 / 단체",pron:"ˌɪnstɪˈtjuːʃən",note:"The hospital is a well-respected institution."},
+{id:9059,cat:"영단어",type:"flash",q:"erode",a:"침식하다 / 부식시키다 / 약화시키다",pron:"ɪˈroʊd",note:"The cliffs were slowly eroded by the sea."},
+{id:9060,cat:"영단어",type:"flash",q:"break down",a:"고장나다 / 무너지다 / 분류하다",pron:"breɪk daʊn",note:"The car broke down on the highway."},
+{id:9061,cat:"영단어",type:"flash",q:"be crammed with",a:"~로 가득 차다",pron:"biː kræmd wɪð",note:"The hall was crammed with people."},
+{id:9062,cat:"영단어",type:"flash",q:"buckle down",a:"열심히 하다 / 본격적으로 달려들다",pron:"ˈbʌkəl daʊn",note:"It's time to buckle down and study."},
+{id:9063,cat:"영단어",type:"flash",q:"restrict",a:"제한하다 / 규제하다",pron:"rɪˈstrɪkt",note:"Access to the area is restricted."},
+{id:9064,cat:"영단어",type:"flash",q:"contingent",a:"조건부의 / 가능성 있는 / 파견단(명)",pron:"kənˈtɪndʒənt",note:"The plan is contingent on the weather."},
+{id:9065,cat:"영단어",type:"flash",q:"coercive",a:"강압적인 / 강제적인",pron:"koʊˈɜːrsɪv",note:"The regime used coercive measures to control people."},
+{id:9066,cat:"영단어",type:"flash",q:"aversive",a:"혐오스러운 / 회피적인",pron:"əˈvɜːrsɪv",note:"Aversive stimuli can change behavior."},
+{id:9067,cat:"영단어",type:"flash",q:"elicit",a:"끌어내다 / 유도하다",pron:"ɪˈlɪsɪt",note:"The question elicited an unexpected response."},
+{id:9068,cat:"영단어",type:"flash",q:"perpetuate",a:"영속시키다 / 영구화하다",pron:"pərˈpetʃueɪt",note:"The policy perpetuates inequality."},
+{id:9069,cat:"영단어",type:"flash",q:"attenuate",a:"약화시키다 / 희석하다",pron:"əˈtenjueɪt",note:"The drug attenuates the effects of the virus."},
+{id:9070,cat:"영단어",type:"flash",q:"inconsiderate",a:"사려없는 / 배려없는",pron:"ɪnˈkɒnsɪdərɪt",note:"It was inconsiderate of him to make noise at night."},
+{id:9071,cat:"영단어",type:"flash",q:"distinct",a:"뚜렷한 / 명확한 / 별개의",pron:"dɪˈstɪŋkt",note:"The two cultures are quite distinct from each other."},
+{id:9072,cat:"영단어",type:"flash",q:"distinctive",a:"독특한 / 구별되는 / 특징적인",pron:"dɪˈstɪŋktɪv",note:"She has a very distinctive voice."},
+{id:9073,cat:"영단어",type:"flash",q:"distinguish",a:"구별하다 / 식별하다",pron:"dɪˈstɪŋɡwɪʃ",note:"Can you distinguish between the two sounds?"},
+{id:9074,cat:"영단어",type:"flash",q:"distinguished",a:"저명한 / 뛰어난",pron:"dɪˈstɪŋɡwɪʃt",note:"He is a distinguished professor of law."},
+{id:9075,cat:"영단어",type:"flash",q:"neutral",a:"중립적인 / 중성의",pron:"ˈnjuːtrəl",note:"Switzerland remained neutral during the war."},
+{id:9076,cat:"영단어",type:"flash",q:"spacious",a:"넓은 / 광활한",pron:"ˈspeɪʃəs",note:"The apartment has a spacious living room."},
+{id:9077,cat:"영단어",type:"flash",q:"perform",a:"수행하다 / 공연하다",pron:"pərˈfɔːrm",note:"The surgeon performed a complex operation."},
+{id:9078,cat:"영단어",type:"flash",q:"anxious",a:"걱정스러운 / 열망하는",pron:"ˈæŋkʃəs",note:"She was anxious to hear the results."},
+{id:9079,cat:"영단어",type:"flash",q:"distant",a:"거리가 먼 / 냉담한 / 먼 옛날의",pron:"ˈdɪstənt",note:"He seemed distant and distracted at the meeting."},
+{id:9080,cat:"영단어",type:"flash",q:"identify",a:"식별하다 / 확인하다 / 동일시하다",pron:"aɪˈdentɪfaɪ",note:"Can you identify the person in this photo?"},
+{id:9081,cat:"영단어",type:"flash",q:"identity",a:"정체성 / 신원",pron:"aɪˈdentɪti",note:"She struggled with her cultural identity."},
+{id:9082,cat:"영단어",type:"flash",q:"identical",a:"동일한 / 똑같은",pron:"aɪˈdentɪkəl",note:"The two signatures were identical."},
+{id:9083,cat:"영단어",type:"flash",q:"identification",a:"신분증 / 식별 / 확인",pron:"aɪˌdentɪfɪˈkeɪʃən",note:"Please show your identification at the entrance."},
+{id:9084,cat:"영단어",type:"flash",q:"priceless",a:"매우 귀중한 / 값을 매길 수 없는\n⚠ price+less ≠ 가격없음 → 반어적으로 엄청 소중한\n↔ worthless(가치없는)",pron:"ˈpraɪsləs",note:"The painting is priceless and cannot be sold at any price."},
+{id:9085,cat:"영단어",type:"flash",q:"medieval",a:"중세의 / 중세 시대의\n⚠ neutral(중립적인)과 혼동 주의",pron:"ˌmedɪˈiːvəl",note:"The medieval castle was built in the 12th century."},
+{id:9086,cat:"영단어",type:"flash",q:"spell",a:"철자를 쓰다(동) / 주문(명) / 한동안(명)\nspell out = 자세히 설명하다\na spell of rain = 한동안의 비",pron:"spel",note:"Can you spell your name for me, please?"},
+{id:9087,cat:"영단어",type:"flash",q:"affair",a:"일·사건(명) / 불륜(명) / (pl.) 업무·일\ncurrent affairs = 시사\nhave an affair = 불륜을 저지르다",pron:"əˈfer",note:"The scandal became a public affair that shocked everyone."},
+{id:9088,cat:"영단어",type:"flash",q:"nail",a:"손톱·발톱(명) / 못(명) / 완벽히 해내다(동, 구어)\nnail it = 완벽하게 해내다\non the nail = 즉시",pron:"neɪl",note:"She nailed the presentation and impressed everyone in the room."},
+{id:9089,cat:"영단어",type:"flash",q:"input",a:"입력(명) / 투입·기여(명) / 입력하다(동)\n⚠ 개입은 intervention\nvaluable input = 귀중한 의견",pron:"ˈɪnpʊt",note:"We need your input before making the final decision."},
+{id:9090,cat:"영단어",type:"flash",q:"uncertainty",a:"불확실성(명)\n⚠ uncertain(형용사)와 구분\neconomic uncertainty = 경제적 불확실성",pron:"ʌnˈsɜːrtənti",note:"There is a lot of uncertainty about the outcome of the election."},
+{id:9091,cat:"영단어",type:"flash",q:"grant",a:"주다·허가하다(동) / 보조금(명)\n⚠ guarantee(보장하다)와 혼동 주의\ntake for granted = 당연히 여기다\ngrant permission = 허가를 주다",pron:"ɡrænt",note:"The government granted funds to support small businesses."},
+{id:9092,cat:"영단어",type:"flash",q:"correlation",a:"상관관계 / 연관성\ncorrelation between A and B = A와 B의 상관관계\n≠ causation(인과관계)",pron:"ˌkɒrəˈleɪʃən",note:"There is a strong correlation between exercise and mental health."},
+{id:9093,cat:"영단어",type:"flash",q:"causality",a:"인과관계 / 인과율\ncause(원인) + ality(성질)\n⚠ correlation(상관관계)과 혼동 주의\ncorrelation ≠ causality",pron:"ˌkɔːzæˈlɪti",note:"Scientists debated whether the data showed causality or mere correlation."},
+{id:9094,cat:"영단어",type:"flash",q:"reduction",a:"감소 / 축소 / 절감\nreduce(줄이다)의 명사형\ncost reduction = 비용 절감\nreduce → reduction",pron:"rɪˈdʌkʃən",note:"The new policy led to a significant reduction in carbon emissions."},
+{id:9095,cat:"영단어",type:"flash",q:"transfer",a:"이동·이전(명/동) / 전학·전근 / 송금\ntransfer to = ~로 이동하다\nbank transfer = 계좌이체",pron:"trænsˈfɜːr",note:"She requested a transfer to the company's overseas office."},
+{id:9096,cat:"영단어",type:"flash",q:"poverty",a:"빈곤 / 가난\npoverty line = 빈곤선\nin poverty = 가난하게\n↔ wealth(부)",pron:"ˈpɒvərti",note:"Many organizations work to eradicate poverty around the world."},
+{id:9097,cat:"영단어",type:"flash",q:"conversation",a:"대화 / 회화\nhave a conversation = 대화를 나누다\nconversation starter = 대화 시작거리\n↔ monologue(독백)",pron:"ˌkɒnvərˈseɪʃən",note:"We had a long conversation about our future plans."},
+{id:9098,cat:"영단어",type:"flash",q:"invitation",a:"초대 / 초청(명)\ninvite(초대하다)의 명사형\naccepted/declined the invitation = 초대를 받아들이다/거절하다",pron:"ˌɪnvɪˈteɪʃən",note:"She received an invitation to the ceremony."},
+{id:9099,cat:"영단어",type:"flash",q:"additive",a:"첨가물(명) / 첨가하는(형)\nfood additive = 식품 첨가물\nadditive effect = 부가적 효과\nadd(더하다) + itive",pron:"ˈædɪtɪv",note:"The product contains no artificial additives or preservatives."},
+{id:9100,cat:"영단어",type:"flash",q:"reform",a:"개혁(명) / 개혁하다(동) / 개선\neducation reform = 교육 개혁\nreform a system = 시스템을 개혁하다\n≒ overhaul, restructure",pron:"rɪˈfɔːrm",note:"The government announced a major reform of the tax system."},
+{id:9101,cat:"영단어",type:"flash",q:"instruction",a:"지시·명령(명) / 설명서 / 교육·수업\nfollow instructions = 지시에 따르다\ninstruction manual = 사용 설명서\nunder the instruction of = ~의 지도하에",pron:"ɪnˈstrʌkʃən",note:"Please read the instructions carefully before assembling the product."},
+{id:9102,cat:"영단어",type:"flash",q:"transformative",a:"변혁적인 / 획기적인 / 근본적으로 바꾸는\ntransform(변형하다) + ative\ntransformative experience = 인생을 바꾸는 경험\n≒ revolutionary, groundbreaking",pron:"trænsˈfɔːrmətɪv",note:"The new technology had a transformative impact on the industry."},
+{id:9103,cat:"영단어",type:"flash",q:"assignment",a:"과제 / 임무 / 배정\n⚠ 배치(arrangement)와 혼동 주의\non assignment = 임무 중\nassignment due = 과제 마감",pron:"əˈsaɪnmənt",note:"The students submitted their assignment before the deadline."},
+{id:9104,cat:"영단어",type:"flash",q:"be concerned with",a:"~에 관한 / ~와 관련된 / ~에 관심을 갖다\nbe concerned about = ~을 걱정하다 (구분!)\nThis report is concerned with climate change.",pron:"biː kənˈsɜːrnd wɪð",note:"The study is concerned with the effects of stress on health."},
+{id:9105,cat:"영단어",type:"flash",q:"portray",a:"묘사하다 / 그리다 / 연기하다\nportrait(초상화)와 같은 어원\nportray A as B = A를 B로 묘사하다",pron:"pɔːrˈtreɪ",note:"The film portrays the life of a famous scientist."},
+{id:9106,cat:"영단어",type:"flash",q:"luxury",a:"사치(품)(명) / 호화로움(명)\n⚠ 형용사형은 luxurious\na life of luxury = 사치스러운 삶\nafford the luxury of = ~하는 사치를 누리다",pron:"ˈlʌkʃəri",note:"They stayed in a luxury hotel overlooking the ocean."},
+{id:9107,cat:"영단어",type:"flash",q:"retail",a:"소매(명) / 소매하다(동) / 소매의(형)\n⚠ 수반하다는 accompany\nretail price = 소매가\nretail store = 소매점\n↔ wholesale(도매)",pron:"ˈriːteɪl",note:"The product retails for about 50 dollars in stores."},
+{id:9108,cat:"영단어",type:"flash",q:"suppress",a:"억압하다 / 억제하다 / 진압하다\n⚠ 늘리다는 increase\nsuppress emotions = 감정을 억제하다\nsuppress a rebellion = 반란을 진압하다",pron:"səˈpres",note:"He tried to suppress his laughter during the serious meeting."},
+{id:9109,cat:"영단어",type:"flash",q:"impede",a:"방해하다 / 저해하다\n⚠ 손상시키다는 damage / impair\nimpede progress = 진전을 방해하다\n≒ hinder, obstruct",pron:"ɪmˈpiːd",note:"The heavy snow impeded traffic throughout the city."},
+{id:9110,cat:"영단어",type:"flash",q:"comprise",a:"구성하다 / 이루다 / 포함하다\nbe comprised of = ~로 구성되다\ncomprise + 구성요소 (목적어로 바로)\n≒ consist of, make up",pron:"kəmˈpraɪz",note:"The committee comprises representatives from ten countries."},
+{id:9111,cat:"영단어",type:"flash",q:"probe",a:"조사하다 / 탐색하다(동) / 탐침 / 조사(명)\nprobe into = ~을 깊이 조사하다\nspace probe = 우주 탐사선",pron:"proʊb",note:"Investigators probed the cause of the accident for weeks."},
+{id:9112,cat:"영단어",type:"flash",q:"eminent",a:"저명한 / 뛰어난 / 탁월한\n⚠ imminent(임박한)과 혼동 주의\nan eminent scholar = 저명한 학자\n≒ distinguished, prominent",pron:"ˈemɪnənt",note:"She is an eminent researcher in the field of genetics."},
+{id:9113,cat:"영단어",type:"flash",q:"shelf",a:"선반(명) / 책장\non the shelf = 선반 위에 / 보류된\nshelf life = 유통기한\nshelves(복수형)",pron:"ʃelf",note:"He placed the books neatly on the shelf."},
+{id:9114,cat:"영단어",type:"flash",q:"underestimate",a:"과소평가하다(동) / 과소평가(명)\n⚠ under(아래) + estimate(추정)\n↔ overestimate(과대평가하다)\nnever underestimate = 절대 얕보지 마라",pron:"ˌʌndərˈestɪmeɪt",note:"Don't underestimate the difficulty of the exam."},
+{id:9115,cat:"영단어",type:"flash",q:"ailment",a:"(가벼운) 질병·병환\n≒ illness, condition\n↔ disease보다 가벼운 뉘앙스\na minor ailment = 가벼운 질환",pron:"ˈeɪlmənt",note:"The patient suffered from a chronic ailment that affected his daily life."},
 ];
 
 // ═══════════════════ STATE ═══════════════════
@@ -2416,6 +2416,7 @@ function load() {
           storedMap[def.id].note = def.note;
           storedMap[def.id].type = def.type;
           storedMap[def.id].cat  = def.cat;
+          if (def.pron) storedMap[def.id].pron = def.pron;
         } else {
           storedMap[def.id] = JSON.parse(JSON.stringify(def));
         }
@@ -2696,8 +2697,35 @@ function renderFlashCard(c) {
   document.getElementById('card-back').style.display = 'none';
 
   document.getElementById('card-front').innerHTML = `
+    ${currentSubject==='eng' ? `
+    <button onclick="event.stopPropagation();speakWord('${esc(c.q).split('\\n')[0].trim()}')"
+      title="발음 듣기"
+      style="position:absolute;top:10px;right:10px;z-index:10;
+        width:28px;height:28px;border-radius:50%;
+        border:1.5px solid rgba(233,30,140,0.25);
+        background:rgba(255,255,255,0.85);
+        color:var(--accent);cursor:pointer;
+        display:flex;align-items:center;justify-content:center;
+        box-shadow:0 1px 6px rgba(233,30,140,0.12);
+        backdrop-filter:blur(4px);
+        transition:all .15s;padding:0;"
+      onmousedown="this.style.transform='scale(.88)';this.style.background='rgba(255,220,240,0.95)'"
+      onmouseup="this.style.transform='scale(1)';this.style.background='rgba(255,255,255,0.85)'"
+      ontouchstart="this.style.transform='scale(.88)';this.style.background='rgba(255,220,240,0.95)'"
+      ontouchend="this.style.transform='scale(1)';this.style.background='rgba(255,255,255,0.85)'">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+        <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+      </svg>
+    </button>` : ''}
     <div class="card-cat">${esc(c.cat)}</div>
     <div class="card-q">${esc(c.q).replace(/\n/g,'<br>')}</div>
+    ${currentSubject==='eng' && c.pron ? `
+    <div style="margin-top:8px;font-size:.82rem;color:var(--muted);
+      font-family:'Quicksand',sans-serif;letter-spacing:.03em;
+      background:rgba(233,30,140,0.05);border-radius:20px;
+      padding:3px 12px;display:inline-block;">/${esc(c.pron)}/</div>` : ''}
     <div class="card-hint">탭하면 답 확인 · 알면 바로 ✓</div>`;
   document.getElementById('card-back').innerHTML = `
     <div class="card-ans-label">ANSWER</div>
@@ -2839,6 +2867,33 @@ function flipCard() {
   document.getElementById('btn-row').style.display = flipped ? 'none' : '';
 }
 
+// ── 영단어 발음 (Web Speech API) ──
+function speakWord(word) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(word);
+  utter.lang = 'en-US';
+  utter.rate = 0.9;
+  utter.pitch = 1.0;
+  window.speechSynthesis.speak(utter);
+}
+
+// ── SRS: 다음 복습일 계산 ──
+function calcNextReview(h, know) {
+  const interval = h.srsInterval || 0;
+  let next;
+  if (know) {
+    // 알겠어: 간격을 늘림 (1→3→7→14→30일)
+    const steps = [1, 3, 7, 14, 30];
+    const nextStep = steps.find(s => s > interval) || 30;
+    next = nextStep;
+  } else {
+    // 모르겠어: 1일로 리셋
+    next = 1;
+  }
+  return next;
+}
+
 function answer(know) {
   document.getElementById('ox-o').disabled = false;
   document.getElementById('ox-x').disabled = false;
@@ -2859,6 +2914,10 @@ function answer(know) {
   document.getElementById('btn-prev').style.display = '';
   if (!history[c.id]) history[c.id] = {know:0, dont:0};
   history[c.id].lastSeen = Date.now();
+  // SRS: 다음 복습일 저장
+  const nextInterval = calcNextReview(history[c.id], know);
+  history[c.id].srsInterval = know ? nextInterval : 1;
+  history[c.id].srsNextDate = Date.now() + nextInterval * 86400000;
   stampToday();
   if (know) {
     history[c.id].know++; cleared.add(c.id); sessK++;
@@ -2901,12 +2960,12 @@ function showComplete() {
   if(isReview && reviewLimit > 0){
     const bMore=document.createElement('button');
     bMore.className='start-go';
-    bMore.textContent='+10개 더';
+    bMore.textContent='+30개 더';
     bMore.style.cssText='background:rgba(138,111,46,.1);border:1px solid var(--accent);color:var(--accent);';
     bMore.onclick=()=>{
       sc.style.display='none';
       document.getElementById('prog-wrap').style.display='';
-      startReview(false, reviewLimit+10);
+      startReview(false, 30);
     };
     btns.appendChild(bMore);
   }
@@ -2919,6 +2978,17 @@ function showComplete() {
 // ═══════════════════ REVIEW ═══════════════════
 const COUNT_OPTIONS=[5,10,15,20,30,'전체'];
 
+function getSrsDuePool() {
+  // SRS: 오늘 이전 nextDate인 카드 (= 지금 봐야 할 카드)
+  const now = Date.now();
+  return reviewFiltered().filter(c => {
+    const h = history[c.id];
+    if (!h || (h.know + h.dont) === 0) return false;
+    if (!h.srsNextDate) return true; // SRS 데이터 없으면 포함
+    return h.srsNextDate <= now;
+  });
+}
+
 function getReviewPool(weakFirst=false){
   let pool = reviewFiltered().filter(c=>history[c.id]&&(history[c.id].know+history[c.id].dont)>0);
   if (weakFirst) {
@@ -2930,7 +3000,13 @@ function getReviewPool(weakFirst=false){
     });
     return weak.length > 0 ? weak : pool;
   }
-  return pool.sort((a, b) => getWeight(b.id) - getWeight(a.id));
+  // SRS 기반: 오늘 볼 카드 먼저, 나머지는 weight 순
+  const now = Date.now();
+  const due = pool.filter(c => !history[c.id]?.srsNextDate || history[c.id].srsNextDate <= now);
+  const notDue = pool.filter(c => history[c.id]?.srsNextDate && history[c.id].srsNextDate > now);
+  due.sort((a, b) => getWeight(b.id) - getWeight(a.id));
+  notDue.sort((a, b) => (history[a.id]?.srsNextDate||0) - (history[b.id]?.srsNextDate||0));
+  return [...due, ...notDue];
 }
 
 function interleaveShuffle(pool) {
@@ -2959,18 +3035,14 @@ function renderReviewStart(){
     wi.textContent = '먼저 학습 모드에서 카드를 봐주세요.';
     return;
   }
-  const urgent = pool.filter(c => {
-    const h = history[c.id];
-    const daysSince = h?.lastSeen ? (Date.now() - h.lastSeen) / 86400000 : 999;
-    return daysSince >= 1;
-  }).length;
+  const now = Date.now();
+  const due = pool.filter(c => !history[c.id]?.srsNextDate || history[c.id].srsNextDate <= now).length;
   const weak = pool.filter(c => {
     const h = history[c.id];
     return h && h.dont / (h.know + h.dont) >= 0.4;
   }).length;
-  sub.innerHTML = `오늘 복습할 카드를 자동 선별해요<br>마지막으로 본 날짜 · 오답률 기반`;
-  const showCount = Math.min(20, pool.length);
-  wi.innerHTML = `전체 ${pool.length}개 중 <b style="color:var(--accent2)">${showCount}개</b> 시작 · 긴급 <b style="color:var(--accent)">${urgent}</b>개 · 취약 <b style="color:var(--red)">${weak}</b>개`;
+  sub.innerHTML = `SRS 간격반복 기반 · 오늘 볼 카드 먼저 올라와요`;
+  wi.innerHTML = `전체 ${pool.length}개 중 <b style="color:var(--accent)">📅 오늘 분량 ${due}개</b> · 취약 <b style="color:var(--red)">⚠ ${weak}개</b>`;
 }
 
 function startReview(weakFirst=false, limit=0){
