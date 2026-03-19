@@ -2238,8 +2238,10 @@ const DEFAULT_CARDS = [
 {id:6160,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S02 배합강도',q:'[배합강도] 콘크리트 강도 시험 횟수가 ___ 이하인 경우, 표에 따라 배합강도를 결정한다.',a:'14회'},
 {id:6161,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S02 배합강도',q:'[배합강도 산정식 - 시험횟수 14회 이하]\nfck ≤ 21MPa → fcr = ___\n21 < fck ≤ 35MPa → fcr = ___\nfck > 35MPa → fcr = ___',a:'fck + 7.0 | fck + 8.5 | 1.1fck + 5.0'},
 {id:6162,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S02 배합강도',q:'[배합강도 - 시험횟수 충분할 때(30회 이상)] 실제 표준편차(s)를 사용하여 두 가지 식 중 ___ 값을 적용\n① fcr = fck + 1.34s\n② fcr = (fck - 3.5) + 2.33s',a:'큰'},
-{id:6163,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S02 배합강도',q:'[배합강도 두 공식 비교 - 30회 이상]\n① fcr = ___ (안전 측 하한 보장)\n② fcr = ___ (단, fck > 35이면 다른 식 적용)',a:'fck + 1.34s | (fck - 3.5) + 2.33s'}
-];
+{id:6163,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S02 배합강도',q:'[배합강도 두 공식 비교 - 30회 이상]\n① fcr = ___ (안전 측 하한 보장)\n② fcr = ___ (단, fck > 35이면 다른 식 적용)',a:'fck + 1.34s | (fck - 3.5) + 2.33s'},
+{id:6164,type:'cloze',cat:'PART3 · RC구조 > CH04 내진설계 > S01 특수모멘트골조',q:'[특수모멘트골조 휨부재 제한]\n최소 폭: ___ mm 이상\n폭/깊이 비: ___ 이상\n순경간/유효깊이 비: ___ 이상\n최대 폭 제한: 기둥 폭 + (___ × 보 깊이) 이내',a:'250 | 0.3 | 4.0 | 0.75'},
+{id:6165,type:'cloze',cat:'PART3 · RC구조 > CH04 내진설계 > S01 특수모멘트골조',q:'[특수모멘트골조 휨부재] 최대 폭 = 기둥 폭 + (0.75 × 보 깊이) 이내\n이 조건이 필요한 이유: 보가 너무 넓으면 ___ 전달이 불균형해지기 때문',a:'전단력'},
+{id:6166,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'[말뚝의 최소 피복두께]\n프리스트레스트 말뚝 (해수 중): ___ mm\n비프리스트레스트 말뚝 (해수 중): ___ mm\n튜브 있는 현장타설말뚝: ___ mm\n튜브 없는 현장타설말뚝: ___ mm',a:'75 | 80 | 65 | 25'}];
 
 // ═══════════════════ ENGLISH CARDS ═══════════════════
 const DEFAULT_ENG_CARDS = [
@@ -2364,6 +2366,22 @@ const DEFAULT_ENG_CARDS = [
 {id:9119,cat:"영단어",type:"flash",q:"throat",a:"목구멍 / 인후(명)\n⚠ voice(목소리)와 혼동 주의\nclear one's throat = 헛기침하다\nsore throat = 인후염·목 아픔",pron:"θroʊt",note:"She cleared her throat before speaking."},
 {id:9120,cat:"영단어",type:"flash",q:"cooperation",a:"협동 / 협력 / 협조(명)\n⚠ corporation(기업)과 혼동 주의\nin cooperation with = ~와 협력하여\ncooperate(동) / cooperative(형)",pron:"koʊˌɒpəˈreɪʃən",note:"The project succeeded through international cooperation."},
 {id:9121,cat:"영단어",type:"flash",q:"journal",a:"일지 / 학술지 / 잡지(명)\n⚠ diary(개인 일기)보다 공식적 뉘앙스\nacademic journal = 학술지\njournal ≠ 여행일기",pron:"ˈdʒɜːrnəl",note:"She published her research in a prestigious academic journal."},
+{id:9122,cat:"영단어",type:"flash",q:"inductive",a:"귀납적인(형) / 유도하는\n↔ deductive(연역적인)\ninductive reasoning = 귀납적 추론\n(특수→일반 방향)",pron:"ɪnˈdʌktɪv",note:"The scientist used inductive reasoning to form a general theory."},
+{id:9123,cat:"영단어",type:"flash",q:"captive",a:"포로(명) / 사로잡힌(형)\ncaptive audience = 어쩔 수 없이 듣는 청중\ncapture(동) / captivity(명 = 포로 상태)",pron:"ˈkæptɪv",note:"The captive was held in a remote location for weeks."},
+{id:9124,cat:"영단어",type:"flash",q:"clumsiness",a:"서투름 / 어색함 / 부주의(명)\nclumsy(형) = 어설픈·둔한\n≒ awkwardness",pron:"ˈklʌmzinəs",note:"His clumsiness caused him to knock over the vase."},
+{id:9125,cat:"영단어",type:"flash",q:"spit",a:"침을 뱉다(동) / 침(명)\nspit out = 뱉어내다\nspit-roast = 꼬치구이\n과거형: spat / spit",pron:"spɪt",note:"He spit out the food because it tasted awful."},
+{id:9126,cat:"영단어",type:"flash",q:"metaphor",a:"은유 / 비유(명)\n⚠ simile(직유, as/like 사용)와 구분\nmetaphorical(형) = 은유적인\nlife is a journey = 은유의 예",pron:"ˈmetəfɔːr",note:"The author used a powerful metaphor to describe grief."},
+{id:9127,cat:"영단어",type:"flash",q:"contagion",a:"(접촉) 전염 / 전파(명)\ncontagious(형) = 전염성의\n⚠ infection(감염)보다 접촉 전파 강조\ncontagion effect = 전염 효과",pron:"kənˈteɪdʒən",note:"Authorities worked to prevent the contagion from spreading."},
+{id:9128,cat:"영단어",type:"flash",q:"transmission",a:"전달 / 전송 / 전염(명)\ntransmit(동) = 전달하다·전송하다\ntransmission of disease = 질병 전파\ndata transmission = 데이터 전송",pron:"trænsˈmɪʃən",note:"The transmission of the virus was traced to a single event."},
+{id:9129,cat:"영단어",type:"flash",q:"viral",a:"바이러스성의(형) / 입소문 난(형)\ngo viral = 바이럴되다·급속도로 퍼지다\nviral disease = 바이러스성 질병",pron:"ˈvaɪrəl",note:"The video went viral overnight and reached millions of viewers."},
+{id:9130,cat:"영단어",type:"flash",q:"corporate",a:"기업의 / 법인의(형)\n⚠ cooperate(협력하다)와 혼동 주의\ncorporate culture = 기업 문화\ncorporation(명) = 기업·법인",pron:"ˈkɔːrpərət",note:"The corporate headquarters is located in New York."},
+{id:9131,cat:"영단어",type:"flash",q:"cooperate",a:"협력하다 / 협조하다(동)\n⚠ corporate(기업의)와 혼동 주의\ncooperate with = ~와 협력하다\ncooperation(명) / cooperative(형)",pron:"koʊˈɒpəreɪt",note:"The two companies agreed to cooperate on the new project."},
+{id:9132,cat:"영단어",type:"flash",q:"restructuring",a:"구조조정 / 재편(명)\nrestructure(동) = 구조를 개편하다\ncorporate restructuring = 기업 구조조정\n≒ reorganization",pron:"riːˈstrʌktʃərɪŋ",note:"The company announced a major restructuring to cut costs."},
+{id:9133,cat:"영단어",type:"flash",q:"restoration",a:"복원 / 회복 / 복구(명)\nrestore(동) = 복원하다\nrestoration of peace = 평화 회복\n≒ recovery, rehabilitation",pron:"ˌrestəˈreɪʃən",note:"The restoration of the ancient building took three years."},
+{id:9134,cat:"영단어",type:"flash",q:"corridor",a:"복도 / 통로(명)\ncorridor of power = 권력의 핵심부\nair corridor = 항공 통로",pron:"ˈkɒrɪdɔːr",note:"The students lined up in the corridor before entering the classroom."},
+{id:9135,cat:"영단어",type:"flash",q:"fragment",a:"조각 / 파편(명) / 산산이 부서지다(동)\nfragment of memory = 기억의 파편\nfragmented(형) = 단편화된\n≒ piece, shard",pron:"ˈfræɡmənt",note:"Only fragments of the ancient manuscript survived."},
+{id:9136,cat:"영단어",type:"flash",q:"logistics",a:"물류 / 병참 / 세부 계획(명)\nlogistics company = 물류 회사\nlogistical(형) = 물류의·세부 계획의\n항상 복수형으로 사용",pron:"ləˈdʒɪstɪks",note:"The logistics of organizing the event proved to be challenging."},
+{id:9137,cat:"영단어",type:"flash",q:"necessity",a:"필요성 / 필수품(명)\nnecessary(형) = 필요한\nout of necessity = 필요에 의해\nnecessity is the mother of invention = 필요는 발명의 어머니",pron:"nəˈsesɪti",note:"Clean water is a basic necessity for all living beings."},
 ];
 
 // ═══════════════════ STATE ═══════════════════
