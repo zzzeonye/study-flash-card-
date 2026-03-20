@@ -1836,11 +1836,10 @@ body::before {
     <button id="theme-dark"  class="btn-add-sub" onclick="setTheme('dark')"  style="flex:1;background:var(--surface);color:var(--text);border:1px solid var(--border);">🌙 다크</button>
   </div>
   <div style="height:1px;background:var(--border);margin:4px 0;"></div>
-  <div style="font-size:.8rem;font-weight:700;color:var(--muted);">🔊 소리 테마</div>
+  <div style="font-size:.8rem;font-weight:700;color:var(--muted);">🔊 효과음</div>
   <div style="display:flex;gap:8px;flex-wrap:wrap;">
-    <button id="snd-game"   class="btn-add-sub" onclick="setSoundTheme('game')"   style="flex:1;">🎮 게임</button>
-    <button id="snd-bubble" class="btn-add-sub" onclick="setSoundTheme('bubble')" style="flex:1;background:var(--surface);color:var(--text);border:1px solid var(--border);">🫧 버블</button>
-    <button id="snd-off"    class="btn-add-sub" onclick="setSoundTheme('off')"    style="flex:1;background:var(--surface);color:var(--text);border:1px solid var(--border);">🔇 끄기</button>
+    <button id="snd-on"  class="btn-add-sub" onclick="setSoundTheme('on')"  style="flex:1;">🔊 켜기</button>
+    <button id="snd-off" class="btn-add-sub" onclick="setSoundTheme('off')" style="flex:1;background:var(--surface);color:var(--text);border:1px solid var(--border);">🔇 끄기</button>
   </div>
   <div style="display:flex;align-items:center;gap:10px;margin-top:4px;">
     <span style="font-size:.78rem;color:var(--muted);white-space:nowrap;">🔉 볼륨</span>
@@ -2394,6 +2393,9 @@ const DEFAULT_ENG_CARDS = [
 {id:9147,cat:"영단어",type:"flash",q:"rejection",a:"거절 / 거부 / 배척(명)\nreject(동) = 거절하다·거부하다\nfear of rejection = 거절에 대한 두려움\n↔ acceptance(수용)",pron:"rɪˈdʒekʃən",note:"She faced rejection from several publishers before succeeding."},
 {id:9148,cat:"영단어",type:"flash",q:"savoring",a:"음미하다 / 맛보다(동 savor의 진행형)\nsavor(동) = 천천히 즐기다·음미하다\nsavoring the moment = 순간을 음미하기\n≒ relishing, enjoying",pron:"ˈseɪvərɪŋ",note:"She sat quietly, savoring every sip of her morning coffee."},
 {id:9149,cat:"영단어",type:"flash",q:"obsession",a:"집착 / 강박(명)\nobsess(동) = 집착하다\nobsessed with = ~에 집착하는\nobsessive(형) = 강박적인",pron:"əbˈseʃən",note:"His obsession with perfection made it hard to finish projects."},
+{id:9150,cat:"영단어",type:"flash",q:"attend to",a:"돌보다 / 시중들다 / 전념하다\n⚠ attend(참석하다)와 혼동 주의\nattend to a patient = 환자를 돌보다\nattend to business = 업무에 전념하다",pron:"əˈtend tuː",note:"The nurse attended to the patient throughout the night."},
+{id:9151,cat:"영단어",type:"flash",q:"legacy",a:"유산 / 업적 / 물려받은 것(명)\n⚠ bond(유대)와 혼동 주의\nleave a legacy = 유산을 남기다\nlegacy system = 구형 시스템",pron:"ˈleɡəsi",note:"The scientist left a lasting legacy in the field of medicine."},
+{id:9152,cat:"영단어",type:"flash",q:"upend",a:"뒤집다 / 전복시키다(동)\nupend the system = 시스템을 뒤엎다\n≒ overturn, disrupt\nupends(3인칭 단수)",pron:"ʌpˈend",note:"The new technology upended the entire publishing industry."},
 ];
 
 // ═══════════════════ STATE ═══════════════════
@@ -2897,7 +2899,7 @@ function answerOX(chosen) {
 
 function flipCard() {
   flipped = !flipped;
-  playWood('flip');
+  playMagic('flip');
   document.getElementById('card-front').style.display = flipped ? 'none' : '';
   document.getElementById('card-back').style.display  = flipped ? '' : 'none';
   document.getElementById('btn-flip').textContent = flipped ? '↩ 질문' : '답 보기';
@@ -2964,10 +2966,7 @@ function answer(know) {
 
   // 소리
   if (soundTheme !== 'off') {
-    const _play = () => {
-      if (soundTheme === 'bubble') playBubble(know ? 'know' : 'dont');
-      else playGame(know ? 'know' : 'dont');
-    };
+    const _play = () => playMagic(know ? 'know' : 'dont');
     if (audioCtx.state === 'suspended') audioCtx.resume().then(_play);
     else _play();
   }
@@ -3624,10 +3623,8 @@ function switchTab(t){
 
 // ═══════════════════ SETTINGS ═══════════════════
 function renderSettings(){
-  // 소리 테마 버튼 상태 반영
-  const sg = document.getElementById('snd-game');
-  const sb = document.getElementById('snd-bubble');
-  ['game','bubble','off'].forEach(id => {
+  // 소리 버튼 상태 반영
+  ['on','off'].forEach(id => {
     const el = document.getElementById('snd-'+id);
     if(!el) return;
     el.style.background = soundTheme===id ? 'var(--accent)' : 'var(--surface)';
@@ -3686,14 +3683,14 @@ function mergeCats(){
 function setSoundTheme(t) {
   soundTheme = t;
   localStorage.setItem('soundTheme', t);
-  ['game','bubble','off'].forEach(id => {
+  ['on','off'].forEach(id => {
     const el = document.getElementById('snd-'+id);
     if(!el) return;
     el.style.background = t===id ? 'var(--accent)' : 'var(--surface)';
     el.style.color      = t===id ? '#fff' : 'var(--text)';
     el.style.border     = t===id ? 'none' : '1px solid var(--border)';
   });
-  playWood('know'); // 미리 듣기
+  if (t !== 'off') playMagic('know');
 }
 
 function resetHistory(){
@@ -3889,7 +3886,7 @@ function switchSubject(subj) {
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 // ── 소리 테마 ──
-let soundTheme = localStorage.getItem('soundTheme') || 'game';
+let soundTheme = localStorage.getItem('soundTheme') || 'on';
 let globalVolume = parseFloat(localStorage.getItem('globalVolume') || '0.5');
 
 function setVolume(v) {
@@ -3917,8 +3914,9 @@ function setTheme(t) {
   if(saved) document.documentElement.setAttribute('data-theme', saved);
 })();
 
-function playBubble(type) {
+function playMagic(type) {
   const ctx = audioCtx;
+  if (ctx.state === 'suspended') { ctx.resume(); return; }
   const now = ctx.currentTime;
 
   function gem(freq, dur, vol=0.07) {
@@ -3985,106 +3983,6 @@ function playBubble(type) {
   }
 }
 
-// ── 게임 효과음 ──
-function playGame(type) {
-  const ctx = audioCtx;
-  const now = ctx.currentTime;
-
-  if (type === 'know') {
-    // 크리스탈 보석 획득 — 맑은 하프 아르페지오 상승
-    const chord = [523, 659, 784, 1047, 1319];
-    chord.forEach((freq, i) => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      const t = now + i * 0.055;
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(freq, t);
-      osc.frequency.exponentialRampToValueAtTime(freq * 1.35, t + 0.04);
-      osc.frequency.exponentialRampToValueAtTime(freq * 1.1, t + 0.15);
-      gain.gain.setValueAtTime(0, t);
-      gain.gain.linearRampToValueAtTime(0.11 * globalVolume, t + 0.01);
-      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.22);
-      osc.connect(gain); gain.connect(ctx.destination);
-      osc.start(t); osc.stop(t + 0.22);
-      // 고배음 반짝임
-      const osc2 = ctx.createOscillator();
-      const gain2 = ctx.createGain();
-      osc2.type = 'triangle';
-      osc2.frequency.setValueAtTime(freq * 2.5, t);
-      gain2.gain.setValueAtTime(0.03 * globalVolume, t);
-      gain2.gain.exponentialRampToValueAtTime(0.001, t + 0.1);
-      osc2.connect(gain2); gain2.connect(ctx.destination);
-      osc2.start(t); osc2.stop(t + 0.1);
-    });
-    // 마지막 별빛 글리터
-    setTimeout(() => {
-      [2093, 2637, 3136].forEach((f, i) => {
-        const o = ctx.createOscillator(), g = ctx.createGain();
-        const t = ctx.currentTime + i * 0.04;
-        o.type = 'sine';
-        o.frequency.setValueAtTime(f, t);
-        g.gain.setValueAtTime(0.05 * globalVolume, t);
-        g.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
-        o.connect(g); g.connect(ctx.destination);
-        o.start(t); o.stop(t + 0.12);
-      });
-    }, 280);
-
-  } else if (type === 'dont') {
-    // 마법 깨짐 — 3단 하강 + 여운
-    const falls = [440, 349, 262];
-    falls.forEach((freq, i) => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      const t = now + i * 0.11;
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(freq, t);
-      osc.frequency.exponentialRampToValueAtTime(freq * 0.7, t + 0.18);
-      gain.gain.setValueAtTime(0, t);
-      gain.gain.linearRampToValueAtTime(0.40 * globalVolume, t + 0.015);
-      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.25);
-      osc.connect(gain); gain.connect(ctx.destination);
-      osc.start(t); osc.stop(t + 0.25);
-    });
-    // 낮은 여운음
-    const sub = ctx.createOscillator();
-    const subG = ctx.createGain();
-    sub.type = 'sine';
-    sub.frequency.setValueAtTime(130, now + 0.3);
-    sub.frequency.exponentialRampToValueAtTime(90, now + 0.7);
-    subG.gain.setValueAtTime(0.22 * globalVolume, now + 0.3);
-    subG.gain.exponentialRampToValueAtTime(0.001, now + 0.75);
-    sub.connect(subG); subG.connect(ctx.destination);
-    sub.start(now + 0.3); sub.stop(now + 0.75);
-
-  } else if (type === 'flip') {
-    // 카드 뒤집기 — 마법진 소환 느낌
-    [1047, 1319, 1568].forEach((f, i) => {
-      const o = ctx.createOscillator(), g = ctx.createGain();
-      const t = now + i * 0.04;
-      o.type = 'sine';
-      o.frequency.setValueAtTime(f, t);
-      o.frequency.exponentialRampToValueAtTime(f * 1.2, t + 0.03);
-      g.gain.setValueAtTime(0.08 * globalVolume, t);
-      g.gain.exponentialRampToValueAtTime(0.001, t + 0.1);
-      o.connect(g); g.connect(ctx.destination);
-      o.start(t); o.stop(t + 0.1);
-    });
-
-  } else {
-    // 일반 탭 — 작은 보석 톡
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(880, now);
-    osc.frequency.exponentialRampToValueAtTime(1100, now + 0.025);
-    gain.gain.setValueAtTime(0.06 * globalVolume, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
-    osc.connect(gain); gain.connect(ctx.destination);
-    osc.start(now); osc.stop(now + 0.07);
-  }
-}
-
 // ── 둥둥 이모지 ──
 const FLOATY_EMOJIS = ['⭐','🌟','✨','💫','🎯','🔥','💥','🎉','🌈','🍀','🦋','🌸','🎈','💎','🪄','🐣','🐥','🍭','🫧','🌙'];
 let floatyCount = 0;
@@ -4140,27 +4038,14 @@ function clearFloaties() {
 document.addEventListener('click', (e) => {
   const btn = e.target.closest('button, .list-item, .ox-btn, .tab, .subject-btn, .drawer-btn, .cat-chip');
   if (!btn) return;
-  if (btn.classList.contains('btn-know') || btn.id === 'ox-o') { playWood('know'); return; }
-  if (btn.classList.contains('btn-dontknow') || btn.classList.contains('btn-dont') || btn.id === 'ox-x') { playWood('dont'); return; }
-  if (btn.classList.contains('btn-flip') || btn.id === 'btn-next') { playWood('flip'); return; }
-  playWood('tap');
+  if (btn.classList.contains('btn-know') || btn.id === 'ox-o') { playMagic('know'); return; }
+  if (btn.classList.contains('btn-dontknow') || btn.classList.contains('btn-dont') || btn.id === 'ox-x') { playMagic('dont'); return; }
+  if (btn.classList.contains('btn-flip') || btn.id === 'btn-next') { playMagic('flip'); return; }
+  playMagic('tap');
 }, { passive: true });
 
 function applyVol(gainNode, baseVol) {
   gainNode.gain.setValueAtTime(baseVol * globalVolume, audioCtx.currentTime);
-}
-
-function playWood(type) {
-  if (soundTheme === 'off') return;
-  if (audioCtx.state === 'suspended') {
-    audioCtx.resume().then(() => {
-      if (soundTheme === 'bubble') playBubble(type);
-      else playGame(type);
-    });
-  } else {
-    if (soundTheme === 'bubble') playBubble(type);
-    else playGame(type);
-  }
 }
 
 // ═══════════════════ INIT ═══════════════════
