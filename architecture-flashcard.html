@@ -2237,7 +2237,7 @@ const DEFAULT_CARDS = [
 {id:6151,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[경량콘크리트 계수 λ]\n보통 콘크리트: ___\n경량 콘크리트(모래): ___\n경량 콘크리트(전체): ___',a:'1.0 | 0.85 | 0.75'},
 {id:6160,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S02 배합강도',q:'[배합강도] 콘크리트 강도 시험 횟수가 ___ 이하인 경우, 표에 따라 배합강도를 결정한다.',a:'14회'},
 {id:6161,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S02 배합강도',q:'[배합강도 산정식 - 시험횟수 14회 이하]\nfck ≤ 21MPa → fcr = ___\n21 < fck ≤ 35MPa → fcr = ___\nfck > 35MPa → fcr = ___',a:'fck + 7.0 | fck + 8.5 | 1.1fck + 5.0'},
-{id:6162,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S02 배합강도',q:'[배합강도 - 시험횟수 충분할 때(30회 이상)] 실제 표준편차(s)를 사용하여 두 가지 식 중 ___ 값을 적용\n① fcr = fck + 1.34s\n② fcr = (fck - 3.5) + 2.33s',a:'큰'},
+{id:6162,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S02 배합강도',q:'[배합강도 - 시험횟수 충분할 때(30회 이상)] 실제 표준편차(s)를 사용하여 두 가지 식 중 ___ 값을 적용\n① fcr = fck + ___s\n② fcr = (fck - ___) + ___s',a:'큰 | 1.34 | 3.5 | 2.33'},
 {id:6163,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S02 배합강도',q:'[배합강도 두 공식 비교 - 30회 이상]\n① fcr = ___ (안전 측 하한 보장)\n② fcr = ___ (단, fck > 35이면 다른 식 적용)',a:'fck + 1.34s | (fck - 3.5) + 2.33s'},
 {id:6164,type:'cloze',cat:'PART3 · RC구조 > CH04 내진설계 > S01 특수모멘트골조',q:'[특수모멘트골조 휨부재 제한]\n최소 폭: ___ mm 이상\n폭/깊이 비: ___ 이상\n순경간/유효깊이 비: ___ 이상\n최대 폭 제한: 기둥 폭 + (___ × 보 깊이) 이내',a:'250 | 0.3 | 4.0 | 0.75'},
 {id:6165,type:'cloze',cat:'PART3 · RC구조 > CH04 내진설계 > S01 특수모멘트골조',q:'[특수모멘트골조 휨부재] 최대 폭 = 기둥 폭 + (0.75 × 보 깊이) 이내\n이 조건이 필요한 이유: 보가 너무 넓으면 ___ 전달이 불균형해지기 때문',a:'전단력'},
@@ -2902,23 +2902,28 @@ function speakWord(word) {
     utter.lang = 'en-US';
     utter.rate = 0.9;
     utter.pitch = 1.0;
-    // en-US 목소리 명시적으로 지정 (Safari 호환)
     const voices = window.speechSynthesis.getVoices();
     const enVoice = voices.find(v => v.lang === 'en-US') || voices.find(v => v.lang.startsWith('en'));
     if (enVoice) utter.voice = enVoice;
+    // Safari: paused 상태면 resume 후 speak
+    if (window.speechSynthesis.paused) {
+      window.speechSynthesis.resume();
+    }
     window.speechSynthesis.speak(utter);
+    // Safari 버그: speak 후 바로 멈추는 경우 resume으로 강제 재개
+    setTimeout(() => {
+      if (window.speechSynthesis.paused) window.speechSynthesis.resume();
+    }, 100);
   }
 
   const voices = window.speechSynthesis.getVoices();
   if (voices.length > 0) {
     doSpeak();
   } else {
-    // Safari는 onvoiceschanged 이후에 getVoices() 사용 가능
     window.speechSynthesis.onvoiceschanged = () => {
       window.speechSynthesis.onvoiceschanged = null;
       doSpeak();
     };
-    // fallback: 500ms 후에도 안 되면 그냥 시도
     setTimeout(() => {
       if (window.speechSynthesis.getVoices().length === 0) doSpeak();
     }, 500);
