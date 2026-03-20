@@ -4002,15 +4002,23 @@ function spawnFloaty() {
   const el = document.createElement('div');
   el.className = 'floaty';
   el.textContent = emoji;
-  // 화면 양옆 여백에 랜덤 위치 (카드 밖)
-  const side = Math.random() < 0.5 ? 'left' : 'right';
-  const x = side === 'left'
-    ? Math.random() * 60 + 5   // 5~65px
-    : window.innerWidth - (Math.random() * 60 + 60); // 우측
-  const y = Math.random() * (window.innerHeight * 0.5) + window.innerHeight * 0.25;
+  // 화면 전체 랜덤 위치 (카드 중앙 피해서 양옆 + 상하 분산)
+  const W = window.innerWidth;
+  const H = window.innerHeight;
+  const zone = Math.floor(Math.random() * 3); // 0=왼쪽, 1=오른쪽, 2=상단
+  let x, y;
+  if (zone === 0) {
+    x = Math.random() * (W * 0.2);           // 왼쪽 20%
+    y = Math.random() * H * 0.7 + H * 0.1;
+  } else if (zone === 1) {
+    x = W * 0.8 + Math.random() * (W * 0.18); // 오른쪽 20%
+    y = Math.random() * H * 0.7 + H * 0.1;
+  } else {
+    x = Math.random() * W * 0.8 + W * 0.1;   // 상단 가로 전체
+    y = Math.random() * H * 0.25;
+  }
   el.style.left = x + 'px';
   el.style.top  = y + 'px';
-  // 랜덤 drift delay로 자연스럽게
   el.style.animationDelay = (Math.random() * 1.5) + 's';
   el.style.animationDuration = (2 + Math.random()) + 's';
   field.appendChild(el);
