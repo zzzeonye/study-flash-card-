@@ -2382,6 +2382,18 @@ const DEFAULT_ENG_CARDS = [
 {id:9135,cat:"영단어",type:"flash",q:"fragment",a:"조각 / 파편(명) / 산산이 부서지다(동)\nfragment of memory = 기억의 파편\nfragmented(형) = 단편화된\n≒ piece, shard",pron:"ˈfræɡmənt",note:"Only fragments of the ancient manuscript survived."},
 {id:9136,cat:"영단어",type:"flash",q:"logistics",a:"물류 / 병참 / 세부 계획(명)\nlogistics company = 물류 회사\nlogistical(형) = 물류의·세부 계획의\n항상 복수형으로 사용",pron:"ləˈdʒɪstɪks",note:"The logistics of organizing the event proved to be challenging."},
 {id:9137,cat:"영단어",type:"flash",q:"necessity",a:"필요성 / 필수품(명)\nnecessary(형) = 필요한\nout of necessity = 필요에 의해\nnecessity is the mother of invention = 필요는 발명의 어머니",pron:"nəˈsesɪti",note:"Clean water is a basic necessity for all living beings."},
+{id:9138,cat:"영단어",type:"flash",q:"induce",a:"유도하다 / 유발하다(동)\n⚠ inductive(귀납적)의 동사형\ninduce A to do = A가 ~하도록 유도하다\ninduction(명) / induced(형)",pron:"ɪnˈdjuːs",note:"The drug was used to induce sleep in patients."},
+{id:9139,cat:"영단어",type:"flash",q:"explicit",a:"명시적인 / 노골적인(형)\n↔ implicit(암묵적인)\nexplicit instructions = 명확한 지시\nexplicitly(부) = 명시적으로",pron:"ɪkˈsplɪsɪt",note:"The contract included explicit terms about payment."},
+{id:9140,cat:"영단어",type:"flash",q:"proficiency",a:"능숙함 / 숙달(명)\nproficient(형) = 능숙한\nproficiency test = 능력 시험\n≒ competence, fluency",pron:"prəˈfɪʃənsi",note:"She demonstrated proficiency in three foreign languages."},
+{id:9141,cat:"영단어",type:"flash",q:"competence",a:"능력 / 역량 / 적격(명)\n⚠ proficiency(기술적 숙달)보다 포괄적\ncompetent(형) = 유능한\ncore competence = 핵심 역량",pron:"ˈkɒmpɪtəns",note:"The job requires a high level of competence in communication."},
+{id:9142,cat:"영단어",type:"flash",q:"secure",a:"안전한(형) / 확보하다·고정하다(동)\nsecure a deal = 계약을 확보하다\nsecurity(명) / securely(부)\n↔ insecure(불안한)",pron:"sɪˈkjʊər",note:"She worked hard to secure a position at the firm."},
+{id:9143,cat:"영단어",type:"flash",q:"inspect",a:"점검하다 / 검사하다(동)\ninspection(명) = 점검·검사\ninspector(명) = 조사관·감독관\n≒ examine, check",pron:"ɪnˈspekt",note:"The engineer inspected the building for structural damage."},
+{id:9144,cat:"영단어",type:"flash",q:"worship",a:"숭배하다(동) / 예배·숭배(명)\nworship a celebrity = 연예인을 숭배하다\nplace of worship = 예배 장소\n≒ adore, revere",pron:"ˈwɜːrʃɪp",note:"They gathered at the temple to worship together."},
+{id:9145,cat:"영단어",type:"flash",q:"representation",a:"대표 / 표현 / 묘사(명)\nrepresent(동) = 대표하다·나타내다\nlegal representation = 법적 대리\nrepresentative(명/형) = 대표자·대표적인",pron:"ˌreprɪzenˈteɪʃən",note:"The painting is a representation of life in the 18th century."},
+{id:9146,cat:"영단어",type:"flash",q:"sensuality",a:"관능성 / 육감적임(명)\nsensual(형) = 관능적인·육감적인\n⚠ sensibility(감수성)와 구분\nsensuous(형) = 감각적인(예술적)",pron:"senʃuˈælɪti",note:"The dancer's movements were full of grace and sensuality."},
+{id:9147,cat:"영단어",type:"flash",q:"rejection",a:"거절 / 거부 / 배척(명)\nreject(동) = 거절하다·거부하다\nfear of rejection = 거절에 대한 두려움\n↔ acceptance(수용)",pron:"rɪˈdʒekʃən",note:"She faced rejection from several publishers before succeeding."},
+{id:9148,cat:"영단어",type:"flash",q:"savoring",a:"음미하다 / 맛보다(동 savor의 진행형)\nsavor(동) = 천천히 즐기다·음미하다\nsavoring the moment = 순간을 음미하기\n≒ relishing, enjoying",pron:"ˈseɪvərɪŋ",note:"She sat quietly, savoring every sip of her morning coffee."},
+{id:9149,cat:"영단어",type:"flash",q:"obsession",a:"집착 / 강박(명)\nobsess(동) = 집착하다\nobsessed with = ~에 집착하는\nobsessive(형) = 강박적인",pron:"əbˈseʃən",note:"His obsession with perfection made it hard to finish projects."},
 ];
 
 // ═══════════════════ STATE ═══════════════════
@@ -4159,6 +4171,14 @@ if (window.speechSynthesis) {
   window.speechSynthesis.getVoices();
   window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.getVoices(); };
 }
+// Safari: 첫 터치 시 AudioContext 강제 resume (효과음 안 나오는 문제 해결)
+const _resumeAudio = () => {
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  document.removeEventListener('touchstart', _resumeAudio);
+  document.removeEventListener('click', _resumeAudio);
+};
+document.addEventListener('touchstart', _resumeAudio);
+document.addEventListener('click', _resumeAudio);
 </script>
 </body>
 </html>
