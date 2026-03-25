@@ -2285,7 +2285,16 @@ const DEFAULT_CARDS = [
 {id:6208,type:'ox',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S06 정착 및 이음 설계',q:'압축을 받는 철근의 정착길이가 부족할 경우 철근 단부에 표준갈고리를 설치하여 정착길이를 줄일 수 있다',a:'X',note:'표준갈고리(Hook)는 인장철근 정착길이에만 유효 — 압축철근 정착 계산 시 갈고리 인정 안 함'},
 {id:6209,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S06 정착 및 이음 설계',q:'[연속부재 받침부 부모멘트 철근]\n부모멘트 철근의 ___ 이상은 변곡점을 지나 다음 중 큰 값 이상의 묻힘길이 확보\n① d (보의 유효깊이)\n② 12d (철근 굵기의 12배)\n③ l/___ (기둥 사이 거리의 1/16)',a:'1/3 | 16'},
 {id:6210,type:'ox',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S06 정착 및 이음 설계',q:'상부철근의 정착길이가 하부철근보다 길다',a:'O',note:'상부철근 계수 1.3 적용 — 콘크리트 타설 시 아래 300mm 이상 콘크리트 있으면 기포·물로 부착력 저하 → 1.3배 더 길게 정착'},
-{id:6211,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S06 정착 및 이음 설계',q:'[상부철근 정착길이 보정계수]\n철근 아래 콘크리트 깊이 ___ mm 이상인 경우 적용\n보정계수: ___배',a:'300 | 1.3'}];
+{id:6211,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S06 정착 및 이음 설계',q:'[상부철근 정착길이 보정계수]\n철근 아래 콘크리트 깊이 ___ mm 이상인 경우 적용\n보정계수: ___배',a:'300 | 1.3'},
+{id:6212,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S06 정착 및 이음 설계',q:'[정착길이 공식 상수 비교]\n인장 갈고리: lhb = ___ × fy(항복강도) / √fck(압축강도) × db(철근지름)\n압축 정착길이: ldc = ___ × fy / √fck × db\n머리붙이 철근: ldt = ___ × fy / √fck × db\n⚠ 갈고리=0.24 / 압축=0.25 / 머리붙이=0.19\n상수 작을수록 정착 성능 우수 → 머리붙이 > 갈고리 > 압축',a:'0.24 | 0.25 | 0.19'},
+{id:6213,type:'ox',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S06 정착 및 이음 설계',q:'표준갈고리 정착길이 공식의 상수는 0.25이다',a:'X',note:'갈고리(인장) = 0.24 / 압축 = 0.25 — 갈고리 보이면 무조건 0.24!'},
+{id:6214,type:'ox',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S03 압축재·벽체 설계',q:'두께 250mm 이상 벽체의 외측면 철근은 전체 소요철근량의 1/3 이상, 2/3 이하로 한다',a:'X',note:'외측면: 1/2 이상 ~ 2/3 이하 (1/3이 아니라 1/2!) — 외측이 외부하중에 더 노출되므로 더 많이 배치'},
+{id:6215,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S03 압축재·벽체 설계',q:'[두께 250mm 이상 벽체 철근 배분]\n외측면: 전체 소요철근량의 ___ 이상 ~ ___ 이하\n내측면: 나머지 ___ ~ ___ 배분\n외측면 위치: 외측면으로부터 ___ mm 이상, 벽두께의 ___ 이내',a:'1/2 | 2/3 | 1/3 | 1/2 | 50 | 1/3'},
+{id:6216,type:'cloze',cat:'PART3 · RC구조 > CH05 기초 > S01 기성콘크리트말뚝',q:'[기초·말뚝 최소 설계기준 압축강도 fck]\n일반 기초 (내진 A·B·C): ___ MPa\n내진설계범주 D·E·F 기초: ___ MPa\n현장타설 말뚝: ___ MPa\n마이크로파일(그라우트): ___ MPa\n기성콘크리트(RC) 말뚝: ___ MPa\n프리스트레스트(PSC) 말뚝: ___ MPa',a:'18 | 21 | 24 | 27 | 30 | 35'},
+{id:6217,type:'ox',cat:'PART3 · RC구조 > CH05 기초 > S01 기성콘크리트말뚝',q:'기성콘크리트(RC) 말뚝의 최소 fck는 27 MPa이다',a:'X',note:'기성RC말뚝 = 30 MPa / 27 MPa는 마이크로파일(그라우트)'},
+{id:6218,type:'ox',cat:'PART3 · RC구조 > CH05 기초 > S01 기성콘크리트말뚝',q:'프리스트레스트(PSC) 말뚝의 최소 fck는 기성콘크리트 말뚝보다 높다',a:'O',note:'PSC 말뚝 35MPa > RC 말뚝 30MPa — 미리 힘을 가하므로 더 높은 강도 필요'},
+{id:6219,type:'cloze',cat:'PART3 · RC구조 > CH04 내진설계 > S01 특수모멘트골조',q:'[내진설계 철근 실제 항복강도 제한]\n철근의 실제 항복강도는 공칭항복강도를 ___ MPa 이상 초과하지 않아야 한다\n이유: 실제 강도 - 설계 강도 ≤ ___ MPa\n⚠ 200 MPa 아님 → ___ MPa',a:'120 | 120 | 120'},
+{id:6220,type:'ox',cat:'PART3 · RC구조 > CH04 내진설계 > S01 특수모멘트골조',q:'철근의 실제 항복강도가 공칭항복강도를 200 MPa 이상 초과하지 않아야 한다',a:'X',note:'200 MPa이 아니라 120 MPa — 철근이 너무 강하면 지진 시 콘크리트가 먼저 취성 파괴되는 것을 방지'}];
 
 // ═══════════════════ ENGLISH CARDS ═══════════════════
 const DEFAULT_ENG_CARDS = [
@@ -2484,6 +2493,31 @@ const DEFAULT_ENG_CARDS = [
 {id:9193,cat:"영단어",type:"flash",q:"prestigious",a:"명망 있는 / 권위 있는(형)\nprestige(명) = 명성·권위\na prestigious award = 권위 있는 상\n≒ renowned, distinguished",pron:"preˈstɪdʒəs",note:"She received a prestigious award for her research."},
 {id:9194,cat:"영단어",type:"flash",q:"pronunciation",a:"발음(명)\npronounce(동) = 발음하다\n⚠ pronounciation 아님 → pronunciation (철자 주의)\npronunciation guide = 발음 안내",pron:"prəˌnʌnsiˈeɪʃən",note:"Her pronunciation of French words was nearly perfect."},
 {id:9195,cat:"영단어",type:"flash",q:"miserable",a:"비참한 / 불행한(형)\n⚠ strange(이상한)와 혼동 주의\nfeel miserable = 너무 괴롭다\n≒ wretched, unhappy",pron:"ˈmɪzərəbl",note:"He felt miserable after hearing the bad news."},
+{id:9196,cat:"영단어",type:"flash",q:"invoice",a:"청구서 / 송장(명) / 청구하다(동)\nsend an invoice = 청구서를 보내다\n≒ bill, statement\ninvoice number = 청구서 번호",pron:"ˈɪnvɔɪs",note:"The contractor sent an invoice for the completed work."},
+{id:9197,cat:"영단어",type:"flash",q:"certificate",a:"증명서 / 자격증(명)\ncertify(동) = 증명하다\nbirth certificate = 출생증명서\ncertification(명) = 인증·자격",pron:"sərˈtɪfɪkət",note:"She received a certificate of completion after the course."},
+{id:9198,cat:"영단어",type:"flash",q:"contract",a:"계약(명) / 계약하다(동) / 수축하다(동)\nsign a contract = 계약서에 서명하다\n⚠ 동사로 '수축하다' 뜻도 있음\ncontraction(명) = 수축",pron:"ˈkɒntrækt",note:"Both parties signed the contract before beginning the project."},
+{id:9199,cat:"영단어",type:"flash",q:"obsolete",a:"시대에 뒤떨어진 / 더 이상 쓰이지 않는(형)\nbecome obsolete = 구식이 되다\n≒ outdated, outmoded\n↔ current, modern",pron:"ˈɒbsəliːt",note:"Many traditional skills have become obsolete in the digital age."},
+{id:9200,cat:"영단어",type:"flash",q:"overcome",a:"극복하다 / 이겨내다(동)\novercome obstacles = 장애를 극복하다\n≒ surmount, conquer\novercame(과거형)",pron:"ˌoʊvərˈkʌm",note:"She overcame her fear of public speaking through practice."},
+{id:9201,cat:"영단어",type:"flash",q:"reimburse",a:"상환하다 / 변제하다(동)\nreimburse expenses = 비용을 상환하다\nreimbursement(명) = 상환·변제\n≒ repay, compensate",pron:"ˌriːɪmˈbɜːrs",note:"The company agreed to reimburse all travel expenses."},
+{id:9202,cat:"영단어",type:"flash",q:"tenant",a:"세입자 / 임차인(명)\ntenancy(명) = 임차·임대 기간\n↔ landlord(집주인)\ntenant agreement = 임대차 계약",pron:"ˈtenənt",note:"The tenant signed a one-year lease agreement."},
+{id:9203,cat:"영단어",type:"flash",q:"unconditional",a:"무조건적인 / 절대적인(형)\nunconditional love = 무조건적인 사랑\n↔ conditional(조건부의)\n≒ absolute, unreserved",pron:"ˌʌnkənˈdɪʃənəl",note:"She received unconditional support from her family."},
+{id:9204,cat:"영단어",type:"flash",q:"contingent on",a:"~에 달려있는 / ~을 조건으로 하는\n⚠ contingent(단독) = 조건부의 — 이미 있음\ncontingent on approval = 승인에 달려있는\n≒ dependent on, subject to",pron:"kənˈtɪndʒənt ɒn",note:"The project's success is contingent on securing adequate funding."},
+{id:9205,cat:"영단어",type:"flash",q:"congressman",a:"(미국) 하원의원 / 국회의원(명)\nCongress(명) = (미국) 의회\ncongresswoman = 여성 하원의원\n≒ representative, legislator",pron:"ˈkɒŋɡrəsmən",note:"The congressman introduced a new bill to reduce taxes."},
+{id:9206,cat:"영단어",type:"flash",q:"inclusion",a:"포함 / 포용(명)\ninclude(동) = 포함하다\ninclusion policy = 포용 정책\n↔ exclusion(배제)",pron:"ɪnˈkluːʒən",note:"The inclusion of all students in activities is important."},
+{id:9207,cat:"영단어",type:"flash",q:"eternity",a:"영원 / 영겁(명)\neternal(형) = 영원한\nfor eternity = 영원히\n≒ forever, infinity",pron:"ɪˈtɜːrnɪti",note:"It felt like an eternity waiting for the results."},
+{id:9208,cat:"영단어",type:"flash",q:"idealize",a:"이상화하다 / 완벽하게 보다(동)\nideal(명/형) = 이상·이상적인\nidealized image = 이상화된 이미지\n≒ romanticize",pron:"aɪˈdiːəlaɪz",note:"People tend to idealize the past and forget its difficulties."},
+{id:9209,cat:"영단어",type:"flash",q:"take into account",a:"고려하다 / 감안하다(구동사)\n≒ consider, take into consideration\ntake A into account = A를 고려하다\n= take account of",pron:"teɪk ˈɪntə əˈkaʊnt",note:"You must take all risks into account before making a decision."},
+{id:9210,cat:"영단어",type:"flash",q:"competing",a:"경쟁하는 / 상충하는(형)\ncompete(동) = 경쟁하다\ncompeting interests = 상충하는 이해관계\n≒ rival, conflicting",pron:"kəmˈpiːtɪŋ",note:"There are competing theories about the cause of the disease."},
+{id:9211,cat:"영단어",type:"flash",q:"dimension",a:"차원 / 규모 / 측면(명)\n3D = three-dimensional\nadd a new dimension = 새로운 차원을 더하다\n≒ aspect, scale",pron:"dɪˈmenʃən",note:"The problem has both a social and economic dimension."},
+{id:9212,cat:"영단어",type:"flash",q:"assign",a:"할당하다 / 배정하다 / 임명하다(동)\nassign a task = 업무를 배정하다\nassignment(명) = 과제·임무\n≒ allocate, designate",pron:"əˈsaɪn",note:"The manager assigned different roles to each team member."},
+{id:9213,cat:"영단어",type:"flash",q:"fluid",a:"유체·액체(명) / 유동적인(형)\nfluid situation = 유동적인 상황\n≒ liquid(액체), flexible(유연한)\nbody fluid = 체액",pron:"ˈfluːɪd",note:"The political situation remained fluid throughout the negotiations."},
+{id:9214,cat:"영단어",type:"flash",q:"steer",a:"조종하다 / 방향을 잡다(동) / 수소(명)\n⚠ stir(휘젓다)와 혼동 주의\nsteer clear of = ~을 피하다\nsteer a car = 차를 운전하다",pron:"stɪər",note:"She steered the conversation away from the sensitive topic."},
+{id:9215,cat:"영단어",type:"flash",q:"provision",a:"공급 / 준비 / 규정·조항(명)\n⚠ supervision(감독)과 혼동 주의\nmake provision for = ~을 대비하다\nlegal provision = 법적 조항",pron:"prəˈvɪʒən",note:"The contract included a provision for early termination."},
+{id:9216,cat:"영단어",type:"flash",q:"rip",a:"찢다 / 뜯다(동) / 찢어진 곳(명)\n⚠ lid(뚜껑)와 혼동 주의\nrip open = 뜯어서 열다\nRIP = Rest In Peace",pron:"rɪp",note:"She ripped open the envelope and read the letter inside."},
+{id:9217,cat:"영단어",type:"flash",q:"all over",a:"도처에 / 전역에 / ~위 전체에\n⚠ rather than(~보다도)과 혼동 주의\nall over the world = 전 세계에\nall over again = 처음부터 다시",pron:"ɔːl ˈoʊvər",note:"His work became famous all over the country."},
+{id:9218,cat:"영단어",type:"flash",q:"clearly",a:"명확하게 / 분명히(부)\n⚠ neatly(깔끔하게)와 혼동 주의\nclearly stated = 명확하게 명시된\n≒ obviously, plainly",pron:"ˈklɪərli",note:"She clearly explained the rules to the new employees."},
+{id:9219,cat:"영단어",type:"flash",q:"electrical",a:"전기의(형)\n⚠ electronic(전자의)과 구분\nelectrical engineer = 전기 기사\nelectrical appliance = 전기 기기",pron:"ɪˈlektrɪkəl",note:"The electrical wiring in the old building needed replacement."},
+{id:9220,cat:"영단어",type:"flash",q:"barrier",a:"장벽 / 장애물(명)\n⚠ 동사 아님 — 막다는 block/prevent\nlanguage barrier = 언어 장벽\nbarrier to entry = 진입 장벽",pron:"ˈbæriər",note:"The mountain range acts as a natural barrier between the two regions."},
 ];
 
 // ═══════════════════ STATE ═══════════════════
