@@ -2294,7 +2294,9 @@ const DEFAULT_CARDS = [
 {id:6217,type:'ox',cat:'PART3 · RC구조 > CH05 기초 > S01 기성콘크리트말뚝',q:'기성콘크리트(RC) 말뚝의 최소 fck는 27 MPa이다',a:'X',note:'기성RC말뚝 = 30 MPa / 27 MPa는 마이크로파일(그라우트)'},
 {id:6218,type:'ox',cat:'PART3 · RC구조 > CH05 기초 > S01 기성콘크리트말뚝',q:'프리스트레스트(PSC) 말뚝의 최소 fck는 기성콘크리트 말뚝보다 높다',a:'O',note:'PSC 말뚝 35MPa > RC 말뚝 30MPa — 미리 힘을 가하므로 더 높은 강도 필요'},
 {id:6219,type:'cloze',cat:'PART3 · RC구조 > CH04 내진설계 > S01 특수모멘트골조',q:'[내진설계 철근 실제 항복강도 제한]\n철근의 실제 항복강도는 공칭항복강도를 ___ MPa 이상 초과하지 않아야 한다\n이유: 실제 강도 - 설계 강도 ≤ ___ MPa\n⚠ 200 MPa 아님 → ___ MPa',a:'120 | 120 | 120'},
-{id:6220,type:'ox',cat:'PART3 · RC구조 > CH04 내진설계 > S01 특수모멘트골조',q:'철근의 실제 항복강도가 공칭항복강도를 200 MPa 이상 초과하지 않아야 한다',a:'X',note:'200 MPa이 아니라 120 MPa — 철근이 너무 강하면 지진 시 콘크리트가 먼저 취성 파괴되는 것을 방지'}];
+{id:6220,type:'ox',cat:'PART3 · RC구조 > CH04 내진설계 > S01 특수모멘트골조',q:'철근의 실제 항복강도가 공칭항복강도를 200 MPa 이상 초과하지 않아야 한다',a:'X',note:'200 MPa이 아니라 120 MPa — 철근이 너무 강하면 지진 시 콘크리트가 먼저 취성 파괴되는 것을 방지'},
+{id:6221,type:'cloze',cat:'PART3 · RC구조 > CH04 내진설계 > S03 연결보',q:'[대각선 다발철근을 둘러싸는 횡철근(띠철근) 간격]\n다음 중 ___ 값 이하\n① 대각선 철근 지름의 ___ 배 (6d)\n② ___ mm',a:'작은 | 6 | 150'},
+{id:6222,type:'ox',cat:'PART3 · RC구조 > CH04 내진설계 > S03 연결보',q:'대각선 다발철근을 둘러싸는 횡철근의 간격은 대각선 철근 지름의 6배 또는 200mm 중 작은 값 이하로 한다',a:'X',note:'200mm가 아니라 150mm — 6d와 150mm 중 작은 값'}];
 
 // ═══════════════════ ENGLISH CARDS ═══════════════════
 const DEFAULT_ENG_CARDS = [
@@ -2520,10 +2522,8 @@ const DEFAULT_ENG_CARDS = [
 {id:9220,cat:"영단어",type:"flash",q:"barrier",a:"장벽 / 장애물(명)\n⚠ 동사 아님 — 막다는 block/prevent\nlanguage barrier = 언어 장벽\nbarrier to entry = 진입 장벽",pron:"ˈbæriər",note:"The mountain range acts as a natural barrier between the two regions."},
 {id:9221,cat:"영단어",type:"flash",q:"neglect",a:"무시하다 / 방치하다(동) / 방치·태만(명)\n⚠ refuse·reject(거절하다)와 혼동 주의\nneglect one's duty = 의무를 소홀히 하다\n≒ ignore, overlook",pron:"nɪˈɡlekt",note:"She neglected to mention the important detail in her report."},
 {id:9222,cat:"영단어",type:"flash",q:"endeavor",a:"노력 / 시도(명) / 노력하다(동)\n⚠ chisel(끌·정)과 발음 혼동 주의\nmake every endeavor = 모든 노력을 다하다\n≒ effort, attempt",pron:"ɪnˈdevər",note:"Despite every endeavor, they failed to reach an agreement."},
-{id:9223,cat:"영단어",type:"flash",q:"highly",a:"매우 / 높이(부)\nhighly recommended = 강력 추천\nhighly likely = 매우 가능성 높은",pron:"ˈhaɪli",note:"She is highly regarded in her field of research."},
 {id:9224,cat:"영단어",type:"flash",q:"give rise to",a:"~을 야기하다 / 일으키다\n⚠ originate from(~에서 기인하다)와 방향 반대\ngive rise to problems = 문제를 야기하다\n≒ cause, lead to",pron:"ɡɪv raɪz tuː",note:"The new policy gave rise to widespread protests."},
 {id:9225,cat:"영단어",type:"flash",q:"conform",a:"따르다 / 순응하다(동)\nconform to = ~을 따르다·준수하다\n⚠ form(형성하다)와 혼동 주의\nconformity(명) = 순응",pron:"kənˈfɔːrm",note:"All employees are expected to conform to the company's code of conduct."},
-{id:9226,cat:"영단어",type:"flash",q:"apparent",a:"명백한 / 외견상의(형)\napparently(부) = 외견상으로는·명백히\nfor no apparent reason = 뚜렷한 이유 없이",pron:"əˈpærənt",note:"It was apparent that she had been crying."},
 {id:9227,cat:"영단어",type:"flash",q:"immerse",a:"몰두하다 / 담그다(동)\nimmerse oneself in = ~에 몰두하다\nimmersive(형) = 몰입형의\n≒ submerge, absorb",pron:"ɪˈmɜːrs",note:"She immersed herself in her work to forget her troubles."},
 {id:9228,cat:"영단어",type:"flash",q:"attic",a:"다락방(명)\nattic room = 다락방\n≒ loft\n⚠ basement(지하실)의 반대",pron:"ˈætɪk",note:"She found old family photos stored in boxes in the attic."},
 {id:9229,cat:"영단어",type:"flash",q:"undermine",a:"약화시키다 / 훼손하다(동)\nundermine confidence = 자신감을 약화시키다\n⚠ under(아래) + mine(파다) → 기반을 파다\n≒ weaken, erode",pron:"ˌʌndərˈmaɪn",note:"Constant criticism can undermine a child's confidence."},
