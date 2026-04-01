@@ -1950,7 +1950,7 @@ const DEFAULT_CARDS = [
   {id:5050,cat:'PART2 · 일반구조 > CH01 구조계획 > S03 풍하중·설하중',type:'cloze',q:'[중요도(특)] 연면적 ___ 이상 위험물 저장·처리시설\n소방서·발전소·방송국·전신전화국 / 종합병원·수술·응급시설 있는 병원',a:'1,000㎡'},
   {id:5051,cat:'PART2 · 일반구조 > CH01 구조계획 > S03 풍하중·설하중',type:'cloze',q:'[중요도(1)] 연면적 ___ 미만 위험물 저장·처리시설\n5층 이상 오피스텔·아파트·기숙사·숙박·교정시설',a:'1,000㎡'},
   {id:5052,cat:'PART2 · 일반구조 > CH01 구조계획 > S03 풍하중·설하중',type:'ox',q:'중요도(3)에 해당하는 건물: 농업시설물, 소규모 창고, 가설구조물',a:'O'},
-  {id:5199,cat:'PART2 · 일반구조 > CH01 구조계획 > S03 풍하중·설하중',type:'ox',q:'중요도(3)에 해당하는 건물: 소방서, 소규모 창고, 가설구조물',a:'X'},
+  {id:5199,cat:'PART2 · 일반구조 > CH01 구조계획 > S03 풍하중·설하중',type:'ox',q:'중요도(3)에 해당하는 건물: 소방서, 소규모 창고, 가설구조물',a:'X',note:'소방서는 중요도(특) — 재난대응 핵심시설\n중요도(3) 맞는 건물: 농업시설물·소규모 창고·가설구조물'},
   {id:5053,cat:'PART2 · 일반구조 > CH01 구조계획 > S03 풍하중·설하중',type:'ox',q:'중요도(2)는 중요도(특),(1),(3)에 해당하지 않는 건축물이다',a:'O'},
   {id:5054,cat:'PART2 · 일반구조 > CH01 구조계획 > S03 풍하중·설하중',type:'cloze',q:'[평지붕 설하중]\n= ___ × ___ × ___ × ___ × 기본지상설하중',a:'기본지붕설하중계수 | 노출계수 | 온도계수 | 중요도계수'},
   {id:5055,cat:'PART2 · 일반구조 > CH01 구조계획 > S03 풍하중·설하중',type:'cloze',q:'최소 지상설하중\n재현기간 ___ 년 수직최소적설깊이 기준 → ___ kN/㎡',a:'100년 | 0.5'},
@@ -2020,6 +2020,7 @@ const DEFAULT_CARDS = [
   {id:5118,cat:'PART2 · 일반구조 > CH01 구조계획 > S04 지진하중·내진설계',type:'cloze',q:'[변위증폭계수·시스템초과강도계수]\n그 방향 반응수정계수에 ___ 하는 값',a:'상응'},
   {id:5119,cat:'PART2 · 일반구조 > CH01 구조계획 > S04 지진하중·내진설계',type:'ox',q:'반응수정계수가 다른 시스템이 공유하는 구조부재는\n가장 작은 반응수정계수에 상응하는 상세로 설계한다',a:'X',note:'공유 구조부재: 가장 큰 반응수정계수 기준으로 설계'},
   {id:5120,cat:'PART2 · 일반구조 > CH01 구조계획 > S05 구조방식',type:'cloze',q:'[구조방식]\n일체식: ___, 철골철근콘크리트\n가구식: ___, 철골(강)\n조적식: ___, 블록',a:'철근콘크리트 | 목구조 | 벽돌'},
+  {id:5119,cat:'PART2 · 일반구조 > CH02 조적구조 > S01 보강콘크리트 블록구조',type:'cloze',q:'[보강콘크리트 블록구조 모멘트저항 벽체골조 설계 제한]\n보(Beam): 폭 대비 깊이 비 ___ 이하 / 최소 순경간 보 깊이의 ___ 배 이상\n피어(Pier): 깊이 대비 높이 비 ___ 이하 / 최대 공칭깊이 ___ mm 이하\n⚠ 피어 깊이대비높이비: 5이하 (3은 오답)',a:'6 | 2 | 5 | 2400'},
   {id:5121,cat:'PART2 · 일반구조 > CH01 구조계획 > S05 구조방식',type:'cloze',q:'[가구식구조] 목재·강재 등 ___ 부재를 기둥·보 등으로 접합하여 뼈대를 만드는 구조',a:'가늘고 긴'},
   {id:5122,cat:'PART2 · 일반구조 > CH01 구조계획 > S05 구조방식',type:'cloze',q:'PC구조 = ___ = ___',a:'프리패브구조 | 프리캐스트구조'},
   {id:5123,cat:'PART2 · 일반구조 > CH01 구조계획 > S05 구조방식',type:'ox',q:'조립식구조는 건물의 해체 및 재설치가 용이하다',a:'O'},
@@ -2296,9 +2297,9 @@ const DEFAULT_CARDS = [
 {id:6216,type:'cloze',cat:'PART3 · RC구조 > CH05 기초 > S01 기성콘크리트말뚝',q:'[기초·말뚝 최소 설계기준 압축강도 fck]\n일반 기초 (내진 A·B·C): ___ MPa\n내진설계범주 D·E·F 기초: ___ MPa\n현장타설 말뚝: ___ MPa\n마이크로파일(그라우트): ___ MPa\n기성콘크리트(RC) 말뚝: ___ MPa\n프리스트레스트(PSC) 말뚝: ___ MPa',a:'18 | 21 | 24 | 27 | 30 | 35'},
 {id:6217,type:'ox',cat:'PART3 · RC구조 > CH05 기초 > S01 기성콘크리트말뚝',q:'기성콘크리트(RC) 말뚝의 최소 fck는 27 MPa이다',a:'X',note:'기성RC말뚝 = 30 MPa / 27 MPa는 마이크로파일(그라우트)'},
 {id:6218,type:'ox',cat:'PART3 · RC구조 > CH05 기초 > S01 기성콘크리트말뚝',q:'프리스트레스트(PSC) 말뚝의 최소 fck는 기성콘크리트 말뚝보다 높다',a:'O',note:'PSC 말뚝 35MPa > RC 말뚝 30MPa — 미리 힘을 가하므로 더 높은 강도 필요'},
-{id:6219,type:'cloze',cat:'PART3 · RC구조 > CH04 내진설계 > S01 특수모멘트골조',q:'[내진설계 철근 실제 항복강도 제한]\n철근의 실제 항복강도는 공칭항복강도를 ___ MPa 이상 초과하지 않아야 한다\n이유: 실제 강도 - 설계 강도 ≤ ___ MPa\n⚠ 200 MPa 아님 → ___ MPa',a:'120 | 120 | 120'},
+{id:6219,type:'cloze',cat:'PART3 · RC구조 > CH04 내진설계 > S01 특수모멘트골조',q:'[내진설계 철근 실제 항복강도 제한]\n철근의 실제 항복강도는 공칭항복강도를 ___ MPa 이상 초과하지 않아야 한다\n이유: 실제 강도 - 설계 강도 ≤ ___ MPa',a:'120 | 120'},
 {id:6220,type:'ox',cat:'PART3 · RC구조 > CH04 내진설계 > S01 특수모멘트골조',q:'철근의 실제 항복강도가 공칭항복강도를 200 MPa 이상 초과하지 않아야 한다',a:'X',note:'200 MPa이 아니라 120 MPa — 철근이 너무 강하면 지진 시 콘크리트가 먼저 취성 파괴되는 것을 방지'},
-{id:6221,type:'cloze',cat:'PART3 · RC구조 > CH04 내진설계 > S03 연결보',q:'[대각선 다발철근을 둘러싸는 횡철근(띠철근) 간격]\n다음 중 ___ 값 이하\n① 대각선 철근 지름의 ___ 배 (6d)\n② ___ mm',a:'작은 | 6 | 150'},
+{id:6221,type:'cloze',cat:'PART3 · RC구조 > CH04 내진설계 > S03 연결보',q:'[대각선 다발철근을 둘러싸는 횡철근(띠철근) 간격]\n다음 중 ___ 값 이하\n① 대각선 철근 지름의 ___ 배\n② ___ mm',a:'작은 | 6 | 150'},
 {id:6222,type:'ox',cat:'PART3 · RC구조 > CH04 내진설계 > S03 연결보',q:'대각선 다발철근을 둘러싸는 횡철근의 간격은 대각선 철근 지름의 6배 또는 200mm 중 작은 값 이하로 한다',a:'X',note:'200mm가 아니라 150mm — 6d와 150mm 중 작은 값'},
 
 {id:7001,type:'cloze',cat:'PART4 · 강구조 > CH01 총론 > S01 강재의 특성',q:'[강구조의 특성]\n인성이 커서 변형에 ___하고, 소성변형능력이 ___함\n내화성능 향상과 부식방지를 위한 유지관리 대책이 ___\n지속적 반복하중에 의한 피로 파괴 우려 ___\n강재는 기둥뿐만 아니라 ___에서도 좌굴 고려 필요',a:'유리 | 우수 | 필요 | 있음 | 보'},
@@ -2401,7 +2402,7 @@ const DEFAULT_CARDS = [
 
 {id:7050,type:'cloze',cat:'PART4 · 강구조 > CH02 부재설계 > S04 주각부·인장재',q:'[주각부 접합]\n주각은 기둥의 하중과 모멘트를 기초를 통하여 지지기반에 전달\n기초 콘크리트에 지압응력이 잘 분포되도록 충분한 면적과 두께를 갖는 ___ 필요\n일반적으로 베이스 플레이트를 앵커볼트에 가조립한 후 베이스 플레이트 밑면에 ___ 모르타르로 충전시켜 기초 콘크리트와 베이스 플레이트를 밀착',a:'베이스 플레이트 | 무수축'},
 
-{id:7051,type:'cloze',cat:'PART4 · 강구조 > CH02 부재설계 > S04 주각부·인장재',q:'[인장재]\n총단면의 ___ 과 유효순단면의 ___ 및 블록전단파단이라는 두 가지 한계상태와 블록전단파단이라는 한계상태에 대해 검토\n인장력에 기초하여 설계되는 부재의 세장비는 가급적 ___ 을 넘지 않도록\n인장력을 받는 강봉이나 매달린 부재에는 적용하지 ___',a:'항복 | 파단 | 300 | 않는다'},
+{id:7051,type:'cloze',cat:'PART4 · 강구조 > CH02 부재설계 > S04 주각부·인장재',q:'[인장재]\n___ 에 대한 ___ 과 ___ 에 대한 ___ 이라는 두 가지 한계상태와\n___ 이라는 한계상태에 대해 검토\n인장력에 기초하여 설계되는 부재의 세장비는 가급적 ___ 을 넘지 않도록\n인장력을 받는 강봉이나 매달린 부재에는 적용하지 ___',a:'총단면 | 항복 | 유효순단면 | 파단 | 블록전단파단 | 300 | 않는다'},
 
 {id:7052,type:'cloze',cat:'PART4 · 강구조 > CH02 부재설계 > S04 주각부·인장재',q:'[인장재의 설계인장강도]\n설계인장강도: 총단면의 항복한계상태와 유효순단면의 파단한계상태에 의해 산정된 값 중 ___ 값으로 산정\n인장저항계수(φ): 연성을 갖는 총단면의 항복한계상태에 대해서는 ___\n급격한 파괴가 일어나는 유효순단면의 파단한계상태에 대해서는 ___',a:'작은 | 0.9 | 0.75'},
 
@@ -2423,7 +2424,7 @@ const DEFAULT_CARDS = [
 
 {id:7061,type:'cloze',cat:'PART4 · 강구조 > CH02 부재설계 > S05 압축재',q:'[설계압축강도]\n적용하는 압축저항계수: ___\n공칭압축강도: 횡좌굴·비틀림좌굴·횡비틀림좌굴에 근거하여 해당하는 한계상태 중에서 가장 ___ 값으로 함\n압축재설계에서 탄성좌굴영역과 비탄성좌굴영역으로 ___ 하여 횡좌굴에 대한 압축강도를 산정',a:'0.9 | 작은 | 구분'},
 
-{id:7062,type:'cloze',cat:'PART4 · 강구조 > CH02 부재설계 > S05 압축재',q:'[조립압축재 단부접합]\n조립재의 단부에서 개재 상호 간의 용접접합은 용접길이가 조립재 최대폭의 ___ 이상이 되도록 하며 ___ 용접으로 하고\n고장력볼트접합은 조립재 최대폭의 ___ 배 이상이 되도록 하며 1.5배 이상의 구간에 대해서 길이방향으로 볼트직경의 ___ 배 이하 간격으로 접합',a:'최대폭 | 연속 | 1.5 | 4'},
+{id:7062,type:'cloze',cat:'PART4 · 강구조 > CH02 부재설계 > S05 압축재',q:'[조립압축재 단부접합]\n조립재의 단부에서 개재 상호 간의 용접접합은 용접길이가 조립재의 ___ 이상이 되도록 하며 ___ 용접으로 하고\n고장력볼트접합은 조립재 최대폭의 ___ 배 이상의 구간에 대해서 길이방향으로 볼트직경의 ___ 배 이하 간격으로 접합',a:'최대폭 | 연속 | 1.5 | 4'},
 
 {id:7063,type:'cloze',cat:'PART4 · 강구조 > CH02 부재설계 > S05 압축재',q:'[조립압축재 긴결간격]\n덧판을 사용한 조립압축재의 파스너 및 단속용접 최대간격\n가장 얇은 덧판두께의 ___ √(E/Fy) 배 또는 ___ mm 이하\n도장 내후성 강재로 만든 조립압축재의 긴결간격: 가장 얇은 판두께의 ___ 배 또는 ___ mm 이하\n최대연단거리: 가장 얇은 판두께의 ___ 배 또는 ___ mm 초과할 수 없음\n2개 이상의 압연형강으로 구성된 조립압축재: 접합재 사이의 개재세장비가 조립압축재 전체세장비의 ___ 배를 초과하지 않도록',a:'0.75 | 300 | 14 | 170 | 8 | 120 | 3/4'},
 
@@ -2473,7 +2474,12 @@ const DEFAULT_CARDS = [
 
 {id:7086,type:'cloze',cat:'PART4 · 강구조 > CH02 부재설계 > S07 합성기둥',q:'[충전형 합성부재(기둥) - 하중전달]\n압축력을 받는 합성기둥에서 강재와 콘크리트 간의 길이방향 전단력을 전달할 수 있도록 설계\n힘전달기구: 직접부착작용, 전단접합, 직접지압\n힘전달기구 중 가장 ___ 공칭강도를 사용하며\n힘전달기구들을 중첩하여 사용할 수 ___ ',a:'큰 | 없다'},
 {id:7087,type:'cloze',cat:'PART4 · 강구조 > CH02 부재설계 > S06 플레이트거더·합성부재',q:'[전단연결재(스터드) 구조제한 수치 정리]\n높이: 지름의 ___ 배 이상 (용접 후 기준)\n직경: 플랜지 두께의 ___ 배 이하\n⚠ 이상·이하 혼동 주의!\n중심 간격: 슬래브 총 두께의 ___ 배 또는 ___ mm 중 작은 값을 초과할 수 없음\n측면 피복: 데크플레이트 골에 설치되는 경우를 제외하고 ___ mm 이상',a:'4 | 2.5 | 8 | 900 | 25'},
-{id:7088,type:'ox',cat:'PART4 · 강구조 > CH02 부재설계 > S06 플레이트거더·합성부재',q:'전단연결재(스터드)의 직경은 플랜지 두께의 2.5배 이상이어야 한다',a:'X',note:'2.5배 이하 — 너무 굵으면 용접 시 플랜지 판에 과도한 열변형·손상 우려\n공식: d ≤ 2.5 × tf'}];
+{id:7088,type:'ox',cat:'PART4 · 강구조 > CH02 부재설계 > S06 플레이트거더·합성부재',q:'전단연결재(스터드)의 직경은 플랜지 두께의 2.5배 이상이어야 한다',a:'X',note:'2.5배 이하 — 너무 굵으면 용접 시 플랜지 판에 과도한 열변형·손상 우려\n공식: d ≤ 2.5 × tf'},
+{id:7089,type:'ox',cat:'PART4 · 강구조 > CH02 부재설계 > S04 주각부·인장재',q:'철골구조에서 인장재의 설계 시 검토할 사항으로 웨브 크리플링(Web Crippling)이 있다',a:'X',note:'웨브 크리플링은 보·휨부재의 검토 사항\n인장재 검토 3가지: ① 전단면 항복 ② 유효순단면 파단 ③ 블록전단파단 (17 서울 9급)'},
+{id:7090,type:'ox',cat:'PART4 · 강구조 > CH02 부재설계 > S02 볼트접합',q:'설계볼트장력은 볼트의 인장강도에 볼트의 유효단면적을 곱한 값이다',a:'X',note:'설계볼트장력 = 볼트 인장강도 × 0.7(항복강도) × 공칭단면적 × 0.75(유효단면적)\n→ 인장강도에 바로 유효단면적 곱하는 게 아님 (22 서울 9급)'},
+{id:7091,type:'ox',cat:'PART4 · 강구조 > CH02 부재설계 > S07 합성기둥',q:'매입형 합성부재에서 횡방향철근의 최대간격은 강재코어 항복강도 450MPa 이하인 경우 부재단면 최소크기의 0.25배를 초과할 수 없다',a:'X',note:'0.25배가 아니라 0.5배\n450MPa 초과인 경우가 0.25배 (19 서울 9급)'},
+{id:7092,type:'ox',cat:'PART4 · 강구조 > CH02 부재설계 > S02 볼트접합',q:'고장력볼트의 최소 피치(중심간격)는 공칭직경의 1.5배 이상이어야 한다',a:'X',note:'최소 피치: 공칭직경의 2.5배 이상 (1.5배는 오답 — 기출 함정)'},
+{id:7093,type:'cloze',cat:'PART4 · 강구조 > CH02 부재설계 > S03 용접접합',q:'[필릿용접 겹침이음 최소 규정]\n모살용접 최소 겹침길이: 얇은 쪽 판 두께의 ___ 배 이상, 또한 ___ mm 이상\n단속모살용접부 길이(응력 전달 시): 모살 사이즈(S)의 ___ 배 이상 또는 ___ mm 이상\n겹침이음 원칙: 응력 전달 시 편심 하중을 줄이기 위해 ___ 열 이상의 모살용접',a:'5 | 25 | 10 | 30 | 2'}];
 
 // ═══════════════════ ENGLISH CARDS ═══════════════════
 const DEFAULT_ENG_CARDS = [
@@ -2723,6 +2729,33 @@ const DEFAULT_ENG_CARDS = [
 {id:9246,cat:"영단어",type:"flash",q:"downturn",a:"침체 / 하락(명)\neconomic downturn = 경기 침체\n↔ upturn(상승·호전)\n≒ decline, slump",pron:"ˈdaʊntɜːrn",note:"The company struggled to survive during the economic downturn."},
 {id:9247,cat:"영단어",type:"flash",q:"augmented",a:"증강된 / 증가된(형)\naugment(동) = 증가시키다·보강하다\naugmented reality(AR) = 증강현실\n≒ enhanced, increased",pron:"ɔːɡˈmentɪd",note:"Augmented reality technology is changing how we interact with the world."},
 {id:9248,cat:"영단어",type:"flash",q:"critique",a:"비평 / 비판(명) / 비평하다(동)\ncritique ≠ criticism (critique는 분석적·건설적 뉘앙스)\nwrite a critique = 비평문을 쓰다\n≒ analysis, review",pron:"krɪˈtiːk",note:"The professor asked students to write a critique of the novel."},
+{id:9249,cat:"영단어",type:"flash",q:"inhabit",a:"거주하다 / 서식하다(동)\ninhabitant(명) = 주민·서식 생물\ninhabited island = 사람이 사는 섬\n≒ live in, occupy",pron:"ɪnˈhæbɪt",note:"Many rare species inhabit the dense rainforest."},
+{id:9250,cat:"영단어",type:"flash",q:"retrieve",a:"되찾다 / 검색하다(동)\nretrieve information = 정보를 검색하다\nretrieval(명) = 회수·검색\n≒ recover, fetch",pron:"rɪˈtriːv",note:"She managed to retrieve the deleted files from the backup."},
+{id:9251,cat:"영단어",type:"flash",q:"intercept",a:"가로채다 / 차단하다(동)\nintercept a message = 메시지를 가로채다\ninterception(명) = 차단·가로채기\n≒ block, catch",pron:"ˌɪntərˈsept",note:"The spy managed to intercept the enemy's communications."},
+{id:9252,cat:"영단어",type:"flash",q:"perilous",a:"위험한 / 위태로운(형)\nperil(명) = 위험\nperilous journey = 위험한 여정\n≒ dangerous, hazardous",pron:"ˈperɪləs",note:"The climbers faced a perilous descent down the icy mountain."},
+{id:9253,cat:"영단어",type:"flash",q:"radical",a:"급진적인 / 근본적인(형) / 급진주의자(명)\nradical change = 근본적인 변화\nradically(부) = 근본적으로\n⚠ 수학에서는 '근호'의 의미",pron:"ˈrædɪkəl",note:"The new policy represented a radical departure from tradition."},
+{id:9254,cat:"영단어",type:"flash",q:"transient",a:"일시적인 / 순간적인(형) / 뜨내기(명)\ntransient pleasure = 일시적인 즐거움\n≒ temporary, fleeting\n↔ permanent(영구적인)",pron:"ˈtrænziənt",note:"Fame can be transient, but the impact of one's work can last forever."},
+{id:9255,cat:"영단어",type:"flash",q:"present",a:"현재의(형) / 참석한(형) / 선물(명) / 제시하다(동)\n⚠ 다의어 주의!\npresent a report = 보고서를 제출하다\nat present = 현재",pron:"ˈprezənt(형·명) / prɪˈzent(동)",note:"She presented her findings to the board of directors."},
+{id:9256,cat:"영단어",type:"flash",q:"represent",a:"대표하다 / 나타내다 / 상징하다(동)\nrepresentative(명) = 대표자\nrepresentation(명) = 표현·대표\n≒ symbolize, stand for",pron:"ˌreprɪˈzent",note:"The lawyer was hired to represent the company in court."},
+{id:9257,cat:"영단어",type:"flash",q:"coin",a:"동전(명) / (새 단어·표현을) 만들다(동)\ncoin a phrase = 표현을 만들다\n⚠ 동사 뜻 주의 — 새로운 말을 창조하다\ncoinage(명) = 주화·신조어",pron:"kɔɪn",note:"The term 'selfie' was coined in the early 2000s."},
+{id:9258,cat:"영단어",type:"flash",q:"weathered away",a:"풍화되다 / 침식되다\nweather(동) = 풍화시키다·견뎌내다\nweathered rock = 풍화된 암석\n⚠ weather away = 서서히 마모·침식",pron:"ˈweðərd əˈweɪ",note:"The ancient inscriptions had weathered away over centuries."},
+{id:9259,cat:"영단어",type:"flash",q:"conclusive",a:"결정적인 / 확실한(형)\nconclusive evidence = 결정적인 증거\ninconclusively(부) = 결론 없이\n↔ inconclusive(불확실한)",pron:"kənˈkluːsɪv",note:"The DNA test provided conclusive proof of his innocence."},
+{id:9260,cat:"영단어",type:"flash",q:"comprehensive",a:"포괄적인 / 종합적인(형)\ncomprehensive plan = 종합 계획\ncomprehensively(부) = 포괄적으로\n≒ thorough, extensive",pron:"ˌkɒmprɪˈhensɪv",note:"The report provides a comprehensive overview of the situation."},
+{id:9261,cat:"영단어",type:"flash",q:"wither",a:"시들다 / 쇠퇴하다(동)\nwither away = 서서히 시들다\nwithered(형) = 시든·쪼그라든\n≒ shrivel, fade",pron:"ˈwɪðər",note:"The flowers withered in the intense summer heat."},
+{id:9262,cat:"영단어",type:"flash",q:"sensitive",a:"민감한 / 예민한(형)\n⚠ sensible(분별있는)과 혼동 주의\nsensitive to = ~에 민감한\nsensitivity(명) = 민감성",pron:"ˈsensɪtɪv",note:"She is very sensitive to criticism."},
+{id:9263,cat:"영단어",type:"flash",q:"sensible",a:"분별있는 / 현명한(형)\n⚠ sensitive(민감한)와 혼동 주의\na sensible decision = 현명한 결정\n≒ reasonable, practical",pron:"ˈsensɪbəl",note:"It would be sensible to save money before making a big purchase."},
+{id:9264,cat:"영단어",type:"flash",q:"promising",a:"유망한 / 전도유망한(형)\n⚠ promise(약속)와 혼동 주의\na promising student = 유망한 학생\n≒ hopeful, bright",pron:"ˈprɒmɪsɪŋ",note:"She is a promising young architect with a bright future."},
+{id:9265,cat:"영단어",type:"flash",q:"altitude",a:"고도 / 높이(명)\n⚠ attitude(태도)와 혼동 주의 — 철자 비슷!\naltitude sickness = 고산병\nhigh altitude = 고고도",pron:"ˈæltɪtjuːd",note:"The plane was flying at an altitude of 10,000 meters."},
+{id:9266,cat:"영단어",type:"flash",q:"fade",a:"서서히 사라지다 / 바래다(동)\nfade away = 희미해지다·사라지다\nfaded jeans = 바랜 청바지\n≒ diminish, vanish",pron:"feɪd",note:"The music slowly faded as the car drove away."},
+{id:9267,cat:"영단어",type:"flash",q:"crucial",a:"결정적인 / 매우 중요한(형)\na crucial decision = 결정적인 결정\n≒ critical, vital, essential",pron:"ˈkruːʃəl",note:"It is crucial that we address climate change immediately."},
+{id:9268,cat:"영단어",type:"flash",q:"equate",a:"동등시하다 / 같다고 여기다(동)\n⚠ equal(평등한)·equate 혼동 주의\nequate A with B = A를 B와 동일시하다\nequation(명) = 방정식·등식",pron:"ɪˈkweɪt",note:"You shouldn't equate wealth with happiness."},
+{id:9269,cat:"영단어",type:"flash",q:"tune",a:"곡 / 선율(명) / 조율하다(동)\n⚠ tone(어조)와 혼동 주의\nin tune = 음이 맞는\nfine-tune = 미세조정하다",pron:"tjuːn",note:"She hummed a familiar tune while cooking dinner."},
+{id:9270,cat:"영단어",type:"flash",q:"altogether",a:"완전히 / 전적으로 / 총합으로(부)\n⚠ together(함께)와 혼동 주의\naltogether different = 완전히 다른\nnot altogether = 완전히 ~은 아닌",pron:"ˌɔːltəˈɡeðər",note:"That's altogether a different matter from what we discussed."},
+{id:9271,cat:"영단어",type:"flash",q:"fallacy",a:"오류 / 잘못된 생각(명)\n⚠ tendency(경향)와 혼동 주의\na common fallacy = 흔한 오류\n≒ misconception, error",pron:"ˈfæləsi",note:"It is a fallacy that money always brings happiness."},
+{id:9272,cat:"영단어",type:"flash",q:"convince",a:"설득하다 / 납득시키다(동)\n⚠ convenience(편리함)와 혼동 주의\nconvince A to do = A가 ~하도록 설득하다\nconvincing(형) = 설득력 있는",pron:"kənˈvɪns",note:"She convinced him to change his mind about the decision."},
+{id:9273,cat:"영단어",type:"flash",q:"ambiguous",a:"모호한 / 애매한(형)\n⚠ ambitious(야망있는)와 혼동 주의 — 철자 비슷!\nan ambiguous answer = 애매한 답\nambiguity(명) = 모호성",pron:"æmˈbɪɡjuəs",note:"His response was so ambiguous that nobody knew what he meant."},
+{id:9274,cat:"영단어",type:"flash",q:"sudden",a:"갑작스러운(형)\n⚠ suddenly(갑자기·부사)와 구분\na sudden change = 갑작스러운 변화\nall of a sudden = 갑자기",pron:"ˈsʌdən",note:"There was a sudden loud noise outside the window."},
+{id:9275,cat:"영단어",type:"flash",q:"generate",a:"발생시키다 / 만들어내다(동)\n⚠ 타동사 — 발생하다(자동사) 아님\ngenerate electricity = 전기를 생산하다\ngeneration(명) = 세대·발생",pron:"ˈdʒenəreɪt",note:"The new policy is expected to generate thousands of jobs."},
 ];
 
 // ═══════════════════ STATE ═══════════════════
