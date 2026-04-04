@@ -78,10 +78,10 @@ body{width:100%;height:var(--app-h);overflow:hidden;position:fixed;background:va
 .center-col{display:flex;flex-direction:column;min-height:0;overflow:hidden}
 
 /* 4분할 버린패 — 작혼 스타일 */
-.discard-table{flex:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:3px;padding:4px;background:var(--table2);border-bottom:2px solid rgba(0,0,0,.28);min-height:0;overflow:hidden}
+.discard-table{flex:1;min-height:0;max-height:55vh;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:3px;padding:4px;background:var(--table2);border-bottom:2px solid rgba(0,0,0,.28);overflow:hidden}
 .dt-cell{background:rgba(0,0,0,.2);border-radius:4px;padding:3px 4px;display:flex;flex-direction:column;overflow:hidden}
 .dt-lbl{font-size:.5rem;font-weight:600;margin-bottom:2px;flex-shrink:0}
-.dt-tiles{display:flex;flex-wrap:wrap;gap:1px;overflow:hidden;align-content:flex-start}
+.dt-tiles{display:flex;flex-direction:column;gap:1px;overflow:hidden;align-items:flex-start}
 
 /* STRIP */
 .center-strip{display:flex;align-items:center;justify-content:center;gap:.55rem;padding:.2rem .45rem;background:var(--table3);flex-shrink:0;border-bottom:1px solid rgba(0,0,0,.3)}
@@ -89,18 +89,19 @@ body{width:100%;height:var(--app-h);overflow:hidden;position:fixed;background:va
 .ri-stick{width:15px;height:4px;background:linear-gradient(90deg,#ccc,#fff,#ccc);border-radius:2px;border:1px solid #aaa;box-shadow:0 1px 3px rgba(0,0,0,.4)}
 
 /* PLAYER ZONE */
-.player-zone{flex-shrink:0;padding:.32rem .48rem .28rem;background:rgba(0,0,0,.22);border-top:2px solid rgba(232,201,106,.2)}
-.player-hdr{display:flex;align-items:center;gap:.38rem;margin-bottom:.28rem}
+.player-zone{flex-shrink:0;padding:.25rem .48rem .1rem;background:rgba(0,0,0,.22);border-top:2px solid rgba(232,201,106,.2)}
+.player-hdr{display:flex;align-items:center;gap:.38rem;margin-bottom:.2rem}
 .player-badge{font-size:.6rem;font-weight:700;color:var(--gold);background:rgba(232,201,106,.1);border:1px solid var(--brd2);padding:.08rem .38rem;border-radius:3px}
 .ri-on{font-size:.56rem;color:var(--blue)}
 .tenpai-show{font-size:.56rem;color:var(--gold2);margin-left:auto}
 .player-sets{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:2px}
 .set-grp{display:flex;gap:1px;background:rgba(255,255,255,.06);border-radius:3px;padding:1px}
-.hand-row{display:flex;align-items:flex-end;gap:2px;flex-wrap:nowrap;overflow-x:auto;overflow-y:visible;padding-bottom:8px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+/* 손패: 넘쳐도 위로 튀어나오게, 가로 스크롤 */
+.hand-row{display:flex;align-items:flex-end;gap:2px;flex-wrap:nowrap;overflow-x:auto;overflow-y:visible;padding-bottom:10px;padding-top:4px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .hand-row::-webkit-scrollbar{display:none}
 
 /* ACTION BAR */
-.act-bar{display:flex;align-items:center;gap:.28rem;flex-wrap:wrap;padding:.25rem .48rem;background:var(--bar);border-top:1px solid var(--brd);flex-shrink:0}
+.act-bar{display:flex;align-items:center;gap:.28rem;flex-wrap:wrap;padding:.18rem .48rem;background:var(--bar);border-top:1px solid var(--brd);flex-shrink:0}
 .ab{padding:.23rem .65rem;border:1.5px solid;border-radius:4px;font-size:.66rem;cursor:pointer;background:transparent;font-weight:600;transition:all .15s;flex-shrink:0;letter-spacing:.02em}
 .ab:disabled{opacity:.2;cursor:default}
 .ab.hidden{display:none}
@@ -116,9 +117,9 @@ body{width:100%;height:var(--app-h);overflow:hidden;position:fixed;background:va
 /* TILES */
 .tile{display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#faf6ee,#ece4d8);border:1px solid #c8b898;border-radius:3px;box-shadow:1px 2px 5px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.55);user-select:none;flex-shrink:0;position:relative;overflow:hidden;transition:transform .12s cubic-bezier(.34,1.4,.64,1),box-shadow .12s}
 .tile svg{display:block;pointer-events:none;width:100%;height:100%}
-.tile-xl{width:40px;height:54px}
-.tile-md{width:28px;height:38px}
-.tile-sm{width:20px;height:27px}
+.tile-xl{width:38px;height:51px}
+.tile-md{width:26px;height:35px}
+.tile-sm{width:19px;height:25px}
 .tile-xs{width:12px;height:17px;border-radius:2px}
 .tile.back{background:linear-gradient(160deg,#2a3d5c,#1e2d46);border-color:#3a5070}
 .tile.back::after{content:'🀫';position:absolute;font-size:.75em}
@@ -256,8 +257,8 @@ body{width:100%;height:var(--app-h);overflow:hidden;position:fixed;background:va
 /* 반응형 */
 @media(max-width:680px){
   .game-main{grid-template-columns:104px 1fr 104px}
-  .tile-xl{width:33px;height:45px}
-  .tile-sm{width:16px;height:22px}
+  .tile-xl{width:31px;height:42px}
+  .tile-sm{width:15px;height:20px}
   .tile-xs{width:10px;height:14px}
 }
 .open-set-grp{display:flex;gap:1px;background:rgba(255,255,255,.06);border-radius:3px;padding:1px;align-items:flex-end}
@@ -510,8 +511,34 @@ function checkReactions(discardBy){
   setTimeout(()=>beginTurn(nextTurnIdx(G.turnIdx)),350)
 }
 
-function aiChooseDiscard(pid){const hand=G.hands[pid];const w=getTenpaiWaits(hand,G.openSets[pid]);if(w.length>0)return hand[Math.floor(Math.random()*hand.length)];const pri=t=>{if(t.endsWith('z'))return 100;const n=parseInt(t);if(n===1||n===9)return 80;if(n===2||n===8)return 50;return 10};return[...hand].sort((a,b)=>pri(b)-pri(a))[0]}
+function renderDiscardGrid(containerId, discards, pid, size){
+  const dc=document.getElementById(containerId);
+  if(!dc) return;
+  dc.innerHTML='';
+  const ROW = size==='xs' ? 8 : 6; // xs(사이드)=8장, sm(중앙)=6장
+  for(let i=0;i<discards.length;i++){
+    if(i%ROW===0){
+      const row=document.createElement('div');
+      row.style.cssText='display:flex;gap:1px;flex-shrink:0';
+      dc.appendChild(row);
+    }
+    const row=dc.lastChild;
+    const t=discards[i];
+    const isLast=i===discards.length-1&&G.lastDiscardBy===pid&&G.phase==='action-wait';
+    row.appendChild(makeTileEl(t,size,{
+      isDora:G.dora.includes(t),
+      justDisc:isLast
+    }));
+  }
+}
 
+function aiChooseDiscard(pid){
+  const hand=G.hands[pid];
+  if(!hand||hand.length===0) return null;
+  const w=getTenpaiWaits(hand,G.openSets[pid]);
+  if(w.length>0) return hand[Math.floor(Math.random()*hand.length)];
+  const pri=t=>{if(t.endsWith('z'))return 100;const n=parseInt(t);if(n===1||n===9)return 80;if(n===2||n===8)return 50;return 10};
+}
 function aiTurn(pid){
   if(G.phase==='done')return;
   const thEl=document.getElementById(`th-${pid}`);if(thEl)thEl.style.display='inline';
@@ -522,7 +549,9 @@ function aiTurn(pid){
     const exp=(4-G.openSets[pid].length)*3+2;while(G.hands[pid].length>exp)G.hands[pid].shift();
     if(isWin(G.hands[pid],G.openSets[pid])){const yaku=G.riichi[pid]?[{n:'리치',h:1},{n:'멘젠쯔모',h:1}]:[{n:'멘젠쯔모',h:1}];aiWin(pid,null,yaku,true,drawn);return}
     if(!G.riichi[pid]&&G.openSets[pid].length===0&&G.scores[pid]>=1000){const without=G.hands[pid].filter((_,i)=>i!==G.hands[pid].length-1);if(getTenpaiWaits(without,G.openSets[pid]).length>0&&Math.random()<.7){aiRiichiDeclare(pid);return}}
-    const disc=aiChooseDiscard(pid),prev=G.prevDiscard[pid];G.prevDiscard[pid]=disc;
+    const disc=aiChooseDiscard(pid);
+    if(!disc){setTimeout(()=>beginTurn(nextTurnIdx(G.turnIdx)),300);return}
+    const prev=G.prevDiscard[pid];G.prevDiscard[pid]=disc;
     const didx=G.hands[pid].indexOf(disc);if(didx>=0)G.hands[pid].splice(didx,1);else G.hands[pid].pop();
     G.discards[pid].push(disc);G.lastDiscard=disc;G.lastDiscardBy=pid;
     if(prev===disc)setTimeout(()=>{if(Math.random()<.45)showBubble(pid,'same_discard')},400);
@@ -925,7 +954,7 @@ function makeTileEl(t, size='md', opts={}){
   if(opts.back){el.classList.add('back');return el}
 
   // SVG 크기 매핑
-  const SZ={xl:[40,54],md:[28,38],sm:[20,27],xs:[12,17]};
+  const SZ={xl:[38,51],md:[26,35],sm:[19,25],xs:[12,17]};
   const [w,h]=SZ[size]||SZ.md;
 
   if(t){
@@ -1011,10 +1040,10 @@ function renderAll(){
   for(const pid of['haju','giwook','seonghun']){
     const hc=document.getElementById(`hand-${pid}`);hc.innerHTML='';for(let i=0;i<G.hands[pid].length;i++)hc.appendChild(makeTileEl(null,'xs',{back:true}));
     const oc=document.getElementById(`open-${pid}`);oc.innerHTML='';for(const set of G.openSets[pid]){oc.appendChild(makeOpenSetEl(set,'xs'))}
-    const dcs=document.getElementById(`disc-${pid}`);dcs.innerHTML='';G.discards[pid].forEach((t,i)=>dcs.appendChild(makeTileEl(t,'xs',{justDisc:i===G.discards[pid].length-1&&G.lastDiscardBy===pid&&G.phase==='action-wait'})));
+    const dcs=document.getElementById(`disc-${pid}`);if(dcs){dcs.innerHTML='';renderDiscardGrid(`disc-${pid}`,G.discards[pid],pid,'xs')}
     const ri=document.getElementById(`ri-${pid}`);if(ri)ri.style.display=G.riichi[pid]?'inline':'none'
   }
-  for(const pid of['haju','giwook','seonghun','player']){const dc=document.getElementById(`disc2-${pid}`);if(!dc)continue;dc.innerHTML='';G.discards[pid].forEach((t,i)=>dc.appendChild(makeTileEl(t,'sm',{isDora:G.dora.includes(t),justDisc:i===G.discards[pid].length-1&&G.lastDiscardBy===pid&&G.phase==='action-wait'})))}
+  for(const pid of['haju','giwook','seonghun','player']){renderDiscardGrid(`disc2-${pid}`,G.discards[pid],pid,'sm')}
   renderPlayerHand();
   const oc=document.getElementById('open-player');oc.innerHTML='';for(const set of G.openSets.player){oc.appendChild(makeOpenSetEl(set,'md'))}
 }
