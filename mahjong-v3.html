@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>딥스페이스 마작</title>
+<style>
+:root {
+  --app-h:100vh; --table:#2d6a4f; --table2:#245a42; --table3:#1e4d38;
+  --panel:#1a2535; --bar:#111b2a; --gold:#e8c96a; --gold2:#f5e090; --gold3:#c8a030;
+  --red:#e05555; --blue:#5599ee; --green:#44cc77;
+  --txt:#f0ece0; --txt2:#a0b8c0; --txt3:#6a8898;
+  --brd:rgba(255,255,255,0.08); --brd2:rgba(232,201,106,0.3);
+  --c-giwook:#b090e8; --c-seonghun:#66aaff; --c-haju:#cc88ff; --c-seoun:#55dd88; --c-jinun:#ff6666;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{height:100%}
+body{width:100%;height:var(--app-h);overflow:hidden;position:fixed;background:var(--table);color:var(--txt);font-family:'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif;font-size:13px}
+
+/* TITLE */
+#title{height:var(--app-h);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:1rem;background:linear-gradient(160deg,#0d1525,#1a2a40 50%,#0d1a30)}
+.t-deco{font-size:.62rem;letter-spacing:.5em;color:var(--gold);opacity:.55}
+.t-title{font-size:clamp(1.8rem,5vw,3rem);font-weight:700;letter-spacing:.12em;background:linear-gradient(135deg,#e8c96a,#f5e090,#c8a030);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:titleGlow 3s ease-in-out infinite}
+.t-sub{font-size:.72rem;color:var(--txt2);letter-spacing:.25em}
+.t-chars{display:flex;gap:1rem;margin:.4rem 0}
+.t-char{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.55rem;border:2px solid}
+.t-desc{font-size:.7rem;color:var(--txt2);line-height:1.9}
+.t-btn{margin-top:.4rem;padding:.65rem 2.4rem;background:linear-gradient(135deg,var(--gold3),var(--gold));color:#1a1200;font-weight:700;font-size:.82rem;letter-spacing:.2em;border:none;border-radius:4px;cursor:pointer;box-shadow:0 4px 18px rgba(232,201,106,.35)}
+@keyframes titleGlow{0%,100%{filter:drop-shadow(0 0 15px rgba(232,201,106,.3))}50%{filter:drop-shadow(0 0 35px rgba(232,201,106,.7))}}
+
+/* GAME */
+#game{display:none;height:var(--app-h);flex-direction:column;position:relative;overflow:hidden;background:var(--table);background-image:radial-gradient(ellipse at 50% 50%,rgba(255,255,255,.02),transparent 70%)}
+
+/* TOP BAR */
+.top-bar{display:flex;align-items:center;gap:.45rem;padding:.28rem .55rem;background:var(--bar);border-bottom:1px solid var(--brd);flex-shrink:0}
+.round-badge{font-size:.65rem;font-weight:700;color:var(--gold);background:rgba(232,201,106,.1);border:1px solid var(--brd2);padding:.16rem .45rem;border-radius:3px}
+.wall-info{font-size:.6rem;color:var(--txt2)}
+.dora-wrap{display:flex;align-items:center;gap:.28rem}
+.dora-lbl{font-size:.56rem;color:var(--txt2)}
+.dora-tiles{display:flex;gap:2px}
+.scores-wrap{display:flex;gap:.45rem;margin-left:auto}
+.score-chip{display:flex;flex-direction:column;align-items:center;min-width:44px}
+.sc-name{font-size:.5rem;color:var(--txt3)}
+.sc-val{font-size:.76rem;font-weight:700;line-height:1.2}
+.sc-ri{font-size:.46rem;color:var(--blue)}
+
+/* SPEC BAR */
+.spec-bar{display:flex;align-items:center;gap:.4rem;padding:.16rem .55rem;background:rgba(0,0,0,.25);border-bottom:1px solid var(--brd);flex-shrink:0}
+.spec-lbl{font-size:.5rem;color:var(--txt3);flex-shrink:0}
+.spec-btns{display:flex;gap:.4rem;flex:1}
+.spec-btn{display:flex;align-items:center;gap:.2rem;padding:.1rem .35rem;border-radius:3px;cursor:pointer;border:1px solid transparent;transition:all .15s;font-size:.54rem}
+.spec-btn:hover{background:rgba(255,255,255,.08);border-color:var(--brd2)}
+.spec-hint{font-size:.5rem;color:var(--txt3);margin-left:auto}
+
+/* GRID */
+.game-main{flex:1;display:grid;grid-template-columns:130px 1fr 130px;min-height:0;overflow:hidden}
+.side-panel{background:rgba(0,0,0,.2);display:flex;flex-direction:column;overflow:hidden;min-height:0}
+.side-panel.left{border-right:1px solid var(--brd)}
+.side-panel.right{border-left:1px solid var(--brd)}
+.opp-card{flex:1;padding:.38rem .42rem;display:flex;flex-direction:column;gap:.2rem;border-bottom:1px solid var(--brd);overflow:hidden;min-height:0}
+.opp-card:last-child{border-bottom:none}
+.opp-hdr{display:flex;align-items:center;gap:.22rem;flex-shrink:0}
+.opp-ico{font-size:.88rem}
+.opp-nm{font-size:.6rem;font-weight:700}
+.wind-tag{font-size:.46rem;padding:.05rem .22rem;border-radius:2px;border:1px solid;opacity:.85}
+.ri-tag{font-size:.5rem;color:#88ccff;margin-left:auto;animation:pulse 1s infinite}
+.think-tag{font-size:.48rem;color:var(--txt3);animation:pulse 1s infinite}
+.opp-tiles{display:flex;flex-wrap:wrap;gap:1px;flex-shrink:0}
+.opp-open{display:flex;flex-wrap:wrap;gap:1px}
+.disc-lbl{font-size:.48rem;color:var(--txt3);flex-shrink:0;margin-top:1px}
+.disc-row{display:flex;flex-wrap:wrap;gap:1px;overflow:hidden}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* CENTER */
+.center-col{display:flex;flex-direction:column;min-height:0;overflow:hidden}
+
+/* 4분할 버린패 — 작혼 스타일 */
+.discard-table{flex:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:3px;padding:4px;background:var(--table2);border-bottom:2px solid rgba(0,0,0,.28);min-height:0;overflow:hidden}
+.dt-cell{background:rgba(0,0,0,.2);border-radius:4px;padding:3px 4px;display:flex;flex-direction:column;overflow:hidden}
+.dt-lbl{font-size:.5rem;font-weight:600;margin-bottom:2px;flex-shrink:0}
+.dt-tiles{display:flex;flex-wrap:wrap;gap:1px;overflow:hidden;align-content:flex-start}
+
+/* STRIP */
+.center-strip{display:flex;align-items:center;justify-content:center;gap:.55rem;padding:.2rem .45rem;background:var(--table3);flex-shrink:0;border-bottom:1px solid rgba(0,0,0,.3)}
+.ri-pool{display:flex;gap:2px}
+.ri-stick{width:15px;height:4px;background:linear-gradient(90deg,#ccc,#fff,#ccc);border-radius:2px;border:1px solid #aaa;box-shadow:0 1px 3px rgba(0,0,0,.4)}
+
+/* PLAYER ZONE */
+.player-zone{flex-shrink:0;padding:.32rem .48rem .28rem;background:rgba(0,0,0,.22);border-top:2px solid rgba(232,201,106,.2)}
+.player-hdr{display:flex;align-items:center;gap:.38rem;margin-bottom:.28rem}
+.player-badge{font-size:.6rem;font-weight:700;color:var(--gold);background:rgba(232,201,106,.1);border:1px solid var(--brd2);padding:.08rem .38rem;border-radius:3px}
+.ri-on{font-size:.56rem;color:var(--blue)}
+.tenpai-show{font-size:.56rem;color:var(--gold2);margin-left:auto}
+.player-sets{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:2px}
+.set-grp{display:flex;gap:1px;background:rgba(255,255,255,.06);border-radius:3px;padding:1px}
+.hand-row{display:flex;align-items:flex-end;gap:2px;flex-wrap:nowrap;overflow-x:auto;overflow-y:visible;padding-bottom:8px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.hand-row::-webkit-scrollbar{display:none}
+
+/* ACTION BAR */
+.act-bar{display:flex;align-items:center;gap:.28rem;flex-wrap:wrap;padding:.25rem .48rem;background:var(--bar);border-top:1px solid var(--brd);flex-shrink:0}
+.ab{padding:.23rem .65rem;border:1.5px solid;border-radius:4px;font-size:.66rem;cursor:pointer;background:transparent;font-weight:600;transition:all .15s;flex-shrink:0;letter-spacing:.02em}
+.ab:disabled{opacity:.2;cursor:default}
+.ab.hidden{display:none}
+.ab-tsumo{border-color:var(--gold);color:var(--gold)}.ab-tsumo:not(:disabled):hover{background:var(--gold);color:#1a1200}
+.ab-ron{border-color:var(--red);color:var(--red)}.ab-ron:not(:disabled):hover{background:var(--red);color:#fff}
+.ab-riichi{border-color:var(--blue);color:var(--blue)}.ab-riichi:not(:disabled):hover{background:var(--blue);color:#fff}
+.ab-chi{border-color:var(--green);color:var(--green)}.ab-chi:not(:disabled):hover{background:var(--green);color:#111}
+.ab-pon{border-color:#ff9944;color:#ff9944}.ab-pon:not(:disabled):hover{background:#ff9944;color:#fff}
+.ab-kan{border-color:#bb77ff;color:#bb77ff}.ab-kan:not(:disabled):hover{background:#bb77ff;color:#fff}
+.ab-skip{border-color:var(--txt2);color:var(--txt2)}.ab-skip:not(:disabled):hover{background:rgba(255,255,255,.15)}
+.ab-hint{font-size:.6rem;color:var(--txt2);margin-left:auto}
+
+/* TILES */
+.tile{display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#faf6ee,#ece4d8);border:1px solid #c8b898;border-radius:3px;box-shadow:1px 2px 5px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.55);user-select:none;flex-shrink:0;position:relative;overflow:hidden;transition:transform .12s cubic-bezier(.34,1.4,.64,1),box-shadow .12s}
+.tile svg{display:block;pointer-events:none;width:100%;height:100%}
+.tile-xl{width:40px;height:54px}
+.tile-md{width:28px;height:38px}
+.tile-sm{width:20px;height:27px}
+.tile-xs{width:12px;height:17px;border-radius:2px}
+.tile.back{background:linear-gradient(160deg,#2a3d5c,#1e2d46);border-color:#3a5070}
+.tile.back::after{content:'🀫';position:absolute;font-size:.75em}
+.tile-xs.back::after{font-size:.48em}
+.tile.clickable{cursor:pointer}
+.tile.clickable:hover{transform:translateY(-7px) scale(1.04);box-shadow:1px 10px 18px rgba(0,0,0,.72),inset 0 1px 0 rgba(255,255,255,.55)}
+
+/* 선택 — 하얀 테두리 글로우 (금색과 다르게) */
+.tile.selected{
+  transform:translateY(-13px) scale(1.06)!important;
+  border:2px solid #fff!important;
+  box-shadow:0 13px 30px rgba(0,0,0,.7),0 0 0 3px rgba(255,255,255,.18),0 0 18px rgba(255,255,255,.4)!important;
+  background:linear-gradient(160deg,#ffffff,#f5f0e8)!important;
+}
+
+/* 새로 뽑은 패 — 민트/시안 (도라 골드와 완전 반대 계열) */
+.tile.new-draw{
+  margin-left:10px!important;
+  border:2px solid #55ddcc!important;
+  box-shadow:1px 2px 5px rgba(0,0,0,.5),0 0 12px rgba(60,210,190,.75),0 0 24px rgba(40,190,170,.35)!important;
+  animation:newPulse 1.6s ease-in-out infinite!important;
+}
+@keyframes newPulse{
+  0%,100%{box-shadow:1px 2px 5px rgba(0,0,0,.5),0 0 9px rgba(60,210,190,.6),0 0 18px rgba(40,190,170,.25)}
+  50%{box-shadow:1px 2px 5px rgba(0,0,0,.5),0 0 20px rgba(60,210,190,.95),0 0 38px rgba(40,190,170,.5)}
+}
+
+/* 도라 — 순금 펄스 (민트와 완전히 다른 색) */
+.tile.dora-tile{
+  border:2px solid #ffc400!important;
+  animation:doraPulse 2s ease-in-out infinite;
+}
+@keyframes doraPulse{
+  0%,100%{
+    box-shadow:1px 2px 5px rgba(0,0,0,.5),0 0 7px rgba(255,196,0,.55),inset 0 0 3px rgba(255,220,0,.12);
+    background:linear-gradient(160deg,#faf6ee,#ece4d8);
+  }
+  50%{
+    box-shadow:1px 2px 5px rgba(0,0,0,.5),0 0 22px rgba(255,196,0,1),0 0 40px rgba(255,160,0,.55),inset 0 0 10px rgba(255,220,0,.28);
+    background:linear-gradient(160deg,#fffcf0,#f8f0da);
+    border-color:#ffe000!important;
+  }
+}
+/* 새패+도라 동시 → 도라 우선 */
+.tile.dora-tile.new-draw{animation:doraPulse 2s ease-in-out infinite!important;border-color:#ffc400!important;margin-left:10px!important}
+
+/* 버린 직후 */
+.tile.just-disc{outline:2.5px solid var(--gold);box-shadow:0 0 14px rgba(232,201,106,.8),0 0 28px rgba(232,201,106,.3)}
+
+/* 같은 패 강조 — 주황 (집었을 때 판에서 강조) */
+.tile.same-tile{
+  border:2px solid #ff8800!important;
+  box-shadow:0 0 11px rgba(255,136,0,.75),0 0 22px rgba(255,136,0,.3)!important;
+  animation:samePulse 1s ease-in-out infinite;
+}
+@keyframes samePulse{
+  0%,100%{box-shadow:0 0 8px rgba(255,136,0,.6),0 0 16px rgba(255,136,0,.22)}
+  50%{box-shadow:0 0 18px rgba(255,136,0,.95),0 0 32px rgba(255,136,0,.45)}
+}
+
+/* 남은 개수 뱃지 */
+.tile-count-badge{
+  position:absolute;top:-7px;right:-6px;
+  background:#ff5500;color:#fff;
+  font-size:.4rem;font-weight:700;line-height:1;
+  width:14px;height:14px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  border:1.5px solid rgba(255,255,255,.5);
+  box-shadow:0 1px 5px rgba(0,0,0,.55);
+  pointer-events:none;z-index:3;
+}
+
+/* 패 등장 */
+@keyframes tileIn{from{opacity:0;transform:translateY(-10px) scale(.88)}to{opacity:1;transform:none}}
+@keyframes tileSlide{from{opacity:0;transform:translateX(16px) scale(.9)}to{opacity:1;transform:none}}
+.tile.anim-in{animation:tileIn .18s ease forwards}
+.tile.anim-slide{animation:tileSlide .2s ease forwards}
+
+/* 말풍선 */
+.bubble{display:none;position:absolute;z-index:500;pointer-events:all;max-width:192px;min-width:100px;border-radius:12px;padding:.52rem .75rem .52rem .68rem;cursor:pointer}
+.bubble.active{display:block;animation:bblIn .2s cubic-bezier(.34,1.56,.64,1) forwards}
+.bubble-name{font-size:.55rem;font-weight:700;margin-bottom:.2rem;letter-spacing:.04em}
+.bubble-text{font-size:.74rem;line-height:1.55;word-break:keep-all}
+.bubble .bx{position:absolute;top:.28rem;right:.45rem;font-size:.58rem;cursor:pointer;opacity:.38;line-height:1}
+.bubble .bx:hover{opacity:.9}
+.bubble::before{content:'';position:absolute;width:0;height:0;border-style:solid}
+
+#bubble-giwook{right:133px;top:8%;background:linear-gradient(135deg,#2a1a3e,#3a2050);border:1.5px solid rgba(176,144,232,.5);box-shadow:0 6px 24px rgba(0,0,0,.6),0 0 20px rgba(176,144,232,.15)}
+#bubble-giwook .bubble-name{color:var(--c-giwook)}
+#bubble-giwook .bubble-text{color:#e8ddf8}
+#bubble-giwook::before{right:-9px;top:15px;border-width:7px 0 7px 9px;border-color:transparent transparent transparent rgba(176,144,232,.5)}
+
+#bubble-seonghun{right:133px;top:50%;background:linear-gradient(135deg,#0f1e38,#1a2d50);border:1.5px solid rgba(102,170,255,.45);box-shadow:0 6px 24px rgba(0,0,0,.6),0 0 20px rgba(102,170,255,.12)}
+#bubble-seonghun .bubble-name{color:var(--c-seonghun)}
+#bubble-seonghun .bubble-text{color:#d8eaff}
+#bubble-seonghun::before{right:-9px;top:15px;border-width:7px 0 7px 9px;border-color:transparent transparent transparent rgba(102,170,255,.45)}
+
+#bubble-haju{left:133px;top:8%;background:linear-gradient(135deg,#20103a,#30185a);border:1.5px solid rgba(204,136,255,.45);box-shadow:0 6px 24px rgba(0,0,0,.6),0 0 20px rgba(204,136,255,.12)}
+#bubble-haju .bubble-name{color:var(--c-haju)}
+#bubble-haju .bubble-text{color:#eed8ff}
+#bubble-haju::before{left:-9px;top:15px;border-width:7px 9px 7px 0;border-color:transparent rgba(204,136,255,.45) transparent transparent}
+
+#bubble-seoun{left:calc(50% - 205px);bottom:128px;background:linear-gradient(135deg,#0e2820,#162e22);border:1.5px solid rgba(85,221,136,.4);box-shadow:0 6px 24px rgba(0,0,0,.6)}
+#bubble-seoun .bubble-name{color:var(--c-seoun)}
+#bubble-seoun .bubble-text{color:#d0f5e0}
+#bubble-seoun::before{bottom:-9px;left:18px;border-width:9px 7px 0 7px;border-color:rgba(85,221,136,.4) transparent transparent transparent}
+
+#bubble-jinun{left:calc(50% + 8px);bottom:128px;background:linear-gradient(135deg,#2a0e0e,#3a1212);border:1.5px solid rgba(255,100,100,.4);box-shadow:0 6px 24px rgba(0,0,0,.6)}
+#bubble-jinun .bubble-name{color:var(--c-jinun)}
+#bubble-jinun .bubble-text{color:#ffd8d8}
+#bubble-jinun::before{bottom:-9px;left:18px;border-width:9px 7px 0 7px;border-color:rgba(255,100,100,.4) transparent transparent transparent}
+
+@keyframes bblIn{from{opacity:0;transform:scale(.85) translateY(5px)}to{opacity:1;transform:scale(1) translateY(0)}}
+
+/* 결과 */
+#result-overlay{display:none;position:absolute;inset:0;background:rgba(0,0,0,.83);z-index:900;align-items:center;justify-content:center}
+.res-box{background:linear-gradient(160deg,#1a2535,#222d42);border:1.5px solid var(--brd2);border-radius:14px;padding:1.7rem 1.4rem;max-width:390px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.7),0 0 40px rgba(232,201,106,.1);animation:bblIn .3s ease}
+.res-title{font-size:1.9rem;font-weight:700;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.28rem}
+.res-sub{font-size:.72rem;color:var(--txt2);margin-bottom:1rem}
+.res-yaku{text-align:left;margin-bottom:.9rem}
+.res-row{display:flex;justify-content:space-between;padding:.28rem 0;border-bottom:1px solid var(--brd);font-size:.76rem}
+.res-pts{font-size:1.1rem;font-weight:700;color:var(--gold);margin-bottom:1rem}
+.res-btn{padding:.48rem 1.3rem;border:1.5px solid var(--gold);color:var(--gold);background:transparent;font-weight:600;font-size:.72rem;letter-spacing:.15em;cursor:pointer;border-radius:4px;margin:0 .28rem;transition:all .18s}
+.res-btn:hover{background:var(--gold);color:#1a1200}
+
+/* 손 오버레이 */
+.hand-ov{position:absolute;pointer-events:none;z-index:50;font-size:1.75rem;opacity:0;filter:drop-shadow(0 3px 6px rgba(0,0,0,.5))}
+@keyframes handGrab{0%{opacity:0;transform:translateY(-16px) rotate(-12deg) scale(.7)}40%{opacity:1;transform:translateY(2px) rotate(-5deg) scale(1.05)}70%{opacity:1;transform:translateY(0) rotate(-7deg) scale(1)}100%{opacity:0;transform:translateY(-14px) rotate(-16deg) scale(.8)}}
+@keyframes handSnatch{0%{opacity:0;transform:translateX(24px) rotate(8deg) scale(.7)}30%{opacity:1;transform:translateX(-3px) rotate(-2deg) scale(1.05)}65%{opacity:1;transform:translateX(0) rotate(0) scale(1)}100%{opacity:0;transform:translateX(18px) rotate(4deg) scale(.8)}}
+@keyframes handSweep{0%{opacity:0;transform:translateY(-20px) rotate(16deg) scale(.65)}35%{opacity:1;transform:translateY(4px) rotate(-1deg) scale(1.08)}65%{opacity:1;transform:translateY(0) rotate(0) scale(1)}100%{opacity:0;transform:translateY(-15px) rotate(13deg) scale(.75)}}
+.hand-ov.anim-grab{animation:handGrab .52s ease forwards}
+.hand-ov.anim-snatch{animation:handSnatch .4s ease forwards}
+.hand-ov.anim-sweep{animation:handSweep .58s ease forwards}
+
+/* 반응형 */
+@media(max-width:680px){
+  .game-main{grid-template-columns:104px 1fr 104px}
+  .tile-xl{width:33px;height:45px}
+  .tile-sm{width:16px;height:22px}
+  .tile-xs{width:10px;height:14px}
+}
+.open-set-grp{display:flex;gap:1px;background:rgba(255,255,255,.06);border-radius:3px;padding:1px;align-items:flex-end}
+/* 눕힌 패 — 치/퐁에서 가져온 패 */
+.tile.rotated{
+  transform:rotate(90deg);
+  transform-origin:center center;
+  margin:0 4px; /* 회전시 공간 확보 */
+}
+</style>
+</head>
+<body>
+
+<div id="title">
+  <div class="t-deco">LOVE AND DEEP SPACE</div>
+  <div class="t-title">딥스페이스 마작</div>
+  <div class="t-sub">DEEP SPACE MAHJONG</div>
+  <div class="t-chars">
+    <div class="t-char" style="border-color:var(--c-giwook);background:rgba(176,144,232,.12)">🔥</div>
+    <div class="t-char" style="border-color:var(--c-seonghun);background:rgba(102,170,255,.12)">✨</div>
+    <div class="t-char" style="border-color:var(--c-haju);background:rgba(204,136,255,.12)">🌀</div>
+    <div class="t-char" style="border-color:var(--c-seoun);background:rgba(85,221,136,.1);opacity:.7">❄️</div>
+    <div class="t-char" style="border-color:var(--c-jinun);background:rgba(255,100,100,.1);opacity:.7">🔴</div>
+  </div>
+  <div class="t-desc">기욱 · 심성훈 · 하우주와 함께하는 리치마작<br><span style="font-size:.62rem;opacity:.55">이서언 · 진운은 관전 중</span></div>
+  <button class="t-btn" onclick="startGame()">S T A R T</button>
+</div>
+
+<div id="game">
+  <div class="top-bar">
+    <div class="round-badge" id="ui-round">동1국</div>
+    <div class="wall-info">🀫 <span id="ui-wall">0</span></div>
+    <div class="dora-wrap"><div class="dora-lbl">도라</div><div class="dora-tiles" id="ui-dora"></div></div>
+    <div id="ui-honba" style="font-size:.56rem;color:var(--txt2)"></div>
+    <div class="scores-wrap" id="ui-scores"></div>
+  </div>
+  <div class="spec-bar">
+    <div class="spec-lbl">👁 관전</div>
+    <div class="spec-btns">
+      <div class="spec-btn" onclick="showBubble('seoun','react')" style="color:var(--c-seoun)">❄️ <b>이서언</b></div>
+      <div class="spec-btn" onclick="showBubble('jinun','react')" style="color:var(--c-jinun)">🔴 <b>진운</b></div>
+    </div>
+    <div class="spec-hint">탭하면 한마디</div>
+  </div>
+  <div class="game-main">
+    <div class="side-panel left">
+      <div class="opp-card" id="panel-haju">
+        <div class="opp-hdr">
+          <span class="opp-ico">🌀</span>
+          <span class="opp-nm" style="color:var(--c-haju)">하우주</span>
+          <span class="wind-tag" style="border-color:var(--c-haju);color:var(--c-haju)" id="wind-haju">西</span>
+          <span class="ri-tag" id="ri-haju" style="display:none">REACH</span>
+          <span class="think-tag" id="th-haju" style="display:none">···</span>
+        </div>
+        <div class="opp-tiles" id="hand-haju"></div>
+        <div class="opp-open" id="open-haju"></div>
+        <div class="disc-lbl">버린 패</div>
+        <div class="disc-row" id="disc-haju"></div>
+      </div>
+    </div>
+    <div class="center-col">
+      <div class="discard-table">
+        <div class="dt-cell"><div class="dt-lbl" style="color:var(--c-haju)">🌀 하우주</div><div class="dt-tiles" id="disc2-haju"></div></div>
+        <div class="dt-cell"><div class="dt-lbl" style="color:var(--c-giwook)">🔥 기욱</div><div class="dt-tiles" id="disc2-giwook"></div></div>
+        <div class="dt-cell"><div class="dt-lbl" style="color:var(--c-seonghun)">✨ 심성훈</div><div class="dt-tiles" id="disc2-seonghun"></div></div>
+        <div class="dt-cell"><div class="dt-lbl" style="color:var(--gold)">⭐ 리쯔</div><div class="dt-tiles" id="disc2-player"></div></div>
+      </div>
+      <div class="center-strip">
+        <div id="ui-riichi-pool" class="ri-pool"></div>
+        <div id="ui-strip-msg" style="font-size:.58rem;color:var(--txt2)"></div>
+      </div>
+      <div class="player-zone">
+        <div class="player-hdr">
+          <div class="player-badge">⭐ 리쯔 — 東</div>
+          <span class="ri-on" id="ui-player-riichi" style="display:none">리치 중</span>
+          <span class="tenpai-show" id="ui-tenpai"></span>
+        </div>
+        <div class="player-sets" id="open-player"></div>
+        <div class="hand-row" id="hand-player"></div>
+      </div>
+      <div class="act-bar">
+        <button class="ab ab-tsumo hidden" id="btn-tsumo" onclick="actTsumo()">쯔모</button>
+        <button class="ab ab-ron   hidden" id="btn-ron"   onclick="actRon()">론</button>
+        <button class="ab ab-riichi hidden" id="btn-riichi" onclick="actRiichi()">리치</button>
+        <button class="ab ab-chi   hidden" id="btn-chi"   onclick="actChi()">치</button>
+        <button class="ab ab-pon   hidden" id="btn-pon"   onclick="actPon()">퐁</button>
+        <button class="ab ab-kan   hidden" id="btn-kan"   onclick="actKan()">깡</button>
+        <button class="ab ab-skip  hidden" id="btn-skip"  onclick="actSkip()">넘기기</button>
+        <div class="ab-hint" id="ui-hint">시작 중...</div>
+      </div>
+    </div>
+    <div class="side-panel right">
+      <div class="opp-card" id="panel-giwook">
+        <div class="opp-hdr">
+          <span class="opp-ico">🔥</span>
+          <span class="opp-nm" style="color:var(--c-giwook)">기욱</span>
+          <span class="wind-tag" style="border-color:var(--c-giwook);color:var(--c-giwook)" id="wind-giwook">南</span>
+          <span class="ri-tag" id="ri-giwook" style="display:none">REACH</span>
+          <span class="think-tag" id="th-giwook" style="display:none">···</span>
+        </div>
+        <div class="opp-tiles" id="hand-giwook"></div>
+        <div class="opp-open" id="open-giwook"></div>
+        <div class="disc-lbl">버린 패</div>
+        <div class="disc-row" id="disc-giwook"></div>
+      </div>
+      <div class="opp-card" id="panel-seonghun">
+        <div class="opp-hdr">
+          <span class="opp-ico">✨</span>
+          <span class="opp-nm" style="color:var(--c-seonghun)">심성훈</span>
+          <span class="wind-tag" style="border-color:var(--c-seonghun);color:var(--c-seonghun)" id="wind-seonghun">北</span>
+          <span class="ri-tag" id="ri-seonghun" style="display:none">REACH</span>
+          <span class="think-tag" id="th-seonghun" style="display:none">···</span>
+        </div>
+        <div class="opp-tiles" id="hand-seonghun"></div>
+        <div class="opp-open" id="open-seonghun"></div>
+        <div class="disc-lbl">버린 패</div>
+        <div class="disc-row" id="disc-seonghun"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="bubble" id="bubble-giwook"><span class="bx" onclick="closeBubble('giwook')">✕</span><div class="bubble-name">🔥 기욱</div><div class="bubble-text" id="btxt-giwook"></div></div>
+<div class="bubble" id="bubble-seonghun"><span class="bx" onclick="closeBubble('seonghun')">✕</span><div class="bubble-name">✨ 심성훈</div><div class="bubble-text" id="btxt-seonghun"></div></div>
+<div class="bubble" id="bubble-haju"><span class="bx" onclick="closeBubble('haju')">✕</span><div class="bubble-name">🌀 하우주</div><div class="bubble-text" id="btxt-haju"></div></div>
+<div class="bubble" id="bubble-seoun"><span class="bx" onclick="closeBubble('seoun')">✕</span><div class="bubble-name">❄️ 이서언 <span style="font-size:.48rem;opacity:.55;font-weight:400">관전</span></div><div class="bubble-text" id="btxt-seoun"></div></div>
+<div class="bubble" id="bubble-jinun"><span class="bx" onclick="closeBubble('jinun')">✕</span><div class="bubble-name">🔴 진운 <span style="font-size:.48rem;opacity:.55;font-weight:400">관전</span></div><div class="bubble-text" id="btxt-jinun"></div></div>
+
+<div class="hand-ov" id="hand-el-giwook"></div>
+<div class="hand-ov" id="hand-el-haju"></div>
+<div class="hand-ov" id="hand-el-seonghun"></div>
+
+<div id="result-overlay">
+  <div class="res-box">
+    <div class="res-title" id="res-title"></div>
+    <div class="res-sub"   id="res-sub"></div>
+    <div class="res-yaku"  id="res-yaku"></div>
+    <div class="res-pts"   id="res-pts"></div>
+    <button class="res-btn" onclick="nextRound()">다음 국</button>
+    <button class="res-btn" onclick="goTitle()">처음으로</button>
+<script>
+function setAppHeight(){document.documentElement.style.setProperty('--app-h',window.innerHeight+'px')}
+setAppHeight();window.addEventListener('resize',setAppHeight);window.addEventListener('orientationchange',()=>setTimeout(setAppHeight,300));
+
+const UNI={'1m':'🀇','2m':'🀈','3m':'🀉','4m':'🀊','5m':'🀋','6m':'🀌','7m':'🀍','8m':'🀎','9m':'🀏','1p':'🀙','2p':'🀚','3p':'🀛','4p':'🀜','5p':'🀝','6p':'🀞','7p':'🀟','8p':'🀠','9p':'🀡','1s':'🀐','2s':'🀑','3s':'🀒','4s':'🀓','5s':'🀔','6s':'🀕','7s':'🀖','8s':'🀗','9s':'🀘','1z':'東','2z':'南','3z':'西','4z':'北','5z':'白','6z':'發','7z':'中'};
+const TILE_COLOR=t=>t.endsWith('m')?'#cc2222':t.endsWith('p')?'#2244bb':t.endsWith('s')?'#118833':t==='5z'?'#888':t==='6z'?'#119933':t==='7z'?'#cc1111':'#885500';
+function tileU(t){return UNI[t]||t}
+function makeDeck(){const d=[];['m','p','s'].forEach(s=>{for(let n=1;n<=9;n++)for(let i=0;i<4;i++)d.push(n+s)});for(let z=1;z<=7;z++)for(let i=0;i<4;i++)d.push(z+'z');return d}
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b}
+function sortHand(t){const o=t=>t.endsWith('m')?parseInt(t):t.endsWith('p')?100+parseInt(t):t.endsWith('s')?200+parseInt(t):300+parseInt(t);return[...t].sort((a,b)=>o(a)-o(b))}
+function countMap(t){const m={};t.forEach(x=>m[x]=(m[x]||0)+1);return m}
+function removeTiles(arr,tgts){const a=[...arr];for(const t of tgts){const i=a.indexOf(t);if(i===-1)return null;a.splice(i,1)}return a}
+function canComplete(tiles,needMeld,hasHead){
+  if(tiles.length===0)return needMeld===0&&hasHead;
+  const s=sortHand(tiles),first=s[0];
+  if(!hasHead&&s.filter(t=>t===first).length>=2){const r=removeTiles(s,[first,first]);if(r&&canComplete(r,needMeld,true))return true}
+  if(s.filter(t=>t===first).length>=3){const r=removeTiles(s,[first,first,first]);if(r&&canComplete(r,needMeld-1,hasHead))return true}
+  if(!first.endsWith('z')){const suit=first.slice(-1),n=parseInt(first);if(n<=7){const r=removeTiles(s,[first,`${n+1}${suit}`,`${n+2}${suit}`]);if(r&&canComplete(r,needMeld-1,hasHead))return true}}
+  return false
+}
+function isWin(hand,openSets){
+  const needMeld=4-openSets.length,exp=needMeld*3+2;
+  if(hand.length!==exp)return false;
+  if(openSets.length===0&&hand.length===14){const m=countMap(hand);if(Object.keys(m).length===7&&Object.values(m).every(v=>v===2))return true}
+  return canComplete(sortHand(hand),needMeld,false)
+}
+function getTenpaiWaits(hand,openSets){return[...new Set(makeDeck())].filter(t=>isWin([...hand,t],openSets))}
+function getChiCombos(hand,d){if(d.endsWith('z'))return[];const s=d.slice(-1),n=parseInt(d),cs=[];const ck=(a,b)=>{if(a>=1&&b<=9&&hand.includes(`${a}${s}`)&&hand.includes(`${b}${s}`))cs.push([`${a}${s}`,d,`${b}${s}`])};ck(n-2,n-1);ck(n-1,n+1);ck(n+1,n+2);return cs}
+function canPon(h,d){return h.filter(t=>t===d).length>=2}
+function canDaiminkan(h,d){return h.filter(t=>t===d).length>=3}
+
+function calcYaku(hand,openSets,winTile,isTsumo,isRiichi,windP,windR){
+  const all=[...hand,winTile],isOpen=openSets.length>0,y=[];
+  if(isRiichi)y.push({n:'리치',h:1});
+  if(isTsumo&&!isOpen)y.push({n:'멘젠쯔모',h:1});
+  if(all.every(t=>!t.endsWith('z')&&parseInt(t)>=2&&parseInt(t)<=8))y.push({n:'탄야오',h:1});
+  if(!isOpen){const m=countMap(all),pairs=Object.keys(m).filter(k=>m[k]===2);if(pairs.length===1&&!['5z','6z','7z',windP,windR].includes(pairs[0]))y.push({n:'핑화',h:1})}
+  if(!isOpen&&all.length===14){const m=countMap(all);if(Object.keys(m).length===7&&Object.values(m).every(v=>v===2))y.push({n:'치또이쯔',h:2})}
+  const ym={'5z':{n:'백',h:1},'6z':{n:'발',h:1},'7z':{n:'중',h:1}};ym[windP]={n:'자풍',h:1};ym[windR]={n:'장풍',h:1};
+  for(const[t,{n,h}]of Object.entries(ym)){if(all.filter(x=>x===t).length>=3)y.push({n,h})}
+  return y.length===0?null:y
+}
+function hanToPoints(han){const b={1:1000,2:2000,3:3900,4:7700,5:8000,6:12000};return b[Math.min(han,6)]||8000}
+
+const PIDS=['player','haju','giwook','seonghun'];
+const PNAME={player:'리쯔',haju:'하우주',giwook:'기욱',seonghun:'심성훈'};
+const TURN_ORDER=['player','giwook','haju','seonghun'];
+let G={};
+
+function initG(){
+  G={round:1,honba:0,dealerIdx:0,turnIdx:0,phase:'',wall:[],deadWall:[],dora:[],uraDora:[],hands:{},discards:{},openSets:{},riichi:{},riichiPool:0,lastDiscard:null,lastDiscardBy:null,selectedIdx:-1,drawnTile:null,scores:{player:25000,haju:25000,giwook:25000,seonghun:25000},winds:{},roundWind:'1z',actionPending:false,chiOptions:[],prevDiscard:{},aiDelayBase:750,lastWinner:null,lastWinType:null};
+  for(const p of PIDS){G.hands[p]=[];G.discards[p]=[];G.openSets[p]=[];G.riichi[p]=false;G.prevDiscard[p]=null}
+}
+
+function nextTurnIdx(i){return(i+1)%4}
+function doraNxt(t){if(t.endsWith('z')){const n=parseInt(t);if(n===4)return'1z';if(n===7)return'5z';return`${n+1}z`}const s=t.slice(-1),n=parseInt(t);return n===9?`1${s}`:`${n+1}${s}`}
+
+function startGame(){document.getElementById('title').style.display='none';document.getElementById('game').style.display='flex';initG();dealRound()}
+
+function dealRound(){
+  const deck=shuffle(makeDeck());G.deadWall=deck.splice(0,14);G.dora=[doraNxt(G.deadWall[4])];G.uraDora=[doraNxt(G.deadWall[9])];G.wall=deck;
+  const dealer=G.dealerIdx%4,winds=['1z','2z','3z','4z'];
+  for(let i=0;i<4;i++)G.winds[TURN_ORDER[i]]=winds[(i-dealer+4)%4];
+  G.roundWind='1z';
+  for(const p of PIDS){G.hands[p]=sortHand(G.wall.splice(0,13));G.discards[p]=[];G.openSets[p]=[];G.riichi[p]=false;G.prevDiscard[p]=null}
+  G.riichiPool=0;G.lastDiscard=null;G.lastDiscardBy=null;G.selectedIdx=-1;G.drawnTile=null;G.phase='';
+  renderAll();setHint('패 나누는 중...');setTimeout(()=>beginTurn(G.dealerIdx),600)
+}
+
+function beginTurn(idx){if(G.phase==='done')return;if(G.wall.length===0){exhausted();return}G.turnIdx=idx;const pid=TURN_ORDER[idx];if(pid==='player')playerDraw();else aiTurn(pid)}
+
+function playerDraw(){
+  try{SFX.draw()}catch(e){}
+  const drawn=G.wall.pop();G.hands.player.push(drawn);G.drawnTile=drawn;G.selectedIdx=G.hands.player.length-1;G.phase='player-discard';
+  renderAll();updateActions();setHint('패를 선택하세요 (같은 패 두 번 탭 = 바로 버리기)')
+}
+
+function selectPlayerTile(idx){
+  if(G.phase!=='player-discard')return;
+  try{SFX.select()}catch(e){}
+  if(G.selectedIdx===idx){doDiscard('player',idx)}
+  else{G.selectedIdx=idx;renderPlayerHand();updateActions()}
+}
+
+function doDiscard(pid,idx){
+  if(idx<0||idx>=G.hands[pid].length)return;
+  const tile=G.hands[pid][idx],prev=G.prevDiscard[pid];
+  G.prevDiscard[pid]=tile;
+  G.hands[pid].splice(idx,1);G.discards[pid].push(tile);G.lastDiscard=tile;G.lastDiscardBy=pid;G.selectedIdx=-1;G.drawnTile=null;
+  if(pid==='player')G.phase='action-wait';
+  try{SFX.discard();if(pid!=='player')showHandAnim(pid,'discard')}catch(e){}
+  if(prev===tile&&pid!=='player')setTimeout(()=>{if(Math.random()<.45)showBubble(pid,'same_discard')},400);
+  if(G.dora.includes(tile)&&pid!=='player')setTimeout(()=>{if(Math.random()<.55)showBubble(pid,'discard_dora')},400);
+  if(G.dora.includes(tile)&&pid==='player'){setTimeout(()=>{const obs=['giwook','seonghun','haju'];if(Math.random()<.6)showBubble(obs[Math.floor(Math.random()*obs.length)],'player_discard_dora')},500)}
+  renderAll();checkReactions(pid)
+}
+
+function checkReactions(discardBy){
+  if(G.phase==='done')return;
+  const d=G.lastDiscard;
+  if(discardBy==='player'){
+    for(const pid of TURN_ORDER){if(pid==='player')continue;if(G.riichi[pid]&&getTenpaiWaits(G.hands[pid],G.openSets[pid]).includes(d)){setTimeout(()=>aiRon(pid),700);return}}
+    for(const pid of TURN_ORDER){if(pid==='player')continue;if(canPon(G.hands[pid],d)&&!G.riichi[pid]&&Math.random()<.22){setTimeout(()=>aiPon(pid),700);return}}
+    setTimeout(()=>beginTurn(nextTurnIdx(G.turnIdx)),350);return
+  }
+  const canRon=isWin([...G.hands.player,d],G.openSets.player),chiCombos=G.riichi.player?[]:getChiCombos(G.hands.player,d),canP=!G.riichi.player&&canPon(G.hands.player,d),canK=!G.riichi.player&&canDaiminkan(G.hands.player,d);
+  if(canRon||chiCombos.length>0||canP||canK){G.phase='action-wait';G.actionPending=true;G.chiOptions=chiCombos;renderAll();updateActions();return}
+  for(const pid of TURN_ORDER){if(pid===discardBy||pid==='player')continue;if(G.riichi[pid]&&getTenpaiWaits(G.hands[pid],G.openSets[pid]).includes(d)){setTimeout(()=>aiRon(pid),700);return}}
+  for(const pid of TURN_ORDER){if(pid===discardBy||pid==='player')continue;if(canPon(G.hands[pid],d)&&!G.riichi[pid]&&Math.random()<.2){setTimeout(()=>aiPon(pid),700);return}}
+  setTimeout(()=>beginTurn(nextTurnIdx(G.turnIdx)),350)
+}
+
+function aiChooseDiscard(pid){const hand=G.hands[pid];const w=getTenpaiWaits(hand,G.openSets[pid]);if(w.length>0)return hand[Math.floor(Math.random()*hand.length)];const pri=t=>{if(t.endsWith('z'))return 100;const n=parseInt(t);if(n===1||n===9)return 80;if(n===2||n===8)return 50;return 10};return[...hand].sort((a,b)=>pri(b)-pri(a))[0]}
+
+function aiTurn(pid){
+  if(G.phase==='done')return;
+  const thEl=document.getElementById(`th-${pid}`);if(thEl)thEl.style.display='inline';
+  setTimeout(()=>{try{SFX.draw();showHandAnim(pid,'draw')}catch(e){}},G.aiDelayBase*.3);
+  setTimeout(()=>{
+    if(thEl)thEl.style.display='none';if(G.phase==='done')return;if(G.wall.length===0){exhausted();return}
+    const drawn=G.wall.pop();G.hands[pid].push(drawn);
+    const exp=(4-G.openSets[pid].length)*3+2;while(G.hands[pid].length>exp)G.hands[pid].shift();
+    if(isWin(G.hands[pid],G.openSets[pid])){const yaku=G.riichi[pid]?[{n:'리치',h:1},{n:'멘젠쯔모',h:1}]:[{n:'멘젠쯔모',h:1}];aiWin(pid,null,yaku,true,drawn);return}
+    if(!G.riichi[pid]&&G.openSets[pid].length===0&&G.scores[pid]>=1000){const without=G.hands[pid].filter((_,i)=>i!==G.hands[pid].length-1);if(getTenpaiWaits(without,G.openSets[pid]).length>0&&Math.random()<.7){aiRiichiDeclare(pid);return}}
+    const disc=aiChooseDiscard(pid),prev=G.prevDiscard[pid];G.prevDiscard[pid]=disc;
+    const didx=G.hands[pid].indexOf(disc);if(didx>=0)G.hands[pid].splice(didx,1);else G.hands[pid].pop();
+    G.discards[pid].push(disc);G.lastDiscard=disc;G.lastDiscardBy=pid;
+    if(prev===disc)setTimeout(()=>{if(Math.random()<.45)showBubble(pid,'same_discard')},400);
+    if(G.dora.includes(disc))setTimeout(()=>{if(Math.random()<.55)showBubble(pid,'discard_dora')},400);
+    if(Math.random()<.1)randomTalk(pid,'idle');
+    renderAll();checkReactions(pid)
+  },G.aiDelayBase+Math.random()*800)
+}
+
+function aiRiichiDeclare(pid){
+  G.riichi[pid]=true;G.scores[pid]-=1000;G.riichiPool++;try{SFX.riichi()}catch(e){}
+  showBubble(pid,'riichi');
+  const disc=G.hands[pid][G.hands[pid].length-1];G.hands[pid].pop();G.discards[pid].push(disc);G.lastDiscard=disc;G.lastDiscardBy=pid;
+  renderAll();checkReactions(pid)
+}
+function aiRon(pid){if(G.phase==='done')return;if(!getTenpaiWaits(G.hands[pid],G.openSets[pid]).includes(G.lastDiscard))return;const yaku=G.riichi[pid]?[{n:'리치',h:1}]:[{n:'역패',h:1}];aiWin(pid,G.lastDiscardBy,yaku,false,G.lastDiscard)}
+function aiPon(pid){
+  if(G.phase==='done')return;const d=G.lastDiscard;let rm=0;
+  G.hands[pid]=G.hands[pid].filter(t=>{if(t===d&&rm<2){rm++;return false}return true});
+  G.openSets[pid].push({type:'pon',tiles:[d,d,d]});try{SFX.pon();showHandAnim(pid,'draw')}catch(e){}showBubble(pid,'pon');
+  const disc=aiChooseDiscard(pid),didx=G.hands[pid].indexOf(disc);if(didx>=0)G.hands[pid].splice(didx,1);else if(G.hands[pid].length>0)G.hands[pid].pop();
+  G.discards[pid].push(disc);G.lastDiscard=disc;G.lastDiscardBy=pid;renderAll();checkReactions(pid)
+}
+function aiWin(pid,loser,yaku,isTsumo,winTile){
+  if(G.phase==='done')return;G.phase='done';const han=yaku.reduce((s,y)=>s+y.h,0),pts=hanToPoints(han);
+  if(isTsumo){const pp=Math.ceil(pts/3/100)*100;for(const p of PIDS){if(p!==pid)G.scores[p]-=pp}G.scores[pid]+=pp*3+G.honba*300}else{G.scores[pid]+=pts+G.honba*300;if(loser)G.scores[loser]-=pts+G.honba*300}
+  if(G.riichi[pid])G.scores[pid]+=G.riichiPool*1000;try{SFX.win()}catch(e){}
+  showBubble(pid,isTsumo?'tsumo':'ron');
+  if(Math.random()<.5)setTimeout(()=>showBubble(Math.random()<.5?'seoun':'jinun','opp_wins'),1200);
+  setTimeout(()=>showResult(pid,loser,yaku,pts,isTsumo,winTile),850)
+}
+
+function actTsumo(){
+  if(G.phase!=='player-discard')return;
+  // 손패가 14장인지 확인 (renderPlayerHand가 재배열했을 수 있으므로)
+  const hand=[...G.hands.player];
+  if(hand.length<14)return;
+  const winTile=hand[hand.length-1]; // 마지막 = 뽑은 패
+
+  const yaku=calcYaku(hand,G.openSets.player,winTile,true,G.riichi.player,G.winds.player,G.roundWind);
+  if(!yaku||yaku.length===0){setHint('역이 없어요! (탄야오·리치 등 역 필요)');return}
+  G.phase='done';
+  const han=yaku.reduce((s,y)=>s+y.h,0),pts=hanToPoints(han),pp=Math.ceil(pts/3/100)*100;
+  for(const p of PIDS){if(p!=='player')G.scores[p]-=pp}
+  G.scores.player+=pp*3+G.honba*300;
+  if(G.riichi.player)G.scores.player+=G.riichiPool*1000;
+  G.lastWinner='player';G.lastWinType='win';
+  try{SFX.win()}catch(e){}
+  const r=['giwook','seonghun','haju'];setTimeout(()=>showBubble(r[Math.floor(Math.random()*r.length)],'lose'),500);
+  if(Math.random()<.6)setTimeout(()=>showBubble(Math.random()<.5?'seoun':'jinun','player_wins'),1100);
+  setTimeout(()=>showResult('player',null,yaku,pts,true,winTile),1000)
+}
+function actRon(){
+  if(G.phase!=='action-wait')return;
+  const yaku=calcYaku([...G.hands.player,G.lastDiscard],G.openSets.player,G.lastDiscard,false,G.riichi.player,G.winds.player,G.roundWind);
+  if(!yaku){setHint('역이 없어요!');return}G.phase='done';
+  const han=yaku.reduce((s,y)=>s+y.h,0),pts=hanToPoints(han);
+  G.scores.player+=pts+G.honba*300;if(G.lastDiscardBy)G.scores[G.lastDiscardBy]-=pts+G.honba*300;
+  if(G.riichi.player)G.scores.player+=G.riichiPool*1000;try{SFX.win()}catch(e){}
+  setTimeout(()=>showBubble(G.lastDiscardBy,'lose'),400);
+  if(Math.random()<.6)setTimeout(()=>showBubble(Math.random()<.5?'seoun':'jinun','player_wins'),1100);
+  setTimeout(()=>showResult('player',G.lastDiscardBy,yaku,pts,false,G.lastDiscard),900)
+}
+function actRiichi(){
+  if(G.phase!=='player-discard'||G.selectedIdx<0)return;
+  const idx=G.selectedIdx,tmp=G.hands.player.filter((_,i)=>i!==idx);
+  if(getTenpaiWaits(tmp,G.openSets.player).length===0){setHint('텐파이가 아니에요.');return}
+  if(G.scores.player<1000){setHint('점수 부족!');return}
+  G.riichi.player=true;G.scores.player-=1000;G.riichiPool++;try{SFX.riichi()}catch(e){}doDiscard('player',idx)
+}
+function actChi(){
+  if(G.phase!=='action-wait'||G.chiOptions.length===0)return;const combo=G.chiOptions[0];
+  for(const t of[combo[0],combo[2]]){const i=G.hands.player.indexOf(t);if(i>=0)G.hands.player.splice(i,1)}
+  G.openSets.player.push({type:'chi',tiles:combo,from:getFromDir(G.lastDiscardBy)});G.turnIdx=TURN_ORDER.indexOf('player');
+  G.phase='player-discard';G.selectedIdx=-1;G.actionPending=false;G.chiOptions=[];G.drawnTile=null;try{SFX.pon()}catch(e){}
+  renderAll();updateActions();setHint('치! 버릴 패를 선택하세요.')
+}
+function actPon(){
+  if(G.phase!=='action-wait')return;const d=G.lastDiscard;let rm=0;
+  G.hands.player=G.hands.player.filter(t=>{if(t===d&&rm<2){rm++;return false}return true});
+  if(rm<2)return;G.openSets.player.push({type:'pon',tiles:[d,d,d],from:getFromDir(G.lastDiscardBy)});G.turnIdx=TURN_ORDER.indexOf('player');
+  G.phase='player-discard';G.selectedIdx=-1;G.actionPending=false;G.drawnTile=null;try{SFX.pon()}catch(e){}
+  renderAll();updateActions();setHint('퐁! 버릴 패를 선택하세요.')
+}
+function actKan(){
+  if(G.phase==='player-discard'){
+    // 손깡(암깡)
+    const ankanTiles=canAnkan(G.hands.player);
+    if(ankanTiles.length===0)return;
+    const t=ankanTiles[0];
+    G.hands.player=G.hands.player.filter(x=>x!==t);
+    G.openSets.player.push({type:'kan',tiles:[t,t,t,t],ankan:true});
+    if(G.deadWall.length>0){const ex=G.deadWall.pop();G.hands.player.push(ex);G.dora.push(doraNxt(G.deadWall[G.dora.length*2]||G.deadWall[0]));G.drawnTile=ex}
+    G.turnIdx=TURN_ORDER.indexOf('player');G.phase='player-discard';G.selectedIdx=G.hands.player.length-1;G.actionPending=false;
+    try{SFX.pon()}catch(e){}
+    renderAll();updateActions();setHint('암깡! 새 패를 뽑았습니다.');
+    return;
+  }
+  if(G.phase!=='action-wait')return;
+  // 대명깡
+  const d=G.lastDiscard;let rm=0;
+  G.hands.player=G.hands.player.filter(t=>{if(t===d&&rm<3){rm++;return false}return true});
+  if(rm<3)return;
+  G.openSets.player.push({type:'kan',tiles:[d,d,d,d],from:getFromDir(G.lastDiscardBy),ankan:false});
+  if(G.deadWall.length>0){const ex=G.deadWall.pop();G.hands.player.push(ex);G.dora.push(doraNxt(G.deadWall[G.dora.length*2]||G.deadWall[0]));G.drawnTile=ex}
+  G.turnIdx=TURN_ORDER.indexOf('player');G.phase='player-discard';G.selectedIdx=G.hands.player.length-1;G.actionPending=false;
+  try{SFX.pon()}catch(e){}
+  renderAll();updateActions();setHint('깡! 버릴 패를 선택하세요.');
+}
+function actSkip(){
+  G.actionPending=false;G.chiOptions=[];G.phase='';
+  const byIdx=TURN_ORDER.indexOf(G.lastDiscardBy);setTimeout(()=>beginTurn(byIdx>=0?nextTurnIdx(byIdx):nextTurnIdx(G.turnIdx)),200)
+}
+
+function exhausted(){
+  if(G.phase==='done')return;G.phase='done';G.lastWinType='exhaust';G.lastWinner=null;const tp={};
+  for(const p of PIDS)tp[p]=getTenpaiWaits(G.hands[p],G.openSets[p]).length>0;
+  const tc=Object.values(tp).filter(Boolean).length;
+  if(tc>0&&tc<4){const g=Math.floor(3000/tc),l=Math.floor(3000/(4-tc));for(const p of PIDS){if(tp[p])G.scores[p]+=g;else G.scores[p]-=l}}
+  try{SFX.draw_game()}catch(e){}
+  const chars=['giwook','seonghun','haju'];showBubble(chars[Math.floor(Math.random()*chars.length)],'draw');
+  if(Math.random()<.5)setTimeout(()=>showBubble(Math.random()<.5?'seoun':'jinun','react'),800);
+  document.getElementById('res-title').textContent='유국';document.getElementById('res-sub').textContent='패산이 소진되었습니다';
+  const ry=document.getElementById('res-yaku');ry.innerHTML='';
+  for(const p of PIDS){const r=document.createElement('div');r.className='res-row';r.innerHTML=`<span>${PNAME[p]}</span><span style="color:${tp[p]?'var(--gold)':'var(--txt2)'}">${tp[p]?'텐파이':'노텐'}</span>`;ry.appendChild(r)}
+  document.getElementById('res-pts').textContent='';document.getElementById('result-overlay').style.display='flex'
+}
+function showResult(winner,loser,yaku,pts,isTsumo,winTile){
+  G.phase='done'; G.lastWinner=winner; G.lastWinType='win';
+  document.getElementById('res-title').textContent=isTsumo?'쯔모!':'론!';
+  document.getElementById('res-sub').textContent=`${PNAME[winner]} 승리${loser?` — ${PNAME[loser]} 방총`:''}`;
+  const ry=document.getElementById('res-yaku');ry.innerHTML='';
+  if(yaku)yaku.forEach(y=>{const r=document.createElement('div');r.className='res-row';r.innerHTML=`<span>${y.n}</span><span style="color:var(--gold)">${y.h}판</span>`;ry.appendChild(r)});
+  document.getElementById('res-pts').textContent=`${pts.toLocaleString()} 점`;
+  document.getElementById('result-overlay').style.display='flex';renderAll()
+}
+function nextRound(){
+  document.getElementById('result-overlay').style.display='none';
+  // G.lastWinner/G.lastWinType 기반으로 판단
+  const isEx = G.lastWinType === 'exhaust';
+  const winnerIsDealer = G.lastWinner && TURN_ORDER[G.dealerIdx%4] === G.lastWinner;
+  if(isEx || winnerIsDealer){
+    G.honba++; // 연장
+  } else {
+    G.dealerIdx=(G.dealerIdx+1)%4; G.honba=0;
+  }
+  G.round++;
+  dealRound();
+}
+function goTitle(){document.getElementById('result-overlay').style.display='none';document.getElementById('game').style.display='none';document.getElementById('title').style.display='flex'}
+
+function makeOpenSetEl(set,size){
+  const grp=document.createElement('div');
+  grp.className='open-set-grp';
+  const {type,tiles,from,ankan}=set;
+
+  if(type==='chi'){
+    // 치: 첫 패(가져온 패)를 눕힘 — 왼쪽 플레이어에서 가져오므로 첫 번째
+    tiles.forEach((t,i)=>{
+      const el=makeTileEl(t,size,{isDora:G.dora.includes(t)});
+      if(i===0) el.classList.add('rotated');
+      grp.appendChild(el);
+    });
+  } else if(type==='pon'){
+    // 퐁: from 방향에 따라 눕히는 위치 결정
+    // left=0번, opp=1번, right=2번
+    const rotIdx=from==='left'?0:from==='opp'?1:2;
+    tiles.forEach((t,i)=>{
+      const el=makeTileEl(t,size,{isDora:G.dora.includes(t)});
+      if(i===rotIdx) el.classList.add('rotated');
+      grp.appendChild(el);
+    });
+  } else if(type==='kan'){
+    if(ankan){
+      // 암깡: 양 끝 뒤집기
+      tiles.forEach((t,i)=>{
+        const el=(i===0||i===3)?makeTileEl(null,size,{back:true}):makeTileEl(t,size,{isDora:G.dora.includes(t)});
+        grp.appendChild(el);
+      });
+    } else {
+      // 대명깡: 끝 패 눕힘
+      tiles.forEach((t,i)=>{
+        const el=makeTileEl(t,size,{isDora:G.dora.includes(t)});
+        if(i===3) el.classList.add('rotated');
+        grp.appendChild(el);
+      });
+    }
+  } else {
+    tiles.forEach(t=>grp.appendChild(makeTileEl(t,size,{isDora:G.dora.includes(t)})));
+  }
+  return grp;
+}
+
+// 방향 계산: discardBy 기준으로 player 입장에서 left/opp/right
+function getFromDir(discardBy){
+  const pidx=TURN_ORDER.indexOf('player');
+  const didx=TURN_ORDER.indexOf(discardBy);
+  const diff=(didx-pidx+4)%4;
+  if(diff===1)return'left'; if(diff===2)return'opp'; return'right';
+}
+function setHint(t){document.getElementById('ui-hint').textContent=t}
+
+function canAnkan(hand){ // 손패에 같은 패 4장
+  const m=countMap(hand);return Object.entries(m).filter(([t,c])=>c>=4).map(([t])=>t);
+}
+
+function updateActions(){
+  ['btn-tsumo','btn-ron','btn-riichi','btn-chi','btn-pon','btn-kan','btn-skip'].forEach(b=>setBtn(b,false));
+  if(G.phase==='player-discard'){
+    // 쯔모: 손패가 정확히 14장(오픈에 따라 다름)이고 화료 가능할 때
+    const needMeld=4-G.openSets.player.length;
+    const exp=needMeld*3+2;
+    if(G.hands.player.length===exp&&isWin(G.hands.player,G.openSets.player))setBtn('btn-tsumo',true);
+    // 손깡(암깡) — 뽑은 직후, 손패에 4장 있으면
+    const ankanTiles=canAnkan(G.hands.player);
+    if(!G.riichi.player&&ankanTiles.length>0)setBtn('btn-kan',true);
+    if(!G.riichi.player&&G.openSets.player.length===0&&G.scores.player>=1000&&G.selectedIdx>=0){if(getTenpaiWaits(G.hands.player.filter((_,i)=>i!==G.selectedIdx),G.openSets.player).length>0)setBtn('btn-riichi',true)}
+
+    // 같은 패 개수 힌트
+    if(G.selectedIdx>=0){
+      const sel=G.hands.player[G.selectedIdx];
+      // 전체 패산에 남은 장수 계산 (버려진 것 포함 제외)
+      const allUsed=[...G.hands.player,...G.discards.player,...G.discards.haju,...G.discards.giwook,...G.discards.seonghun];
+      G.openSets.player.forEach(s=>allUsed.push(...s.tiles));
+      G.openSets.haju.forEach(s=>allUsed.push(...s.tiles));
+      G.openSets.giwook.forEach(s=>allUsed.push(...s.tiles));
+      G.openSets.seonghun.forEach(s=>allUsed.push(...s.tiles));
+      const usedCnt=allUsed.filter(t=>t===sel).length;
+      const remaining=4-usedCnt;
+      setHint(`선택: ${tileU(sel)} (잔여 ${remaining}장) — 한 번 더 탭하면 버리기`);
+    } else setHint('패를 선택하세요');
+  }else if(G.phase==='action-wait'){
+    const d=G.lastDiscard;
+    if(G.lastDiscardBy!=='player'&&isWin([...G.hands.player,d],G.openSets.player))setBtn('btn-ron',true);
+    if(!G.riichi.player&&G.lastDiscardBy!=='player'){if(G.chiOptions.length>0)setBtn('btn-chi',true);if(canPon(G.hands.player,d))setBtn('btn-pon',true);if(canDaiminkan(G.hands.player,d))setBtn('btn-kan',true)}
+    setBtn('btn-skip',true);setHint(`${tileU(d)} — 행동하거나 넘기세요`);
+  }else setHint(G.phase==='done'?'':'상대 차례...');
+  if(G.phase==='player-discard'){const w=getTenpaiWaits(G.hands.player,G.openSets.player);document.getElementById('ui-tenpai').textContent=w.length>0?`대기: ${[...new Set(w)].map(tileU).join('')}`:''}else document.getElementById('ui-tenpai').textContent='';
+  document.getElementById('ui-player-riichi').style.display=G.riichi.player?'inline':'none'
+}
+
+// ══ 귀여운 고양이 패 렌더러 ══
+const TILE_SVG = (() => {
+
+  // 고양이 얼굴 (아래서 빼꼼 — 얼굴이 패 절반 이상)
+  function catFace(cx, cy, r, fc, ac) {
+    return `
+<ellipse cx="${cx-r*.5}" cy="${cy-r*.65}" rx="${r*.38}" ry="${r*.46}" fill="${fc}"/>
+<ellipse cx="${cx+r*.5}" cy="${cy-r*.65}" rx="${r*.38}" ry="${r*.46}" fill="${fc}"/>
+<ellipse cx="${cx-r*.5}" cy="${cy-r*.58}" rx="${r*.21}" ry="${r*.27}" fill="${ac}"/>
+<ellipse cx="${cx+r*.5}" cy="${cy-r*.58}" rx="${r*.21}" ry="${r*.27}" fill="${ac}"/>
+<circle cx="${cx}" cy="${cy}" r="${r}" fill="${fc}"/>
+<circle cx="${cx-r*.28}" cy="${cy-r*.06}" r="${r*.19}" fill="#2a2a2a"/>
+<circle cx="${cx+r*.28}" cy="${cy-r*.06}" r="${r*.19}" fill="#2a2a2a"/>
+<circle cx="${cx-r*.22}" cy="${cy-r*.13}" r="${r*.085}" fill="#fff"/>
+<circle cx="${cx+r*.22}" cy="${cy-r*.13}" r="${r*.085}" fill="#fff"/>
+<ellipse cx="${cx}" cy="${cy+r*.23}" rx="${r*.12}" ry="${r*.08}" fill="${ac}"/>
+<line x1="${cx-r*.12}" y1="${cy+r*.23}" x2="${cx-r*.5}" y2="${cy+r*.15}" stroke="#333" stroke-width="${r*.052}" stroke-linecap="round" opacity=".6"/>
+<line x1="${cx-r*.12}" y1="${cy+r*.27}" x2="${cx-r*.48}" y2="${cy+r*.3}" stroke="#333" stroke-width="${r*.052}" stroke-linecap="round" opacity=".6"/>
+<line x1="${cx+r*.12}" y1="${cy+r*.23}" x2="${cx+r*.5}" y2="${cy+r*.15}" stroke="#333" stroke-width="${r*.052}" stroke-linecap="round" opacity=".6"/>
+<line x1="${cx+r*.12}" y1="${cy+r*.27}" x2="${cx+r*.48}" y2="${cy+r*.3}" stroke="#333" stroke-width="${r*.052}" stroke-linecap="round" opacity=".6"/>
+<path d="M${cx} ${cy+r*.23} L${cx-r*.18} ${cy+r*.4}" stroke="#333" stroke-width="${r*.052}" stroke-linecap="round" fill="none" opacity=".55"/>
+<path d="M${cx} ${cy+r*.23} L${cx+r*.18} ${cy+r*.4}" stroke="#333" stroke-width="${r*.052}" stroke-linecap="round" fill="none" opacity=".55"/>`;
+  }
+
+  // 고양이 색상 (9종)
+  const CATS = [
+    {fc:'#f5f2ee',ac:'#f0b0b4'},  // 1 흰냥
+    {fc:'#f8c85a',ac:'#f0b090'},  // 2 치즈
+    {fc:'#e8a870',ac:'#f0b0a0'},  // 3 삼색
+    {fc:'#b8b8ca',ac:'#dea8b0'},  // 4 회냥
+    {fc:'#e8e8ec',ac:'#f0b0b4'},  // 5 턱시도
+    {fc:'#caba88',ac:'#e0b090'},  // 6 고등어
+    {fc:'#a8b2ca',ac:'#c0a8c0'},  // 7 러시안블루
+    {fc:'#d2c2a0',ac:'#e0b090'},  // 8 스코티시
+    {fc:'#f09040',ac:'#f0b878'},  // 9 오렌지
+  ];
+
+  const MAN_NUM_COLOR = ['#cc2233','#cc2233','#222','#222','#cc2233','#222','#222','#1133bb','#1133bb'];
+  const MAN_BG  = ['#fff0f5','#fff8ee','#f5f0ff','#eef4ff','#f0fff8','#fffbee','#f0eeff','#eef8ff','#fff0fa'];
+  const MAN_BD  = ['#f0c0d0','#f0d0b0','#d0c0f0','#b8d0f0','#b0f0d0','#f0e0b0','#d0b8f0','#b0d8f0','#f0b8d8'];
+
+  function manzu(n, w, h) {
+    const cat = CATS[n-1];
+    // 얼굴 반지름: 패 너비의 46% → 얼굴이 크게
+    const r = w * .46;
+    const cx = w * .5;
+    const cy = h * .84; // 아래쪽에 중심 → 위로 빼꼼
+    const nc = MAN_NUM_COLOR[n-1];
+    const fs = h * .3;
+    // 얼룩 패턴
+    let spot = '';
+    if(n===3) spot=`<circle cx="${cx-r*.32}" cy="${cy-r*.52}" r="${r*.24}" fill="#c84020" opacity=".48"/>`;
+    if(n===5) spot=`<ellipse cx="${cx}" cy="${cy+r*.16}" rx="${r*.26}" ry="${r*.19}" fill="#f8f8f8" opacity=".82"/>`;
+    if(n===6) spot=`<path d="M${cx-r*.55} ${cy-r*.28} Q${cx} ${cy-r*.5} ${cx+r*.55} ${cy-r*.28}" stroke="#9a8858" stroke-width="${r*.07}" fill="none" opacity=".45"/>`;
+    return `<rect width="${w}" height="${h}" rx="5" fill="${MAN_BG[n-1]}"/>
+<rect x="2" y="2" width="${w-4}" height="${h-4}" rx="4" fill="none" stroke="${MAN_BD[n-1]}" stroke-width="1.2"/>
+${spot}${catFace(cx, cy, r, cat.fc, cat.ac)}
+<text x="${w*.5}" y="${h*.25}" text-anchor="middle" font-size="${fs}" font-weight="900" fill="${nc}" font-family="'Arial Rounded MT Bold',Arial,sans-serif" stroke="rgba(255,255,255,.65)" stroke-width="${fs*.07}" paint-order="stroke">${n}</text>`;
+  }
+
+  // 통수 — 발바닥
+  function paw(cx, cy, r, col) {
+    return `<ellipse cx="${cx}" cy="${cy}" rx="${r}" ry="${r*.82}" fill="${col}"/>
+<circle cx="${cx-r*.56}" cy="${cy-r*.82}" r="${r*.33}" fill="${col}"/>
+<circle cx="${cx}" cy="${cy-r*.98}" r="${r*.33}" fill="${col}"/>
+<circle cx="${cx+r*.56}" cy="${cy-r*.82}" r="${r*.33}" fill="${col}"/>
+<ellipse cx="${cx}" cy="${cy}" rx="${r*.5}" ry="${r*.38}" fill="rgba(180,40,80,.2)"/>`;
+  }
+
+  const PAW_POS = {
+    1:[[.5,.52]], 2:[[.3,.38],[.7,.62]], 3:[[.3,.27],[.7,.27],[.5,.64]],
+    4:[[.27,.27],[.73,.27],[.27,.63],[.73,.63]],
+    5:[[.27,.21],[.73,.21],[.5,.46],[.27,.68],[.73,.68]],
+    6:[[.27,.19],[.73,.19],[.27,.46],[.73,.46],[.27,.71],[.73,.71]],
+    7:[[.5,.15],[.27,.34],[.73,.34],[.27,.54],[.73,.54],[.27,.73],[.73,.73]],
+    8:[[.22,.17],[.5,.17],[.78,.17],[.22,.46],[.78,.46],[.22,.72],[.5,.72],[.78,.72]],
+    9:[[.22,.15],[.5,.15],[.78,.15],[.22,.44],[.5,.44],[.78,.44],[.22,.7],[.5,.7],[.78,.7]],
+  };
+  const PAW_COL = ['#f0a8c0','#f0b8c8','#e8a0b8','#d8b8d0','#f0b0c0','#e8c0a8','#c8b8d8','#d8c8b0','#f0c090'];
+
+  function pingCircles(n, w, h) {
+    const r = n===1?w*.17:n<=2?w*.15:n<=4?w*.125:n<=6?w*.108:w*.092;
+    const paws = (PAW_POS[n]||[]).map(([px,py])=>paw(px*w,py*h,r,PAW_COL[n-1])).join('');
+    return `<rect width="${w}" height="${h}" rx="5" fill="#fff8fc"/>
+<rect x="2" y="2" width="${w-4}" height="${h-4}" rx="4" fill="none" stroke="#f0c0d8" stroke-width="1.2"/>
+${paws}<text x="2.5" y="${h*.18}" font-size="${Math.max(h*.13,6)}" font-weight="900" fill="#cc4477" font-family="Arial,sans-serif" opacity=".78">${n}</text>`;
+  }
+
+  // 삭수 — 물고기
+  function fish(cx, cy, s, col, dir) {
+    const g = dir<0 ? `transform="scale(-1,1) translate(${-2*cx},0)"` : '';
+    return `<g ${g}>
+<ellipse cx="${cx}" cy="${cy}" rx="${s*.44}" ry="${s*.23}" fill="${col}" opacity=".92"/>
+<path d="M${cx+s*.36} ${cy} L${cx+s*.62} ${cy-s*.23} L${cx+s*.62} ${cy+s*.23}Z" fill="${col}" opacity=".82"/>
+<ellipse cx="${cx-s*.04}" cy="${cy-s*.04}" rx="${s*.27}" ry="${s*.12}" fill="rgba(255,255,255,.3)"/>
+<circle cx="${cx-s*.2}" cy="${cy-s*.07}" r="${s*.07}" fill="#fff" opacity=".95"/>
+<circle cx="${cx-s*.18}" cy="${cy-s*.055}" r="${s*.033}" fill="#222"/>
+</g>`;
+  }
+
+  const FISH_COL = ['#5aace0','#e07848','#58c878','#c868b8','#e0c030','#58b8d0','#e08848','#8068d0','#48c868'];
+  const FISH_POS = {
+    1:[[.5,.52,1]], 2:[[.3,.37,1],[.7,.63,-1]], 3:[[.5,.27,1],[.27,.57,-1],[.73,.57,1]],
+    4:[[.27,.27,1],[.73,.27,-1],[.27,.63,1],[.73,.63,-1]],
+    5:[[.5,.21,1],[.27,.41,-1],[.73,.41,1],[.27,.67,-1],[.73,.67,1]],
+    6:[[.27,.19,1],[.73,.19,-1],[.27,.45,1],[.73,.45,-1],[.27,.69,1],[.73,.69,-1]],
+    7:[[.5,.16,1],[.27,.33,-1],[.73,.33,1],[.27,.51,-1],[.73,.51,1],[.27,.69,-1],[.73,.69,1]],
+    8:[[.23,.16,1],[.5,.16,-1],[.77,.16,1],[.23,.44,-1],[.77,.44,1],[.23,.68,-1],[.5,.68,1],[.77,.68,-1]],
+    9:[[.23,.15,1],[.5,.15,-1],[.77,.15,1],[.23,.43,-1],[.5,.43,1],[.77,.43,-1],[.23,.69,1],[.5,.69,-1],[.77,.69,1]],
+  };
+
+  function souzu(n, w, h) {
+    const s = n===1?w*.37:n<=2?w*.29:n<=4?w*.22:n<=6?w*.19:n<=8?w*.162:w*.146;
+    const col = FISH_COL[n-1];
+    const fishes = (FISH_POS[n]||[]).map(([px,py,d])=>fish(px*w,py*h,s,col,d)).join('');
+    return `<rect width="${w}" height="${h}" rx="5" fill="#f0f8ff"/>
+<rect x="2" y="2" width="${w-4}" height="${h-4}" rx="4" fill="none" stroke="#a8d0f0" stroke-width="1.2"/>
+${fishes}<text x="2.5" y="${h*.18}" font-size="${Math.max(h*.13,6)}" font-weight="900" fill="#2266aa" font-family="Arial,sans-serif" opacity=".78">${n}</text>`;
+  }
+
+  // 자패 — 고양이 빼꼼 + 한자
+  const JIHAI = {
+    '1z':{txt:'東',bg:'#fff8e8',bd:'#f0d080',tc:'#b06000',fc:'#f5c860',ac:'#f0b090'},
+    '2z':{txt:'南',bg:'#fff0f0',bd:'#f0b8b8',tc:'#cc1111',fc:'#f0a8a8',ac:'#f0c0c0'},
+    '3z':{txt:'西',bg:'#f0f0ff',bd:'#c0c8f0',tc:'#2233cc',fc:'#c0c8f0',ac:'#d0b8e8'},
+    '4z':{txt:'北',bg:'#eef8ff',bd:'#a8d0f0',tc:'#0055aa',fc:'#a0c8e8',ac:'#c0d8f0'},
+    '5z':{txt:'白',bg:'#fafafa',bd:'#d8d8d8',tc:'#666',  fc:'#eeeef0',ac:'#e0d0d8'},
+    '6z':{txt:'發',bg:'#f0fff0',bd:'#a0e0a0',tc:'#117711',fc:'#88cc88',ac:'#b0e8b0'},
+    '7z':{txt:'中',bg:'#fff0f0',bd:'#f0b0b0',tc:'#cc0022',fc:'#f08888',ac:'#f0b0b0'},
+  };
+
+  function jihai(t, w, h) {
+    const j = JIHAI[t]; if(!j) return '';
+    const r = w * .46, cx = w * .5, cy = h * .84;
+    const fs = h * .27;
+    return `<rect width="${w}" height="${h}" rx="5" fill="${j.bg}"/>
+<rect x="2" y="2" width="${w-4}" height="${h-4}" rx="4" fill="none" stroke="${j.bd}" stroke-width="1.2"/>
+${catFace(cx, cy, r, j.fc, j.ac)}
+<text x="${w*.5}" y="${h*.24}" text-anchor="middle" font-size="${fs}" font-weight="900" fill="${j.tc}" font-family="serif" stroke="rgba(255,255,255,.6)" stroke-width="${fs*.08}" paint-order="stroke">${j.txt}</text>`;
+  }
+
+  return function(t, w, h) {
+    if(!t) return '';
+    const n = parseInt(t);
+    const suit = t.slice(-1);
+    let inner = '';
+    if(suit==='m') inner = manzu(n, w, h);
+    else if(suit==='p') inner = pingCircles(n, w, h);
+    else if(suit==='s') inner = souzu(n, w, h);
+    else inner = jihai(t, w, h);
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">${inner}</svg>`;
+  };
+})();
+
+function makeTileEl(t, size='md', opts={}){
+  const el=document.createElement('div');
+  el.className=`tile tile-${size}`;
+
+  if(opts.back){el.classList.add('back');return el}
+
+  // SVG 크기 매핑
+  const SZ={xl:[40,54],md:[28,38],sm:[20,27],xs:[12,17]};
+  const [w,h]=SZ[size]||SZ.md;
+
+  if(t){
+    const svg=TILE_SVG(t,w,h);
+    if(svg){
+      el.innerHTML=svg;
+      el.style.overflow='hidden';
+      el.style.padding='0';
+    } else {
+      el.textContent=tileU(t);
+      el.style.color=TILE_COLOR(t);
+    }
+  }
+
+  if(opts.isDora)el.classList.add('dora-tile');
+  if(opts.selected)el.classList.add('selected');
+  if(opts.justDisc)el.classList.add('just-disc');
+  if(opts.newDraw)el.classList.add('new-draw');
+  if(opts.animIn)el.classList.add('anim-in');
+  if(opts.animSlide)el.classList.add('anim-slide');
+  if(opts.clickable)el.classList.add('clickable');
+  if(opts.onClick)el.addEventListener('click',opts.onClick);
+  return el
+}
+
+function renderPlayerHand(){
+  const c=document.getElementById('hand-player'),hand=G.hands.player;
+  let sortedHand,newDrawIdx=-1;
+  if(G.drawnTile&&G.phase==='player-discard'){const main=sortHand(hand.slice(0,-1));sortedHand=[...main,hand[hand.length-1]];newDrawIdx=sortedHand.length-1;G.hands.player=[...main,hand[hand.length-1]]}
+  else{sortedHand=sortHand(hand);G.hands.player=[...sortedHand]}
+  if(G.selectedIdx>=sortedHand.length)G.selectedIdx=sortedHand.length-1;
+  const prev=c.children.length;c.innerHTML='';
+
+  // 선택된 패와 같은 종류 파악 + 잔여 계산
+  const selTile=G.selectedIdx>=0?sortedHand[G.selectedIdx]:null;
+  let remaining=0;
+  if(selTile){
+    const allUsed=[...sortedHand,...G.discards.player,...G.discards.haju,...G.discards.giwook,...G.discards.seonghun];
+    ['player','haju','giwook','seonghun'].forEach(p=>G.openSets[p].forEach(s=>allUsed.push(...s.tiles)));
+    remaining=4-allUsed.filter(t=>t===selTile).length;
+  }
+
+  sortedHand.forEach((t,i)=>{
+    const isNew=(i===newDrawIdx);
+    const isSame=selTile&&t===selTile&&i!==G.selectedIdx;
+    const el=makeTileEl(t,'xl',{
+      isDora:G.dora.includes(t)&&!G.riichi.player&&!isNew,
+      selected:G.selectedIdx===i,
+      newDraw:isNew,
+      animSlide:isNew,
+      clickable:G.phase==='player-discard',
+      onClick:G.phase==='player-discard'?()=>selectPlayerTile(i):null,
+    });
+    if(!isNew&&i>=prev)el.classList.add('anim-in');
+    if(isSame)el.classList.add('same-tile');
+    // 선택한 패 자체에 잔여 뱃지
+    if(G.selectedIdx===i&&selTile&&remaining<=3){
+      const badge=document.createElement('div');badge.className='tile-count-badge';badge.textContent=remaining;el.appendChild(badge);
+    }
+    c.appendChild(el)
+  })
+}
+
+function renderAll(){
+  const sc=document.getElementById('ui-scores');sc.innerHTML='';
+  const cc={player:'var(--gold)',haju:'var(--c-haju)',giwook:'var(--c-giwook)',seonghun:'var(--c-seonghun)'};
+  for(const p of PIDS){const d=document.createElement('div');d.className='score-chip';d.innerHTML=`<div class="sc-name">${PNAME[p]}</div><div class="sc-val" style="color:${cc[p]}">${(G.scores[p]/1000).toFixed(1)}k</div>${G.riichi[p]?'<div class="sc-ri">REACH</div>':''}`;sc.appendChild(d)}
+  const dc=document.getElementById('ui-dora');dc.innerHTML='';G.dora.forEach(t=>{dc.appendChild(makeTileEl(t,'sm',{isDora:true}))});
+  const rds=['동1국','동2국','동3국','동4국'];document.getElementById('ui-round').textContent=rds[(G.round-1)%4]||`${G.round}국`;
+  document.getElementById('ui-wall').textContent=G.wall.length;document.getElementById('ui-honba').textContent=G.honba>0?`${G.honba}본장`:'';
+  const rp=document.getElementById('ui-riichi-pool');rp.innerHTML='';for(let i=0;i<G.riichiPool;i++){const s=document.createElement('div');s.className='ri-stick';rp.appendChild(s)}
+
+  // ★ 바람 뱃지 업데이트
+  const windKanji={'1z':'東','2z':'南','3z':'西','4z':'北'};
+  for(const pid of['haju','giwook','seonghun']){
+    const wEl=document.getElementById(`wind-${pid}`);
+    if(wEl&&G.winds[pid]) wEl.textContent=windKanji[G.winds[pid]]||G.winds[pid];
+  }
+  // 플레이어 바람도 player-badge에 반영
+  const pb=document.querySelector('.player-badge');
+  if(pb&&G.winds.player) pb.textContent=`⭐ 리쯔 — ${windKanji[G.winds.player]||'東'}`;
+
+  for(const pid of['haju','giwook','seonghun']){
+    const hc=document.getElementById(`hand-${pid}`);hc.innerHTML='';for(let i=0;i<G.hands[pid].length;i++)hc.appendChild(makeTileEl(null,'xs',{back:true}));
+    const oc=document.getElementById(`open-${pid}`);oc.innerHTML='';for(const set of G.openSets[pid]){oc.appendChild(makeOpenSetEl(set,'xs'))}
+    const dcs=document.getElementById(`disc-${pid}`);dcs.innerHTML='';G.discards[pid].forEach((t,i)=>dcs.appendChild(makeTileEl(t,'xs',{justDisc:i===G.discards[pid].length-1&&G.lastDiscardBy===pid&&G.phase==='action-wait'})));
+    const ri=document.getElementById(`ri-${pid}`);if(ri)ri.style.display=G.riichi[pid]?'inline':'none'
+  }
+  for(const pid of['haju','giwook','seonghun','player']){const dc=document.getElementById(`disc2-${pid}`);if(!dc)continue;dc.innerHTML='';G.discards[pid].forEach((t,i)=>dc.appendChild(makeTileEl(t,'sm',{isDora:G.dora.includes(t),justDisc:i===G.discards[pid].length-1&&G.lastDiscardBy===pid&&G.phase==='action-wait'})))}
+  renderPlayerHand();
+  const oc=document.getElementById('open-player');oc.innerHTML='';for(const set of G.openSets.player){oc.appendChild(makeOpenSetEl(set,'md'))}
+}
+
+const DIALOGUES={
+  giwook:{
+    riichi:["리치. — 서두르지 않아도 돼. 어차피 내가 이기니까.","리치야. 인상적이지 않아?","...리치. 뭐, 운이 따라줄 거야.","리치 선언이야. 이제 못 바꿔.","리치야. 기대해도 돼."],
+    tsumo:["쯔모야. 뭐, 운이 좋았을 뿐이야.","쯔모. 이 정도는 돼야지.","...쯔모. 역시나.","쯧, 이기고도 기분이 영... 뭐, 이겼으니 됐어.","쯔모야. 만 년 버텨온 보람이야."],
+    ron:["론이야. 몰랐어?","론. 다음엔 조심해.","...론이야. 예상했어.","론이야. 뭐, 당연한 결과지."],
+    lose:["...지는 건 별로 기분이 나쁘지 않네.","에이, 오늘만이야.","쯧. 패가 안 좋았어.","...운이 좀 없었을 뿐이야.","...이런 날도 있는 거야."],
+    pon:["퐁. 오, 생각대로야.","퐁이야. 슬슬 되고 있어.","...퐁. 좋아.","퐁이야. 이 흐름이야."],
+    idle:["...","쯧.","...패가 애매하네.","집중, 집중.","...흠."],
+    draw:["유국이야. 아쉽네.","...이런 경우도 있지. 다음에.","패운이 없었어.","...다음 국은 달라."],
+    discard_dora:["도라 버렸네. 여유가 있는 건지...","...도라 버리는 건 좀.","오, 도라야? 아깝지 않아?","...도라를 포기하는 전략인가."],
+    same_discard:["또 같은 패야? 뭔가 패가 몰렸나.","...또 같은 거네. 흥미롭긴 한데.","같은 패 두 번째야. 어떤 패산이야.","...연속이네. 패가 물렸어."],
+    player_discard_dora:["도라 버리는 거야? 여유 있네.","...도라야. 괜찮은 건가.","오, 도라 버렸어. 대담하네.","도라를 포기할 이유가 있겠지."],
+  },
+  seonghun:{
+    riichi:["리치.","...리치야.","리치 선언.","리치. 막아봐.","...리치."],
+    tsumo:["쯔모.","...이 패였어.","끝났어.","...쯔모.","됐어."],
+    ron:["론.","...론이야.","론. 계산대로야.","...론."],
+    lose:["...좋은 패였어.","다음에는 안 질게.","...졌네.","계산이 틀렸나.","...다음 판."],
+    pon:["퐁.","...퐁이야.","퐁."],
+    idle:["...","...","...","잠깐."],
+    draw:["유국.","...한계였어.","...이 패로는.","유국이야."],
+    discard_dora:["...도라.","도라 버렸어.","...흥미롭네.","...도라인데."],
+    same_discard:["...또야.","같은 패.","...연속이네.","...물렸어."],
+    player_discard_dora:["...도라야.","도라 버렸어.","...","도라인데."],
+  },
+  haju:{
+    riichi:["리치야. 조심해.","리치. 거의 다 왔어.","...리치 선언.","리치. 여유 있어.","리치야. 함대에서도 이런 결정적 순간 있어."],
+    tsumo:["쯔모. 함대 지휘보다 쉬운 것 같기도 하고.","이겼네. 집중하니까 되는 거야.","쯔모야.","...쯔모. 역시.","쯔모야. 딱 맞아 떨어지는 느낌이야."],
+    ron:["론이야. 이런 거 미리 알려줘야 하는데.","론. 방심하면 안 되지.","...론이야.","론이야. 예상 범위 안이야."],
+    lose:["...지는 것도 경험이야.","일부러 진 거 아니야.","패가 안 맞았어.","...다음에 만회할게.","...이런 날도 있어."],
+    pon:["퐁이야. 오빠 아직 여유 있어.","퐁. 생각대로 되고 있어.","...퐁.","퐁이야. 여기서부터야."],
+    idle:["...집중해야 하는데.","함대에서도 이런 교착 있었지.","...","패 정리 중.","...흐름이 보여."],
+    draw:["유국이네. 인내가 중요해.","...함대에서도 이런 교착상태 있어.","유국이야. 아쉽네.","...다음 국이야."],
+    discard_dora:["도라를 버렸네. 손패가 정리됐나.","...도라야. 아깝지 않나.","도라 버린 거야? 뭔가 계획이 있나.","...도라 포기가 맞는 선택이었을까."],
+    same_discard:["또 같은 패네. 패산이 편중됐나.","...같은 패 또야.","이거 좀 흥미로운데. 같은 패 연속이야.","...패가 물렸어. 함대에서도 이런 교착 있어."],
+    player_discard_dora:["...도라 버렸어. 대담한데.","도라야. 다른 패가 더 좋은 건가.","오, 도라 버리는 거야.","...도라를 포기하는 이유가 있겠지."],
+  },
+  seoun:{
+    react:["의학적으로 집중력 있는 상태가 유리해.","저 패 배열, 위험 신호야.","...흥미로운 국면이야.","계산상 아직 여유 있어.","...데이터가 보여.","저 리치, 위험해.","패 배열 분석 중이야.","...최적해가 있어.","집중이 필요한 순간이야."],
+    player_wins:["의학적으로도 훌륭한 판단이었어.","...심박수가 안정적이었어. 실력이야.","예뻐. 이기는 것도.","잘 뒀어.","...계산이 맞았어."],
+    player_loses:["...다음에는 이길 거야. 데이터 봤으니까.","최적 선택을 하면 돼.","...괜찮아.","다음 국에서 만회하면 돼."],
+    opp_riichi:["위험 신호야.","...저 리치, 경계해.","리치야. 집중해."],
+    opp_wins:["...다음 판이야.","...회수하면 돼.","이 국은 내줘. 다음이 있어."],
+  },
+  jinun:{
+    react:["마음에 드네.","...재밌어.","생각보다 잘하는데.","...이 판, 흥미롭네.","그 패 버려도 돼?","...에너지가 집중돼 있어.","...좋은 흐름이야.","마음에 드네, 이 판.","...단골 우대야."],
+    player_wins:["마음에 드네.","...기대 이상이야.","좋은 소리야, 이기는 것도.","...흥미롭네.","단골 우대야. 잘했어."],
+    player_loses:["...다음 판에서 만회하면 되지.","생각해봐. 다음 판.","...아직 끝난 게 아니야.","...다음이야."],
+    opp_riichi:["...저 패, 읽히는데.","흥미롭네.","...저 리치."],
+    opp_wins:["...다음에 회수하면 돼.","...아직이야.","...회수해."],
+  },
+};
+
+let bubbleTimers={};
+function showBubble(pid,situation){
+  const pool=DIALOGUES[pid]?.[situation];if(!pool||pool.length===0)return;
+  const line=pool[Math.floor(Math.random()*pool.length)];
+  const el=document.getElementById(`bubble-${pid}`),tx=document.getElementById(`btxt-${pid}`);if(!el||!tx)return;
+  tx.textContent=line;el.classList.add('active');if(bubbleTimers[pid])clearTimeout(bubbleTimers[pid]);
+  bubbleTimers[pid]=setTimeout(()=>closeBubble(pid),(pid==='seoun'||pid==='jinun')?6500:5500)
+}
+function closeBubble(pid){const el=document.getElementById(`bubble-${pid}`);if(el)el.classList.remove('active')}
+function randomTalk(pid,sit){if(Math.random()<.5)showBubble(pid,sit)}
+
+let _actx=null;
+function getACtx(){if(!_actx)_actx=new(window.AudioContext||window.webkitAudioContext)();return _actx}
+function playTone(f,type,dur,vol=0.14){try{const ctx=getACtx(),osc=ctx.createOscillator(),g=ctx.createGain();osc.connect(g);g.connect(ctx.destination);osc.type=type;osc.frequency.setValueAtTime(f,ctx.currentTime);g.gain.setValueAtTime(vol,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+dur);osc.start(ctx.currentTime);osc.stop(ctx.currentTime+dur)}catch(e){}}
+function playNoise(dur=0.06,vol=0.08){try{const ctx=getACtx(),buf=ctx.createBuffer(1,ctx.sampleRate*dur,ctx.sampleRate),d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;const src=ctx.createBufferSource(),g=ctx.createGain(),f=ctx.createBiquadFilter();f.type='bandpass';f.frequency.value=800;f.Q.value=1.5;src.buffer=buf;src.connect(f);f.connect(g);g.connect(ctx.destination);g.gain.setValueAtTime(vol,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+dur);src.start();src.stop(ctx.currentTime+dur)}catch(e){}}
+const SFX={
+  draw:()=>{playNoise(.05,.09);playTone(920,'sine',.07,.05)},
+  discard:()=>{playNoise(.08,.13);playTone(360,'sine',.12,.07)},
+  select:()=>{playTone(1200,'sine',.06,.06)},
+  riichi:()=>{[0,.07,.14].forEach((t,i)=>setTimeout(()=>playTone([900,1100,1350][i],'sine',.22,.11),t*1000))},
+  win:()=>{playNoise(.05,.18);[0,.08,.2].forEach((t,i)=>setTimeout(()=>playTone([440,660,880][i],'triangle',.35,.13),t*1000))},
+  pon:()=>{playNoise(.09,.16);playTone(310,'sawtooth',.14,.07)},
+  draw_game:()=>{playTone(220,'sine',.9,.09);playTone(330,'sine',.7,.05)},
+};
+
+const HAND_CFG={giwook:{emoji:'🤚',drawAnim:'anim-grab',discardAnim:'anim-grab',side:'right',top:true},haju:{emoji:'✋',drawAnim:'anim-sweep',discardAnim:'anim-sweep',side:'left',top:true},seonghun:{emoji:'🖐️',drawAnim:'anim-snatch',discardAnim:'anim-snatch',side:'right',top:false}};
+function showHandAnim(pid,action){
+  const cfg=HAND_CFG[pid];if(!cfg)return;const el=document.getElementById(`hand-el-${pid}`);if(!el)return;
+  const panel=document.getElementById(`panel-${pid}`);if(!panel)return;
+  const rect=panel.getBoundingClientRect(),gameRect=document.getElementById('game').getBoundingClientRect();
+  el.textContent=cfg.emoji;el.style.left=`${(cfg.side==='left'?rect.right-45:rect.left+8)-gameRect.left}px`;el.style.top=`${rect.top+rect.height*.4-gameRect.top}px`;
+  el.className='hand-ov';void el.offsetWidth;el.classList.add(action==='draw'?cfg.drawAnim:cfg.discardAnim)
+}
+
+document.getElementById('btn-tsumo').onclick=actTsumo;
+document.getElementById('btn-ron').onclick=actRon;
+document.getElementById('btn-riichi').onclick=actRiichi;
+document.getElementById('btn-chi').onclick=actChi;
+document.getElementById('btn-pon').onclick=actPon;
+document.getElementById('btn-kan').onclick=actKan;
+document.getElementById('btn-skip').onclick=actSkip;
+document.addEventListener('click',()=>{try{getACtx().resume()}catch(e){}},{once:true});
+</script>
+</body>
+</html>
