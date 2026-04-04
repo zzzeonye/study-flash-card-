@@ -2,276 +2,351 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>딥스페이스 마작</title>
 <style>
-:root {
-  --app-h:100vh; --table:#2d6a4f; --table2:#245a42; --table3:#1e4d38;
-  --panel:#1a2535; --bar:#111b2a; --gold:#e8c96a; --gold2:#f5e090; --gold3:#c8a030;
+:root{
+  --app-h:100vh;
+  --table:#2a6045; --table2:#1e5038; --table3:#183d2c;
+  --bar:rgba(0,0,0,.6); --gold:#e8c96a; --gold2:#f5e090; --gold3:#c8a030;
   --red:#e05555; --blue:#5599ee; --green:#44cc77;
   --txt:#f0ece0; --txt2:#a0b8c0; --txt3:#6a8898;
-  --brd:rgba(255,255,255,0.08); --brd2:rgba(232,201,106,0.3);
-  --c-giwook:#b090e8; --c-seonghun:#66aaff; --c-haju:#cc88ff; --c-seoun:#55dd88; --c-jinun:#ff6666;
+  --brd:rgba(255,255,255,.08); --brd2:rgba(232,201,106,.3);
+  --c-giwook:#b090e8; --c-seonghun:#66aaff; --c-haju:#cc88ff;
+  --c-seoun:#55dd88; --c-jinun:#ff6666;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html{height:100%}
-body{width:100%;height:var(--app-h);overflow:hidden;position:fixed;background:var(--table);color:var(--txt);font-family:'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif;font-size:13px}
+html,body{height:100%}
+body{width:100%;height:var(--app-h);overflow:hidden;position:fixed;
+  background:var(--table);color:var(--txt);
+  font-family:'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:13px}
 
-/* TITLE */
-#title{height:var(--app-h);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:1rem;background:linear-gradient(160deg,#0d1525,#1a2a40 50%,#0d1a30)}
-.t-deco{font-size:.62rem;letter-spacing:.5em;color:var(--gold);opacity:.55}
-.t-title{font-size:clamp(1.8rem,5vw,3rem);font-weight:700;letter-spacing:.12em;background:linear-gradient(135deg,#e8c96a,#f5e090,#c8a030);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:titleGlow 3s ease-in-out infinite}
-.t-sub{font-size:.72rem;color:var(--txt2);letter-spacing:.25em}
-.t-chars{display:flex;gap:1rem;margin:.4rem 0}
-.t-char{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.55rem;border:2px solid}
-.t-desc{font-size:.7rem;color:var(--txt2);line-height:1.9}
-.t-btn{margin-top:.4rem;padding:.65rem 2.4rem;background:linear-gradient(135deg,var(--gold3),var(--gold));color:#1a1200;font-weight:700;font-size:.82rem;letter-spacing:.2em;border:none;border-radius:4px;cursor:pointer;box-shadow:0 4px 18px rgba(232,201,106,.35)}
-@keyframes titleGlow{0%,100%{filter:drop-shadow(0 0 15px rgba(232,201,106,.3))}50%{filter:drop-shadow(0 0 35px rgba(232,201,106,.7))}}
+/* ═══ TITLE ═══ */
+#title{height:var(--app-h);display:flex;flex-direction:column;align-items:center;
+  justify-content:center;text-align:center;gap:.9rem;
+  background:linear-gradient(160deg,#0d1525,#1a2a40 50%,#0d1a30)}
+.t-deco{font-size:.6rem;letter-spacing:.5em;color:var(--gold);opacity:.55}
+.t-title{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:700;letter-spacing:.12em;
+  background:linear-gradient(135deg,#e8c96a,#f5e090,#c8a030);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  animation:glow 3s ease-in-out infinite}
+@keyframes glow{0%,100%{filter:drop-shadow(0 0 12px rgba(232,201,106,.3))}
+  50%{filter:drop-shadow(0 0 28px rgba(232,201,106,.7))}}
+.t-sub{font-size:.7rem;color:var(--txt2);letter-spacing:.25em}
+.t-chars{display:flex;gap:.9rem;margin:.3rem 0}
+.t-char{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-size:1.5rem;border:2px solid}
+.t-desc{font-size:.68rem;color:var(--txt2);line-height:1.9}
+.t-btn{padding:.62rem 2.2rem;background:linear-gradient(135deg,var(--gold3),var(--gold));
+  color:#1a1200;font-weight:700;font-size:.8rem;letter-spacing:.2em;
+  border:none;border-radius:4px;cursor:pointer;
+  box-shadow:0 4px 16px rgba(232,201,106,.35)}
 
-/* GAME */
-#game{display:none;height:var(--app-h);flex-direction:column;position:relative;overflow:hidden;background:var(--table);background-image:radial-gradient(ellipse at 50% 50%,rgba(255,255,255,.02),transparent 70%)}
+/* ═══ GAME ═══ */
+#game{
+  display:none;height:var(--app-h);
+  flex-direction:column;position:relative;overflow:hidden;
+  background:var(--table);
+}
 
-/* TOP BAR */
-.top-bar{display:flex;align-items:center;gap:.45rem;padding:.28rem .55rem;background:var(--bar);border-bottom:1px solid var(--brd);flex-shrink:0}
-.round-badge{font-size:.65rem;font-weight:700;color:var(--gold);background:rgba(232,201,106,.1);border:1px solid var(--brd2);padding:.16rem .45rem;border-radius:3px}
-.wall-info{font-size:.6rem;color:var(--txt2)}
-.dora-wrap{display:flex;align-items:center;gap:.28rem}
-.dora-lbl{font-size:.56rem;color:var(--txt2)}
+/* ── 상단 정보바 ── */
+.top-bar{
+  display:flex;align-items:center;gap:.35rem;
+  padding:.2rem .45rem;
+  background:rgba(0,0,0,.55);border-bottom:1px solid var(--brd);
+  flex-shrink:0;flex-wrap:nowrap;
+}
+.round-badge{font-size:.6rem;font-weight:700;color:var(--gold);
+  background:rgba(232,201,106,.12);border:1px solid var(--brd2);
+  padding:.1rem .35rem;border-radius:3px;white-space:nowrap}
+.wall-info{font-size:.56rem;color:var(--txt2);white-space:nowrap}
+.dora-wrap{display:flex;align-items:center;gap:.22rem;flex-shrink:0}
+.dora-lbl{font-size:.5rem;color:var(--txt2);white-space:nowrap}
+.dora-arrow{font-size:.5rem;color:var(--txt3)}
 .dora-tiles{display:flex;gap:2px}
-.scores-wrap{display:flex;gap:.45rem;margin-left:auto}
-.score-chip{display:flex;flex-direction:column;align-items:center;min-width:44px}
-.sc-name{font-size:.5rem;color:var(--txt3)}
-.sc-val{font-size:.76rem;font-weight:700;line-height:1.2}
-.sc-ri{font-size:.46rem;color:var(--blue)}
+.scores-wrap{display:flex;gap:.35rem;margin-left:auto;flex-shrink:0}
+.score-chip{display:flex;flex-direction:column;align-items:center;min-width:40px}
+.sc-name{font-size:.46rem;color:var(--txt3)}
+.sc-val{font-size:.7rem;font-weight:700;line-height:1.2}
+.sc-ri{font-size:.42rem;color:var(--blue)}
 
-/* SPEC BAR */
-.spec-bar{display:flex;align-items:center;gap:.4rem;padding:.16rem .55rem;background:rgba(0,0,0,.25);border-bottom:1px solid var(--brd);flex-shrink:0}
-.spec-lbl{font-size:.5rem;color:var(--txt3);flex-shrink:0}
-.spec-btns{display:flex;gap:.4rem;flex:1}
-.spec-btn{display:flex;align-items:center;gap:.2rem;padding:.1rem .35rem;border-radius:3px;cursor:pointer;border:1px solid transparent;transition:all .15s;font-size:.54rem}
-.spec-btn:hover{background:rgba(255,255,255,.08);border-color:var(--brd2)}
-.spec-hint{font-size:.5rem;color:var(--txt3);margin-left:auto}
+/* ── 관전자 바 ── */
+.spec-bar{display:flex;align-items:center;gap:.3rem;padding:.1rem .45rem;
+  background:rgba(0,0,0,.35);border-bottom:1px solid var(--brd);flex-shrink:0}
+.spec-lbl{font-size:.46rem;color:var(--txt3)}
+.spec-btns{display:flex;gap:.3rem}
+.spec-btn{display:flex;align-items:center;gap:.16rem;padding:.07rem .28rem;
+  border-radius:3px;cursor:pointer;border:1px solid transparent;font-size:.5rem}
+.spec-btn:hover{background:rgba(255,255,255,.08)}
+.spec-hint{font-size:.46rem;color:var(--txt3);margin-left:auto}
 
-/* GRID */
-.game-main{flex:1;display:grid;grid-template-columns:130px 1fr 130px;min-height:0;overflow:hidden}
-.side-panel{background:rgba(0,0,0,.2);display:flex;flex-direction:column;overflow:hidden;min-height:0}
-.side-panel.left{border-right:1px solid var(--brd)}
-.side-panel.right{border-left:1px solid var(--brd)}
-.opp-card{flex:1;padding:.38rem .42rem;display:flex;flex-direction:column;gap:.2rem;border-bottom:1px solid var(--brd);overflow:hidden;min-height:0}
-.opp-card:last-child{border-bottom:none}
-.opp-hdr{display:flex;align-items:center;gap:.22rem;flex-shrink:0}
-.opp-ico{font-size:.88rem}
-.opp-nm{font-size:.6rem;font-weight:700}
-.wind-tag{font-size:.46rem;padding:.05rem .22rem;border-radius:2px;border:1px solid;opacity:.85}
-.ri-tag{font-size:.5rem;color:#88ccff;margin-left:auto;animation:pulse 1s infinite}
-.think-tag{font-size:.48rem;color:var(--txt3);animation:pulse 1s infinite}
-.opp-tiles{display:flex;flex-wrap:wrap;gap:1px;flex-shrink:0}
-.opp-open{display:flex;flex-wrap:wrap;gap:1px}
-.disc-lbl{font-size:.48rem;color:var(--txt3);flex-shrink:0;margin-top:1px}
-.disc-row{display:flex;flex-wrap:wrap;gap:1px;overflow:hidden}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+/* ═══ 진짜 마작 레이아웃 ═══
+   [상대 3명 가로]
+   [버린패 4분할]
+   [중앙 정보]
+   [내 손패]
+   [액션바]
+*/
+.game-body{flex:1;display:flex;flex-direction:column;min-height:0;overflow:hidden}
 
-/* CENTER */
-.center-col{display:flex;flex-direction:column;min-height:0;overflow:hidden}
+/* ── 상대 3명 가로 ── */
+.opp-row{
+  display:flex;flex-shrink:0;
+  background:rgba(0,0,0,.3);
+  border-bottom:1px solid var(--brd);
+}
+.opp-card{
+  flex:1;min-width:0;
+  padding:.28rem .35rem;
+  display:flex;flex-direction:column;gap:.12rem;
+  border-right:1px solid var(--brd);overflow:hidden;
+}
+.opp-card:last-child{border-right:none}
+.opp-hdr{display:flex;align-items:center;gap:.18rem;flex-shrink:0}
+.opp-ico{font-size:.8rem}
+.opp-nm{font-size:.56rem;font-weight:700;white-space:nowrap}
+.wind-tag{font-size:.42rem;padding:.03rem .18rem;border-radius:2px;border:1px solid;opacity:.85}
+.ri-tag{font-size:.46rem;color:#88ccff;margin-left:auto;animation:pulse 1s infinite}
+.think-tag{font-size:.44rem;color:var(--txt3);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+/* 상대 손패: 가로로 빽빽하게 */
+.opp-hand-row{display:flex;gap:1px;flex-wrap:nowrap;overflow:hidden;flex-shrink:0}
+.opp-open-row{display:flex;gap:2px;flex-wrap:wrap;margin-top:1px}
+/* 상대 버린패: 사이드에 작게 */
+.opp-disc-wrap{overflow:hidden;flex:1}
+.opp-disc-row{display:flex;flex-direction:column;gap:1px}
 
-/* 4분할 버린패 — 작혼 스타일 */
-.discard-table{flex:1;min-height:0;max-height:55vh;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:3px;padding:4px;background:var(--table2);border-bottom:2px solid rgba(0,0,0,.28);overflow:hidden}
-.dt-cell{background:rgba(0,0,0,.2);border-radius:4px;padding:3px 4px;display:flex;flex-direction:column;overflow:hidden}
-.dt-lbl{font-size:.5rem;font-weight:600;margin-bottom:2px;flex-shrink:0}
-.dt-tiles{display:flex;flex-direction:column;gap:1px;overflow:hidden;align-items:flex-start}
+/* ── 버린패 4분할 ── */
+.discard-table{
+  flex:1;min-height:0;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  grid-template-rows:1fr 1fr;
+  gap:2px;padding:2px;
+  background:var(--table2);
+  overflow:hidden;
+}
+.dt-cell{
+  background:rgba(0,0,0,.2);border-radius:3px;
+  padding:3px;display:flex;flex-direction:column;
+  overflow:hidden;min-height:0;
+}
+.dt-lbl{font-size:.44rem;font-weight:600;margin-bottom:2px;flex-shrink:0;opacity:.8}
+.dt-tiles{display:flex;flex-direction:column;gap:1px;overflow:hidden;flex:1}
 
-/* STRIP */
-.center-strip{display:flex;align-items:center;justify-content:center;gap:.55rem;padding:.2rem .45rem;background:var(--table3);flex-shrink:0;border-bottom:1px solid rgba(0,0,0,.3)}
-.ri-pool{display:flex;gap:2px}
-.ri-stick{width:15px;height:4px;background:linear-gradient(90deg,#ccc,#fff,#ccc);border-radius:2px;border:1px solid #aaa;box-shadow:0 1px 3px rgba(0,0,0,.4)}
+/* ── 중앙 정보 ── */
+.center-strip{
+  display:flex;align-items:center;justify-content:center;gap:.45rem;
+  padding:.15rem .4rem;
+  background:rgba(0,0,0,.45);flex-shrink:0;
+}
+.ri-pool{display:flex;gap:2px;flex-wrap:wrap}
+.ri-stick{width:13px;height:3px;
+  background:linear-gradient(90deg,#bbb,#fff,#bbb);
+  border-radius:2px;border:1px solid #999}
+.strip-txt{font-size:.52rem;color:var(--txt2)}
 
-/* PLAYER ZONE */
-.player-zone{flex-shrink:0;padding:.25rem .48rem .1rem;background:rgba(0,0,0,.22);border-top:2px solid rgba(232,201,106,.2)}
-.player-hdr{display:flex;align-items:center;gap:.38rem;margin-bottom:.2rem}
-.player-badge{font-size:.6rem;font-weight:700;color:var(--gold);background:rgba(232,201,106,.1);border:1px solid var(--brd2);padding:.08rem .38rem;border-radius:3px}
-.ri-on{font-size:.56rem;color:var(--blue)}
-.tenpai-show{font-size:.56rem;color:var(--gold2);margin-left:auto}
+/* ── 내 패 영역 ── */
+.player-zone{
+  flex-shrink:0;
+  background:rgba(0,0,0,.35);
+  border-top:2px solid rgba(232,201,106,.22);
+  padding:.18rem .4rem .04rem;
+}
+.player-hdr{display:flex;align-items:center;gap:.32rem;margin-bottom:.12rem}
+.player-badge{font-size:.56rem;font-weight:700;color:var(--gold);
+  background:rgba(232,201,106,.1);border:1px solid var(--brd2);
+  padding:.06rem .32rem;border-radius:3px}
+.ri-on{font-size:.52rem;color:var(--blue)}
+.tenpai-show{font-size:.52rem;color:var(--gold2);margin-left:auto}
 .player-sets{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:2px}
-.set-grp{display:flex;gap:1px;background:rgba(255,255,255,.06);border-radius:3px;padding:1px}
-/* 손패: 넘쳐도 위로 튀어나오게, 가로 스크롤 */
-.hand-row{display:flex;align-items:flex-end;gap:2px;flex-wrap:nowrap;overflow-x:auto;overflow-y:visible;padding-bottom:10px;padding-top:4px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+
+/* 손패 — 짤리지 않게 클리핑 없음 */
+.hand-wrap{
+  /* 선택 시 위로 올라오는 공간 확보 */
+  padding-top:18px;
+  margin-top:-18px;
+  overflow:visible;
+}
+.hand-row{
+  display:flex;align-items:flex-end;gap:2px;
+  flex-wrap:nowrap;
+  overflow-x:auto;
+  overflow-y:visible;  /* 위로 올라오는 거 짤리지 않게 */
+  padding-bottom:4px;
+  scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+}
 .hand-row::-webkit-scrollbar{display:none}
 
-/* ACTION BAR */
-.act-bar{display:flex;align-items:center;gap:.28rem;flex-wrap:wrap;padding:.18rem .48rem;background:var(--bar);border-top:1px solid var(--brd);flex-shrink:0}
-.ab{padding:.23rem .65rem;border:1.5px solid;border-radius:4px;font-size:.66rem;cursor:pointer;background:transparent;font-weight:600;transition:all .15s;flex-shrink:0;letter-spacing:.02em}
-.ab:disabled{opacity:.2;cursor:default}
+/* ── 액션바 ── */
+.act-bar{
+  display:flex;align-items:center;gap:.22rem;flex-wrap:wrap;
+  padding:.12rem .4rem;
+  background:rgba(0,0,0,.55);border-top:1px solid var(--brd);
+  flex-shrink:0;
+}
+.ab{padding:.18rem .55rem;border:1.5px solid;border-radius:4px;
+  font-size:.62rem;cursor:pointer;background:transparent;
+  font-weight:600;transition:all .14s;flex-shrink:0}
+.ab:disabled{opacity:.18;cursor:default}
 .ab.hidden{display:none}
-.ab-tsumo{border-color:var(--gold);color:var(--gold)}.ab-tsumo:not(:disabled):hover{background:var(--gold);color:#1a1200}
-.ab-ron{border-color:var(--red);color:var(--red)}.ab-ron:not(:disabled):hover{background:var(--red);color:#fff}
-.ab-riichi{border-color:var(--blue);color:var(--blue)}.ab-riichi:not(:disabled):hover{background:var(--blue);color:#fff}
-.ab-chi{border-color:var(--green);color:var(--green)}.ab-chi:not(:disabled):hover{background:var(--green);color:#111}
-.ab-pon{border-color:#ff9944;color:#ff9944}.ab-pon:not(:disabled):hover{background:#ff9944;color:#fff}
-.ab-kan{border-color:#bb77ff;color:#bb77ff}.ab-kan:not(:disabled):hover{background:#bb77ff;color:#fff}
-.ab-skip{border-color:var(--txt2);color:var(--txt2)}.ab-skip:not(:disabled):hover{background:rgba(255,255,255,.15)}
-.ab-hint{font-size:.6rem;color:var(--txt2);margin-left:auto}
+.ab-tsumo{border-color:var(--gold);color:var(--gold)}
+.ab-tsumo:not(:disabled):hover{background:var(--gold);color:#1a1200}
+.ab-ron{border-color:var(--red);color:var(--red)}
+.ab-ron:not(:disabled):hover{background:var(--red);color:#fff}
+.ab-riichi{border-color:var(--blue);color:var(--blue)}
+.ab-riichi:not(:disabled):hover{background:var(--blue);color:#fff}
+.ab-chi{border-color:var(--green);color:var(--green)}
+.ab-chi:not(:disabled):hover{background:var(--green);color:#111}
+.ab-pon{border-color:#ff9944;color:#ff9944}
+.ab-pon:not(:disabled):hover{background:#ff9944;color:#fff}
+.ab-kan{border-color:#bb77ff;color:#bb77ff}
+.ab-kan:not(:disabled):hover{background:#bb77ff;color:#fff}
+.ab-skip{border-color:var(--txt2);color:var(--txt2)}
+.ab-skip:not(:disabled):hover{background:rgba(255,255,255,.12)}
+.ab-hint{font-size:.56rem;color:var(--txt2);margin-left:auto}
 
-/* TILES */
-.tile{display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#faf6ee,#ece4d8);border:1px solid #c8b898;border-radius:3px;box-shadow:1px 2px 5px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.55);user-select:none;flex-shrink:0;position:relative;overflow:hidden;transition:transform .12s cubic-bezier(.34,1.4,.64,1),box-shadow .12s}
+/* ═══ 패 스타일 ═══ */
+.tile{
+  display:inline-flex;align-items:center;justify-content:center;
+  background:linear-gradient(160deg,#faf6ee,#ece4d8);
+  border:1px solid #c8b898;border-radius:3px;
+  box-shadow:1px 2px 5px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.55);
+  user-select:none;flex-shrink:0;position:relative;
+  overflow:hidden;
+  transition:transform .12s cubic-bezier(.34,1.4,.64,1),box-shadow .12s;
+}
 .tile svg{display:block;pointer-events:none;width:100%;height:100%}
 .tile-xl{width:38px;height:51px}
 .tile-md{width:26px;height:35px}
-.tile-sm{width:19px;height:25px}
-.tile-xs{width:12px;height:17px;border-radius:2px}
+.tile-sm{width:18px;height:24px}
+.tile-xs{width:11px;height:15px;border-radius:2px}
 .tile.back{background:linear-gradient(160deg,#2a3d5c,#1e2d46);border-color:#3a5070}
-.tile.back::after{content:'🀫';position:absolute;font-size:.75em}
-.tile-xs.back::after{font-size:.48em}
+.tile.back::after{content:'🀫';position:absolute;font-size:.7em}
+.tile-xs.back::after{font-size:.45em}
 .tile.clickable{cursor:pointer}
-.tile.clickable:hover{transform:translateY(-7px) scale(1.04);box-shadow:1px 10px 18px rgba(0,0,0,.72),inset 0 1px 0 rgba(255,255,255,.55)}
+.tile.clickable:hover{transform:translateY(-7px) scale(1.04);
+  box-shadow:1px 10px 18px rgba(0,0,0,.72),inset 0 1px 0 rgba(255,255,255,.55)}
 
-/* 선택 — 하얀 테두리 글로우 (금색과 다르게) */
+/* 선택 */
 .tile.selected{
-  transform:translateY(-13px) scale(1.06)!important;
+  transform:translateY(-14px) scale(1.06)!important;
   border:2px solid #fff!important;
-  box-shadow:0 13px 30px rgba(0,0,0,.7),0 0 0 3px rgba(255,255,255,.18),0 0 18px rgba(255,255,255,.4)!important;
+  box-shadow:0 14px 30px rgba(0,0,0,.7),0 0 0 3px rgba(255,255,255,.18),0 0 18px rgba(255,255,255,.38)!important;
   background:linear-gradient(160deg,#ffffff,#f5f0e8)!important;
 }
-
-/* 새로 뽑은 패 — 민트/시안 (도라 골드와 완전 반대 계열) */
+/* 새패 — 민트 */
 .tile.new-draw{
   margin-left:10px!important;
   border:2px solid #55ddcc!important;
-  box-shadow:1px 2px 5px rgba(0,0,0,.5),0 0 12px rgba(60,210,190,.75),0 0 24px rgba(40,190,170,.35)!important;
+  box-shadow:1px 2px 5px rgba(0,0,0,.5),0 0 14px rgba(60,210,190,.8),0 0 28px rgba(40,190,170,.38)!important;
   animation:newPulse 1.6s ease-in-out infinite!important;
 }
 @keyframes newPulse{
   0%,100%{box-shadow:1px 2px 5px rgba(0,0,0,.5),0 0 9px rgba(60,210,190,.6),0 0 18px rgba(40,190,170,.25)}
-  50%{box-shadow:1px 2px 5px rgba(0,0,0,.5),0 0 20px rgba(60,210,190,.95),0 0 38px rgba(40,190,170,.5)}
+  50%{box-shadow:1px 2px 5px rgba(0,0,0,.5),0 0 22px rgba(60,210,190,.95),0 0 40px rgba(40,190,170,.5)}
 }
-
-/* 도라 — 순금 펄스 (민트와 완전히 다른 색) */
-.tile.dora-tile{
-  border:2px solid #ffc400!important;
-  animation:doraPulse 2s ease-in-out infinite;
-}
+/* 도라 — 골드 */
+.tile.dora-tile{border:2px solid #ffc400!important;animation:doraPulse 2s ease-in-out infinite}
 @keyframes doraPulse{
-  0%,100%{
-    box-shadow:1px 2px 5px rgba(0,0,0,.5),0 0 7px rgba(255,196,0,.55),inset 0 0 3px rgba(255,220,0,.12);
-    background:linear-gradient(160deg,#faf6ee,#ece4d8);
-  }
-  50%{
-    box-shadow:1px 2px 5px rgba(0,0,0,.5),0 0 22px rgba(255,196,0,1),0 0 40px rgba(255,160,0,.55),inset 0 0 10px rgba(255,220,0,.28);
-    background:linear-gradient(160deg,#fffcf0,#f8f0da);
-    border-color:#ffe000!important;
-  }
+  0%,100%{box-shadow:1px 2px 5px rgba(0,0,0,.5),0 0 7px rgba(255,196,0,.55);background:linear-gradient(160deg,#faf6ee,#ece4d8)}
+  50%{box-shadow:1px 2px 5px rgba(0,0,0,.5),0 0 22px rgba(255,196,0,1),0 0 40px rgba(255,160,0,.55);background:linear-gradient(160deg,#fffcf0,#f8f0da);border-color:#ffe000!important}
 }
-/* 새패+도라 동시 → 도라 우선 */
 .tile.dora-tile.new-draw{animation:doraPulse 2s ease-in-out infinite!important;border-color:#ffc400!important;margin-left:10px!important}
-
-/* 버린 직후 */
-.tile.just-disc{outline:2.5px solid var(--gold);box-shadow:0 0 14px rgba(232,201,106,.8),0 0 28px rgba(232,201,106,.3)}
-
-/* 같은 패 강조 — 주황 (집었을 때 판에서 강조) */
-.tile.same-tile{
-  border:2px solid #ff8800!important;
-  box-shadow:0 0 11px rgba(255,136,0,.75),0 0 22px rgba(255,136,0,.3)!important;
-  animation:samePulse 1s ease-in-out infinite;
-}
+/* 표시패 (도라 지시패) */
+.tile.indicator{border:2px solid #aaa;opacity:.9}
+/* 방금 버린 패 */
+.tile.just-disc{outline:2.5px solid var(--gold);box-shadow:0 0 14px rgba(232,201,106,.8)}
+/* 같은 패 강조 */
+.tile.same-tile{border:2px solid #ff8800!important;animation:samePulse 1s ease-in-out infinite}
 @keyframes samePulse{
-  0%,100%{box-shadow:0 0 8px rgba(255,136,0,.6),0 0 16px rgba(255,136,0,.22)}
+  0%,100%{box-shadow:0 0 8px rgba(255,136,0,.6)}
   50%{box-shadow:0 0 18px rgba(255,136,0,.95),0 0 32px rgba(255,136,0,.45)}
 }
-
-/* 남은 개수 뱃지 */
+/* 잔여 뱃지 */
 .tile-count-badge{
   position:absolute;top:-7px;right:-6px;
-  background:#ff5500;color:#fff;
-  font-size:.4rem;font-weight:700;line-height:1;
-  width:14px;height:14px;border-radius:50%;
+  background:#ff5500;color:#fff;font-size:.38rem;font-weight:700;
+  width:13px;height:13px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;
   border:1.5px solid rgba(255,255,255,.5);
-  box-shadow:0 1px 5px rgba(0,0,0,.55);
-  pointer-events:none;z-index:3;
+  box-shadow:0 1px 4px rgba(0,0,0,.55);pointer-events:none;z-index:3;
 }
-
+/* 눕힌 패 */
+.tile.rotated{transform:rotate(90deg);transform-origin:center;margin:0 4px}
 /* 패 등장 */
 @keyframes tileIn{from{opacity:0;transform:translateY(-10px) scale(.88)}to{opacity:1;transform:none}}
 @keyframes tileSlide{from{opacity:0;transform:translateX(16px) scale(.9)}to{opacity:1;transform:none}}
 .tile.anim-in{animation:tileIn .18s ease forwards}
 .tile.anim-slide{animation:tileSlide .2s ease forwards}
 
-/* 말풍선 */
-.bubble{display:none;position:absolute;z-index:500;pointer-events:all;max-width:192px;min-width:100px;border-radius:12px;padding:.52rem .75rem .52rem .68rem;cursor:pointer}
-.bubble.active{display:block;animation:bblIn .2s cubic-bezier(.34,1.56,.64,1) forwards}
-.bubble-name{font-size:.55rem;font-weight:700;margin-bottom:.2rem;letter-spacing:.04em}
-.bubble-text{font-size:.74rem;line-height:1.55;word-break:keep-all}
-.bubble .bx{position:absolute;top:.28rem;right:.45rem;font-size:.58rem;cursor:pointer;opacity:.38;line-height:1}
-.bubble .bx:hover{opacity:.9}
-.bubble::before{content:'';position:absolute;width:0;height:0;border-style:solid}
+/* 오픈 세트 */
+.open-set-grp{display:flex;gap:1px;background:rgba(255,255,255,.07);border-radius:3px;padding:1px;align-items:flex-end}
 
-#bubble-giwook{right:133px;top:8%;background:linear-gradient(135deg,#2a1a3e,#3a2050);border:1.5px solid rgba(176,144,232,.5);box-shadow:0 6px 24px rgba(0,0,0,.6),0 0 20px rgba(176,144,232,.15)}
+/* ═══ 말풍선 ═══ */
+.bubble{display:none;position:absolute;z-index:500;pointer-events:all;
+  max-width:185px;min-width:90px;border-radius:11px;
+  padding:.48rem .7rem .48rem .62rem;cursor:pointer}
+.bubble.active{display:block;animation:bblIn .2s cubic-bezier(.34,1.56,.64,1) forwards}
+.bubble-name{font-size:.52rem;font-weight:700;margin-bottom:.18rem;letter-spacing:.04em}
+.bubble-text{font-size:.7rem;line-height:1.5;word-break:keep-all}
+.bubble .bx{position:absolute;top:.26rem;right:.42rem;font-size:.55rem;cursor:pointer;opacity:.35}
+.bubble::before{content:'';position:absolute;width:0;height:0;border-style:solid}
+@keyframes bblIn{from{opacity:0;transform:scale(.85) translateY(5px)}to{opacity:1;transform:none}}
+
+#bubble-giwook{right:10px;top:18%;background:linear-gradient(135deg,#2a1a3e,#3a2050);border:1.5px solid rgba(176,144,232,.5);box-shadow:0 6px 24px rgba(0,0,0,.6)}
 #bubble-giwook .bubble-name{color:var(--c-giwook)}
 #bubble-giwook .bubble-text{color:#e8ddf8}
-#bubble-giwook::before{right:-9px;top:15px;border-width:7px 0 7px 9px;border-color:transparent transparent transparent rgba(176,144,232,.5)}
+#bubble-giwook::before{right:-8px;top:14px;border-width:6px 0 6px 8px;border-color:transparent transparent transparent rgba(176,144,232,.5)}
 
-#bubble-seonghun{right:133px;top:50%;background:linear-gradient(135deg,#0f1e38,#1a2d50);border:1.5px solid rgba(102,170,255,.45);box-shadow:0 6px 24px rgba(0,0,0,.6),0 0 20px rgba(102,170,255,.12)}
+#bubble-seonghun{right:10px;top:52%;background:linear-gradient(135deg,#0f1e38,#1a2d50);border:1.5px solid rgba(102,170,255,.45);box-shadow:0 6px 24px rgba(0,0,0,.6)}
 #bubble-seonghun .bubble-name{color:var(--c-seonghun)}
 #bubble-seonghun .bubble-text{color:#d8eaff}
-#bubble-seonghun::before{right:-9px;top:15px;border-width:7px 0 7px 9px;border-color:transparent transparent transparent rgba(102,170,255,.45)}
+#bubble-seonghun::before{right:-8px;top:14px;border-width:6px 0 6px 8px;border-color:transparent transparent transparent rgba(102,170,255,.45)}
 
-#bubble-haju{left:133px;top:8%;background:linear-gradient(135deg,#20103a,#30185a);border:1.5px solid rgba(204,136,255,.45);box-shadow:0 6px 24px rgba(0,0,0,.6),0 0 20px rgba(204,136,255,.12)}
+#bubble-haju{left:10px;top:18%;background:linear-gradient(135deg,#20103a,#30185a);border:1.5px solid rgba(204,136,255,.45);box-shadow:0 6px 24px rgba(0,0,0,.6)}
 #bubble-haju .bubble-name{color:var(--c-haju)}
 #bubble-haju .bubble-text{color:#eed8ff}
-#bubble-haju::before{left:-9px;top:15px;border-width:7px 9px 7px 0;border-color:transparent rgba(204,136,255,.45) transparent transparent}
+#bubble-haju::before{left:-8px;top:14px;border-width:6px 8px 6px 0;border-color:transparent rgba(204,136,255,.45) transparent transparent}
 
-#bubble-seoun{left:calc(50% - 205px);bottom:128px;background:linear-gradient(135deg,#0e2820,#162e22);border:1.5px solid rgba(85,221,136,.4);box-shadow:0 6px 24px rgba(0,0,0,.6)}
+#bubble-seoun{left:10px;bottom:100px;background:linear-gradient(135deg,#0e2820,#162e22);border:1.5px solid rgba(85,221,136,.4);box-shadow:0 6px 24px rgba(0,0,0,.6)}
 #bubble-seoun .bubble-name{color:var(--c-seoun)}
 #bubble-seoun .bubble-text{color:#d0f5e0}
-#bubble-seoun::before{bottom:-9px;left:18px;border-width:9px 7px 0 7px;border-color:rgba(85,221,136,.4) transparent transparent transparent}
+#bubble-seoun::before{bottom:-8px;left:16px;border-width:8px 6px 0 6px;border-color:rgba(85,221,136,.4) transparent transparent transparent}
 
-#bubble-jinun{left:calc(50% + 8px);bottom:128px;background:linear-gradient(135deg,#2a0e0e,#3a1212);border:1.5px solid rgba(255,100,100,.4);box-shadow:0 6px 24px rgba(0,0,0,.6)}
+#bubble-jinun{right:10px;bottom:100px;background:linear-gradient(135deg,#2a0e0e,#3a1212);border:1.5px solid rgba(255,100,100,.4);box-shadow:0 6px 24px rgba(0,0,0,.6)}
 #bubble-jinun .bubble-name{color:var(--c-jinun)}
 #bubble-jinun .bubble-text{color:#ffd8d8}
-#bubble-jinun::before{bottom:-9px;left:18px;border-width:9px 7px 0 7px;border-color:rgba(255,100,100,.4) transparent transparent transparent}
+#bubble-jinun::before{bottom:-8px;left:16px;border-width:8px 6px 0 6px;border-color:rgba(255,100,100,.4) transparent transparent transparent}
 
-@keyframes bblIn{from{opacity:0;transform:scale(.85) translateY(5px)}to{opacity:1;transform:scale(1) translateY(0)}}
-
-/* 결과 */
+/* ═══ 결과 ═══ */
 #result-overlay{display:none;position:absolute;inset:0;background:rgba(0,0,0,.83);z-index:900;align-items:center;justify-content:center}
-.res-box{background:linear-gradient(160deg,#1a2535,#222d42);border:1.5px solid var(--brd2);border-radius:14px;padding:1.7rem 1.4rem;max-width:390px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.7),0 0 40px rgba(232,201,106,.1);animation:bblIn .3s ease}
-.res-title{font-size:1.9rem;font-weight:700;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.28rem}
-.res-sub{font-size:.72rem;color:var(--txt2);margin-bottom:1rem}
-.res-yaku{text-align:left;margin-bottom:.9rem}
-.res-row{display:flex;justify-content:space-between;padding:.28rem 0;border-bottom:1px solid var(--brd);font-size:.76rem}
-.res-pts{font-size:1.1rem;font-weight:700;color:var(--gold);margin-bottom:1rem}
-.res-btn{padding:.48rem 1.3rem;border:1.5px solid var(--gold);color:var(--gold);background:transparent;font-weight:600;font-size:.72rem;letter-spacing:.15em;cursor:pointer;border-radius:4px;margin:0 .28rem;transition:all .18s}
+.res-box{background:linear-gradient(160deg,#1a2535,#222d42);border:1.5px solid var(--brd2);border-radius:14px;padding:1.5rem 1.3rem;max-width:380px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.7);animation:bblIn .3s ease}
+.res-title{font-size:1.8rem;font-weight:700;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.25rem}
+.res-sub{font-size:.7rem;color:var(--txt2);margin-bottom:.9rem}
+.res-yaku{text-align:left;margin-bottom:.85rem}
+.res-row{display:flex;justify-content:space-between;padding:.25rem 0;border-bottom:1px solid var(--brd);font-size:.73rem}
+.res-pts{font-size:1.05rem;font-weight:700;color:var(--gold);margin-bottom:.9rem}
+.res-btn{padding:.44rem 1.2rem;border:1.5px solid var(--gold);color:var(--gold);background:transparent;font-weight:600;font-size:.7rem;letter-spacing:.15em;cursor:pointer;border-radius:4px;margin:0 .25rem;transition:all .17s}
 .res-btn:hover{background:var(--gold);color:#1a1200}
 
 /* 손 오버레이 */
-.hand-ov{position:absolute;pointer-events:none;z-index:50;font-size:1.75rem;opacity:0;filter:drop-shadow(0 3px 6px rgba(0,0,0,.5))}
-@keyframes handGrab{0%{opacity:0;transform:translateY(-16px) rotate(-12deg) scale(.7)}40%{opacity:1;transform:translateY(2px) rotate(-5deg) scale(1.05)}70%{opacity:1;transform:translateY(0) rotate(-7deg) scale(1)}100%{opacity:0;transform:translateY(-14px) rotate(-16deg) scale(.8)}}
-@keyframes handSnatch{0%{opacity:0;transform:translateX(24px) rotate(8deg) scale(.7)}30%{opacity:1;transform:translateX(-3px) rotate(-2deg) scale(1.05)}65%{opacity:1;transform:translateX(0) rotate(0) scale(1)}100%{opacity:0;transform:translateX(18px) rotate(4deg) scale(.8)}}
-@keyframes handSweep{0%{opacity:0;transform:translateY(-20px) rotate(16deg) scale(.65)}35%{opacity:1;transform:translateY(4px) rotate(-1deg) scale(1.08)}65%{opacity:1;transform:translateY(0) rotate(0) scale(1)}100%{opacity:0;transform:translateY(-15px) rotate(13deg) scale(.75)}}
+.hand-ov{position:absolute;pointer-events:none;z-index:50;font-size:1.7rem;opacity:0;filter:drop-shadow(0 3px 6px rgba(0,0,0,.5))}
+@keyframes handGrab{0%{opacity:0;transform:translateY(-16px) rotate(-12deg) scale(.7)}40%{opacity:1;transform:translateY(2px) rotate(-5deg) scale(1.05)}70%{opacity:1}100%{opacity:0;transform:translateY(-14px) rotate(-16deg) scale(.8)}}
+@keyframes handSnatch{0%{opacity:0;transform:translateX(24px) rotate(8deg) scale(.7)}30%{opacity:1;transform:translateX(-3px) rotate(-2deg) scale(1.05)}65%{opacity:1}100%{opacity:0;transform:translateX(18px) rotate(4deg) scale(.8)}}
+@keyframes handSweep{0%{opacity:0;transform:translateY(-20px) rotate(16deg) scale(.65)}35%{opacity:1;transform:translateY(4px) rotate(-1deg) scale(1.08)}65%{opacity:1}100%{opacity:0;transform:translateY(-15px) rotate(13deg) scale(.75)}}
 .hand-ov.anim-grab{animation:handGrab .52s ease forwards}
 .hand-ov.anim-snatch{animation:handSnatch .4s ease forwards}
 .hand-ov.anim-sweep{animation:handSweep .58s ease forwards}
-
-/* 반응형 */
-@media(max-width:680px){
-  .game-main{grid-template-columns:104px 1fr 104px}
-  .tile-xl{width:31px;height:42px}
-  .tile-sm{width:15px;height:20px}
-  .tile-xs{width:10px;height:14px}
-}
-.open-set-grp{display:flex;gap:1px;background:rgba(255,255,255,.06);border-radius:3px;padding:1px;align-items:flex-end}
-/* 눕힌 패 — 치/퐁에서 가져온 패 */
-.tile.rotated{
-  transform:rotate(90deg);
-  transform-origin:center center;
-  margin:0 4px; /* 회전시 공간 확보 */
-}
 </style>
 </head>
 <body>
 
+<!-- 타이틀 -->
 <div id="title">
   <div class="t-deco">LOVE AND DEEP SPACE</div>
   <div class="t-title">딥스페이스 마작</div>
@@ -283,18 +358,30 @@ body{width:100%;height:var(--app-h);overflow:hidden;position:fixed;background:va
     <div class="t-char" style="border-color:var(--c-seoun);background:rgba(85,221,136,.1);opacity:.7">❄️</div>
     <div class="t-char" style="border-color:var(--c-jinun);background:rgba(255,100,100,.1);opacity:.7">🔴</div>
   </div>
-  <div class="t-desc">기욱 · 심성훈 · 하우주와 함께하는 리치마작<br><span style="font-size:.62rem;opacity:.55">이서언 · 진운은 관전 중</span></div>
+  <div class="t-desc">기욱 · 심성훈 · 하우주와 함께하는 리치마작<br><span style="font-size:.62rem;opacity:.5">이서언 · 진운은 관전 중</span></div>
   <button class="t-btn" onclick="startGame()">S T A R T</button>
 </div>
 
+<!-- 게임 -->
 <div id="game">
+
+  <!-- 상단 정보바 -->
   <div class="top-bar">
     <div class="round-badge" id="ui-round">동1국</div>
-    <div class="wall-info">🀫 <span id="ui-wall">0</span></div>
-    <div class="dora-wrap"><div class="dora-lbl">도라</div><div class="dora-tiles" id="ui-dora"></div></div>
-    <div id="ui-honba" style="font-size:.56rem;color:var(--txt2)"></div>
+    <div class="wall-info">🀫<span id="ui-wall">0</span></div>
+    <!-- 도라: 표시패→도라 표시 -->
+    <div class="dora-wrap">
+      <div class="dora-lbl">표시패</div>
+      <div class="dora-tiles" id="ui-indicator"></div>
+      <div class="dora-arrow">→</div>
+      <div class="dora-lbl">도라</div>
+      <div class="dora-tiles" id="ui-dora"></div>
+    </div>
+    <div id="ui-honba" style="font-size:.52rem;color:var(--txt2);white-space:nowrap"></div>
     <div class="scores-wrap" id="ui-scores"></div>
   </div>
+
+  <!-- 관전자 바 -->
   <div class="spec-bar">
     <div class="spec-lbl">👁 관전</div>
     <div class="spec-btns">
@@ -303,8 +390,14 @@ body{width:100%;height:var(--app-h);overflow:hidden;position:fixed;background:va
     </div>
     <div class="spec-hint">탭하면 한마디</div>
   </div>
-  <div class="game-main">
-    <div class="side-panel left">
+
+  <!-- 게임 바디 -->
+  <div class="game-body">
+
+    <!-- 상대 3명 가로 -->
+    <div class="opp-row">
+
+      <!-- 하우주 -->
       <div class="opp-card" id="panel-haju">
         <div class="opp-hdr">
           <span class="opp-ico">🌀</span>
@@ -313,44 +406,12 @@ body{width:100%;height:var(--app-h);overflow:hidden;position:fixed;background:va
           <span class="ri-tag" id="ri-haju" style="display:none">REACH</span>
           <span class="think-tag" id="th-haju" style="display:none">···</span>
         </div>
-        <div class="opp-tiles" id="hand-haju"></div>
-        <div class="opp-open" id="open-haju"></div>
-        <div class="disc-lbl">버린 패</div>
-        <div class="disc-row" id="disc-haju"></div>
+        <div class="opp-hand-row" id="hand-haju"></div>
+        <div class="opp-open-row" id="open-haju"></div>
+        <div class="opp-disc-wrap"><div class="opp-disc-row" id="disc-haju"></div></div>
       </div>
-    </div>
-    <div class="center-col">
-      <div class="discard-table">
-        <div class="dt-cell"><div class="dt-lbl" style="color:var(--c-haju)">🌀 하우주</div><div class="dt-tiles" id="disc2-haju"></div></div>
-        <div class="dt-cell"><div class="dt-lbl" style="color:var(--c-giwook)">🔥 기욱</div><div class="dt-tiles" id="disc2-giwook"></div></div>
-        <div class="dt-cell"><div class="dt-lbl" style="color:var(--c-seonghun)">✨ 심성훈</div><div class="dt-tiles" id="disc2-seonghun"></div></div>
-        <div class="dt-cell"><div class="dt-lbl" style="color:var(--gold)">⭐ 리쯔</div><div class="dt-tiles" id="disc2-player"></div></div>
-      </div>
-      <div class="center-strip">
-        <div id="ui-riichi-pool" class="ri-pool"></div>
-        <div id="ui-strip-msg" style="font-size:.58rem;color:var(--txt2)"></div>
-      </div>
-      <div class="player-zone">
-        <div class="player-hdr">
-          <div class="player-badge">⭐ 리쯔 — 東</div>
-          <span class="ri-on" id="ui-player-riichi" style="display:none">리치 중</span>
-          <span class="tenpai-show" id="ui-tenpai"></span>
-        </div>
-        <div class="player-sets" id="open-player"></div>
-        <div class="hand-row" id="hand-player"></div>
-      </div>
-      <div class="act-bar">
-        <button class="ab ab-tsumo hidden" id="btn-tsumo" onclick="actTsumo()">쯔모</button>
-        <button class="ab ab-ron   hidden" id="btn-ron"   onclick="actRon()">론</button>
-        <button class="ab ab-riichi hidden" id="btn-riichi" onclick="actRiichi()">리치</button>
-        <button class="ab ab-chi   hidden" id="btn-chi"   onclick="actChi()">치</button>
-        <button class="ab ab-pon   hidden" id="btn-pon"   onclick="actPon()">퐁</button>
-        <button class="ab ab-kan   hidden" id="btn-kan"   onclick="actKan()">깡</button>
-        <button class="ab ab-skip  hidden" id="btn-skip"  onclick="actSkip()">넘기기</button>
-        <div class="ab-hint" id="ui-hint">시작 중...</div>
-      </div>
-    </div>
-    <div class="side-panel right">
+
+      <!-- 기욱 -->
       <div class="opp-card" id="panel-giwook">
         <div class="opp-hdr">
           <span class="opp-ico">🔥</span>
@@ -359,11 +420,12 @@ body{width:100%;height:var(--app-h);overflow:hidden;position:fixed;background:va
           <span class="ri-tag" id="ri-giwook" style="display:none">REACH</span>
           <span class="think-tag" id="th-giwook" style="display:none">···</span>
         </div>
-        <div class="opp-tiles" id="hand-giwook"></div>
-        <div class="opp-open" id="open-giwook"></div>
-        <div class="disc-lbl">버린 패</div>
-        <div class="disc-row" id="disc-giwook"></div>
+        <div class="opp-hand-row" id="hand-giwook"></div>
+        <div class="opp-open-row" id="open-giwook"></div>
+        <div class="opp-disc-wrap"><div class="opp-disc-row" id="disc-giwook"></div></div>
       </div>
+
+      <!-- 심성훈 -->
       <div class="opp-card" id="panel-seonghun">
         <div class="opp-hdr">
           <span class="opp-ico">✨</span>
@@ -372,25 +434,78 @@ body{width:100%;height:var(--app-h);overflow:hidden;position:fixed;background:va
           <span class="ri-tag" id="ri-seonghun" style="display:none">REACH</span>
           <span class="think-tag" id="th-seonghun" style="display:none">···</span>
         </div>
-        <div class="opp-tiles" id="hand-seonghun"></div>
-        <div class="opp-open" id="open-seonghun"></div>
-        <div class="disc-lbl">버린 패</div>
-        <div class="disc-row" id="disc-seonghun"></div>
+        <div class="opp-hand-row" id="hand-seonghun"></div>
+        <div class="opp-open-row" id="open-seonghun"></div>
+        <div class="opp-disc-wrap"><div class="opp-disc-row" id="disc-seonghun"></div></div>
       </div>
+    </div>
+
+    <!-- 버린패 4분할 -->
+    <div class="discard-table">
+      <div class="dt-cell">
+        <div class="dt-lbl" style="color:var(--c-haju)">🌀 하우주</div>
+        <div class="dt-tiles" id="disc2-haju"></div>
+      </div>
+      <div class="dt-cell">
+        <div class="dt-lbl" style="color:var(--c-giwook)">🔥 기욱</div>
+        <div class="dt-tiles" id="disc2-giwook"></div>
+      </div>
+      <div class="dt-cell">
+        <div class="dt-lbl" style="color:var(--c-seonghun)">✨ 심성훈</div>
+        <div class="dt-tiles" id="disc2-seonghun"></div>
+      </div>
+      <div class="dt-cell">
+        <div class="dt-lbl" style="color:var(--gold)">⭐ 리쯔</div>
+        <div class="dt-tiles" id="disc2-player"></div>
+      </div>
+    </div>
+
+    <!-- 중앙 정보 -->
+    <div class="center-strip">
+      <div class="ri-pool" id="ui-riichi-pool"></div>
+      <div class="strip-txt" id="ui-strip-msg"></div>
+    </div>
+
+    <!-- 내 패 -->
+    <div class="player-zone">
+      <div class="player-hdr">
+        <div class="player-badge" id="player-badge">⭐ 리쯔 — 東</div>
+        <span class="ri-on" id="ui-player-riichi" style="display:none">REACH</span>
+        <span class="tenpai-show" id="ui-tenpai"></span>
+      </div>
+      <div class="player-sets" id="open-player"></div>
+      <div class="hand-wrap">
+        <div class="hand-row" id="hand-player"></div>
+      </div>
+    </div>
+
+    <!-- 액션바 -->
+    <div class="act-bar">
+      <button class="ab ab-tsumo hidden" id="btn-tsumo" onclick="actTsumo()">쯔모</button>
+      <button class="ab ab-ron   hidden" id="btn-ron"   onclick="actRon()">론</button>
+      <button class="ab ab-riichi hidden" id="btn-riichi" onclick="actRiichi()">리치</button>
+      <button class="ab ab-chi   hidden" id="btn-chi"   onclick="actChi()">치</button>
+      <button class="ab ab-pon   hidden" id="btn-pon"   onclick="actPon()">퐁</button>
+      <button class="ab ab-kan   hidden" id="btn-kan"   onclick="actKan()">깡</button>
+      <button class="ab ab-skip  hidden" id="btn-skip"  onclick="actSkip()">넘기기</button>
+      <div class="ab-hint" id="ui-hint">시작 중...</div>
     </div>
   </div>
 </div>
 
+<!-- 말풍선 -->
 <div class="bubble" id="bubble-giwook"><span class="bx" onclick="closeBubble('giwook')">✕</span><div class="bubble-name">🔥 기욱</div><div class="bubble-text" id="btxt-giwook"></div></div>
 <div class="bubble" id="bubble-seonghun"><span class="bx" onclick="closeBubble('seonghun')">✕</span><div class="bubble-name">✨ 심성훈</div><div class="bubble-text" id="btxt-seonghun"></div></div>
 <div class="bubble" id="bubble-haju"><span class="bx" onclick="closeBubble('haju')">✕</span><div class="bubble-name">🌀 하우주</div><div class="bubble-text" id="btxt-haju"></div></div>
-<div class="bubble" id="bubble-seoun"><span class="bx" onclick="closeBubble('seoun')">✕</span><div class="bubble-name">❄️ 이서언 <span style="font-size:.48rem;opacity:.55;font-weight:400">관전</span></div><div class="bubble-text" id="btxt-seoun"></div></div>
-<div class="bubble" id="bubble-jinun"><span class="bx" onclick="closeBubble('jinun')">✕</span><div class="bubble-name">🔴 진운 <span style="font-size:.48rem;opacity:.55;font-weight:400">관전</span></div><div class="bubble-text" id="btxt-jinun"></div></div>
+<div class="bubble" id="bubble-seoun"><span class="bx" onclick="closeBubble('seoun')">✕</span><div class="bubble-name">❄️ 이서언 <span style="font-size:.45rem;opacity:.5">관전</span></div><div class="bubble-text" id="btxt-seoun"></div></div>
+<div class="bubble" id="bubble-jinun"><span class="bx" onclick="closeBubble('jinun')">✕</span><div class="bubble-name">🔴 진운 <span style="font-size:.45rem;opacity:.5">관전</span></div><div class="bubble-text" id="btxt-jinun"></div></div>
 
+<!-- 손 오버레이 -->
 <div class="hand-ov" id="hand-el-giwook"></div>
 <div class="hand-ov" id="hand-el-haju"></div>
 <div class="hand-ov" id="hand-el-seonghun"></div>
 
+<!-- 결과 -->
 <div id="result-overlay">
   <div class="res-box">
     <div class="res-title" id="res-title"></div>
@@ -399,6 +514,8 @@ body{width:100%;height:var(--app-h);overflow:hidden;position:fixed;background:va
     <div class="res-pts"   id="res-pts"></div>
     <button class="res-btn" onclick="nextRound()">다음 국</button>
     <button class="res-btn" onclick="goTitle()">처음으로</button>
+  </div>
+</div>
 <script>
 function setAppHeight(){document.documentElement.style.setProperty('--app-h',window.innerHeight+'px')}
 setAppHeight();window.addEventListener('resize',setAppHeight);window.addEventListener('orientationchange',()=>setTimeout(setAppHeight,300));
@@ -1022,7 +1139,11 @@ function renderAll(){
   const sc=document.getElementById('ui-scores');sc.innerHTML='';
   const cc={player:'var(--gold)',haju:'var(--c-haju)',giwook:'var(--c-giwook)',seonghun:'var(--c-seonghun)'};
   for(const p of PIDS){const d=document.createElement('div');d.className='score-chip';d.innerHTML=`<div class="sc-name">${PNAME[p]}</div><div class="sc-val" style="color:${cc[p]}">${(G.scores[p]/1000).toFixed(1)}k</div>${G.riichi[p]?'<div class="sc-ri">REACH</div>':''}`;sc.appendChild(d)}
-  const dc=document.getElementById('ui-dora');dc.innerHTML='';G.dora.forEach(t=>{dc.appendChild(makeTileEl(t,'sm',{isDora:true}))});
+  // 도라 — 표시패와 도라 둘 다 표시
+  const indEl=document.getElementById('ui-indicator');
+  const doraEl=document.getElementById('ui-dora');
+  if(indEl){indEl.innerHTML='';G.deadWall.length>4&&[...Array(G.dora.length)].forEach((_,i)=>{const ind=G.deadWall[4+i*2]||G.deadWall[4];const el=makeTileEl(ind,'sm',{});el.classList.add('indicator');indEl.appendChild(el)})}
+  if(doraEl){doraEl.innerHTML='';G.dora.forEach(t=>{doraEl.appendChild(makeTileEl(t,'sm',{isDora:true}))})}
   const rds=['동1국','동2국','동3국','동4국'];document.getElementById('ui-round').textContent=rds[(G.round-1)%4]||`${G.round}국`;
   document.getElementById('ui-wall').textContent=G.wall.length;document.getElementById('ui-honba').textContent=G.honba>0?`${G.honba}본장`:'';
   const rp=document.getElementById('ui-riichi-pool');rp.innerHTML='';for(let i=0;i<G.riichiPool;i++){const s=document.createElement('div');s.className='ri-stick';rp.appendChild(s)}
@@ -1034,7 +1155,7 @@ function renderAll(){
     if(wEl&&G.winds[pid]) wEl.textContent=windKanji[G.winds[pid]]||G.winds[pid];
   }
   // 플레이어 바람도 player-badge에 반영
-  const pb=document.querySelector('.player-badge');
+  const pb=document.getElementById('player-badge');
   if(pb&&G.winds.player) pb.textContent=`⭐ 리쯔 — ${windKanji[G.winds.player]||'東'}`;
 
   for(const pid of['haju','giwook','seonghun']){
