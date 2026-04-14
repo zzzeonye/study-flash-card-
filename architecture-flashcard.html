@@ -1609,6 +1609,764 @@ body::before {
   font-family: 'Pacifico', cursive !important;
 }
 
+/* ═══ 티어 시스템 ═══ */
+.tier-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: .72rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .2s;
+  border: 1.5px solid rgba(247,202,201,0.5);
+  background: rgba(255,252,254,0.9);
+  color: var(--text);
+  box-shadow: 0 2px 8px rgba(201,131,138,0.15);
+}
+.tier-badge:hover { transform: scale(1.05); }
+
+/* 티어별 색상 */
+.tier-iron     { border-color:#9e9e9e; background:linear-gradient(135deg,#e0e0e0,#bdbdbd); color:#424242; }
+.tier-bronze   { border-color:#cd7f32; background:linear-gradient(135deg,#f5cba7,#cd7f32); color:#5d3a1a; }
+.tier-silver   { border-color:#aaa; background:linear-gradient(135deg,#f0f0f0,#c0c0c0); color:#333; }
+.tier-gold     { border-color:#f5c518; background:linear-gradient(135deg,#fff8dc,#f5c518); color:#7d6608; }
+.tier-platinum { border-color:#00b8d9; background:linear-gradient(135deg,#e0f7fa,#00b8d9); color:#006064; }
+.tier-diamond  { border-color:#7c4dff; background:linear-gradient(135deg,#ede7f6,#7c4dff); color:#fff; }
+.tier-master   { border-color:#ff6d00; background:linear-gradient(135deg,#fff3e0,#ff6d00); color:#fff; }
+.tier-challenger { border-color:#d32f2f; background:linear-gradient(135deg,#c62828,#7b1fa2); color:#fff;
+  box-shadow: 0 0 12px rgba(211,47,47,0.5); animation: tier-glow 2s ease-in-out infinite alternate; }
+
+@keyframes tier-glow {
+  from { box-shadow: 0 0 8px rgba(211,47,47,0.4); }
+  to   { box-shadow: 0 0 20px rgba(123,31,162,0.7); }
+}
+
+/* 티어 모달 */
+.tier-modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(30,0,50,.5); backdrop-filter: blur(6px);
+  z-index: 500; align-items: center; justify-content: center;
+}
+.tier-modal-overlay.open { display: flex; }
+.tier-modal {
+  background: var(--surface);
+  border-radius: 24px;
+  padding: 28px 24px;
+  width: 90%; max-width: 360px;
+  border: 1.5px solid rgba(247,202,201,0.4);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  position: relative;
+}
+.tier-modal-title {
+  font-family: 'Pacifico', cursive;
+  font-size: 1.2rem;
+  text-align: center;
+  margin-bottom: 16px;
+  color: var(--accent);
+}
+.tier-current-display {
+  text-align: center;
+  padding: 16px;
+  border-radius: 16px;
+  margin-bottom: 16px;
+  background: rgba(247,202,201,0.1);
+}
+.tier-current-icon { font-size: 2.5rem; margin-bottom: 4px; }
+.tier-current-name { font-size: 1.1rem; font-weight: 700; }
+.tier-current-pts  { font-size: .8rem; color: var(--muted); margin-top: 2px; }
+
+.tier-progress-wrap { margin-bottom: 16px; }
+.tier-progress-label {
+  display: flex; justify-content: space-between;
+  font-size: .72rem; color: var(--muted); margin-bottom: 4px;
+}
+.tier-progress-bar {
+  height: 10px; border-radius: 10px;
+  background: rgba(247,202,201,0.2);
+  overflow: hidden;
+}
+.tier-progress-fill {
+  height: 100%; border-radius: 10px;
+  background: linear-gradient(90deg, #f7cac9, #c9838a);
+  transition: width .6s cubic-bezier(.34,1.56,.64,1);
+}
+
+.tier-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+.tier-list-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 12px; border-radius: 12px;
+  font-size: .78rem; font-weight: 600;
+  background: rgba(247,202,201,0.08);
+  border: 1px solid rgba(247,202,201,0.2);
+}
+.tier-list-item.current {
+  background: rgba(247,202,201,0.2);
+  border-color: var(--accent);
+}
+.tier-list-item.achieved { opacity: 0.6; }
+.tier-list-pts { margin-left: auto; font-size: .7rem; color: var(--muted); }
+
+.tier-modal-close {
+  width: 100%; padding: 10px; border-radius: 14px;
+  border: 1.5px solid rgba(247,202,201,0.4);
+  background: transparent; color: var(--muted);
+  font-size: .85rem; cursor: pointer;
+}
+
+/* 티어 업/다운 토스트 */
+.tier-toast {
+  position: fixed; top: 80px; left: 50%; transform: translateX(-50%) translateY(-20px);
+  padding: 12px 24px; border-radius: 20px;
+  font-weight: 700; font-size: .9rem;
+  z-index: 600; opacity: 0;
+  transition: all .4s cubic-bezier(.34,1.56,.64,1);
+  pointer-events: none;
+  white-space: nowrap;
+}
+.tier-toast.show {
+  opacity: 1; transform: translateX(-50%) translateY(0);
+}
+.tier-toast.up {
+  background: linear-gradient(135deg, #fff8dc, #f5c518);
+  color: #7d6608;
+  box-shadow: 0 4px 20px rgba(245,197,24,0.4);
+}
+.tier-toast.down {
+  background: linear-gradient(135deg, #fde8e8, #c9838a);
+  color: #5a2028;
+  box-shadow: 0 4px 20px rgba(201,131,138,0.4);
+}
+
+/* 포인트 획득 팝업 */
+.pt-popup {
+  position: fixed; pointer-events: none;
+  font-weight: 700; font-size: 1rem;
+  z-index: 600; opacity: 0;
+  animation: pt-fly 1.2s ease forwards;
+}
+@keyframes pt-fly {
+  0%   { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-60px) scale(1.3); }
+}
+
+/* ═══ 퀘스트 보드 ═══ */
+.quest-bar {
+  width: 100%; max-width: 580px;
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 14px;
+  background: rgba(255,252,254,0.9);
+  border: 1.5px solid rgba(247,202,201,0.4);
+  border-radius: 14px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all .2s;
+  box-shadow: 0 2px 8px rgba(201,131,138,0.08);
+}
+.quest-bar:hover { border-color: var(--accent); transform: translateY(-1px); }
+.quest-bar-label { font-size: .78rem; font-weight: 700; color: var(--text); flex:1; }
+.quest-bar-progress { font-size: .72rem; color: var(--muted); }
+.quest-mini-bars { display: flex; gap: 4px; }
+.quest-mini-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: rgba(247,202,201,0.3);
+  border: 1.5px solid rgba(247,202,201,0.5);
+  transition: all .3s;
+}
+.quest-mini-dot.done {
+  background: linear-gradient(135deg, #f7cac9, #c9838a);
+  border-color: #c9838a;
+  box-shadow: 0 0 4px rgba(201,131,138,0.5);
+}
+
+/* 퀘스트 모달 */
+.quest-modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(30,0,50,.5); backdrop-filter: blur(6px);
+  z-index: 500; align-items: center; justify-content: center;
+}
+.quest-modal-overlay.open { display: flex; }
+.quest-modal {
+  background: var(--surface);
+  border-radius: 24px;
+  padding: 24px 20px;
+  width: 90%; max-width: 360px;
+  border: 1.5px solid rgba(247,202,201,0.4);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+.quest-modal-title {
+  font-family: 'Pacifico', cursive;
+  font-size: 1.1rem;
+  text-align: center;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+.quest-modal-date {
+  text-align: center; font-size: .7rem;
+  color: var(--muted); margin-bottom: 16px;
+}
+.quest-item {
+  display: flex; flex-direction: column; gap: 5px;
+  padding: 12px 14px; border-radius: 14px;
+  margin-bottom: 10px;
+  background: rgba(247,202,201,0.08);
+  border: 1.5px solid rgba(247,202,201,0.2);
+  transition: all .3s;
+}
+.quest-item.done {
+  background: rgba(168,197,181,0.12);
+  border-color: rgba(168,197,181,0.4);
+}
+.quest-item-top {
+  display: flex; align-items: center; gap: 8px;
+}
+.quest-item-icon { font-size: 1.1rem; }
+.quest-item-title { font-size: .82rem; font-weight: 600; flex: 1; }
+.quest-item-reward { font-size: .72rem; color: var(--accent); font-weight: 700; }
+.quest-item-done-badge {
+  font-size: .68rem; color: #82a898; font-weight: 700;
+  background: rgba(168,197,181,0.2); padding: 2px 7px;
+  border-radius: 10px;
+}
+.quest-prog-bar {
+  height: 6px; border-radius: 6px;
+  background: rgba(247,202,201,0.2); overflow: hidden;
+}
+.quest-prog-fill {
+  height: 100%; border-radius: 6px;
+  background: linear-gradient(90deg, #f7cac9, #c9838a);
+  transition: width .5s cubic-bezier(.34,1.56,.64,1);
+}
+.quest-prog-label {
+  font-size: .68rem; color: var(--muted); text-align: right;
+}
+.quest-bonus-bar {
+  text-align: center; padding: 10px;
+  border-radius: 12px; margin-bottom: 14px;
+  background: rgba(247,202,201,0.1);
+  border: 1px dashed rgba(247,202,201,0.4);
+  font-size: .78rem; color: var(--muted);
+}
+.quest-bonus-bar.ready {
+  background: rgba(245,197,24,0.1);
+  border-color: rgba(245,197,24,0.5);
+  color: #7d6608; font-weight: 700;
+}
+.quest-modal-close {
+  width: 100%; padding: 10px; border-radius: 14px;
+  border: 1.5px solid rgba(247,202,201,0.4);
+  background: transparent; color: var(--muted);
+  font-size: .85rem; cursor: pointer;
+}
+
+/* 퀘스트 완료 이펙트 */
+@keyframes quest-complete {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+.quest-item.just-done { animation: quest-complete .4s ease; }
+
+/* ═══ 가챠 시스템 ═══ */
+.gacha-btn-wrap {
+  width: 100%; max-width: 580px;
+  display: flex; gap: 8px; margin-bottom: 8px;
+}
+.gacha-open-btn {
+  flex: 1; padding: 10px 14px;
+  border-radius: 14px;
+  border: 1.5px solid rgba(247,202,201,0.5);
+  background: linear-gradient(135deg, rgba(255,252,254,0.95), rgba(247,230,235,0.9));
+  color: var(--text); font-weight: 700; font-size: .82rem;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+  box-shadow: 0 2px 8px rgba(201,131,138,0.12);
+  transition: all .2s;
+}
+.gacha-open-btn:hover { transform: translateY(-1px); border-color: var(--accent); }
+.gacha-ticket-count {
+  font-size: .7rem; color: var(--accent); font-weight: 700;
+  background: rgba(247,202,201,0.2); padding: 2px 7px; border-radius: 10px;
+}
+
+/* 가챠 모달 */
+.gacha-modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(10,0,30,.7); backdrop-filter: blur(8px);
+  z-index: 600; align-items: center; justify-content: center;
+  flex-direction: column;
+}
+.gacha-modal-overlay.open { display: flex; }
+
+/* 뽑기 대기 화면 */
+.gacha-ready {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 20px; padding: 30px 20px; width: 90%; max-width: 340px;
+}
+.gacha-ready-title {
+  font-family: 'Pacifico', cursive;
+  font-size: 1.4rem; color: #fff;
+  text-shadow: 0 0 20px rgba(247,202,201,0.8);
+}
+.gacha-ticket-info {
+  font-size: .85rem; color: rgba(255,255,255,0.7);
+}
+.gacha-pull-btn {
+  padding: 14px 36px; border-radius: 20px; border: none;
+  background: linear-gradient(135deg, #f7cac9, #c9838a, #a882b0);
+  color: #fff; font-size: 1rem; font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 24px rgba(201,131,138,0.5);
+  transition: all .2s;
+  animation: gacha-pulse 2s ease-in-out infinite;
+}
+.gacha-pull-btn:hover { transform: scale(1.05); }
+.gacha-pull-btn:disabled { opacity: 0.4; cursor: not-allowed; animation: none; }
+@keyframes gacha-pulse {
+  0%,100% { box-shadow: 0 4px 24px rgba(201,131,138,0.5); }
+  50%      { box-shadow: 0 4px 40px rgba(168,130,176,0.8); }
+}
+.gacha-close-btn {
+  color: rgba(255,255,255,0.5); font-size: .8rem;
+  background: none; border: none; cursor: pointer; padding: 8px;
+}
+
+/* 카드 뒤집기 */
+.gacha-card-scene {
+  width: 200px; height: 280px;
+  perspective: 1000px;
+}
+.gacha-card-inner {
+  width: 100%; height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform .8s cubic-bezier(.4,0,.2,1);
+}
+.gacha-card-inner.flipped { transform: rotateY(180deg); }
+.gacha-card-face {
+  position: absolute; inset: 0;
+  border-radius: 20px;
+  backface-visibility: hidden;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 10px;
+}
+.gacha-card-back {
+  background: linear-gradient(135deg, #1a0a2e, #2d1b4e, #1a0a2e);
+  border: 2px solid rgba(247,202,201,0.3);
+  cursor: pointer;
+  overflow: hidden;
+}
+.gacha-card-back::before {
+  content: '✦';
+  font-size: 4rem; color: rgba(247,202,201,0.2);
+  animation: rotate 8s linear infinite;
+}
+.gacha-card-front {
+  transform: rotateY(180deg);
+  border: 3px solid rgba(247,202,201,0.5);
+}
+
+/* 등급별 카드 스타일 */
+.gacha-grade-n  { background: linear-gradient(135deg, #e0e0e0, #bdbdbd); border-color: #9e9e9e; }
+.gacha-grade-r  { background: linear-gradient(135deg, #e3f2fd, #90caf9, #42a5f5); border-color: #1565c0; }
+.gacha-grade-sr { background: linear-gradient(135deg, #f3e5f5, #ce93d8, #9c27b0); border-color: #6a1b9a; }
+.gacha-grade-ssr {
+  background: linear-gradient(135deg, #fff8e1, #ffe082, #ffd700, #ffb300);
+  border-color: #f57f17;
+  box-shadow: 0 0 30px rgba(255,215,0,0.6);
+  animation: ssr-glow 1.5s ease-in-out infinite alternate;
+}
+@keyframes ssr-glow {
+  from { box-shadow: 0 0 20px rgba(255,215,0,0.5); }
+  to   { box-shadow: 0 0 50px rgba(255,150,0,0.9); }
+}
+
+.gacha-card-grade {
+  font-size: .75rem; font-weight: 700; letter-spacing: 2px;
+  padding: 3px 10px; border-radius: 10px;
+  background: rgba(0,0,0,0.15); color: rgba(0,0,0,0.6);
+}
+.gacha-grade-ssr .gacha-card-grade { color: #7d4e00; background: rgba(255,255,255,0.3); }
+.gacha-grade-sr .gacha-card-grade  { color: #fff; background: rgba(0,0,0,0.2); }
+.gacha-grade-r .gacha-card-grade   { color: #fff; background: rgba(0,0,0,0.2); }
+
+.gacha-card-emoji { font-size: 4rem; }
+.gacha-card-name  { font-size: .85rem; font-weight: 700; text-align: center; color: rgba(0,0,0,0.7); }
+.gacha-grade-sr .gacha-card-name,
+.gacha-grade-r .gacha-card-name { color: #fff; }
+.gacha-grade-ssr .gacha-card-name { color: #7d4e00; }
+
+/* SSR 풀스크린 */
+.gacha-ssr-overlay {
+  position: fixed; inset: 0; z-index: 700;
+  background: radial-gradient(ellipse at center, rgba(255,215,0,0.3) 0%, rgba(10,0,30,0.95) 70%);
+  display: none; align-items: center; justify-content: center;
+  flex-direction: column; gap: 20px;
+}
+.gacha-ssr-overlay.open { display: flex; }
+.gacha-ssr-title {
+  font-family: 'Pacifico', cursive;
+  font-size: 1.8rem; color: #ffd700;
+  text-shadow: 0 0 30px rgba(255,215,0,0.8);
+  animation: ssr-title 1s ease-in-out infinite alternate;
+}
+@keyframes ssr-title {
+  from { text-shadow: 0 0 20px rgba(255,215,0,0.6); }
+  to   { text-shadow: 0 0 50px rgba(255,200,0,1); }
+}
+.gacha-ssr-card {
+  width: 220px; height: 300px; border-radius: 24px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 12px;
+  animation: ssr-card-in 1s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes ssr-card-in {
+  from { transform: scale(0) rotate(-10deg); opacity: 0; }
+  to   { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+.gacha-ssr-close {
+  color: rgba(255,255,255,0.6); background: none; border: none;
+  font-size: .9rem; cursor: pointer; padding: 10px;
+}
+
+/* 가챠 결과 히스토리 */
+.gacha-history-wrap {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  justify-content: center; margin-top: 10px;
+  max-height: 120px; overflow-y: auto;
+}
+.gacha-history-item {
+  width: 36px; height: 50px; border-radius: 8px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  font-size: 1.2rem;
+  border: 1.5px solid rgba(247,202,201,0.3);
+  background: rgba(255,252,254,0.1);
+}
+.gacha-history-item.grade-r   { border-color: #42a5f5; background: rgba(66,165,245,0.1); }
+.gacha-history-item.grade-sr  { border-color: #9c27b0; background: rgba(156,39,176,0.1); }
+.gacha-history-item.grade-ssr { border-color: #ffd700; background: rgba(255,215,0,0.15); box-shadow: 0 0 8px rgba(255,215,0,0.3); }
+
+/* 별 파티클 */
+.gacha-star {
+  position: fixed; pointer-events: none; z-index: 650;
+  font-size: 1.2rem; animation: gacha-star-fly 1.5s ease forwards;
+}
+@keyframes gacha-star-fly {
+  0%   { opacity: 1; transform: translate(0,0) scale(1) rotate(0deg); }
+  100% { opacity: 0; transform: translate(var(--tx),var(--ty)) scale(0) rotate(360deg); }
+}
+
+/* ═══ 도감 + 칭호 ═══ */
+.collection-modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(10,0,30,.8); backdrop-filter: blur(8px);
+  z-index: 600; align-items: flex-start; justify-content: center;
+  padding-top: 40px; overflow-y: auto;
+}
+.collection-modal-overlay.open { display: flex; }
+.collection-modal {
+  background: var(--surface);
+  border-radius: 24px; padding: 24px 20px;
+  width: 92%; max-width: 400px;
+  border: 1.5px solid rgba(247,202,201,0.4);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  margin-bottom: 40px;
+}
+.collection-modal-title {
+  font-family: 'Pacifico', cursive;
+  font-size: 1.1rem; text-align: center;
+  color: var(--accent); margin-bottom: 16px;
+}
+
+/* 칭호 섹션 */
+.title-section { margin-bottom: 20px; }
+.title-section-label {
+  font-size: .78rem; font-weight: 700;
+  color: var(--muted); margin-bottom: 10px;
+}
+.title-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.title-item {
+  padding: 10px 12px; border-radius: 12px;
+  border: 1.5px solid rgba(247,202,201,0.2);
+  background: rgba(247,202,201,0.05);
+  position: relative; overflow: hidden;
+}
+.title-item.unlocked {
+  border-color: var(--accent);
+  background: rgba(247,202,201,0.12);
+}
+.title-item.locked { opacity: 0.5; }
+.title-item-name {
+  font-size: .8rem; font-weight: 700; color: var(--text);
+  margin-bottom: 2px;
+}
+.title-item-cond {
+  font-size: .68rem; color: var(--muted);
+}
+.title-item-badge {
+  position: absolute; top: 6px; right: 6px;
+  font-size: .6rem; padding: 1px 5px;
+  border-radius: 6px; font-weight: 700;
+}
+.title-item.unlocked .title-item-badge {
+  background: rgba(168,197,181,0.3); color: #4a7868;
+}
+.title-item.locked .title-item-badge {
+  background: rgba(247,202,201,0.2); color: var(--muted);
+}
+.title-equip-btn {
+  margin-top: 6px; width: 100%; padding: 4px;
+  border-radius: 8px; border: 1px solid var(--accent);
+  background: transparent; color: var(--accent);
+  font-size: .68rem; cursor: pointer; font-weight: 700;
+}
+.title-equip-btn.equipped {
+  background: var(--accent); color: #fff;
+}
+
+/* 도감 섹션 */
+.collection-section-label {
+  font-size: .78rem; font-weight: 700;
+  color: var(--muted); margin: 16px 0 10px;
+}
+.collection-grade-group { margin-bottom: 14px; }
+.collection-grade-title {
+  font-size: .72rem; font-weight: 700;
+  padding: 3px 10px; border-radius: 8px;
+  display: inline-block; margin-bottom: 8px;
+}
+.cgt-ssr { background: rgba(255,215,0,0.2); color: #7d4e00; }
+.cgt-sr  { background: rgba(156,39,176,0.15); color: #6a1b9a; }
+.cgt-r   { background: rgba(66,165,245,0.15); color: #1565c0; }
+.cgt-n   { background: rgba(158,158,158,0.15); color: #424242; }
+
+.collection-cards-grid {
+  display: flex; flex-wrap: wrap; gap: 8px;
+}
+.collection-card-item {
+  width: 60px; height: 80px; border-radius: 10px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 3px; font-size: 1.6rem;
+  border: 1.5px solid rgba(247,202,201,0.3);
+  background: rgba(255,252,254,0.08);
+  position: relative;
+}
+.collection-card-item .cc-count {
+  position: absolute; top: 3px; right: 4px;
+  font-size: .55rem; font-weight: 700;
+  color: var(--muted);
+}
+.collection-card-item .cc-name {
+  font-size: .5rem; color: var(--muted);
+  text-align: center; line-height: 1.2;
+  padding: 0 2px;
+}
+.collection-card-item.grade-ssr {
+  border-color: #ffd700;
+  background: rgba(255,215,0,0.1);
+  box-shadow: 0 0 8px rgba(255,215,0,0.2);
+}
+.collection-card-item.grade-sr {
+  border-color: #9c27b0;
+  background: rgba(156,39,176,0.08);
+}
+.collection-card-item.grade-r {
+  border-color: #42a5f5;
+  background: rgba(66,165,245,0.08);
+}
+.collection-modal-close {
+  width: 100%; padding: 10px; border-radius: 14px;
+  border: 1.5px solid rgba(247,202,201,0.4);
+  background: transparent; color: var(--muted);
+  font-size: .85rem; cursor: pointer; margin-top: 16px;
+}
+
+/* 현재 장착 칭호 표시 */
+.equipped-title-display {
+  text-align: center; font-size: .72rem;
+  color: var(--accent); font-weight: 700;
+  padding: 4px 12px; border-radius: 10px;
+  background: rgba(247,202,201,0.1);
+  border: 1px solid rgba(247,202,201,0.3);
+  margin-bottom: 12px;
+}
+
+/* ═══ 보스전 ═══ */
+.boss-bar {
+  width: 100%; max-width: 580px;
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 14px;
+  background: rgba(255,252,254,0.9);
+  border: 1.5px solid rgba(247,202,201,0.4);
+  border-radius: 14px;
+  margin-bottom: 8px;
+  box-shadow: 0 2px 8px rgba(201,131,138,0.08);
+}
+.boss-bar.ready {
+  border-color: #c9838a;
+  background: linear-gradient(135deg, rgba(255,252,254,0.95), rgba(247,202,201,0.15));
+  cursor: pointer;
+  animation: boss-pulse 2s ease-in-out infinite;
+}
+@keyframes boss-pulse {
+  0%,100% { box-shadow: 0 2px 8px rgba(201,131,138,0.2); }
+  50%      { box-shadow: 0 4px 20px rgba(201,131,138,0.5); }
+}
+.boss-bar-label { font-size: .78rem; font-weight: 700; color: var(--text); flex:1; }
+.boss-progress-wrap { flex:1; display:flex; flex-direction:column; gap:3px; }
+.boss-progress-bar {
+  height: 6px; border-radius: 6px;
+  background: rgba(247,202,201,0.2); overflow:hidden;
+}
+.boss-progress-fill {
+  height: 100%; border-radius: 6px;
+  background: linear-gradient(90deg, #f7cac9, #c9838a);
+  transition: width .4s ease;
+}
+.boss-progress-label {
+  font-size: .65rem; color: var(--muted); text-align:right;
+}
+
+/* 보스전 모달 */
+.boss-modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(10,0,20,.85); backdrop-filter: blur(10px);
+  z-index: 600; align-items: center; justify-content: center;
+  flex-direction: column;
+}
+.boss-modal-overlay.open { display: flex; }
+
+/* 보스 등장 연출 */
+.boss-intro {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 16px;
+  animation: boss-intro-in .6s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes boss-intro-in {
+  from { transform: scale(0.5); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+.boss-sprite {
+  font-size: 5rem;
+  filter: drop-shadow(0 0 20px rgba(201,131,138,0.8));
+  animation: boss-float 3s ease-in-out infinite;
+}
+@keyframes boss-float {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-12px); }
+}
+.boss-name {
+  font-family: 'Pacifico', cursive;
+  font-size: 1.4rem; color: #f7cac9;
+  text-shadow: 0 0 20px rgba(247,202,201,0.6);
+}
+.boss-hp-wrap { width: 260px; }
+.boss-hp-bar {
+  height: 14px; border-radius: 10px;
+  background: rgba(255,255,255,0.1); overflow:hidden;
+  margin-bottom: 4px;
+}
+.boss-hp-fill {
+  height: 100%; border-radius: 10px;
+  background: linear-gradient(90deg, #ff6b6b, #c9383a);
+  transition: width .5s ease;
+}
+.boss-hp-label {
+  font-size: .72rem; color: rgba(255,255,255,0.6);
+  text-align: center;
+}
+.boss-start-btn {
+  padding: 12px 32px; border-radius: 20px; border: none;
+  background: linear-gradient(135deg, #f7cac9, #c9838a);
+  color: #fff; font-weight: 700; font-size: .95rem;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(201,131,138,0.4);
+  transition: all .2s;
+}
+.boss-start-btn:hover { transform: scale(1.05); }
+
+/* 보스전 진행 화면 */
+.boss-battle-screen {
+  width: 92%; max-width: 380px;
+  background: rgba(20,5,35,0.95);
+  border-radius: 24px; padding: 20px;
+  border: 1.5px solid rgba(247,202,201,0.2);
+}
+.boss-battle-header {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 16px;
+}
+.boss-battle-sprite { font-size: 2rem; }
+.boss-battle-hp-wrap { flex:1; }
+.boss-battle-hp-bar {
+  height: 8px; border-radius: 8px;
+  background: rgba(255,255,255,0.1); overflow:hidden;
+}
+.boss-battle-hp-fill {
+  height: 100%; border-radius: 8px;
+  background: linear-gradient(90deg, #ff6b6b, #c9383a);
+  transition: width .4s ease;
+}
+.boss-battle-hp-label {
+  font-size: .65rem; color: rgba(255,255,255,0.5);
+  margin-top: 2px;
+}
+.boss-q-num {
+  font-size: .7rem; color: rgba(255,255,255,0.4);
+  text-align: center; margin-bottom: 8px;
+}
+.boss-question {
+  background: rgba(255,255,255,0.06);
+  border-radius: 14px; padding: 16px;
+  color: #fff; font-size: .88rem; line-height: 1.6;
+  margin-bottom: 14px; min-height: 80px;
+  white-space: pre-wrap;
+}
+.boss-answer-wrap { display:flex; flex-direction:column; gap:8px; }
+.boss-ans-btn {
+  padding: 10px 14px; border-radius: 12px;
+  border: 1.5px solid rgba(247,202,201,0.2);
+  background: rgba(255,255,255,0.05);
+  color: #fff; font-size: .82rem;
+  cursor: pointer; text-align:left;
+  transition: all .2s;
+}
+.boss-ans-btn:hover { border-color: rgba(247,202,201,0.5); background: rgba(247,202,201,0.1); }
+.boss-ans-btn.correct { border-color: #82a898; background: rgba(130,168,152,0.2); color: #b8e0d4; }
+.boss-ans-btn.wrong   { border-color: #c9838a; background: rgba(201,131,138,0.2); color: #f7cac9; }
+.boss-next-btn {
+  width:100%; margin-top: 10px; padding: 10px;
+  border-radius: 12px; border: 1px solid rgba(247,202,201,0.3);
+  background: rgba(247,202,201,0.1); color: rgba(255,255,255,0.7);
+  font-size: .82rem; cursor: pointer;
+}
+
+/* 결과 화면 */
+.boss-result {
+  display: flex; flex-direction:column;
+  align-items: center; gap: 14px;
+  animation: boss-intro-in .6s cubic-bezier(.34,1.56,.64,1);
+}
+.boss-result-icon { font-size: 4rem; }
+.boss-result-title {
+  font-family: 'Pacifico', cursive;
+  font-size: 1.3rem;
+}
+.boss-result-title.win  { color: #ffd700; text-shadow: 0 0 20px rgba(255,215,0,0.6); }
+.boss-result-title.lose { color: #f7cac9; }
+.boss-result-desc { font-size: .82rem; color: rgba(255,255,255,0.6); text-align:center; }
+.boss-result-btn {
+  padding: 12px 28px; border-radius: 16px; border:none;
+  background: linear-gradient(135deg, #f7cac9, #c9838a);
+  color:#fff; font-weight:700; cursor:pointer; font-size:.9rem;
+}
+
 </style>
 </head>
 <body>
@@ -1619,6 +2377,7 @@ body::before {
     <div class="subtitle" id="app-subtitle">♥ 9급 건축직 공무원 시험 대비</div>
   </div>
   <div style="display:flex;align-items:center;gap:10px;">
+    <button class="tier-badge tier-iron" id="tier-badge" onclick="openTierModal()">🔩 아이언</button>
     <div class="hstats">
       <div><div class="hsn g" id="st-know">0</div><div class="hsl">완료</div></div>
       <div><div class="hsn r" id="st-left">0</div><div class="hsl">남은것</div></div>
@@ -1630,6 +2389,9 @@ body::before {
 <div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
 <div class="drawer" id="drawer">
   <div class="drawer-title">더보기</div>
+  <button class="drawer-btn" id="drawer-quest" onclick="openQuestModal();closeDrawer()">📋 오늘의 퀘스트</button>
+  <button class="drawer-btn" id="drawer-tier" onclick="openTierModal();closeDrawer()">🏆 티어 현황</button>
+  <button class="drawer-btn" id="drawer-collection" onclick="openCollectionModal();closeDrawer()">📖 도감 &amp; 칭호</button>
   <button class="drawer-btn" id="drawer-calendar" onclick="switchTab('calendar');closeDrawer()">📅 출석 캘린더</button>
   <button class="drawer-btn" id="drawer-stats"    onclick="switchTab('stats');closeDrawer()">📊 통계</button>
   <div class="drawer-title">관리</div>
@@ -1637,9 +2399,179 @@ body::before {
   <button class="drawer-btn" id="drawer-settings" onclick="switchTab('settings');closeDrawer()">⚙ 설정</button>
   <button class="drawer-close" onclick="closeDrawer()">닫기</button>
 </div>
+
+<!-- 티어 모달 -->
+<div class="tier-modal-overlay" id="tier-modal-overlay" onclick="closeTierModal(event)">
+  <div class="tier-modal">
+    <div class="tier-modal-title">🏆 티어 현황</div>
+    <div class="tier-current-display" id="tier-current-display">
+      <div class="tier-current-icon" id="tier-icon">🔩</div>
+      <div class="tier-current-name" id="tier-name">아이언</div>
+      <div class="tier-current-pts" id="tier-pts">0 pt</div>
+    </div>
+    <div class="tier-progress-wrap">
+      <div class="tier-progress-label">
+        <span id="tier-prog-cur">0 pt</span>
+        <span id="tier-prog-next">다음 티어까지 100pt</span>
+      </div>
+      <div class="tier-progress-bar">
+        <div class="tier-progress-fill" id="tier-prog-fill" style="width:0%"></div>
+      </div>
+    </div>
+    <div class="tier-list" id="tier-list"></div>
+    <div style="font-size:.7rem;color:var(--muted);margin-bottom:12px;line-height:1.6;">
+      ✅ 카드 맞히기 +1pt &nbsp;|&nbsp; 📅 출석 +5pt<br>
+      📋 퀘스트 완료 +10pt &nbsp;|&nbsp; 👾 보스전 승리 +20pt<br>
+      ❌ 보스전 패배 -15pt &nbsp;|&nbsp; 😴 2일 결석 -10pt<br>
+      💤 3일+ 결석 -20pt &nbsp;|&nbsp; 📋 주간퀘스트 미완료 -10pt
+    </div>
+    <button class="tier-modal-close" onclick="closeTierModal()">닫기</button>
+  </div>
+</div>
+
+<!-- 티어 토스트 -->
+<div class="tier-toast" id="tier-toast"></div>
+
+<!-- 가챠 모달 -->
+<div class="gacha-modal-overlay" id="gacha-modal-overlay">
+  <div class="gacha-ready" id="gacha-ready-screen">
+    <div class="gacha-ready-title">✨ 마법 뽑기 ✨</div>
+    <div class="gacha-card-scene" id="gacha-card-scene" onclick="flipGachaCard()">
+      <div class="gacha-card-inner" id="gacha-card-inner">
+        <div class="gacha-card-face gacha-card-back">
+          <div style="color:rgba(247,202,201,0.5);font-size:3rem;">✦</div>
+          <div style="color:rgba(255,255,255,0.4);font-size:.75rem;">탭하여 뽑기</div>
+        </div>
+        <div class="gacha-card-face gacha-card-front gacha-grade-n" id="gacha-card-front">
+          <div class="gacha-card-grade" id="gacha-result-grade">N</div>
+          <div class="gacha-card-emoji" id="gacha-result-emoji">🌸</div>
+          <div class="gacha-card-name" id="gacha-result-name">이름</div>
+        </div>
+      </div>
+    </div>
+    <div class="gacha-ticket-info" id="gacha-ticket-info">🎟 보유 티켓: 0장</div>
+    <button class="gacha-pull-btn" id="gacha-pull-btn" onclick="doPull()">뽑기!</button>
+    <div class="gacha-history-wrap" id="gacha-history-wrap"></div>
+    <button class="gacha-close-btn" onclick="closeGacha()">닫기</button>
+  </div>
+</div>
+
+<!-- SSR 풀스크린 연출 -->
+<div class="gacha-ssr-overlay" id="gacha-ssr-overlay">
+  <div class="gacha-ssr-title">✨ SSR ✨</div>
+  <div class="gacha-ssr-card gacha-grade-ssr" id="gacha-ssr-card">
+    <div class="gacha-card-grade">SSR</div>
+    <div class="gacha-card-emoji" id="gacha-ssr-emoji" style="font-size:5rem;">⭐</div>
+    <div class="gacha-card-name" id="gacha-ssr-name" style="font-size:1rem;color:#7d4e00;">이름</div>
+  </div>
+  <button class="gacha-ssr-close" onclick="closeSSROverlay()">✦ 확인</button>
+</div>
+
+<!-- 도감 + 칭호 모달 -->
+<div class="collection-modal-overlay" id="collection-modal-overlay" onclick="closeCollectionModal(event)">
+  <div class="collection-modal">
+    <div class="collection-modal-title">📖 도감 &amp; 칭호</div>
+    <div class="equipped-title-display" id="equipped-title-display">장착 칭호: 없음</div>
+
+    <!-- 칭호 -->
+    <div class="title-section">
+      <div class="title-section-label">🏅 칭호 해금</div>
+      <div class="title-grid" id="title-grid"></div>
+    </div>
+
+    <!-- 도감 -->
+    <div class="collection-section-label">✨ 수집 도감</div>
+    <div id="collection-grades-wrap"></div>
+
+    <button class="collection-modal-close" onclick="closeCollectionModal()">닫기</button>
+  </div>
+</div>
 <div class="subject-row">
   <button class="subject-btn active" id="subj-arch" onclick="switchSubject('arch')">🏛 건축구조</button>
   <button class="subject-btn" id="subj-eng" onclick="switchSubject('eng')">✨ 영단어</button>
+</div>
+
+<!-- 퀘스트 바 (메인화면 항상 표시) -->
+<div class="quest-bar" onclick="openQuestModal()" id="quest-bar">
+  <span style="font-size:1rem;">📋</span>
+  <span class="quest-bar-label">오늘의 퀘스트</span>
+  <div class="quest-mini-bars" id="quest-mini-bars">
+    <div class="quest-mini-dot" id="qdot-0"></div>
+    <div class="quest-mini-dot" id="qdot-1"></div>
+    <div class="quest-mini-dot" id="qdot-2"></div>
+  </div>
+  <span class="quest-bar-progress" id="quest-bar-progress">0/3</span>
+</div>
+
+<!-- 가챠 버튼 -->
+<div class="gacha-btn-wrap">
+  <button class="gacha-open-btn" onclick="openGacha()">
+    🎰 뽑기
+    <span class="gacha-ticket-count" id="gacha-ticket-count">🎟 0장</span>
+  </button>
+</div>
+
+<!-- 보스 진행바 -->
+<div class="boss-bar" id="boss-bar" onclick="tryOpenBoss()">
+  <span style="font-size:1rem;" id="boss-bar-icon">👾</span>
+  <div class="boss-progress-wrap">
+    <div class="boss-bar-label" id="boss-bar-label">보스 등장까지</div>
+    <div class="boss-progress-bar">
+      <div class="boss-progress-fill" id="boss-progress-fill" style="width:0%"></div>
+    </div>
+    <div class="boss-progress-label" id="boss-progress-label">0 / 50</div>
+  </div>
+</div>
+
+<!-- 보스전 모달 -->
+<div class="boss-modal-overlay" id="boss-modal-overlay">
+  <!-- 인트로 -->
+  <div class="boss-intro" id="boss-intro-screen">
+    <div class="boss-sprite" id="boss-intro-sprite">👾</div>
+    <div class="boss-name" id="boss-intro-name">오늘의 보스</div>
+    <div class="boss-hp-wrap">
+      <div class="boss-hp-bar"><div class="boss-hp-fill" id="boss-intro-hp" style="width:100%"></div></div>
+      <div class="boss-hp-label">HP ████████████ 5/5</div>
+    </div>
+    <button class="boss-start-btn" onclick="startBossBattle()">⚔️ 도전!</button>
+    <button style="color:rgba(255,255,255,0.4);background:none;border:none;cursor:pointer;font-size:.8rem;" onclick="closeBossModal()">나중에</button>
+  </div>
+
+  <!-- 전투 화면 -->
+  <div class="boss-battle-screen" id="boss-battle-screen" style="display:none;">
+    <div class="boss-battle-header">
+      <div class="boss-battle-sprite" id="boss-battle-sprite">👾</div>
+      <div class="boss-battle-hp-wrap">
+        <div class="boss-battle-hp-bar">
+          <div class="boss-battle-hp-fill" id="boss-battle-hp-fill" style="width:100%"></div>
+        </div>
+        <div class="boss-battle-hp-label" id="boss-battle-hp-label">HP 5/5</div>
+      </div>
+    </div>
+    <div class="boss-q-num" id="boss-q-num">문제 1 / 5</div>
+    <div class="boss-question" id="boss-question">문제 내용</div>
+    <div class="boss-answer-wrap" id="boss-answer-wrap"></div>
+    <button class="boss-next-btn" id="boss-next-btn" style="display:none;" onclick="nextBossQuestion()">다음 →</button>
+  </div>
+
+  <!-- 결과 화면 -->
+  <div class="boss-result" id="boss-result-screen" style="display:none;">
+    <div class="boss-result-icon" id="boss-result-icon">🎉</div>
+    <div class="boss-result-title" id="boss-result-title">승리!</div>
+    <div class="boss-result-desc" id="boss-result-desc"></div>
+    <button class="boss-result-btn" onclick="closeBossModal()">확인</button>
+  </div>
+</div>
+
+<!-- 퀘스트 모달 -->
+<div class="quest-modal-overlay" id="quest-modal-overlay" onclick="closeQuestModal(event)">
+  <div class="quest-modal">
+    <div class="quest-modal-title">📋 오늘의 퀘스트</div>
+    <div class="quest-modal-date" id="quest-modal-date"></div>
+    <div id="quest-items-wrap"></div>
+    <div class="quest-bonus-bar" id="quest-bonus-bar">🎁 3개 모두 완료 시 보너스 +5pt</div>
+    <button class="quest-modal-close" onclick="closeQuestModal()">닫기</button>
+  </div>
 </div>
 <div class="tabs">
   <button class="tab active" onclick="switchTab('study')">학습</button>
@@ -1861,6 +2793,14 @@ body::before {
   <div style="font-size:.78rem;color:var(--muted);line-height:1.5;">카테고리 선택·학습기록·추가카드 전부 초기화합니다. 목차가 안 맞을 때 사용하세요.</div>
   <button class="btn-add-sub" onclick="resetAll()" style="background:#c0392b;color:#fff;">전체 초기화</button>
   <div style="height:1px;background:var(--border);margin:4px 0;"></div>
+  <div style="font-size:.8rem;font-weight:700;color:var(--muted);">👾 보스 테스트</div>
+  <div style="font-size:.78rem;color:var(--muted);line-height:1.5;">보스를 즉시 소환합니다.</div>
+  <button class="btn-add-sub" onclick="bossData.bossAvailable=true;bossData.bossDefeated=false;saveBoss();updateBossBar();alert('👾 보스 소환!');closeDrawer&&closeDrawer();" style="background:linear-gradient(135deg,#2d1b4e,#7c4dff);color:#fff;">👾 보스 즉시 소환</button>
+  <div style="height:1px;background:var(--border);margin:4px 0;"></div>
+  <div style="font-size:.8rem;font-weight:700;color:var(--muted);">🎰 뽑기 테스트</div>
+  <div style="font-size:.78rem;color:var(--muted);line-height:1.5;">테스트용 뽑기권 10장을 지급합니다.</div>
+  <button class="btn-add-sub" onclick="addGachaTicket(10);alert('🎟 뽑기권 10장 지급!')" style="background:linear-gradient(135deg,#f7cac9,#c9838a);color:#fff;">🎟 테스트 티켓 +10장</button>
+  <div style="height:1px;background:var(--border);margin:4px 0;"></div>
   <div style="font-size:.8rem;font-weight:700;color:var(--muted);">카테고리별 카드 수</div>
   <div id="cat-stats-list" style="display:flex;flex-direction:column;gap:5px;"></div>
 </div>
@@ -2074,6 +3014,10 @@ const DEFAULT_CARDS = [
   {id:5168,cat:'PART2 · 일반구조 > CH01 구조계획 > S06 내진계획·비구조요소',type:'ox',q:'건축비구조요소는 캔틸레버 형식에서 발생하는\n지점회전에 의한 수직 방향 변위를 고려해야 한다',a:'O'},
   {id:5169,cat:'PART2 · 일반구조 > CH01 구조계획 > S06 내진계획·비구조요소',type:'ox',q:'설계하중에 의한 비구조요소의 횡방향·면외방향\n휨·변형이 변형한계를 초과하지 않아야 한다',a:'O'},
   {id:5170,cat:'PART2 · 일반구조 > CH01 구조계획 > S06 내진계획·비구조요소',type:'normal',q:'[반응수정계수 R값 크기 순서] 지진력저항시스템별 R값 순위',a:'특수·편심가새 > 중간(RC>S) > 보통(S>RC) > 철근보강조적(3~2.5) > 역추형 특수(2.5) > 무보강 조적(1.5) > 역추형 보통(1.25)'},
+  {id:5171,cat:'PART2 · 일반구조 > CH01 구조계획 > S06 내진계획·비구조요소',type:'cloze',q:'[반응수정계수 R — 시스템별 수치]\n내력벽: 보통 ___ / 특수 ___\n건물골조: 보통 ___ / 특수 ___\n이중골조: 중간 ___ / 특수 ___\n모멘트골조: 보통 ___ / 중간 ___ / 특수 ___\n⚠ 특수 자가 붙으면 항상 큰 숫자!',a:'4 | 5 | 5 | 6 | 6.5 | 8 | 3.5 | 4.5 | 8'},
+  {id:5172,cat:'PART2 · 일반구조 > CH01 구조계획 > S06 내진계획·비구조요소',type:'cloze',q:'[시스템초과강도계수 Ω₀]\n전단벽·가새(Braced) 시스템: ___\n모멘트골조(Moment Frame) 시스템: ___\n⚠ 전단벽·가새 = 2.5 / 모멘트골조 = 3.0',a:'2.5 | 3.0'},
+  {id:5173,cat:'PART2 · 일반구조 > CH01 구조계획 > S06 내진계획·비구조요소',type:'ox',q:'모멘트골조는 보와 기둥만으로 횡력에 저항하므로 가장 유연(연성)하여 반응수정계수 R값이 가장 크다',a:'O',note:'보통(3.5) → 중간(4.5) → 특수(8)\n내력벽이 가장 뻣뻣(강성↑), 모멘트골조가 가장 유연(연성↑)'},
+  {id:5174,cat:'PART2 · 일반구조 > CH01 구조계획 > S06 내진계획·비구조요소',type:'ox',q:'이중골조시스템에서 모멘트골조는 설계지진력의 25% 이상을 부담해야 한다',a:'O',note:'이중골조 = 전단벽·가새골조 + 모멘트골조 조합\n모멘트골조가 25% 이상 분담 → R값 높아짐(6.5~8)'},
 
 
 // ===== PART2 철근콘크리트구조 =====
@@ -2201,7 +3145,7 @@ const DEFAULT_CARDS = [
 {id:6111,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 슬래브 설계',q:'[2방향 슬래브 직접설계법] 내부 경간에서는 전체 정적계수휨모멘트를 부계수휨모멘트는 ___, 정계수휨모멘트는 ___와 같은 비율로 분배하여야 한다.',a:'0.65 | 0.35'},
 {id:6112,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 슬래브 설계',q:'[무량판슬래브] 플랫슬래브의 ___은 뚫림전단(펀칭전단)에 안전하게 할 목적으로 슬래브의 다른 부분보다 두껍게 한 부분 / ___슬래브는 보나 지판 없이 슬래브와 기둥으로만 구성된 가장 간단한 형식의 철근콘크리트 슬래브 방식이다.',a:'지판 | 플랫 플레이트'},
 {id:6113,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 슬래브 설계',q:'[플랫슬래브의 지판] 받침부 중심선에서 각 방향 받침부 중심 간 경간의 ___이상을 각 방향으로 연장 / 지판의 슬래브 아래로 돌출한 두께는 돌출부를 제외한 슬래브 두께의 ___이상 / 지판 부위의 슬래브 철근량 계산 시 슬래브 아래로 돌출한 지판의 두께는 지판의 외단부에서 기둥이나 기둥머리까지 거리의 ___이하로 취하여야 함',a:'1/6 | 1/4 | 1/4'},
-{id:6114,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 슬래브 설계',q:'[장선구조]는 일정한 간격의 장선과 그 위의 슬래브가 일체로 되어 있는 구조형태로서, 장선은 1방향 또는 서로 직각을 이루는 2방향으로 구성 / 장선은 그 폭이 ___mm이상이어야 하고, 그 높이는 장선의 최소폭의 ___배 이하 / 장선 사이의 순간격은 ___mm를 초과하지 않아야 한다.',a:'100 | 3.5 | 750'},
+{id:6114,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 슬래브 설계',q:'[장선구조 설계기준]\n장선 폭: ___ mm 이상\n장선 깊이: 장선 최소폭의 ___ 배 이하\n장선 순간격: ___ mm 이하\n슬래브 두께(충전재 O): 순간격의 ___ 이상 & ___ mm 이상\n슬래브 두께(충전재 X): 순간격의 ___ 이상 & ___ mm 이상',a:'100 | 3.5 | 750 | 1/12 | 40 | 1/12 | 50'},
 {id:6115,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 슬래브 설계',q:'[슬래브의 전단설계] 1방향 전단강도의 위험단면은 집중하중 또는 반력이 작용하는 기둥머리 또는 하중 작용면에서 ___만큼 떨어진 곳 / 2방향 전단강도의 위험단면은 슬래브에 수직한 단면으로써 받침 부재면에서 최소한 ___이상 떨어진 위치에서 둘레 길이가 최소가 되는 곳',a:'d | d/2'},
 {id:6116,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 슬래브 설계',q:'[슬래브의 뚫림전단] 슬래브와 기초판의 뚫림전단 보강철근의 항복강도는 ___MPa를 초과할 수 없다. / 슬래브 전단철근은 충분히 정착되어야 하며 길이방향 휨철근을 둘러싸야 한다.',a:'400'},
 {id:6117,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S05 기초판 설계',q:'[철근콘크리트 기초벽] 기초벽은 ___에 지지되어야 함 / 기초벽 및 옹벽은 건축구조기준의 내부면에 밀착되어 있는 경우, 불균형 되메움 높이는 외측 마감지면에서 내부 콘크리트 지면슬래브가 기초벽 ___면까지 할 수 있다.',a:'기초 | 슬래브의 상부'},
@@ -2414,7 +3358,7 @@ const DEFAULT_CARDS = [
 
 {id:7054,type:'cloze',cat:'PART4 · 강구조 > CH02 부재설계 > S04 주각부·인장재',q:'[부재의 유효순단면적]\n순단면적에 ___ 를 곱하여 산정\n전달뒤짐계수: 인장력이 용접이나 파스너를 통해 각각의 단면요소에 직접적으로 전달되는 모든 인장재인 경우 ___\n시어래그 현상: 인장부재의 중심축과 인장력의 축이 일치하지 않을 때 발생\n두 축 사이의 거리가 ___ 수록 심해지며, 접합부의 길이가 ___ 수록 줄어듦',a:'전달뒤짐계수 | 1.0 | 커질 | 길어질'},
 
-{id:7055,type:'cloze',cat:'PART4 · 강구조 > CH02 부재설계 > S04 주각부·인장재',q:'[조립인장재 긴결간격]\n도장된 부재 또는 부식 우려 없는 노출된 도장되지 않은 부재의 경우 얇은 판두께의 ___ 배 또는 ___ mm 이하\n대기 중 부식에 노출된 도장되지 않은 내후성 강재의 경우 얇은 판두께의 ___ 배 또는 ___ mm 이하\n끼움판 사용한 2개 이상 형강으로 구성된 조립인장재: 개재세장비 가급적 ___ 을 넘지 않도록',a:'24 | 300 | 14 | 180 | 300'},
+{id:7055,type:'cloze',cat:'PART4 · 강구조 > CH02 부재설계 > S04 주각부·인장재',q:'[조립인장재 긴결간격]\n일반부재(도장·부식우려 없음): 얇은 판두께의 ___ 배 또는 ___ mm 이하\n내후성강재(부식 노출): 얇은 판두께의 ___ 배 또는 ___ mm 이하\n인장재 세장비 제한: 가급적 ___ 을 넘지 않도록\n띠판(Tie plate) 단속용접·파스너 간격: ___ mm 이하',a:'24 | 300 | 14 | 180 | 300 | 150'},
 
 {id:7056,type:'cloze',cat:'PART4 · 강구조 > CH02 부재설계 > S04 주각부·인장재',q:'[핀접합부재]\n핀구멍의 직경은 핀 직경보다 ___ mm를 초과하여 크면 안 됨',a:'1'},
 
@@ -2487,7 +3431,54 @@ const DEFAULT_CARDS = [
 {id:7094,type:'cloze',cat:'PART4 · 강구조 > CH02 부재설계 > S03 용접접합',q:'[플러그·슬롯용접 규정]\n플러그용접 최소 중심간격: 구멍 직경의 ___ 배 이상\n⚠ 2배 아님! — 너무 가까우면 열변형 과다\n플러그·슬롯용접의 유효전단면적: 접합면에서의 구멍 또는 슬롯의 ___ 단면적\n필릿용접의 최소길이(강도기반): 필릿용접 치수의 ___ 배 이상 또는 ___ mm 이상',a:'4 | 공칭 | 4 | 40'},
 {id:7095,type:'cloze',cat:'PART4 · 강구조 > CH02 부재설계 > S03 용접접합',q:'[필릿용접 유효목두께]\n일반적으로 용접 치수(S)에 대하여 ___ S를 적용\n⚠ "유효길이의 0.7배"는 틀린 정의!\n유효면적 = ___ × 유효목두께',a:'0.707 | 유효길이'},
 {id:7096,type:'ox',cat:'PART4 · 강구조 > CH02 부재설계 > S03 용접접합',q:'필릿용접의 유효목두께는 일반적으로 유효길이의 0.707배이다',a:'X',note:'유효목두께 = 0.707 × 용접치수(S)\n"유효길이의 0.7배"가 아니라 "용접치수(S)의 0.707배" — 기출 함정!'},
-{id:7097,type:'ox',cat:'PART4 · 강구조 > CH02 부재설계 > S03 용접접합',q:'단속모살용접의 각 세그먼트 길이는 모살사이즈의 5배 이상 또한 25mm 이상이어야 한다',a:'X',note:'단속모살용접: 모살사이즈의 4배 이상 또한 40mm 이상\n5배·25mm는 겹침이음 기준 — 혼동 주의!'}];
+{id:7097,type:'ox',cat:'PART4 · 강구조 > CH02 부재설계 > S03 용접접합',q:'단속모살용접의 각 세그먼트 길이는 모살사이즈의 5배 이상 또한 25mm 이상이어야 한다',a:'X',note:'단속모살용접: 모살사이즈의 4배 이상 또한 40mm 이상\n5배·25mm는 겹침이음 기준 — 혼동 주의!'},
+
+// ===== PART5 · 구조역학 =====
+{id:8001,type:'cloze',cat:'PART5 · 구조역학 > CH01 총론',q:'[모멘트 합의 크기]\nM₀ = (P₁ × x₁) ___ (P₂ × x₂)',a:'−'},
+{id:8002,type:'cloze',cat:'PART5 · 구조역학 > CH01 총론',q:'[구조물의 판별식]\nN = ___ + ___ + ___ − 2절점수\n(반력수 + 부재수 + 강절점수 − 2절점수)',a:'반력수 | 부재수 | 강절점수'},
+{id:8003,type:'cloze',cat:'PART5 · 구조역학 > CH01 총론',q:'[반력수 계산]\n고정단: ___ / 힌지: ___ / 롤러: ___',a:'3 | 2 | 1'},
+{id:8004,type:'cloze',cat:'PART5 · 구조역학 > CH01 총론',q:'[부재수 계산]\n강절점수: 절점에 연결된 부재수 − 1\n자유단 포함: ___',a:'자유단도 강절점으로 포함'},
+{id:8005,type:'cloze',cat:'PART5 · 구조역학 > CH01 총론',q:'[판별식 결과]\nN > 0: ___ 구조물(안정)\nN = 0: ___ 구조물(안정·불안정)\nN < 0: ___ 구조물',a:'부정정 | 정정 | 불안정'},
+{id:8006,type:'ox',cat:'PART5 · 구조역학 > CH01 총론',q:'판별식 N=0이면 항상 안정한 정정구조물이다',a:'X',note:'N=0 → 정정구조물이지만 안정 또는 불안정 둘 다 가능\nN>0 → 부정정(항상 안정)'},
+{id:8007,type:'cloze',cat:'PART5 · 구조역학 > CH02 단면성질',q:'[단면1차모멘트]\nGx = ___ × ___\n→ 도심좌표: y₀ = Gx / A',a:'면적(A) | 도심까지거리(y₀)'},
+{id:8008,type:'cloze',cat:'PART5 · 구조역학 > CH02 단면성질',q:'[단면2차모멘트 — 기본도형]\n직사각형(도심): ___\n삼각형(도심): ___\n원형(도심): ___',a:'bh³/12 | bh³/36 | πd⁴/64'},
+{id:8009,type:'cloze',cat:'PART5 · 구조역학 > CH02 단면성질',q:'[단면2차모멘트 — 연단 기준]\n직사각형(연단): ___\n삼각형(연단): ___\n원형(연단): ___',a:'bh³/3 | bh³/12 | 5πd⁴/64'},
+{id:8010,type:'cloze',cat:'PART5 · 구조역학 > CH02 단면성질',q:'[축의 평행이동 — 평행축 정리]\nIx = ___ + ___',a:'Ix₀ | A×y²'},
+{id:8011,type:'cloze',cat:'PART5 · 구조역학 > CH02 단면성질',q:'[대칭도형 단면2차모멘트]\nIx = ___ − ___\n(큰 직사각형 − 빈 부분)',a:'BH³/12 | bh³/12'},
+{id:8012,type:'cloze',cat:'PART5 · 구조역학 > CH02 단면성질',q:'[단면계수 Z]\n정의: Z = Ix / y\n직사각형: ___\n삼각형(하단): ___ / (상단): ___\n원형: ___',a:'bh²/6 | bh²/12 | bh²/24 | πd³/32'},
+{id:8013,type:'cloze',cat:'PART5 · 구조역학 > CH02 단면성질',q:'[단면2차반경 r]\nr = √(___ / ___)\n→ 기둥의 세장비 검토에 사용',a:'I | A'},
+{id:8014,type:'cloze',cat:'PART5 · 구조역학 > CH02 단면성질',q:'[단면2차반경 r — 도형별]\n직사각형: ___\n삼각형: ___\n원형: ___',a:'h/2√3 | h/3√2 | d/4'},
+{id:8015,type:'cloze',cat:'PART5 · 구조역학 > CH02 단면성질',q:'[극단면2차모멘트 Ip]\nIp = ___ + ___\n→ 부재의 비틀림 계산에 사용',a:'Ix | Iy'},
+{id:8016,type:'cloze',cat:'PART5 · 구조역학 > CH02 단면성질',q:'[단면상승모멘트 Ixy]\nIxy = A × ___ × ___\n→ 주응력 계산 시 사용',a:'x₀ | y₀'},
+{id:8017,type:'cloze',cat:'PART5 · 구조역학 > CH03 재료의 성질',q:'[포아송비]\nν = 가로변형도 / 세로변형도\n= (Δd/d) / (___ / ___)',a:'Δl | l'},
+{id:8018,type:'cloze',cat:'PART5 · 구조역학 > CH03 재료의 성질',q:'[탄성계수 E]\nE = 응력도 / 변형도\n= σ / ε\n= (P/A) / (Δl/l)\n= ___',a:'P×l / (A×Δl)'},
+{id:8019,type:'cloze',cat:'PART5 · 구조역학 > CH03 재료의 성질',q:'[온도응력]\nσt = ___ × ___ × ΔT\n온도변형량: ΔL = L × α × ΔT',a:'E(탄성계수) | α(선팽창계수)'},
+{id:8020,type:'cloze',cat:'PART5 · 구조역학 > CH04 정정구조물',q:'[반력산정 3조건]\n① ΣH = ___\n② ΣV = ___\n③ ΣM = ___',a:'0 | 0 | 0'},
+{id:8021,type:'cloze',cat:'PART5 · 구조역학 > CH04 정정구조물',q:'[전단력 부호 규칙]\n좌측에서 구할 때: 상향→___ / 하향→___\n우측에서 구할 때: 반대 적용',a:'(+) | (−)'},
+{id:8022,type:'cloze',cat:'PART5 · 구조역학 > CH04 정정구조물',q:'[휨모멘트 부호 규칙]\n좌측에서 구할 때: 시계방향→___ / 반시계→___\n우측에서 구할 때: 시계방향→___ / 반시계→___',a:'(+) | (−) | (−) | (+)'},
+{id:8023,type:'cloze',cat:'PART5 · 구조역학 > CH04 정정구조물',q:'[전단력도·휨모멘트도 관계]\n전단력=0인 점 → 휨모멘트 ___\n등분포하중 구간 → 전단력도: ___ / 휨모멘트도: ___',a:'최대 | 직선 | 곡선(포물선)'},
+{id:8024,type:'cloze',cat:'PART5 · 구조역학 > CH05 트러스',q:'[트러스 부재력 — 절단법]\n상현재·하현재: ___ 으로 산정 (ΣM=0)\n수직재·경사재: ___ 으로 산정 (ΣH=0, ΣV=0)',a:'모멘트법 | 전단력법'},
+{id:8025,type:'cloze',cat:'PART5 · 구조역학 > CH06 보의 응력',q:'[최대휨응력]\nσmax = Mmax / Z\n단순보 집중하중(중앙): M = ___\n단순보 등분포하중: M = ___',a:'Pl/4 | wl²/8'},
+{id:8026,type:'cloze',cat:'PART5 · 구조역학 > CH06 보의 응력',q:'[최대전단응력]\nτmax = 전단력 × S / (I × b)\n직사각형: 평균의 ___ 배\n삼각형: 평균의 ___ 배\n원형: 평균의 ___ 배',a:'3/2 | 3/2 | 4/3'},
+{id:8027,type:'ox',cat:'PART5 · 구조역학 > CH06 보의 응력',q:'직사각형 단면에서 최대전단응력은 평균전단응력의 1.5배이다',a:'O',note:'τmax = (3/2) × (V/A) — 도심축(중립축)에서 최대'},
+{id:8028,type:'cloze',cat:'PART5 · 구조역학 > CH07 처짐',q:'[캔틸레버보 처짐 공식]\n끝단 집중하중: δ = ___\n등분포하중: δ = ___',a:'PL³/3EI | wL⁴/8EI'},
+{id:8029,type:'cloze',cat:'PART5 · 구조역학 > CH07 처짐',q:'[단순보 처짐 공식]\n중앙 집중하중: δ = ___\n등분포하중: δ = ___',a:'PL³/48EI | 5wL⁴/384EI'},
+{id:8030,type:'cloze',cat:'PART5 · 구조역학 > CH07 처짐',q:'[처짐각 공식 — 캔틸레버]\n집중하중: θ = ___\n등분포하중: θ = ___',a:'PL²/2EI | wL³/6EI'},
+{id:8031,type:'cloze',cat:'PART5 · 구조역학 > CH07 처짐',q:'[처짐각 공식 — 단순보 단부에 모멘트 M]\nθA = ___ / SA = ___',a:'Ml/EI | Ml²/2EI'},
+{id:8032,type:'cloze',cat:'PART5 · 구조역학 > CH07 처짐',q:'[처짐 비교 — 같은 조건]\n캔틸레버 집중하중 vs 단순보 집중하중\n캔틸레버가 단순보보다 ___ 배 크다\n(PL³/3EI ÷ PL³/48EI = ___)',a:'16 | 16'},
+{id:8033,type:'cloze',cat:'PART5 · 구조역학 > CH08 부정정구조물',q:'[양단고정보 — 등분포하중]\n단부 모멘트: MA = MB = ___\n중앙 모멘트: MC = ___\n최대처짐: δ = ___',a:'−wl²/12 | wl²/24 | wl⁴/384EI'},
+{id:8034,type:'cloze',cat:'PART5 · 구조역학 > CH08 부정정구조물',q:'[양단고정보 — 중앙 집중하중]\n반력: RA = RB = ___\n단부·중앙 모멘트: MA = MB = MC = ___\n최대처짐: δ = ___',a:'P/2 | Pl/8 | Pl³/192EI'},
+{id:8035,type:'cloze',cat:'PART5 · 구조역학 > CH08 부정정구조물',q:'[일단고정 일단힌지보 — 등분포하중]\n고정단 반력: RA = ___ / 힌지단: RB = ___',a:'5wl/8 | 3wl/8'},
+{id:8036,type:'cloze',cat:'PART5 · 구조역학 > CH08 부정정구조물',q:'[모멘트 분배법]\n분배모멘트 = 균형M × ___\n도달모멘트 = 분배M × ___\n도달율: 고정단=___ / 힌지·자유단=___',a:'분배율(해당부재강비/전체강비합) | 도달율 | 1/2 | 0'},
+{id:8037,type:'cloze',cat:'PART5 · 구조역학 > CH08 부정정구조물',q:'[분배율 강비]\n고정단: k = ___\n힌지단: k = ___\n자유단: k = ___',a:'EI/l | 3EI/4l | 0'},
+{id:8038,type:'cloze',cat:'PART5 · 구조역학 > CH09 기둥',q:'[오일러 좌굴하중]\nPe = π²EI / (kL)²\nk값: 양단힌지=___ / 일단고정일단힌지=___ / 양단고정=___ / 일단고정일단자유=___',a:'1.0 | 0.7 | 0.5 | 2.0'},
+{id:8039,type:'cloze',cat:'PART5 · 구조역학 > CH09 기둥',q:'[좌굴하중 배수 비교 — 양단힌지 기준]\n양단고정: ___ 배\n일단고정일단힌지: ___ 배\n일단고정일단자유: ___ 배',a:'4 | 2 | 1/4'},
+{id:8040,type:'ox',cat:'PART5 · 구조역학 > CH09 기둥',q:'양단힌지 기둥의 좌굴하중이 100kN이면, 양단고정으로 바꾸면 400kN이 된다',a:'O',note:'k: 1.0→0.5 → 분모 (kL)²가 1/4 → 하중 4배\nPe = π²EI/(0.5L)² = 4×π²EI/L²'},
+{id:8041,type:'ox',cat:'PART5 · 구조역학 > CH09 기둥',q:'양단힌지 기둥의 좌굴하중이 100kN이면, 일단고정일단자유로 바꾸면 25kN이 된다',a:'O',note:'k: 1.0→2.0 → 분모 4배 증가 → 하중 1/4배 = 25kN'},
+{id:8042,type:'cloze',cat:'PART5 · 구조역학 > CH09 기둥',q:'[기둥 최대압축응력]\nσmax = P/A + M/Z\nM = P × e (편심거리)\n핵 범위 — 사각형: e ≤ ___ / 원형: e ≤ ___',a:'l/6 | d/8'},
+{id:8043,type:'ox',cat:'PART5 · 구조역학 > CH09 기둥',q:'편심거리가 핵 범위 안이면 단면 전체에 압축만 작용한다',a:'O',note:'핵 범위 내 → 인장 없음 → 압축만\n핵 범위 초과 → 일부 인장 발생'},
+{id:8044,type:'cloze',cat:'PART5 · 구조역학 > CH10 전단중심',q:'[전단중심]\n① 중심축 하중이 작용하는 경우\n② 보에서 비틀림이 생기지 않고 ___ 만 유발하는 외면의 작용위치',a:'휨변형'},
+{id:8045,type:'normal',cat:'PART5 · 구조역학 > CH10 전단중심',q:'[단면별 전단중심 위치]\n대칭단면(직사각형·I형): 도심=전단중심\nT형·ㄷ형: 전단중심이 단면 밖에 위치\nㄱ형: 꼭짓점(모서리)에 위치',a:'대칭→도심=전단중심 / 비대칭→도심≠전단중심 (도심이 전단중심보다 약측에 위치)'}];
 
 // ═══════════════════ ENGLISH CARDS ═══════════════════
 const DEFAULT_ENG_CARDS = [
@@ -2780,6 +3771,34 @@ const DEFAULT_ENG_CARDS = [
 {id:9287,cat:"영단어",type:"flash",q:"ruling",a:"지배하는(형) / 판결·결정(명)\n⚠ restrain(억제하다)·regulate(규제하다)와 혼동 주의!\nruling class = 지배 계층\na court ruling = 법원 판결",pron:"ˈruːlɪŋ",note:"The court issued a ruling that changed the interpretation of the law."},
 {id:9288,cat:"영단어",type:"flash",q:"judicial",a:"사법의 / 재판의(형)\n⚠ justifiable(정당한)과 혼동 주의!\njudicial system = 사법 제도\njudicial review = 사법 심사\njudge(판사)에서 파생",pron:"dʒuːˈdɪʃəl",note:"The judicial process must be fair and impartial."},
 {id:9289,cat:"영단어",type:"flash",q:"sanction",a:"승인·허가(명) / 제재(명) / 승인하다(동)\n⚠ 반의어가 동시에 존재하는 단어!\nsanction = 허락하다 OR 제재를 가하다\neconomic sanctions = 경제 제재\n≒ consent(동의) 아님 — 더 공식적·법적 뉘앙스",pron:"ˈsæŋkʃən",note:"The UN imposed sanctions on the country for violating international law."},
+{id:9290,cat:"영단어",type:"flash",q:"obedience",a:"복종 / 순종(명)\nobedient(형) = 순종하는\nin obedience to = ~에 복종하여\n↔ disobedience(불복종)",pron:"əˈbiːdiəns",note:"The soldiers showed complete obedience to their commander."},
+{id:9291,cat:"영단어",type:"flash",q:"compassionate",a:"동정심 있는 / 자비로운(형)\ncompassion(명) = 연민·동정\nfeel compassion for = ~에 연민을 느끼다\n≒ sympathetic, merciful",pron:"kəmˈpæʃənət",note:"She was a compassionate nurse who always cared for her patients."},
+{id:9292,cat:"영단어",type:"flash",q:"reassure",a:"안심시키다(동)\nreassurance(명) = 안심·위안\nreassuring(형) = 안심시키는\n⚠ assure(확신시키다)보다 '다시 안심시키다' 뉘앙스",pron:"ˌriːəˈʃʊər",note:"The doctor reassured the patient that the surgery was routine."},
+{id:9293,cat:"영단어",type:"flash",q:"conviction",a:"확신(명) / 유죄판결(명)\nconvict(동) = 유죄로 선고하다\nwith conviction = 확신을 가지고\n⚠ 두 가지 뜻 모두 중요!",pron:"kənˈvɪkʃən",note:"She spoke with great conviction about the importance of education."},
+{id:9294,cat:"영단어",type:"flash",q:"unanimous",a:"만장일치의 / 이견 없는(형)\nunanimously(부) = 만장일치로\na unanimous decision = 만장일치 결정\nunan- = 하나(one)에서 파생",pron:"juːˈnænɪməs",note:"The committee reached a unanimous agreement on the new policy."},
+{id:9295,cat:"영단어",type:"flash",q:"take down",a:"받아 적다 / 해체하다 / 쓰러뜨리다(구동사)\ntake down notes = 필기하다\ntake down a building = 건물을 해체하다\n⚠ 문맥에 따라 뜻이 달라짐!",pron:"teɪk daʊn",note:"Please take down the following information carefully."},
+{id:9296,cat:"영단어",type:"flash",q:"instinctive",a:"본능적인(형)\ninstinct(명) = 본능\ninstinctively(부) = 본능적으로\n≒ intuitive, automatic",pron:"ɪnˈstɪŋktɪv",note:"Her instinctive reaction was to protect her child."},
+{id:9297,cat:"영단어",type:"flash",q:"vague",a:"모호한 / 불분명한(형)\nvaguely(부) = 막연히\nvagueness(명) = 모호함\n↔ clear, specific, precise",pron:"veɪɡ",note:"His answer was too vague to be useful."},
+{id:9298,cat:"영단어",type:"flash",q:"address",a:"연설하다(동) / 다루다·해결하다(동) / 주소(명) / 연설(명)\n⚠ 다의어 주의!\naddress a problem = 문제를 다루다·해결하다\naddress an audience = 청중에게 연설하다",pron:"əˈdres(동) / ˈædres(명)",note:"The president addressed the nation in a televised speech."},
+{id:9299,cat:"영단어",type:"flash",q:"deliver",a:"배달하다(동) / 전달하다(동) / 출산하다(동)\n⚠ 다의어 주의!\ndeliver a speech = 연설하다\ndeliver a baby = 아이를 낳다\ndelivery(명) = 배달·전달·출산",pron:"dɪˈlɪvər",note:"The company promises to deliver all orders within 24 hours."},
+{id:9300,cat:"영단어",type:"flash",q:"herbivore",a:"초식동물(명)\nherbi-(풀) + vore(먹다)\n↔ carnivore(육식동물)\nomnivore(잡식동물)\nherbivorous(형) = 초식성의",pron:"ˈhɜːrbɪvɔːr",note:"Cows and deer are herbivores that feed only on plants."},
+{id:9301,cat:"영단어",type:"flash",q:"render",a:"만들다(동) / 제공하다(동) / 표현하다(동)\nrender A + 형용사 = A를 ~하게 만들다\nrender services = 서비스를 제공하다\n⚠ 다의어 — 문맥 파악 필수!",pron:"ˈrendər",note:"The storm rendered the road impassable."},
+{id:9302,cat:"영단어",type:"flash",q:"carbohydrate",a:"탄수화물(명)\ncarbo(탄소) + hydrate(수화물)\ncomplex carbohydrates = 복합 탄수화물\n≒ starch, sugar류 포함",pron:"ˌkɑːrbəˈhaɪdreɪt",note:"Athletes often eat carbohydrates before a race for energy."},
+{id:9303,cat:"영단어",type:"flash",q:"resilient",a:"회복력 있는 / 탄력 있는(형)\nresilience(명) = 회복력·탄력성\n⚠ 시험 빈출! 사람·소재 둘 다 사용\n≒ flexible, tough, adaptable",pron:"rɪˈzɪliənt",note:"Children are often more resilient than adults in difficult situations."},
+{id:9304,cat:"영단어",type:"flash",q:"inferior",a:"열등한 / 하위의(형) / 하급자(명)\n⚠ superior(우월한)의 반의어\ninferior to = ~보다 열등한\nfeel inferior = 열등감을 느끼다",pron:"ɪnˈfɪəriər",note:"She refused to feel inferior just because of her background."},
+{id:9305,cat:"영단어",type:"flash",q:"moderate",a:"적당한 / 온건한(형) / 완화하다(동)\n⚠ 동사로도 쓰임!\nmoderate exercise = 적당한 운동\nmoderate views = 온건한 견해\n≒ reasonable, mild",pron:"ˈmɒdərət(형) / ˈmɒdəreɪt(동)",note:"A moderate amount of exercise is recommended every day."},
+{id:9306,cat:"영단어",type:"flash",q:"mention",a:"언급하다(동) / 언급(명)\n⚠ opinion(의견)과 혼동 주의!\nnot to mention = ~은 말할 것도 없고\nas mentioned above = 위에서 언급한 바와 같이",pron:"ˈmenʃən",note:"She mentioned that she would be late for the meeting."},
+{id:9307,cat:"영단어",type:"flash",q:"intact",a:"온전한 / 손상되지 않은(형)\n⚠ '본질의'가 아님!\nremain intact = 온전히 남다\nkeep intact = 손상 없이 유지하다\n≒ undamaged, whole",pron:"ɪnˈtækt",note:"Despite the storm, the ancient building remained intact."},
+{id:9308,cat:"영단어",type:"flash",q:"overwhelm",a:"압도하다(동) / 제압하다(동)\n⚠ overcome(극복하다)과 혼동 주의!\noverwhelming(형) = 압도적인\nbe overwhelmed by = ~에 압도되다",pron:"ˌoʊvərˈwelm",note:"The team was overwhelmed by the sheer number of complaints."},
+{id:9309,cat:"영단어",type:"flash",q:"justify",a:"정당화하다(동)\n⚠ define(정의하다)과 혼동 주의!\njustification(명) = 정당화\njustified(형) = 정당한\n≒ vindicate, warrant",pron:"ˈdʒʌstɪfaɪ",note:"He tried to justify his actions by claiming he had no choice."},
+{id:9310,cat:"영단어",type:"flash",q:"recede",a:"물러나다 / 줄어들다 / 멀어지다(동)\nrecession(명) = 경기 침체·후퇴\nreceding hairline = 후퇴하는 헤어라인\n≒ retreat, withdraw",pron:"rɪˈsiːd",note:"The floodwaters slowly receded after the rain stopped."},
+{id:9311,cat:"영단어",type:"flash",q:"frugality",a:"검소함 / 절약(명)\nfrugal(형) = 검소한·절약하는\nlive with frugality = 검소하게 살다\n≒ thrift, economy\n↔ extravagance(낭비)",pron:"fruːˈɡæləti",note:"His frugality allowed him to save enough money to retire early."},
+{id:9312,cat:"영단어",type:"flash",q:"soaking",a:"흠뻑 젖은(형) / 담그기(명)\nsoak(동) = 담그다·흠뻑 적시다\nsoaking wet = 흠뻑 젖은\nsoak up = 흡수하다",pron:"ˈsoʊkɪŋ",note:"They came home soaking wet after getting caught in the rain."},
+{id:9313,cat:"영단어",type:"flash",q:"penalize",a:"벌칙을 주다 / 불이익을 주다(동)\npenalty(명) = 벌칙·패널티\nbe penalized for = ~로 인해 벌칙을 받다\n⚠ punish보다 규정·규칙 위반에 쓰임",pron:"ˈpiːnəlaɪz",note:"Players who break the rules will be penalized immediately."},
+{id:9314,cat:"영단어",type:"flash",q:"cottage",a:"시골집 / 별장(명)\n⚠ 다락방(attic)과 혼동 주의!\ncottage = 작고 아늑한 시골집\na cottage in the countryside = 시골의 작은 집",pron:"ˈkɒtɪdʒ",note:"They spent the summer in a cozy cottage by the lake."},
+{id:9315,cat:"영단어",type:"flash",q:"overcome",a:"극복하다 / 이겨내다(동)\n⚠ result(결과)와 혼동 주의!\novercome = over(넘어서) + come\novercome difficulties = 어려움을 극복하다",pron:"ˌoʊvərˈkʌm",note:"She managed to overcome her fear of public speaking."},
+{id:9316,cat:"영단어",type:"flash",q:"extend",a:"연장하다 / 확장하다(동)\n⚠ extent(규모·정도·명사)와 혼동 주의!\nextend = 동사 / extent = 명사\nextend the deadline = 마감을 연장하다",pron:"ɪkˈstend",note:"The company decided to extend the project deadline by two weeks."},
+{id:9317,cat:"영단어",type:"flash",q:"be attributed to",a:"~에 기인하다 / ~의 덕분이다\n⚠ be contributed to(~에 기여하다)와 혼동!\nattribute A to B = A를 B의 탓으로 돌리다\ncontribute to = ~에 기여하다 (반대 뉘앙스!)",pron:"biː əˈtrɪbjuːtɪd tuː",note:"The success was attributed to years of hard work and dedication."},
 ];
 
 // ═══════════════════ STATE ═══════════════════
@@ -3370,6 +4389,16 @@ function answer(know) {
   if (know) {
     history[c.id].know++; cleared.add(c.id); sessK++;
     spawnFloaty();
+    onCardCorrect(); // 티어 포인트 +1
+    // 퀘스트 진행
+    progressQuest('cardCorrect', 1);
+    if (currentSubject === 'arch') progressQuest('archCorrect', 1);
+    if (currentSubject === 'eng')  progressQuest('engCorrect', 1);
+    if (isReview) progressQuest('review', 1);
+    // 보스 진행
+    onBossCorrect();
+    // 큐에 같은 카드 중복 제거 (틀렸다가 맞힌 경우)
+    queue = queue.filter(q => q.id !== c.id);
   } else {
     history[c.id].dont++; sessD++;
     spawnPoop();
@@ -4441,9 +5470,1019 @@ function applyVol(gainNode, baseVol) {
   gainNode.gain.setValueAtTime(baseVol * globalVolume, audioCtx.currentTime);
 }
 
-// ═══════════════════ INIT ═══════════════════
+
+
+// ═══════════════════ GACHA SYSTEM ═══════════════════
+const GACHA_POOL = {
+  N: [
+    {emoji:'🐣', name:'갓 태어난 병아리'},
+    {emoji:'🌱', name:'새싹'},
+    {emoji:'🐾', name:'귀여운 발자국'},
+    {emoji:'🍡', name:'분홍 경단'},
+    {emoji:'🌸', name:'벚꽃 한 잎'},
+    {emoji:'🐤', name:'노란 병아리'},
+    {emoji:'🫧', name:'비눗방울'},
+    {emoji:'🍓', name:'딸기'},
+    {emoji:'🌼', name:'데이지'},
+    {emoji:'🐇', name:'흰 토끼'},
+  ],
+  R: [
+    {emoji:'🦋', name:'푸른 나비'},
+    {emoji:'🌙', name:'반달'},
+    {emoji:'🐬', name:'돌고래'},
+    {emoji:'🦄', name:'유니콘'},
+    {emoji:'🌊', name:'파도'},
+    {emoji:'🦊', name:'여우'},
+    {emoji:'🍀', name:'네잎클로버'},
+    {emoji:'🌈', name:'무지개'},
+  ],
+  SR: [
+    {emoji:'🦋', name:'별빛 나비 ✦'},
+    {emoji:'🐉', name:'꿈의 드래곤'},
+    {emoji:'🌺', name:'마법의 히비스커스'},
+    {emoji:'🦅', name:'황금 독수리'},
+    {emoji:'🌙', name:'보름달 요정'},
+    {emoji:'🐋', name:'하늘 고래'},
+  ],
+  SSR: [
+    {emoji:'⭐', name:'전설의 별'},
+    {emoji:'🌟', name:'슈퍼노바'},
+    {emoji:'💫', name:'유성'},
+    {emoji:'👑', name:'여왕의 왕관'},
+    {emoji:'🔮', name:'예언의 수정구'},
+  ],
+};
+
+const GACHA_RATES = { N:0.60, R:0.25, SR:0.12, SSR:0.03 };
+const GRADE_COLORS = { N:'gacha-grade-n', R:'gacha-grade-r', SR:'gacha-grade-sr', SSR:'gacha-grade-ssr' };
+
+let gachaData = { tickets: 0, history: [], pulled: false };
+let currentPullResult = null;
+
+function loadGacha() {
+  const s = localStorage.getItem('gacha_data');
+  if (s) gachaData = JSON.parse(s);
+}
+function saveGacha() {
+  localStorage.setItem('gacha_data', JSON.stringify(gachaData));
+}
+
+function addGachaTicket(n=1) {
+  loadGacha();
+  gachaData.tickets += n;
+  saveGacha();
+  updateGachaBtn();
+  // 토스트
+  const el = document.getElementById('tier-toast');
+  el.textContent = `🎟 뽑기권 +${n}장 획득!`;
+  el.className = 'tier-toast up show';
+  setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+function updateGachaBtn() {
+  loadGacha();
+  const el = document.getElementById('gacha-ticket-count');
+  if (el) el.textContent = `🎟 ${gachaData.tickets}장`;
+}
+
+function rollGrade() {
+  const r = Math.random();
+  if (r < GACHA_RATES.SSR) return 'SSR';
+  if (r < GACHA_RATES.SSR + GACHA_RATES.SR) return 'SR';
+  if (r < GACHA_RATES.SSR + GACHA_RATES.SR + GACHA_RATES.R) return 'R';
+  return 'N';
+}
+
+function rollItem(grade) {
+  const pool = GACHA_POOL[grade];
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
+function openGacha() {
+  loadGacha();
+  resetGachaCard();
+  document.getElementById('gacha-pull-btn').disabled = gachaData.tickets <= 0;
+  document.getElementById('gacha-pull-btn').textContent = '뽑기!';
+  document.getElementById('gacha-ticket-info').textContent = `🎟 보유 티켓: ${gachaData.tickets}장`;
+  currentPullResult = null;
+  renderGachaHistory();
+  document.getElementById('gacha-modal-overlay').classList.add('open');
+}
+
+function resetGachaCard() {
+  const inner = document.getElementById('gacha-card-inner');
+  inner.style.transition = 'none';
+  inner.classList.remove('flipped');
+  setTimeout(() => { inner.style.transition = ''; }, 50);
+}
+
+function closeGacha() {
+  document.getElementById('gacha-modal-overlay').classList.remove('open');
+}
+
+function doPull() {
+  loadGacha();
+  if (gachaData.tickets <= 0) return;
+
+  // 버튼 비활성화
+  const btn = document.getElementById('gacha-pull-btn');
+  btn.disabled = true;
+  btn.textContent = '뽑는 중...';
+
+  // 카드 리셋 후 뽑기
+  resetGachaCard();
+
+  gachaData.tickets--;
+  const grade = rollGrade();
+  const item = rollItem(grade);
+  currentPullResult = { grade, ...item };
+
+  // 카드 앞면 세팅
+  const front = document.getElementById('gacha-card-front');
+  front.className = 'gacha-card-face gacha-card-front ' + GRADE_COLORS[grade];
+  document.getElementById('gacha-result-grade').textContent = grade;
+  document.getElementById('gacha-result-emoji').textContent = item.emoji;
+  document.getElementById('gacha-result-name').textContent = item.name;
+
+  // 히스토리 저장
+  gachaData.history.unshift({ grade, emoji: item.emoji, name: item.name, date: new Date().toLocaleDateString() });
+  if (gachaData.history.length > 30) gachaData.history = gachaData.history.slice(0, 30);
+  saveGacha();
+  updateGachaBtn();
+  document.getElementById('gacha-ticket-info').textContent = `🎟 보유 티켓: ${gachaData.tickets}장`;
+
+  // 잠깐 대기 후 자동으로 카드 뒤집기
+  setTimeout(() => {
+    const inner = document.getElementById('gacha-card-inner');
+    inner.classList.add('flipped');
+    spawnGachaStars(grade);
+
+    // SSR이면 풀스크린
+    if (grade === 'SSR') {
+      setTimeout(() => showSSROverlay(currentPullResult), 1000);
+    }
+
+    // 뒤집힌 후 다시 뽑기 버튼 활성화
+    setTimeout(() => {
+      renderGachaHistory();
+      loadGacha();
+      btn.disabled = gachaData.tickets <= 0;
+      btn.textContent = gachaData.tickets > 0 ? '한 번 더! 🎰' : '티켓 없음 😢';
+      currentPullResult = null;
+      checkNewTitleUnlock(); // 칭호 체크
+    }, 1000);
+  }, 400);
+}
+
+function flipGachaCard() {
+  // 탭으로 뒤집기 제거 — 자동 뒤집기만 사용
+}
+
+function spawnGachaStars(grade) {
+  const count = grade==='SSR'?20 : grade==='SR'?12 : grade==='R'?7 : 4;
+  const stars = ['✦','✧','⭐','🌟','💫','✨','🌸'];
+  for (let i=0; i<count; i++) {
+    setTimeout(() => {
+      const el = document.createElement('div');
+      el.className = 'gacha-star';
+      el.textContent = stars[Math.floor(Math.random()*stars.length)];
+      const cx = 30 + Math.random() * 40;
+      el.style.left = cx + '%';
+      el.style.top = (30 + Math.random() * 40) + '%';
+      el.style.setProperty('--tx', (Math.random()*200-100)+'px');
+      el.style.setProperty('--ty', (Math.random()*(-200)-50)+'px');
+      el.style.animationDuration = (.8 + Math.random()*.8) + 's';
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 2000);
+    }, i * 60);
+  }
+}
+
+function showSSROverlay(item) {
+  document.getElementById('gacha-ssr-emoji').textContent = item.emoji;
+  document.getElementById('gacha-ssr-name').textContent = item.name;
+  document.getElementById('gacha-ssr-overlay').classList.add('open');
+  spawnGachaStars('SSR');
+}
+
+function closeSSROverlay() {
+  document.getElementById('gacha-ssr-overlay').classList.remove('open');
+}
+
+function renderGachaHistory() {
+  loadGacha();
+  const wrap = document.getElementById('gacha-history-wrap');
+  if (!wrap) return;
+  wrap.innerHTML = gachaData.history.slice(0,20).map(h =>
+    `<div class="gacha-history-item grade-${h.grade.toLowerCase()}" title="${h.name} (${h.grade})">
+      ${h.emoji}
+    </div>`
+  ).join('');
+}
+
+
+
+// ═══════════════════ BOSS SYSTEM ═══════════════════
+const BOSS_GOAL = 50; // 하루 N개 맞히면 보스 등장
+const BOSS_QUESTIONS = 5;
+
+const BOSS_LIST = [
+  { name:'망각의 군주',    sprite:'👾', desc:'틀린 카드를 소환한다...' },
+  { name:'혼돈의 수호자',  sprite:'🦂', desc:'어둠 속에서 나타났다!' },
+  { name:'오답의 악마',    sprite:'😈', desc:'너의 약점을 알고 있다!' },
+  { name:'시험의 마왕',    sprite:'💀', desc:'최후의 시험이 시작된다!' },
+  { name:'건축의 수호신',  sprite:'🏛', desc:'건축 지식으로 쓰러뜨려라!' },
+  { name:'단어의 정령',    sprite:'📖', desc:'단어의 힘을 보여줘!' },
+];
+
+let bossData = {
+  date: '',
+  todayCorrect: 0,
+  bossDefeated: false,
+  bossAvailable: false,
+};
+let bossSession = {
+  boss: null,
+  questions: [],
+  currentQ: 0,
+  hp: BOSS_QUESTIONS,
+  answered: false,
+};
+
+function loadBoss() {
+  const s = localStorage.getItem('boss_data');
+  if (s) bossData = JSON.parse(s);
+  // 날짜 바뀌면 리셋
+  const today = getTodayStr();
+  if (bossData.date !== today) {
+    bossData = { date:today, todayCorrect:0, bossDefeated:false, bossAvailable:false };
+    saveBoss();
+  }
+}
+function saveBoss() {
+  localStorage.setItem('boss_data', JSON.stringify(bossData));
+}
+
+function initBoss() {
+  loadBoss();
+  updateBossBar();
+}
+
+function onBossCorrect() {
+  loadBoss();
+  if (bossData.bossDefeated) return; // 이미 오늘 클리어
+  bossData.todayCorrect = Math.min(BOSS_GOAL, (bossData.todayCorrect||0) + 1);
+  if (bossData.todayCorrect >= BOSS_GOAL && !bossData.bossAvailable) {
+    bossData.bossAvailable = true;
+    showBossAppearToast();
+  }
+  saveBoss();
+  updateBossBar();
+}
+
+function showBossAppearToast() {
+  const el = document.getElementById('tier-toast');
+  el.textContent = '👾 보스가 나타났다! 도전해봐!';
+  el.className = 'tier-toast up show';
+  setTimeout(() => el.classList.remove('show'), 4000);
+}
+
+function updateBossBar() {
+  loadBoss();
+  const bar = document.getElementById('boss-bar');
+  const fill = document.getElementById('boss-progress-fill');
+  const label = document.getElementById('boss-progress-label');
+  const icon = document.getElementById('boss-bar-icon');
+  const barLabel = document.getElementById('boss-bar-label');
+
+  const pct = Math.min(100, Math.round((bossData.todayCorrect||0) / BOSS_GOAL * 100));
+  fill.style.width = pct + '%';
+
+  if (bossData.bossDefeated) {
+    icon.textContent = '✅';
+    barLabel.textContent = '오늘 보스 클리어!';
+    label.textContent = '내일 또 도전';
+    bar.classList.remove('ready');
+    bar.style.cursor = 'default';
+  } else if (bossData.bossAvailable) {
+    icon.textContent = '👾';
+    barLabel.textContent = '⚔️ 보스 출현! 탭하여 도전!';
+    label.textContent = '도전 가능!';
+    bar.classList.add('ready');
+  } else {
+    icon.textContent = '👾';
+    barLabel.textContent = '보스 등장까지';
+    label.textContent = `${bossData.todayCorrect||0} / ${BOSS_GOAL}`;
+    bar.classList.remove('ready');
+    bar.style.cursor = 'default';
+  }
+}
+
+function tryOpenBoss() {
+  loadBoss();
+  if (!bossData.bossAvailable || bossData.bossDefeated) return;
+  openBossModal();
+}
+
+function openBossModal() {
+  // 보스 랜덤 선택
+  const boss = BOSS_LIST[Math.floor(Math.random() * BOSS_LIST.length)];
+  bossSession.boss = boss;
+
+  // 문제 선택 — 틀린 카드 가중치 높게
+  bossSession.questions = selectBossQuestions();
+  bossSession.currentQ = 0;
+  bossSession.hp = BOSS_QUESTIONS;
+  bossSession.answered = false;
+
+  // 인트로 화면
+  document.getElementById('boss-intro-sprite').textContent = boss.sprite;
+  document.getElementById('boss-intro-name').textContent = boss.name;
+  document.getElementById('boss-intro-screen').style.display = 'flex';
+  document.getElementById('boss-battle-screen').style.display = 'none';
+  document.getElementById('boss-result-screen').style.display = 'none';
+  document.getElementById('boss-modal-overlay').classList.add('open');
+}
+
+function selectBossQuestions() {
+  const pool = cards.filter(c => history[c.id] && (history[c.id].know + history[c.id].dont) > 0);
+  if (pool.length === 0) return shuffle([...cards]).slice(0, BOSS_QUESTIONS);
+
+  // 가중치: dont 횟수 많을수록 높은 확률
+  const weighted = [];
+  for (const c of pool) {
+    const h = history[c.id];
+    const weight = Math.max(1, (h.dont||0) * 3 + 1); // 틀린 횟수 × 3 + 기본1
+    for (let i=0; i<weight; i++) weighted.push(c);
+  }
+  shuffle(weighted);
+
+  // 중복 제거하면서 5개 선택
+  const selected = [];
+  const usedIds = new Set();
+  for (const c of weighted) {
+    if (!usedIds.has(c.id)) {
+      selected.push(c);
+      usedIds.add(c.id);
+      if (selected.length >= BOSS_QUESTIONS) break;
+    }
+  }
+  // 부족하면 나머지 채우기
+  if (selected.length < BOSS_QUESTIONS) {
+    const rest = cards.filter(c=>!usedIds.has(c.id));
+    shuffle(rest);
+    selected.push(...rest.slice(0, BOSS_QUESTIONS - selected.length));
+  }
+  return selected;
+}
+
+function startBossBattle() {
+  document.getElementById('boss-intro-screen').style.display = 'none';
+  document.getElementById('boss-battle-screen').style.display = 'flex';
+  document.getElementById('boss-battle-screen').style.flexDirection = 'column';
+  document.getElementById('boss-battle-sprite').textContent = bossSession.boss.sprite;
+  renderBossQuestion();
+}
+
+function renderBossQuestion() {
+  const q = bossSession.questions[bossSession.currentQ];
+  if (!q) { endBossBattle(true); return; }
+
+  bossSession.answered = false;
+  document.getElementById('boss-next-btn').style.display = 'none';
+  document.getElementById('boss-q-num').textContent = `문제 ${bossSession.currentQ+1} / ${BOSS_QUESTIONS}`;
+
+  // HP 바
+  const hpPct = (bossSession.hp / BOSS_QUESTIONS) * 100;
+  document.getElementById('boss-battle-hp-fill').style.width = hpPct + '%';
+  document.getElementById('boss-battle-hp-label').textContent = `HP ${bossSession.hp}/${BOSS_QUESTIONS}`;
+
+  const ansWrap = document.getElementById('boss-answer-wrap');
+
+  if (q.type === 'cloze') {
+    // cloze: 문제 + 정답 전체 보여주고 O/X 자기판단
+    const qText = q.q.replace(/___/g, '　　　').replace(/\|/g, ' / ');
+    const aText = q.a.split('|').map((a,i) => `${i+1}. ${a.trim()}`).join('\n');
+    document.getElementById('boss-question').innerHTML =
+      `<div style="margin-bottom:10px;">${esc(qText)}</div>
+       <div style="border-top:1px solid rgba(255,255,255,0.1);padding-top:10px;font-size:.78rem;color:rgba(255,255,255,0.5);">정답</div>
+       <div style="color:#b8e0d4;font-size:.82rem;line-height:1.8;">${esc(aText)}</div>`;
+    ansWrap.innerHTML = `
+      <div style="font-size:.72rem;color:rgba(255,255,255,0.4);text-align:center;margin-bottom:6px;">맞혔나요?</div>
+      <div style="display:flex;gap:8px;">
+        <button class="boss-ans-btn" style="flex:1;text-align:center;border-color:rgba(130,168,152,0.4);"
+          onclick="answerBossOX(true)">✓ 맞혔어!</button>
+        <button class="boss-ans-btn" style="flex:1;text-align:center;border-color:rgba(201,131,138,0.4);"
+          onclick="answerBossOX(false)">✕ 틀렸어</button>
+      </div>`;
+  } else {
+    // flash/OX: 같은 카테고리에서 오답 뽑아 3지선다
+    const qText = q.type === 'ox'
+      ? q.q
+      : q.q.replace(/\|/g, ' / ');
+    document.getElementById('boss-question').textContent = qText;
+
+    const correctAns = q.type === 'ox' ? q.a : q.a.split('|')[0].trim();
+
+    // 같은 카테고리에서 오답 뽑기
+    const sameCat = cards.filter(c => c.id !== q.id && c.cat === q.cat && c.a && c.a !== q.a);
+    const diffCat = cards.filter(c => c.id !== q.id && c.a && c.a !== q.a);
+    const wrongPool = sameCat.length >= 2 ? sameCat : [...sameCat, ...diffCat];
+    shuffle(wrongPool);
+    const wrongs = [];
+    const usedAns = new Set([correctAns]);
+    for (const c of wrongPool) {
+      const wa = c.type === 'ox' ? c.a : c.a.split('|')[0].trim();
+      if (!usedAns.has(wa) && wa.length < 30) {
+        wrongs.push(wa);
+        usedAns.add(wa);
+        if (wrongs.length >= 2) break;
+      }
+    }
+    const options = shuffle([correctAns, ...wrongs]);
+    ansWrap.innerHTML = options.map(opt =>
+      `<button class="boss-ans-btn" onclick="answerBoss(this,'${correctAns.replace(/'/g,"\\'")}','${opt.replace(/'/g,"\\'")}')">
+        ${esc(opt)}
+      </button>`
+    ).join('');
+  }
+}
+
+function answerBossOX(correct) {
+  if (bossSession.answered) return;
+  bossSession.answered = true;
+  document.querySelectorAll('.boss-ans-btn').forEach(b => b.disabled = true);
+
+  if (correct) {
+    bossSession.hp--;
+    const hpPct = (bossSession.hp / BOSS_QUESTIONS) * 100;
+    document.getElementById('boss-battle-hp-fill').style.width = hpPct + '%';
+    document.getElementById('boss-battle-hp-label').textContent = `HP ${bossSession.hp}/${BOSS_QUESTIONS}`;
+    if (bossSession.hp <= 0) { setTimeout(() => endBossBattle(true), 500); return; }
+    document.getElementById('boss-next-btn').style.display = 'block';
+  } else {
+    setTimeout(() => endBossBattle(false), 800);
+  }
+}
+
+function answerBoss(btn, correct, chosen) {
+  if (bossSession.answered) return;
+  bossSession.answered = true;
+  document.querySelectorAll('.boss-ans-btn').forEach(b => b.disabled = true);
+
+  if (chosen === correct) {
+    btn.classList.add('correct');
+    bossSession.hp--;
+    const hpPct = (bossSession.hp / BOSS_QUESTIONS) * 100;
+    document.getElementById('boss-battle-hp-fill').style.width = hpPct + '%';
+    document.getElementById('boss-battle-hp-label').textContent = `HP ${bossSession.hp}/${BOSS_QUESTIONS}`;
+    if (bossSession.hp <= 0) { setTimeout(() => endBossBattle(true), 700); return; }
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('.boss-ans-btn').forEach(b => {
+      if (b.textContent.trim() === correct) b.classList.add('correct');
+    });
+    setTimeout(() => endBossBattle(false), 1200);
+    return;
+  }
+  document.getElementById('boss-next-btn').style.display = 'block';
+}
+
+function nextBossQuestion() {
+  bossSession.currentQ++;
+  if (bossSession.currentQ >= BOSS_QUESTIONS) {
+    endBossBattle(true);
+  } else {
+    renderBossQuestion();
+  }
+}
+
+function endBossBattle(win) {
+  document.getElementById('boss-battle-screen').style.display = 'none';
+  document.getElementById('boss-result-screen').style.display = 'flex';
+  document.getElementById('boss-result-screen').style.flexDirection = 'column';
+
+  if (win) {
+    document.getElementById('boss-result-icon').textContent = '🎉';
+    document.getElementById('boss-result-title').textContent = '승리!';
+    document.getElementById('boss-result-title').className = 'boss-result-title win';
+    document.getElementById('boss-result-desc').textContent = `${bossSession.boss.name}을 쓰러뜨렸다!\n+20pt & 뽑기권 1장 획득!`;
+    addPoints(PT.bossWin, '보스전 승리');
+    addGachaTicket(1);
+    bossData.bossDefeated = true;
+    saveBoss();
+    spawnGachaStars('SR');
+  } else {
+    document.getElementById('boss-result-icon').textContent = '💀';
+    document.getElementById('boss-result-title').textContent = '패배...';
+    document.getElementById('boss-result-title').className = 'boss-result-title lose';
+    document.getElementById('boss-result-desc').textContent = `${bossSession.boss.name}에게 졌다...\n-15pt\n오늘 다시 도전 가능!`;
+    addPoints(PT.bossLose, '보스전 패배');
+    // 패배 시 재도전 가능 (bossDefeated = false 유지)
+  }
+  updateBossBar();
+}
+
+function closeBossModal() {
+  document.getElementById('boss-modal-overlay').classList.remove('open');
+}
+
+// ═══════════════════ COLLECTION & TITLE SYSTEM ═══════════════════
+const TITLE_DEFS = [
+  { id:'first',   name:'첫 수집가',     icon:'🌱', cond:'카드 1장 수집',         check: h => h.total >= 1 },
+  { id:'n20',     name:'초보 수집가',   icon:'🐣', cond:'N 카드 20장',            check: h => h.N >= 20 },
+  { id:'r10',     name:'희귀 사냥꾼',   icon:'🦋', cond:'R 카드 10장',            check: h => h.R >= 10 },
+  { id:'sr5',     name:'별빛 연구자',   icon:'🌙', cond:'SR 카드 5장',            check: h => h.SR >= 5 },
+  { id:'ssr1',    name:'전설의 수집가', icon:'👑', cond:'SSR 카드 1장',           check: h => h.SSR >= 1 },
+  { id:'ssr3',    name:'전설을 넘어서', icon:'🌟', cond:'SSR 카드 3장',           check: h => h.SSR >= 3 },
+  { id:'total30', name:'카드 마스터',   icon:'💎', cond:'총 30장 수집',           check: h => h.total >= 30 },
+  { id:'allgrade',name:'완전 수집가',   icon:'✨', cond:'N·R·SR·SSR 모두 보유',  check: h => h.N>=1&&h.R>=1&&h.SR>=1&&h.SSR>=1 },
+];
+
+let collectionMeta = { equippedTitle: null };
+
+function loadCollectionMeta() {
+  const s = localStorage.getItem('collection_meta');
+  if (s) collectionMeta = JSON.parse(s);
+}
+function saveCollectionMeta() {
+  localStorage.setItem('collection_meta', JSON.stringify(collectionMeta));
+}
+
+function getGachaStats() {
+  loadGacha();
+  const stats = { N:0, R:0, SR:0, SSR:0, total:0 };
+  // 중복 제거 없이 전체 뽑은 수
+  for (const h of gachaData.history) {
+    stats[h.grade] = (stats[h.grade]||0) + 1;
+    stats.total++;
+  }
+  return stats;
+}
+
+function getUnlockedTitles() {
+  const stats = getGachaStats();
+  return TITLE_DEFS.filter(t => t.check(stats));
+}
+
+function openCollectionModal() {
+  loadGacha();
+  loadCollectionMeta();
+  renderTitleGrid();
+  renderCollectionDogam();
+  updateEquippedTitleDisplay();
+  document.getElementById('collection-modal-overlay').classList.add('open');
+}
+
+function closeCollectionModal(e) {
+  if (!e || e.target === document.getElementById('collection-modal-overlay')) {
+    document.getElementById('collection-modal-overlay').classList.remove('open');
+  }
+}
+
+function renderTitleGrid() {
+  const unlocked = getUnlockedTitles().map(t=>t.id);
+  const grid = document.getElementById('title-grid');
+  grid.innerHTML = TITLE_DEFS.map(t => {
+    const isUnlocked = unlocked.includes(t.id);
+    const isEquipped = collectionMeta.equippedTitle === t.id;
+    return `<div class="title-item ${isUnlocked?'unlocked':'locked'}">
+      <span class="title-item-badge">${isUnlocked?(isEquipped?'장착중':'해금'):'잠김'}</span>
+      <div style="font-size:1.2rem;margin-bottom:3px;">${t.icon}</div>
+      <div class="title-item-name">${t.name}</div>
+      <div class="title-item-cond">${t.cond}</div>
+      ${isUnlocked ? `<button class="title-equip-btn ${isEquipped?'equipped':''}"
+        onclick="equipTitle('${t.id}')">${isEquipped?'✓ 장착중':'장착'}</button>` : ''}
+    </div>`;
+  }).join('');
+}
+
+function equipTitle(id) {
+  loadCollectionMeta();
+  collectionMeta.equippedTitle = collectionMeta.equippedTitle === id ? null : id;
+  saveCollectionMeta();
+  renderTitleGrid();
+  updateEquippedTitleDisplay();
+  updateSubtitleWithTitle();
+}
+
+function updateEquippedTitleDisplay() {
+  loadCollectionMeta();
+  const el = document.getElementById('equipped-title-display');
+  if (!el) return;
+  if (collectionMeta.equippedTitle) {
+    const t = TITLE_DEFS.find(t=>t.id===collectionMeta.equippedTitle);
+    el.textContent = t ? `장착 칭호: ${t.icon} ${t.name}` : '장착 칭호: 없음';
+  } else {
+    el.textContent = '장착 칭호: 없음';
+  }
+}
+
+function updateSubtitleWithTitle() {
+  loadCollectionMeta();
+  const sub = document.getElementById('app-subtitle');
+  if (!sub) return;
+  if (collectionMeta.equippedTitle) {
+    const t = TITLE_DEFS.find(t=>t.id===collectionMeta.equippedTitle);
+    if (t) { sub.textContent = `${t.icon} ${t.name} · 9급 건축직 시험 대비`; return; }
+  }
+  sub.textContent = '♥ 9급 건축직 공무원 시험 대비';
+}
+
+function renderCollectionDogam() {
+  loadGacha();
+  const wrap = document.getElementById('collection-grades-wrap');
+  const grades = ['SSR','SR','R','N'];
+  const gradeLabels = { SSR:'⭐ SSR', SR:'💜 SR', R:'💙 R', N:'⬜ N' };
+  const gradeCls = { SSR:'cgt-ssr', SR:'cgt-sr', R:'cgt-r', N:'cgt-n' };
+
+  // 카드별 카운트
+  const cardMap = {};
+  for (const h of gachaData.history) {
+    const key = h.emoji + h.name;
+    if (!cardMap[key]) cardMap[key] = { ...h, count: 0 };
+    cardMap[key].count++;
+  }
+
+  wrap.innerHTML = grades.map(grade => {
+    const cards = Object.values(cardMap).filter(c=>c.grade===grade);
+    if (!cards.length) return `<div class="collection-grade-group">
+      <span class="collection-grade-title ${gradeCls[grade]}">${gradeLabels[grade]}</span>
+      <div style="font-size:.72rem;color:var(--muted);padding:4px 0;">아직 없음</div>
+    </div>`;
+    return `<div class="collection-grade-group">
+      <span class="collection-grade-title ${gradeCls[grade]}">${gradeLabels[grade]} (${cards.length}종)</span>
+      <div class="collection-cards-grid">
+        ${cards.map(c=>`
+          <div class="collection-card-item grade-${grade.toLowerCase()}">
+            <span class="cc-count">×${c.count}</span>
+            ${c.emoji}
+            <span class="cc-name">${c.name}</span>
+          </div>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// 칭호 새로 해금됐는지 체크 (뽑기 후 호출)
+function checkNewTitleUnlock() {
+  const unlocked = getUnlockedTitles();
+  const saved = JSON.parse(localStorage.getItem('unlocked_titles')||'[]');
+  const newOnes = unlocked.filter(t=>!saved.includes(t.id));
+  if (newOnes.length > 0) {
+    localStorage.setItem('unlocked_titles', JSON.stringify(unlocked.map(t=>t.id)));
+    newOnes.forEach(t => {
+      setTimeout(() => {
+        const el = document.getElementById('tier-toast');
+        el.textContent = `🏅 새 칭호 해금! ${t.icon} ${t.name}`;
+        el.className = 'tier-toast up show';
+        setTimeout(() => el.classList.remove('show'), 3000);
+      }, 1500);
+    });
+  } else {
+    localStorage.setItem('unlocked_titles', JSON.stringify(unlocked.map(t=>t.id)));
+  }
+}
+
+// ═══════════════════ QUEST SYSTEM ═══════════════════
+const QUEST_TEMPLATES = [
+  { id:'card20',  icon:'✏️', title:'카드 20개 맞히기',     type:'cardCorrect', target:20,  reward:10 },
+  { id:'card50',  icon:'✏️', title:'카드 50개 맞히기',     type:'cardCorrect', target:50,  reward:10 },
+  { id:'card100', icon:'🔥', title:'카드 100개 맞히기',    type:'cardCorrect', target:100, reward:10 },
+  { id:'arch20',  icon:'🏛', title:'건축 카드 20개 맞히기', type:'archCorrect', target:20,  reward:10 },
+  { id:'arch50',  icon:'🏛', title:'건축 카드 50개 맞히기', type:'archCorrect', target:50,  reward:10 },
+  { id:'eng10',   icon:'✨', title:'영단어 10개 맞히기',    type:'engCorrect',  target:10,  reward:10 },
+  { id:'eng20',   icon:'✨', title:'영단어 20개 맞히기',    type:'engCorrect',  target:20,  reward:10 },
+  { id:'review10',icon:'🔁', title:'복습 10개 완료',        type:'review',      target:10,  reward:10 },
+  { id:'review20',icon:'🔁', title:'복습 20개 완료',        type:'review',      target:20,  reward:10 },
+  { id:'login',   icon:'📅', title:'오늘 출석 체크',        type:'login',       target:1,   reward:10 },
+];
+
+let questData = { date:'', quests:[], bonusClaimed:false };
+
+function loadQuest() {
+  const s = localStorage.getItem('quest_data');
+  if (s) questData = JSON.parse(s);
+}
+function saveQuest() {
+  localStorage.setItem('quest_data', JSON.stringify(questData));
+}
+
+function getTodayStr() {
+  const d = new Date();
+  return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+}
+
+function generateDailyQuests() {
+  // 랜덤 3개 선택 (중복 type 피하기)
+  const pool = [...QUEST_TEMPLATES];
+  const picked = [];
+  const usedTypes = new Set();
+  
+  // 로그인 퀘스트는 항상 포함
+  picked.push({ ...QUEST_TEMPLATES.find(q=>q.id==='login'), progress:0, done:false });
+  usedTypes.add('login');
+
+  // 나머지 2개 랜덤
+  const shuffled = pool.filter(q=>q.id!=='login').sort(()=>Math.random()-.5);
+  for (const q of shuffled) {
+    if (picked.length >= 3) break;
+    if (!usedTypes.has(q.type)) {
+      picked.push({ ...q, progress:0, done:false });
+      usedTypes.add(q.type);
+    }
+  }
+  return picked;
+}
+
+function initQuest() {
+  loadQuest();
+  const today = getTodayStr();
+  if (questData.date !== today) {
+    // 새 날 — 퀘스트 리셋
+    questData = { date: today, quests: generateDailyQuests(), bonusClaimed: false };
+    saveQuest();
+  }
+  // 로그인 퀘스트 자동 완료
+  progressQuest('login', 1);
+  updateQuestBar();
+}
+
+function progressQuest(type, amount) {
+  loadQuest();
+  const today = getTodayStr();
+  if (questData.date !== today) { initQuest(); return; }
+
+  let changed = false;
+  for (const q of questData.quests) {
+    if (q.type === type && !q.done) {
+      q.progress = Math.min(q.target, (q.progress||0) + amount);
+      if (q.progress >= q.target) {
+        q.done = true;
+        addPoints(q.reward, q.title);
+        showQuestCompleteToast(q);
+        changed = true;
+      }
+    }
+  }
+  // 보너스 체크
+  const allDone = questData.quests.every(q=>q.done);
+  if (allDone && !questData.bonusClaimed) {
+    questData.bonusClaimed = true;
+    addPoints(5, '퀘스트 전체 완료 보너스');
+    addGachaTicket(1); // 퀘스트 전체 완료 시 티켓 1장
+    showQuestCompleteToast({ icon:'🎁', title:'보너스 +5pt!' });
+  }
+  saveQuest();
+  updateQuestBar();
+  if (changed) updateQuestModal();
+}
+
+function showQuestCompleteToast(q) {
+  const el = document.getElementById('tier-toast');
+  el.textContent = `${q.icon} ${q.title} 완료! +${q.reward||5}pt`;
+  el.className = 'tier-toast up show';
+  setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+function updateQuestBar() {
+  loadQuest();
+  const doneCount = questData.quests.filter(q=>q.done).length;
+  document.getElementById('quest-bar-progress').textContent = doneCount + '/3';
+  for (let i=0; i<3; i++) {
+    const dot = document.getElementById('qdot-'+i);
+    if (!dot) continue;
+    const q = questData.quests[i];
+    dot.classList.toggle('done', q && q.done);
+  }
+}
+
+function openQuestModal() {
+  loadQuest();
+  const today = new Date();
+  document.getElementById('quest-modal-date').textContent =
+    today.getFullYear() + '년 ' + (today.getMonth()+1) + '월 ' + today.getDate() + '일';
+  updateQuestModal();
+  document.getElementById('quest-modal-overlay').classList.add('open');
+}
+
+function updateQuestModal() {
+  loadQuest();
+  const wrap = document.getElementById('quest-items-wrap');
+  wrap.innerHTML = questData.quests.map((q,i) => {
+    const pct = Math.min(100, Math.round((q.progress||0) / q.target * 100));
+    return `<div class="quest-item ${q.done?'done':''}" id="qitem-${i}">
+      <div class="quest-item-top">
+        <span class="quest-item-icon">${q.icon}</span>
+        <span class="quest-item-title">${q.title}</span>
+        ${q.done
+          ? '<span class="quest-item-done-badge">✓ 완료</span>'
+          : `<span class="quest-item-reward">+${q.reward}pt</span>`
+        }
+      </div>
+      ${!q.done ? `
+        <div class="quest-prog-bar">
+          <div class="quest-prog-fill" style="width:${pct}%"></div>
+        </div>
+        <div class="quest-prog-label">${q.progress||0} / ${q.target}</div>
+      ` : ''}
+    </div>`;
+  }).join('');
+
+  // 보너스 바
+  const bonusBar = document.getElementById('quest-bonus-bar');
+  const allDone = questData.quests.every(q=>q.done);
+  if (questData.bonusClaimed) {
+    bonusBar.textContent = '🎉 보너스 획득 완료!';
+    bonusBar.classList.add('ready');
+  } else if (allDone) {
+    bonusBar.textContent = '🎁 보너스 +5pt 지급!';
+    bonusBar.classList.add('ready');
+  } else {
+    const doneCount = questData.quests.filter(q=>q.done).length;
+    bonusBar.textContent = `🎁 3개 모두 완료 시 보너스 +5pt (${doneCount}/3)`;
+    bonusBar.classList.remove('ready');
+  }
+}
+
+function closeQuestModal(e) {
+  if (!e || e.target === document.getElementById('quest-modal-overlay')) {
+    document.getElementById('quest-modal-overlay').classList.remove('open');
+  }
+}
+
+// ═══════════════════ TIER SYSTEM ═══════════════════
+const TIERS = [
+  { id:'iron',       name:'아이언',     icon:'🔩', min:0,    max:99,   cls:'tier-iron' },
+  { id:'bronze',     name:'브론즈',     icon:'🥉', min:100,  max:299,  cls:'tier-bronze' },
+  { id:'silver',     name:'실버',       icon:'🥈', min:300,  max:599,  cls:'tier-silver' },
+  { id:'gold',       name:'골드',       icon:'🥇', min:600,  max:999,  cls:'tier-gold' },
+  { id:'platinum',   name:'플래티넘',   icon:'💠', min:1000, max:1499, cls:'tier-platinum' },
+  { id:'diamond',    name:'다이아',     icon:'💎', min:1500, max:1999, cls:'tier-diamond' },
+  { id:'master',     name:'마스터',     icon:'👑', min:2000, max:2999, cls:'tier-master' },
+  { id:'challenger', name:'챌린저',     icon:'🌟', min:3000, max:Infinity, cls:'tier-challenger' },
+];
+
+const PT = {
+  cardCorrect: 1,
+  attend: 5,
+  quest: 10,
+  bossWin: 20,
+  bossLose: -15,
+  absent2: -10,
+  absent3plus: -20,
+  weeklyQuestFail: -10,
+};
+
+let tierData = { points: 0, lastAttend: null };
+
+function loadTier() {
+  const s = localStorage.getItem('tier_data');
+  if (s) tierData = JSON.parse(s);
+}
+function saveTier() {
+  localStorage.setItem('tier_data', JSON.stringify(tierData));
+}
+function getTierByPts(pts) {
+  return TIERS.slice().reverse().find(t => pts >= t.min) || TIERS[0];
+}
+function initTier() {
+  loadTier();
+  updateTierBadge();
+}
+
+function addPoints(pt, label) {
+  const before = getTierByPts(tierData.points);
+  tierData.points = Math.max(0, tierData.points + pt);
+  saveTier();
+  const after = getTierByPts(tierData.points);
+
+  // 포인트 팝업
+  showPtPopup(pt);
+
+  // 티어 변동 체크
+  if (before.id !== after.id) {
+    const up = tierData.points > (before.min + (before.max === Infinity ? 0 : 0));
+    showTierToast(after, pt > 0);
+    if (pt > 0) addGachaTicket(1); // 승급 시 티켓 1장
+  }
+  updateTierBadge();
+}
+
+function showPtPopup(pt) {
+  const el = document.createElement('div');
+  el.className = 'pt-popup';
+  el.textContent = (pt > 0 ? '+' : '') + pt + 'pt';
+  el.style.cssText = `color:${pt>0?'#c9838a':'#888'};top:${60+Math.random()*30}px;left:${30+Math.random()*40}%;`;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1300);
+}
+
+function showTierToast(tier, isUp) {
+  const el = document.getElementById('tier-toast');
+  el.textContent = isUp
+    ? `🎉 ${tier.icon} ${tier.name} 승급!`
+    : `${tier.icon} ${tier.name}으로 강등...`;
+  el.className = 'tier-toast ' + (isUp ? 'up' : 'down');
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+function updateTierBadge() {
+  const tier = getTierByPts(tierData.points);
+  const badge = document.getElementById('tier-badge');
+  badge.textContent = tier.icon + ' ' + tier.name;
+  badge.className = 'tier-badge ' + tier.cls;
+}
+
+function openTierModal() {
+  loadTier();
+  const tier = getTierByPts(tierData.points);
+  const pts = tierData.points;
+
+  document.getElementById('tier-icon').textContent = tier.icon;
+  document.getElementById('tier-name').textContent = tier.name;
+  document.getElementById('tier-pts').textContent = pts + ' pt';
+
+  // 진행바
+  const nextTier = TIERS[TIERS.indexOf(tier) + 1];
+  if (nextTier) {
+    const range = nextTier.min - tier.min;
+    const cur = pts - tier.min;
+    const pct = Math.min(100, Math.round(cur / range * 100));
+    document.getElementById('tier-prog-fill').style.width = pct + '%';
+    document.getElementById('tier-prog-cur').textContent = cur + '/' + range + 'pt';
+    document.getElementById('tier-prog-next').textContent = '다음: ' + nextTier.icon + ' ' + nextTier.name;
+  } else {
+    document.getElementById('tier-prog-fill').style.width = '100%';
+    document.getElementById('tier-prog-cur').textContent = '최고 티어!';
+    document.getElementById('tier-prog-next').textContent = '🌟 챌린저';
+  }
+
+  // 티어 목록
+  const list = document.getElementById('tier-list');
+  list.innerHTML = TIERS.map(t => {
+    const achieved = pts >= t.min;
+    const isCur = t.id === tier.id;
+    return `<div class="tier-list-item ${isCur?'current':''} ${achieved&&!isCur?'achieved':''}">
+      <span>${t.icon}</span>
+      <span>${t.name}</span>
+      <span class="tier-list-pts">${t.min}pt~</span>
+    </div>`;
+  }).join('');
+
+  document.getElementById('tier-modal-overlay').classList.add('open');
+}
+
+function closeTierModal(e) {
+  if (!e || e.target === document.getElementById('tier-modal-overlay')) {
+    document.getElementById('tier-modal-overlay').classList.remove('open');
+  }
+}
+
+// 출석 보상 및 결석 패널티
+function checkAttendancePenalty() {
+  loadTier();
+  const today = new Date().toDateString();
+  if (tierData.lastAttend === today) return; // 오늘 이미 처리함
+
+  if (tierData.lastAttend) {
+    const last = new Date(tierData.lastAttend);
+    const now = new Date();
+    const diffDays = Math.floor((now - last) / (1000 * 60 * 60 * 24));
+
+    if (diffDays >= 3) {
+      addPoints(PT.absent3plus, '3일+ 결석');
+    } else if (diffDays >= 2) {
+      addPoints(PT.absent2, '2일 결석');
+    } else if (diffDays === 1) {
+      // 연속 출석 보상
+      addPoints(PT.attend, '출석');
+    }
+  } else {
+    // 첫 출석
+    addPoints(PT.attend, '첫 출석');
+  }
+
+  tierData.lastAttend = today;
+  saveTier();
+  updateTierBadge();
+}
+
+// 카드 맞힐 때 포인트 (answer() 함수에서 호출)
+function onCardCorrect() {
+  addPoints(PT.cardCorrect, '카드 정답');
+}
+
+
 document.getElementById('modal-type').addEventListener('change', toggleModalType);
 load(); loadCats(); renderCats(); updateTrashBadge(); updateCatSelectLabel(); switchTab('study');
+initTier();
+checkAttendancePenalty();
+initQuest();
+updateGachaBtn();
+updateSubtitleWithTitle();
+initBoss();
 // Safari 음성 목록 미리 워밍업
 if (window.speechSynthesis) {
   window.speechSynthesis.getVoices();
