@@ -2733,6 +2733,43 @@ body::before {
 
 <!-- 보스전 모달 -->
 <div class="boss-modal-overlay" id="boss-modal-overlay">
+  <!-- 인트로 -->
+  <div class="boss-intro" id="boss-intro-screen">
+    <div class="boss-sprite" id="boss-intro-sprite">👾</div>
+    <div class="boss-name" id="boss-intro-name">오늘의 보스</div>
+    <div class="boss-hp-wrap">
+      <div class="boss-hp-bar"><div class="boss-hp-fill" id="boss-intro-hp" style="width:100%"></div></div>
+      <div class="boss-hp-label">HP ████████████ 5/5</div>
+    </div>
+    <button class="boss-start-btn" onclick="startBossBattle()">⚔️ 도전!</button>
+    <button style="color:rgba(255,255,255,0.4);background:none;border:none;cursor:pointer;font-size:.8rem;" onclick="closeBossModal()">나중에</button>
+  </div>
+
+  <!-- 전투 화면 -->
+  <div class="boss-battle-screen" id="boss-battle-screen" style="display:none;">
+    <div class="boss-battle-header">
+      <div class="boss-battle-sprite" id="boss-battle-sprite">👾</div>
+      <div class="boss-battle-hp-wrap">
+        <div class="boss-battle-hp-bar">
+          <div class="boss-battle-hp-fill" id="boss-battle-hp-fill" style="width:100%"></div>
+        </div>
+        <div class="boss-battle-hp-label" id="boss-battle-hp-label">HP 5/5</div>
+      </div>
+    </div>
+    <div class="boss-q-num" id="boss-q-num">문제 1 / 5</div>
+    <div class="boss-question" id="boss-question">문제 내용</div>
+    <div class="boss-answer-wrap" id="boss-answer-wrap"></div>
+    <button class="boss-next-btn" id="boss-next-btn" style="display:none;" onclick="nextBossQuestion()">다음 →</button>
+  </div>
+
+  <!-- 결과 화면 -->
+  <div class="boss-result" id="boss-result-screen" style="display:none;">
+    <div class="boss-result-icon" id="boss-result-icon">🎉</div>
+    <div class="boss-result-title" id="boss-result-title">승리!</div>
+    <div class="boss-result-desc" id="boss-result-desc"></div>
+    <button class="boss-result-btn" onclick="closeBossModal()">확인</button>
+  </div>
+</div>
 
 <!-- 메모 모달 -->
 <div class="memo-modal-overlay" id="memo-modal-overlay" onclick="closeMemoOnBg(event)">
@@ -2772,55 +2809,6 @@ body::before {
     <button class="memo-modal-close" onclick="closeMemoHistory()">✕</button>
   </div>
   <div class="memo-history-grid" id="memo-history-grid"></div>
-</div>
-
-<!-- 카드 미리보기 모달 -->
-<div class="preview-modal-overlay" id="preview-modal" onclick="closePreviewBg(event)">
-  <div class="preview-modal" onclick="event.stopPropagation()">
-    <div class="preview-modal-header">
-      <div class="preview-modal-title">👀 카드 미리보기</div>
-      <button class="memo-modal-close" onclick="closePreview()">✕</button>
-    </div>
-    <div id="preview-content"></div>
-  </div>
-</div>
-
-  <!-- 인트로 -->
-  <div class="boss-intro" id="boss-intro-screen">
-    <div class="boss-sprite" id="boss-intro-sprite">👾</div>
-    <div class="boss-name" id="boss-intro-name">오늘의 보스</div>
-    <div class="boss-hp-wrap">
-      <div class="boss-hp-bar"><div class="boss-hp-fill" id="boss-intro-hp" style="width:100%"></div></div>
-      <div class="boss-hp-label">HP ████████████ 5/5</div>
-    </div>
-    <button class="boss-start-btn" onclick="startBossBattle()">⚔️ 도전!</button>
-    <button style="color:rgba(255,255,255,0.4);background:none;border:none;cursor:pointer;font-size:.8rem;" onclick="closeBossModal()">나중에</button>
-  </div>
-
-  <!-- 전투 화면 -->
-  <div class="boss-battle-screen" id="boss-battle-screen" style="display:none;">
-    <div class="boss-battle-header">
-      <div class="boss-battle-sprite" id="boss-battle-sprite">👾</div>
-      <div class="boss-battle-hp-wrap">
-        <div class="boss-battle-hp-bar">
-          <div class="boss-battle-hp-fill" id="boss-battle-hp-fill" style="width:100%"></div>
-        </div>
-        <div class="boss-battle-hp-label" id="boss-battle-hp-label">HP 5/5</div>
-      </div>
-    </div>
-    <div class="boss-q-num" id="boss-q-num">문제 1 / 5</div>
-    <div class="boss-question" id="boss-question">문제 내용</div>
-    <div class="boss-answer-wrap" id="boss-answer-wrap"></div>
-    <button class="boss-next-btn" id="boss-next-btn" style="display:none;" onclick="nextBossQuestion()">다음 →</button>
-  </div>
-
-  <!-- 결과 화면 -->
-  <div class="boss-result" id="boss-result-screen" style="display:none;">
-    <div class="boss-result-icon" id="boss-result-icon">🎉</div>
-    <div class="boss-result-title" id="boss-result-title">승리!</div>
-    <div class="boss-result-desc" id="boss-result-desc"></div>
-    <button class="boss-result-btn" onclick="closeBossModal()">확인</button>
-  </div>
 </div>
 
 <!-- 퀘스트 모달 -->
@@ -4233,8 +4221,13 @@ function loadCats() {
   const k = getKeys();
   try {
     const sc = localStorage.getItem(k.cats);
-    selectedCats = sc ? new Set(JSON.parse(sc)) : new Set();
-  } catch(e) { selectedCats = new Set(); }
+    if (sc) {
+      selectedCats = new Set(JSON.parse(sc));
+    } else {
+      // 처음 로드 시 전체 선택
+      selectedCats = new Set(cards.map(c => c.cat));
+    }
+  } catch(e) { selectedCats = new Set(cards.map(c => c.cat)); }
 }
 
 // ═══════════════════ WEIGHT ═══════════════════
@@ -5581,13 +5574,13 @@ function renderCatCheckGroups() {
 
   if (currentSubject === 'eng') {
     wrap.innerHTML = `<div class="cat-select-items">${
-      allCats.map(cat => `<button class="cat-check-btn${selectedCats.has(cat)||selectedCats.size===0?' checked':''}"
+      allCats.map(cat => `<button class="cat-check-btn${selectedCats.has(cat)?' checked':''}"
         onclick="toggleCatCheck('${cat.replace(/'/g,"\\'")}',this)">${cat}</button>`).join('')
     }</div>`;
     return;
   }
 
-  const partLabels = {'PART1':'PART 1 · 역학','PART2':'PART 2 · 일반구조','PART3':'PART 3 · RC','PART4':'PART 4 · 강구조','기타':'기타'};
+  const partLabels = {'PART1':'PART 1 · 역학','PART2':'PART 2 · 일반구조','PART3':'PART 3 · RC','PART4':'PART 4 · 강구조','PART5':'PART 5 · 구조역학','기타':'기타'};
   const parts = {};
   allCats.forEach(cat => {
     const m = cat.match(/^(PART\d+)/);
@@ -5596,24 +5589,41 @@ function renderCatCheckGroups() {
     parts[key].push(cat);
   });
 
-  wrap.innerHTML = Object.keys(parts).sort().map(pk => `
+  wrap.innerHTML = Object.keys(parts).sort().map(pk => {
+    const partCats = parts[pk];
+    const allChecked = partCats.every(c => selectedCats.has(c));
+    return `
     <div class="cat-select-part">
-      <div class="cat-select-part-label">${partLabels[pk]||pk}</div>
-      <div class="cat-select-items">${parts[pk].map(cat => {
+      <div class="cat-select-part-label" style="display:flex;justify-content:space-between;align-items:center;">
+        <span>${partLabels[pk]||pk}</span>
+        <button onclick="togglePartCheck('${pk}')" style="padding:3px 10px;border-radius:12px;border:1.5px solid rgba(247,202,201,0.5);background:${allChecked?'rgba(247,202,201,0.25)':'rgba(250,247,242,0.9)'};color:${allChecked?'#c9838a':'var(--muted)'};font-size:.65rem;cursor:pointer;">${allChecked?'✓ 전체':'전체'}</button>
+      </div>
+      <div class="cat-select-items">${partCats.map(cat => {
         const short = cat.includes('>') ? cat.split('>').pop().trim() : cat;
-        const checked = selectedCats.has(cat) || selectedCats.size === 0;
+        const checked = selectedCats.has(cat);
         return `<button class="cat-check-btn${checked?' checked':''}"
           onclick="toggleCatCheck('${cat.replace(/'/g,"\\'")}',this)">${short}</button>`;
       }).join('')}</div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
+}
+
+function togglePartCheck(pk) {
+  const allCats = [...new Set(cards.map(c => c.cat))];
+  const partCats = allCats.filter(c => {
+    const m = c.match(/^(PART\d+)/);
+    return (m ? m[1] : '기타') === pk;
+  });
+  const allChecked = partCats.every(c => selectedCats.has(c));
+  if (allChecked) {
+    partCats.forEach(c => selectedCats.delete(c));
+  } else {
+    partCats.forEach(c => selectedCats.add(c));
+  }
+  renderCatCheckGroups();
 }
 
 function toggleCatCheck(cat, btn) {
-  if (selectedCats.size === 0) {
-    const allCats = [...new Set(cards.map(c => c.cat))];
-    allCats.forEach(c => selectedCats.add(c));
-    document.querySelectorAll('.cat-check-btn').forEach(b => b.classList.add('checked'));
-  }
   if (selectedCats.has(cat)) {
     selectedCats.delete(cat);
     btn.classList.remove('checked');
@@ -5631,8 +5641,6 @@ function catCheckAll(val) {
 }
 
 function applyCatSelect() {
-  const allCats = [...new Set(cards.map(c => c.cat))];
-  if (selectedCats.size === allCats.length) selectedCats.clear();
   updateCatSelectLabel();
   document.getElementById('cat-select-panel').classList.remove('open');
   document.getElementById('cat-select-toggle').classList.remove('active');
@@ -5641,7 +5649,8 @@ function applyCatSelect() {
 
 function updateCatSelectLabel() {
   const label = document.getElementById('cat-select-label');
-  if (selectedCats.size === 0) {
+  const allCats = [...new Set(cards.map(c => c.cat))];
+  if (selectedCats.size === 0 || selectedCats.size === allCats.length) {
     label.textContent = '📚 단원 선택 (전체)';
   } else {
     label.textContent = `📚 ${selectedCats.size}개 단원 선택됨`;
@@ -5924,7 +5933,19 @@ let currentPullResult = null;
 
 function loadGacha() {
   const s = localStorage.getItem('gacha_data');
-  if (s) gachaData = JSON.parse(s);
+  if (s) {
+    try {
+      const parsed = JSON.parse(s);
+      // 기존 필드 보존하면서 병합
+      gachaData = {
+        tickets: parsed.tickets ?? 0,
+        history: parsed.history ?? [],
+        pulled: parsed.pulled ?? false
+      };
+    } catch(e) {
+      console.error('gacha load error', e);
+    }
+  }
 }
 function saveGacha() {
   localStorage.setItem('gacha_data', JSON.stringify(gachaData));
@@ -6278,14 +6299,23 @@ function renderBossQuestion() {
         <button class="boss-ans-btn" style="flex:1;text-align:center;border-color:rgba(201,131,138,0.4);"
           onclick="answerBossOX(false)">✕ 틀렸어</button>
       </div>`;
+  } else if (q.type === 'ox') {
+    // OX: 2지선다 (O/X만)
+    document.getElementById('boss-question').textContent = q.q;
+    const correctAns = q.a;
+    ansWrap.innerHTML = `
+      <div style="display:flex;gap:10px;">
+        <button class="boss-ans-btn" style="flex:1;font-size:1.3rem;padding:14px;text-align:center;"
+          onclick="answerBoss(this,'${correctAns}','O')">⭕ O</button>
+        <button class="boss-ans-btn" style="flex:1;font-size:1.3rem;padding:14px;text-align:center;"
+          onclick="answerBoss(this,'${correctAns}','X')">❌ X</button>
+      </div>`;
   } else {
-    // flash/OX: 같은 카테고리에서 오답 뽑아 3지선다
-    const qText = q.type === 'ox'
-      ? q.q
-      : q.q.replace(/\|/g, ' / ');
+    // flash: 같은 카테고리에서 오답 뽑아 3지선다
+    const qText = q.q.replace(/\|/g, ' / ');
     document.getElementById('boss-question').textContent = qText;
 
-    const correctAns = q.type === 'ox' ? q.a : q.a.split('|')[0].trim();
+    const correctAns = q.a.split('|')[0].trim();
 
     // 같은 카테고리에서 오답 뽑기
     const sameCat = cards.filter(c => c.id !== q.id && c.cat === q.cat && c.a && c.a !== q.a);
@@ -7116,5 +7146,17 @@ const _resumeAudio = () => {
 document.addEventListener('touchstart', _resumeAudio);
 document.addEventListener('click', _resumeAudio);
 </script>
+
+<!-- 카드 미리보기 모달 -->
+<div class="preview-modal-overlay" id="preview-modal" onclick="closePreviewBg(event)">
+  <div class="preview-modal" onclick="event.stopPropagation()">
+    <div class="preview-modal-header">
+      <div class="preview-modal-title">👀 카드 미리보기</div>
+      <button class="memo-modal-close" onclick="closePreview()">✕</button>
+    </div>
+    <div id="preview-content"></div>
+  </div>
+</div>
+
 </body>
 </html>
