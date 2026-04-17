@@ -2549,6 +2549,32 @@ body::before {
 }
 .memo-preview img { width: 100%; display: block; background: #fff; }
 
+/* 카드 미리보기 모달 */
+.preview-modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(30,10,20,.6); backdrop-filter: blur(12px);
+  z-index: 700; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.preview-modal-overlay.open { display: flex; }
+.preview-modal {
+  width: 100%; max-width: 540px; max-height: 85vh; overflow-y: auto;
+  background: linear-gradient(160deg, #fff9f8, #fff3f5);
+  border-radius: 20px;
+  border: 1.5px solid rgba(247,202,201,0.4);
+  padding: 20px;
+  box-shadow: 0 8px 40px rgba(201,131,138,0.2);
+  animation: cardIn .3s cubic-bezier(.34,1.56,.64,1);
+}
+.preview-modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 12px;
+}
+.preview-modal-title {
+  font-family: 'Pacifico', cursive;
+  font-size: 1rem; color: #c9838a;
+}
+
 </style>
 </head>
 <body>
@@ -2747,6 +2773,18 @@ body::before {
   </div>
   <div class="memo-history-grid" id="memo-history-grid"></div>
 </div>
+
+<!-- 카드 미리보기 모달 -->
+<div class="preview-modal-overlay" id="preview-modal" onclick="closePreviewBg(event)">
+  <div class="preview-modal" onclick="event.stopPropagation()">
+    <div class="preview-modal-header">
+      <div class="preview-modal-title">👀 카드 미리보기</div>
+      <button class="memo-modal-close" onclick="closePreview()">✕</button>
+    </div>
+    <div id="preview-content"></div>
+  </div>
+</div>
+
   <!-- 인트로 -->
   <div class="boss-intro" id="boss-intro-screen">
     <div class="boss-sprite" id="boss-intro-sprite">👾</div>
@@ -3431,6 +3469,25 @@ const DEFAULT_CARDS = [
 {id:6223,type:'cloze',cat:'PART3 · RC구조 > CH05 기초 > S02 현장타설콘크리트말뚝',q:'[현장타설콘크리트말뚝 주근 규정]\n주근 개수: ___ 개 이상\n최소 철근비: 설계단면적의 ___ % 이상',a:'6 | 0.25',note:'주근 개수: 기성콘크리트말뚝과 동일\n철근비: 기성말뚝(0.8%)과 다름 — 헷갈리지 말 것!'},
 {id:6224,type:'cloze',cat:'PART3 · RC구조 > CH05 기초 > S02 현장타설콘크리트말뚝',q:'[현장타설콘크리트말뚝 기타 규정]\n선단부: ___ 에 확실히 도달시켜야 지지력 확보\n저부 확대 말뚝의 경사각: 수직면과 ___ ° 이하\n중심간격: 말뚝머리 지름의 ___ 배 이상 또는 지름 + ___ mm 중 큰 값 이상',a:'지지층 | 30 | 2.0 | 1000'},
 {id:6225,type:'ox',cat:'PART3 · RC구조 > CH05 기초 > S02 현장타설콘크리트말뚝',q:'현장타설콘크리트말뚝의 주근은 특별한 경우를 제외하고 4개 이상, 설계단면적의 0.2% 이상으로 한다',a:'X',note:'주근: 6개 이상 / 최소 철근비: 0.25% 이상\n4개·0.2%는 오답 — 시험 함정!'},
+{id:6226,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 슬래브 설계',q:'[2방향 슬래브 최소두께 - 얇은 순서]\n1. 지판 有 + 내부 슬래브: 가장 ___\n2. 지판 有 + 외부 슬래브\n3. 지판 無 + 내부 슬래브\n4. 지판 無 + 외부 + 테두리보 有\n5. 지판 無 + 외부 + 테두리보 無: 가장 ___\n→ 구속 조건이 좋을수록 ___ 할 수 있음',a:'얇음 | 두꺼움 | 얇게',note:'구속 원리: 지판·테두리보·내부 위치 → 처짐 억제 → 두께 감소\n반대로 외부+테두리보無 = 구속 약함 → 두께 더 필요'},
+{id:6227,type:'ox',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 슬래브 설계',q:'철근의 설계기준항복강도(fy)가 증가할수록 슬래브 최소두께는 감소한다',a:'X',note:'보정계수 = 0.4 + fy/700\nfy 증가 → 보정계수 증가 → 최소두께 증가\n(24 국가직 9급)'},
+{id:6228,type:'ox',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 슬래브 설계',q:'외부 슬래브의 경우 테두리보가 없는 슬래브보다 테두리보가 있는 슬래브의 최소 두께가 작다',a:'O',note:'테두리보가 구속 역할 → 처짐 억제 → 더 얇게 가능 (24 국가직 9급)'},
+{id:6229,type:'ox',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 슬래브 설계',q:'지판이 있는 경우 테두리보가 없는 외부 슬래브보다 내부 슬래브의 최소 두께가 작다',a:'O',note:'내부 슬래브는 사방으로 구속 → 외부보다 더 얇게 가능 (24 국가직 9급)'},
+{id:6230,type:'ox',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 슬래브 설계',q:'내부 슬래브의 경우 지판이 없는 슬래브보다 지판이 있는 슬래브의 최소 두께가 작다',a:'O',note:'지판(펀칭 보강)이 있으면 전단에 유리 → 더 얇게 가능 (24 국가직 9급)'},
+{id:6231,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S01 설계하중·강도감소계수',q:'[강도감소계수 φ - 변형률별 분류]\n압축지배 (εt ≤ 0.002): 띠철근 ___ / 나선철근 ___\n인장지배 (εt ≥ 0.005): ___\n변화구간 (0.002 < εt < 0.005): ___ 보간\n휨부재 최소 허용 변형률: ___',a:'0.65 | 0.70 | 0.85 | 선형 | 0.004',note:'변화구간 선형보간 공식:\nφ = 0.65 + (0.85-0.65) × (εt-0.002)/(0.005-0.002)'},
+{id:6232,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S01 설계하중·강도감소계수',q:'[강도감소계수 선형보간 계산 - 기출]\n스터럽 보강 RC보, fy=400MPa\n최외단 인장철근 순인장변형률 εt = ___ (휨부재 최소 허용)\nφ = 0.65 + 0.20 × (___)/(___) \n= 0.65 + 0.20 × 0.667\n= ___',a:'0.004 | 0.002 | 0.003 | 0.78',note:'휨부재 최소 허용 변형률은 0.004\n0.78 — 띠철근 보강 보의 실제 설계 감소계수\n(20 국가 9급)'},
+{id:6233,type:'ox',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S01 설계하중·강도감소계수',q:'fy=400MPa 철근 사용 휨부재에서 순인장변형률이 0.004일 때 강도감소계수는 0.85이다',a:'X',note:'εt=0.004는 변화구간이라 선형보간 필요\nφ = 0.65 + 0.20 × (0.004-0.002)/(0.005-0.002) = 0.78\n0.85는 εt ≥ 0.005 (인장지배)일 때만 (20 국가 9급)'},
+{id:6234,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 슬래브 설계',q:'[플랫슬래브 지판 유효지지단면]\n지판이 있는 2방향 슬래브의 유효지지단면은\n바닥 표면이 기둥축 중심으로 ___ ° 내로 펼쳐진\n기둥·기둥머리·브래킷 내 가장 큰 정원추·정사면추·쐐기 형태의\n표면과 이루는 절단면으로 정의',a:'45',note:'⚠ 30°는 오답 — 항상 45° (원뿔 형태 기본 각도)\n(22 지방 9급)'},
+{id:6235,type:'ox',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 슬래브 설계',q:'지판이 있는 2방향 슬래브의 유효지지단면은 기둥축 중심으로 30° 내로 펼쳐진 원추 표면과 이루는 절단면으로 정의된다',a:'X',note:'30° → 45° 가 맞음\n유효지지단면 = 기둥이 하중을 지지하는 실제 범위 (원뿔 형태)\n(22 지방 9급)'},
+{id:6236,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 슬래브 설계',q:'[플랫슬래브 지판 수치 종합]\n연장 거리: 받침부 중심선에서 각 방향 경간의 ___ 이상\n슬래브 아래 돌출 두께: 돌출부 제외 슬래브 두께의 ___ 이상\n지판 부위 철근량 계산 시 돌출 두께 상한: 외단부~기둥 거리의 ___ 이하\n유효지지단면 각도: ___ °',a:'1/6 | 1/4 | 1/4 | 45',note:'지판 필수 수치 — 기출 단골!\n(22 지방 9급)'},
+{id:6237,type:'cloze',cat:'PART3 · RC구조 > CH04 내진설계 > S01 특수모멘트골조',q:'[특수모멘트골조 - 휨모멘트와 축력 받는 부재 설계]\n① 횡방향철근 구속 없는 외부 콘크리트 두께 ___ mm 초과 시 부가 횡방향철근을 ___ mm 이하 간격으로 배치\n② 축방향 철근 겹침이음: 부재 ___ 구역 내에서만\n③ 접합부 기둥 설계휨강도 합 ≥ 연결된 보 설계휨강도 합의 ___ 배 이상\n④ 축방향 철근비: ___ 이상, ___ 이하',a:'100 | 300 | 중앙부 1/2 | 1.2 | 0.01 | 0.06',note:'⚠ 철근비 상한 0.06 (0.10은 오답 함정!)\n(15 국가 7급)'},
+{id:6238,type:'ox',cat:'PART3 · RC구조 > CH04 내진설계 > S01 특수모멘트골조',q:'특수모멘트골조 부재의 축방향 철근비는 0.01 이상, 0.10 이하로 한다',a:'X',note:'철근비 상한: 0.06 (0.10은 오답)\n0.01 이상, 0.06 이하\n(15 국가 7급)'},
+{id:6239,type:'ox',cat:'PART3 · RC구조 > CH04 내진설계 > S01 특수모멘트골조',q:'특수모멘트골조 축방향 철근의 겹침이음은 부재의 중앙부에서 부재길이의 1/2 구역 내에서만 한다',a:'O',note:'단부는 지진력 집중 구간이라 겹침이음 금지\n중앙부 1/2 구역에서만 겹침이음 허용\n(15 국가 7급)'},
+{id:6240,type:'ox',cat:'PART3 · RC구조 > CH04 내진설계 > S01 특수모멘트골조',q:'접합부의 접합면에서 기둥들의 설계휨강도 합은 연결된 보의 설계휨강도 합의 1.2배 이상으로 한다',a:'O',note:'강주약보 원칙 — 기둥이 보보다 강해야 연성 거동 확보\n1.2배 = 약한 기둥 파괴 방지 (15 국가 7급)'},
+{id:6241,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 슬래브 설계',q:'[슬래브 두께·배근 종합 수치]\n1방향 슬래브 최소 두께: ___ mm 이상\n철근 수평 순간격: 공칭지름 이상, ___ mm 이상\n굵은 골재 최대치수의 ___ 이상\n2방향 슬래브 위험단면 철근 간격: 슬래브 두께의 ___ 이하, 또한 ___ mm 이하\n슬래브 최소 피복두께(옥외 공기 직접 접하지 X): ___ mm 이상',a:'100 | 25 | 4/3 | 2배 | 300 | 20',note:'⚠ 최소 두께 100mm (120mm 아님)\n⚠ 순간격 25mm (22mm 아님)\n⚠ 굵은 골재 4/3 (5/3 아님)\n⚠ 피복 20mm (10mm 아님)\n(11 국가 9급)'},
+{id:6242,type:'ox',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 슬래브 설계',q:'1방향 슬래브의 두께는 최소 120mm 이상으로 하여야 한다',a:'X',note:'1방향 슬래브 최소 두께: 100mm 이상\n120mm는 오답 함정\n(11 국가 9급)'},
+{id:6243,type:'ox',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 슬래브 설계',q:'2방향 슬래브의 위험단면에서 철근 간격은 슬래브 두께의 2배 이하 또한 300mm 이하로 하여야 한다. 단 와플구조나 리브구조로 된 부분은 예외로 한다',a:'O',note:'위험단면 = 기둥 주변 펀칭 전단 집중구간\n2방향 슬래브 철근 최대 간격 = 슬래브 두께 2배 & 300mm 이하\n(11 국가 9급 정답)'},
+{id:6244,type:'ox',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 슬래브 설계',q:'슬래브 철근의 피복 두께는 10mm 이상으로 한다',a:'X',note:'옥외 공기 직접 접하지 않는 슬래브 피복: 20mm 이상\n(D35 초과는 40mm) 10mm는 오답\n(11 국가 9급)'},
 {id:6183,type:'cloze',cat:'PART3 · RC구조 > CH04 내진설계 > S02 특수전단벽',q:'[특수경계요소 범위]\n압축단부에서 ___ 와 ___ 중 큰 값 이상이어야 한다',a:'c-0.1lw | c/2'},
 {id:6184,type:'cloze',cat:'PART3 · RC구조 > CH04 내진설계 > S02 특수전단벽',q:'[플랜지를 가진 벽체의 경계요소]\n유효플랜지폭과 복부 쪽으로 적어도 ___ mm 이상 포함해야 한다',a:'300'},
 {id:6185,type:'cloze',cat:'PART3 · RC구조 > CH04 내진설계 > S03 연결보',q:'[연결보 대각선 묶음철근]\n각 방향 최소 ___ 개의 철근으로 이루어져야 한다',a:'4'},
@@ -3657,6 +3714,18 @@ const DEFAULT_CARDS = [
 {id:7095,type:'cloze',cat:'PART4 · 강구조 > CH02 부재설계 > S03 용접접합',q:'[필릿용접 유효목두께]\n일반적으로 용접 치수(S)에 대하여 ___ S를 적용\n⚠ "유효길이의 0.7배"는 틀린 정의!\n유효면적 = ___ × 유효목두께',a:'0.707 | 유효길이'},
 {id:7096,type:'ox',cat:'PART4 · 강구조 > CH02 부재설계 > S03 용접접합',q:'필릿용접의 유효목두께는 일반적으로 유효길이의 0.707배이다',a:'X',note:'유효목두께 = 0.707 × 용접치수(S)\n"유효길이의 0.7배"가 아니라 "용접치수(S)의 0.707배" — 기출 함정!'},
 {id:7097,type:'ox',cat:'PART4 · 강구조 > CH02 부재설계 > S03 용접접합',q:'단속모살용접의 각 세그먼트 길이는 모살사이즈의 5배 이상 또한 25mm 이상이어야 한다',a:'X',note:'단속모살용접: 모살사이즈의 4배 이상 또한 40mm 이상\n5배·25mm는 겹침이음 기준 — 혼동 주의!'},
+{id:7098,type:'ox',cat:'PART4 · 강구조 > CH02 부재설계 > S07 합성기둥',q:'매입형 합성부재에서 강재코어의 단면적은 합성기둥 총단면적의 0.8% 이상으로 한다',a:'X',note:'강재코어 단면적: 총단면적의 1% 이상\n0.8%는 기성콘크리트말뚝 주근 최소 철근비 — 혼동 주의!\n(23 국가 7급)'},
+{id:7099,type:'ox',cat:'PART4 · 강구조 > CH02 부재설계 > S07 합성기둥',q:'매입형 합성부재에서 횡방향철근의 중심 간 간격은 D10 철근 사용 시 400mm 이하로 한다',a:'X',note:'D10 → 300mm 이하 / D13 이상 → 400mm 이하\n(23 국가 7급)'},
+{id:7100,type:'ox',cat:'PART4 · 강구조 > CH02 부재설계 > S07 합성기둥',q:'매입형 합성부재에서 연속된 길이방향철근의 최소철근비는 0.002이다',a:'X',note:'최소철근비: 0.004\n0.002는 오답 — 2배 차이!\n(23 국가 7급)'},
+{id:7101,type:'ox',cat:'PART4 · 강구조 > CH02 부재설계 > S07 합성기둥',q:'매입형 합성부재에서 횡방향철근의 최대간격은 강재코어 항복강도가 450MPa을 초과하는 경우 부재 단면에서 최소 크기의 0.25배를 초과할 수 없다',a:'O',note:'fy ≤ 450MPa → 0.5배\nfy > 450MPa → 0.25배 (더 엄격)\n(23 국가 7급 정답)'},
+{id:7102,type:'cloze',cat:'PART4 · 강구조 > CH02 부재설계 > S03 용접접합',q:'[용접 공칭강도 - 응력별 기준]\n완전용입용접 + 직교 인장/압축응력: ___\n부분용입용접 + 직교 인장응력: ___\n부분용입용접 + 직교 압축응력: ___\n모살용접 + 평행 전단응력: ___\n플러그·슬롯용접 + 평행 전단응력: ___',a:'Fy | 0.6Fy | Fy | 0.6Fy | 0.6Fy',note:'핵심: 완전용입 = Fy (모재와 동급)\n부분용입 인장 = 0.6Fy (약해서 감소)\n모든 전단응력 = 0.6Fy'},
+{id:7103,type:'ox',cat:'PART4 · 강구조 > CH02 부재설계 > S03 용접접합',q:'부분용입용접에서 유효단면에 직교인장응력이 작용하는 경우, 용접모재의 공칭강도는 용접모재 항복강도(Fy)를 사용한다',a:'X',note:'부분용입 + 직교 인장응력 → 0.6Fy\n완전용입이면 Fy지만 부분용입은 단면이 작아서 감소\n(16 국가 9급)'},
+{id:7104,type:'ox',cat:'PART4 · 강구조 > CH02 부재설계 > S03 용접접합',q:'모살용접에서 용접선에 평행한 전단응력이 작용하는 경우, 용접모재의 공칭강도는 용접모재 항복강도의 0.6배를 사용한다',a:'O',note:'전단응력은 항상 0.6Fy\n용접 종류 상관없이 전단 = 0.6Fy로 외우기 (16 국가 9급)'},
+{id:7105,type:'ox',cat:'PART4 · 강구조 > CH02 부재설계 > S03 용접접합',q:'완전용입용접은 단면이 완전히 용접되어 있어 직교 응력에 대해 모재와 같은 강도를 발휘한다',a:'O',note:'완전용입 = Full Penetration\n단면이 전부 용접 → 모재 항복강도(Fy) 그대로 사용\n부분용입과 구별 필수!'},
+{id:7106,type:'cloze',cat:'PART4 · 강구조 > CH02 부재설계 > S07 합성기둥',q:'[충전형 합성부재 - 압축강재요소 폭두께비]\n각형강관 b/t\n  조밀(λp): ___ √(E/Fy)\n  비조밀(λr): ___ √(E/Fy)\n  최대허용(λmax): ___ √(E/Fy)\n원형강관 D/t\n  조밀(λp): ___ E/Fy\n  비조밀(λr): ___ E/Fy\n  최대허용(λmax): ___ E/Fy',a:'2.26 | 3.00 | 5.00 | 0.15 | 0.19 | 0.31',note:'⚠ 각형: √ 있음 / 원형: √ 없음\n⚠ 각형강관은 사각형 강관 및 두께가 일정한 용접사각형강관만 해당\n(17 국가 7급 하반기)'},
+{id:7107,type:'ox',cat:'PART4 · 강구조 > CH02 부재설계 > S07 합성기둥',q:'압축력을 받는 충전형 각형강관의 최대허용 폭두께비는 5.7√(E/Fy)이다',a:'X',note:'압축 각형강관 최대허용 b/t = 5.00√(E/Fy)\n5.7은 다른 기준의 값 — 충전형 합성부재에서는 5.0이 맞음\n(17 국가 7급 하반기 함정)'},
+{id:7108,type:'ox',cat:'PART4 · 강구조 > CH02 부재설계 > S07 합성기둥',q:'충전형 원형강관의 최대허용 폭두께비는 √(E/Fy)를 포함한 식으로 표현된다',a:'X',note:'원형강관: √ 없이 0.31 × E/Fy\n각형강관: 2.26·3.00·5.00 √(E/Fy) (√ 포함)\n⚠ 각형↔원형 공식 혼동 주의!'},
+{id:7109,type:'cloze',cat:'PART4 · 강구조 > CH02 부재설계 > S07 합성기둥',q:'[충전형 합성부재(기둥) 구조제한]\n강관의 단면적: 합성기둥 총단면적의 ___ % 이상\n충전형 합성부재는 ___ 효과를 고려하여 분류\n압축력을 받는 충전형 합성부재의 단면은 ___, ___, ___ 으로 분류',a:'1 | 국부좌굴 | 조밀 | 비조밀 | 세장'},
 
 // ===== PART5 · 구조역학 =====
 {id:8001,type:'cloze',cat:'PART5 · 구조역학 > CH01 총론',q:'[모멘트 합의 크기]\nM₀ = (P₁ × x₁) ___ (P₂ × x₂)',a:'−'},
@@ -3720,7 +3789,14 @@ const DEFAULT_CARDS = [
 {id:8057,type:'ox',cat:'PART5 · 구조역학 > 기출 OX',q:'단면계수 Z는 단면2차모멘트를 단면적으로 나눈 값이다',a:'X',note:'Z = I/y (도심까지 거리로 나눔, 면적 아님!)\n단면2차반경 r = √(I/A) — 이게 면적으로 나누는 것'},
 {id:8058,type:'ox',cat:'PART5 · 구조역학 > 기출 OX',q:'평행축 정리: Ix = Ix₀ + Ay² (도심축 기준 I에 Ay² 더함)',a:'O',note:'도심에서 거리 y만큼 떨어진 축에 대한 I 계산\n반드시 도심축 I₀에 더해야 함 (임의축 기준 I₀ 사용 불가)'},
 {id:8059,type:'ox',cat:'PART5 · 구조역학 > 기출 OX',q:'온도응력 σt = E × α × ΔT에서 α는 탄성계수이다',a:'X',note:'α = 선팽창계수 / E = 탄성계수\nσt = E(탄성계수) × α(선팽창계수) × ΔT(온도변화)'},
-{id:8060,type:'ox',cat:'PART5 · 구조역학 > 기출 OX',q:'모멘트분배법에서 고정단의 도달율은 1/2이다',a:'O',note:'도달율: 고정단=1/2 / 힌지·자유단=0\n분배모멘트 × 도달율 = 도달모멘트'}];
+{id:8060,type:'ox',cat:'PART5 · 구조역학 > 기출 OX',q:'모멘트분배법에서 고정단의 도달율은 1/2이다',a:'O',note:'도달율: 고정단=1/2 / 힌지·자유단=0\n분배모멘트 × 도달율 = 도달모멘트'},
+{id:8061,type:'cloze',cat:'PART5 · 구조역학 > 기출 OX',q:'[캔틸레버 중앙(L/2)에 집중하중 P — 자유단 처짐]\n하중점을 지나면 하중 없음 → 직선 회전\n자유단 처짐 = 하중점 처짐 + 하중점 처짐각 × (L/2)\n= PL³/24EI + PL²/8EI × L/2\n= ___',a:'5PL³/48EI',note:'핵심: 하중점 이후는 직선 회전만 (추가 처짐 없음)\nδ_a = δ_b + θ_b × (L/2)\n(13 지방직 9급)'},
+{id:8062,type:'cloze',cat:'PART5 · 구조역학 > 기출 OX',q:'[캔틸레버 부분 구간에 하중 - 처짐 계산 공식]\n하중이 길이 a 지점(자유단에서)에 있을 때:\n하중점 처짐 δ_b = ___\n하중점 처짐각 θ_b = ___\n자유단까지 거리 c만큼 떨어졌을 때\n자유단 처짐 = δ_b + θ_b × c',a:'Pa³/3EI | Pa²/2EI',note:'고정단에서 길이 a까지만 휘고, 그 이후는 직선 회전\n시험에 자주 나오는 유형'},
+{id:8063,type:'ox',cat:'PART5 · 구조역학 > 기출 OX',q:'캔틸레버 중앙에 집중하중이 작용하면, 자유단 처짐 = 하중점 처짐(PL³/24EI)과 같다',a:'X',note:'자유단 처짐 = 하중점 처짐 + 하중점 처짐각 × 남은 길이\n= 5PL³/48EI (PL³/24EI보다 2.5배 큼)\n하중점 이후는 직선 회전으로 추가 처짐 발생'},
+{id:8064,type:'cloze',cat:'PART5 · 구조역학 > 기출 OX',q:'[유효좌굴길이 이론 k값]\n양단힌지: ___\n양단고정: ___\n일단고정 일단힌지: ___\n일단고정 일단자유(캔틸레버): ___\n일단고정 일단이동자유(비횡구속): ___',a:'1.0 | 0.5 | 0.7 | 2.0 | 1.0',note:'비횡구속(sidesway) 조건: 회전은 구속되지만 횡방향 이동 자유 → k=1.0\n유효좌굴길이 KL = k × L'},
+{id:8065,type:'cloze',cat:'PART5 · 구조역학 > 기출 OX',q:'[유효좌굴길이 기출]\nL=3m 강재기둥, 비횡구속 골조\n기둥하단: 회전구속·이동구속 (고정)\n기둥상단: 회전구속·이동자유\n이론 k = ___\n유효좌굴길이 KL = ___ m',a:'1.0 | 3',note:'비횡구속 + 양단 회전구속 = 이론 k=1.0\nKL = 1.0 × 3 = 3m\n(16 국가 7급, 정답 ①)'},
+{id:8066,type:'cloze',cat:'PART5 · 구조역학 > 기출 OX',q:'[캔틸레버 단면 회전 영향 - 자유단 P 집중하중]\n단면 (가) a×2a → (나) 2a×a (폭·높이 바뀜)\n면적 A = 동일 (2a²)\n최대 전단응력(V/A): ___ 배\n최대 휨응력(M/Z): Z가 1/2 → ___ 배\n최대 처짐(1/I): I가 1/4 → ___ 배\n최대 휨모멘트(PL): ___ 배',a:'1 | 2 | 4 | 1',note:'⚠ 단면적 동일 → 전단응력·휨모멘트는 변화 없음\n⚠ Z = bh²/6, I = bh³/12 → h가 반이 되면 큰 영향\n(22 국가 7급 2차)'},
+{id:8067,type:'ox',cat:'PART5 · 구조역학 > 기출 OX',q:'캔틸레버 보의 단면이 a×2a에서 2a×a로 바뀌면 최대 전단응력은 2배 증가한다',a:'X',note:'면적 A는 동일 (2a²) → 전단응력(V/A) 변화 없음\n높이가 반으로 줄면 Z(휨응력)·I(처짐)만 변화\n(22 국가 7급 2차)'}];
 
 // ═══════════════════ ENGLISH CARDS ═══════════════════
 const DEFAULT_ENG_CARDS = [
@@ -4065,6 +4141,8 @@ const DEFAULT_ENG_CARDS = [
 {id:9339,cat:"영단어",type:"flash",q:"defect",a:"결함 / 결점(명) / 탈주하다(동)\n⚠ defeat(패배)와 혼동 주의!\na defect in the product = 제품의 결함\ndefect to the enemy = 적에게 탈주하다",pron:"ˈdiːfekt",note:"The car was recalled due to a safety defect in the braking system."},
 {id:9340,cat:"영단어",type:"flash",q:"constitute",a:"구성하다 / ~이 되다(동)\n⚠ 대표하다(represent)와 혼동!\nconstitute a crime = 범죄를 구성하다\nconstitution(명) = 헌법·구성",pron:"ˈkɒnstɪtjuːt",note:"Women constitute more than half of the country's population."},
 {id:9341,cat:"영단어",type:"flash",q:"direct",a:"직접적인(형) / 지시하다·감독하다(동) / 곧장(부)\n⚠ 형용사·동사·부사 다 가능!\ndirect flight = 직항편\ndirect a movie = 영화를 감독하다",pron:"dɪˈrekt",note:"She directed the team to complete the project by Friday."},
+{id:9342,cat:"영단어",type:"flash",q:"superstition",a:"미신(명)\nsuperstitious(형) = 미신을 믿는\n⚠ super(위에) + stition(세우다) = 위에 세워진 믿음\nbreak a superstition = 미신을 깨다",pron:"ˌsuːpərˈstɪʃən",note:"Walking under a ladder is considered bad luck in some superstitions."},
+{id:9343,cat:"영단어",type:"flash",q:"collision",a:"충돌 / 부딪힘(명)\ncollide(동) = 충돌하다\nhead-on collision = 정면충돌\n⚠ col(함께) + lis(치다) = 함께 부딪힘",pron:"kəˈlɪʒən",note:"The collision between the two cars caused a massive traffic jam."},
 ];
 
 // ═══════════════════ STATE ═══════════════════
@@ -4470,6 +4548,7 @@ function renderOXCard(c) {
   document.getElementById('ox-o').className = 'ox-btn ox-btn-o';
   document.getElementById('ox-x').className = 'ox-btn ox-btn-x';
 
+  const hasMemoOX = !!localStorage.getItem('memo_'+c.id);
   document.getElementById('ox-card').innerHTML = `
     <div class="ox-type-badge">OX 문제</div>
     <div class="card-cat">${esc(c.cat)}</div>
@@ -4477,8 +4556,8 @@ function renderOXCard(c) {
     <div class="ox-result" id="ox-result"></div>
     <div style="display:flex;gap:8px;justify-content:center;margin-top:10px;">
       <button class="card-edit-btn" onclick="openEdit(${c.id})">✏ 수정</button>
-      <button class="memo-btn ${localStorage.getItem('memo_'+${c.id})?'has-memo':''}" onclick="memoCurrentCardId=${c.id};openMemo()">
-        ${localStorage.getItem('memo_'+${c.id})?'✏️ 메모 있음':'✏️ 메모'}
+      <button class="memo-btn ${hasMemoOX?'has-memo':''}" onclick="memoCurrentCardId=${c.id};openMemo()">
+        ${hasMemoOX?'✏️ 메모 있음':'✏️ 메모'}
       </button>
     </div>`;
 }
@@ -4886,7 +4965,50 @@ function updateListSearchClear(){
   const btn=document.getElementById('list-search-clear');
   if(btn) btn.style.display=(inp&&inp.value)?'':'none';
 }
-function onListItemClick(e,id){if(selectMode)toggleSelect(id);}
+function onListItemClick(e,id){if(selectMode)toggleSelect(id);else openPreview(id);}
+
+function openPreview(id){
+  const c = cards.find(x=>x.id===id);
+  if(!c) return;
+  const h = history[c.id] || {know:0,dont:0};
+
+  let answerHTML = '';
+  if (c.type === 'ox') {
+    answerHTML = `<div style="font-size:2rem;text-align:center;margin:14px 0;color:${c.a==='O'?'var(--accent)':'var(--red)'};">${c.a==='O'?'⭕ O':'❌ X'}</div>`;
+  } else if (c.type === 'cloze') {
+    answerHTML = `<div style="font-size:.9rem;color:var(--text);background:rgba(247,202,201,0.15);padding:10px 14px;border-radius:10px;margin:10px 0;line-height:1.7;"><b style="color:#c9838a;">정답:</b> ${esc(c.a).replace(/\|/g,' <b style="color:#c9838a;">|</b> ')}</div>`;
+  } else {
+    answerHTML = `<div style="font-size:.9rem;color:var(--text);background:rgba(247,202,201,0.15);padding:10px 14px;border-radius:10px;margin:10px 0;line-height:1.7;white-space:pre-line;">${esc(c.a)}</div>`;
+  }
+
+  const memoData = localStorage.getItem(`memo_${c.id}`);
+  const memoHTML = memoData ? `
+    <div style="margin-top:12px;">
+      <div style="font-size:.72rem;color:#c9838a;margin-bottom:6px;">✏️ 내 풀이 메모</div>
+      <img src="${memoData}" style="width:100%;border-radius:10px;border:1.5px solid rgba(247,202,201,0.4);background:#fff;">
+    </div>` : '';
+
+  const noteHTML = c.note ? `
+    <div style="margin-top:10px;padding:10px 14px;background:rgba(138,111,46,.08);border-left:3px solid rgba(138,111,46,.4);border-radius:8px;font-size:.8rem;color:var(--text);line-height:1.7;white-space:pre-line;">📌 ${esc(c.note)}</div>` : '';
+
+  const pronHTML = c.pron ? `<div style="font-size:.75rem;color:var(--muted);margin-bottom:4px;">/${esc(c.pron)}/</div>` : '';
+
+  document.getElementById('preview-content').innerHTML = `
+    <div style="font-size:.7rem;color:var(--muted);margin-bottom:8px;">${esc(c.cat)}</div>
+    ${pronHTML}
+    <div style="font-size:1rem;font-weight:700;color:var(--text);line-height:1.7;white-space:pre-line;margin-bottom:8px;">${esc(c.q)}</div>
+    ${answerHTML}
+    ${noteHTML}
+    ${memoHTML}
+    <div style="margin-top:14px;display:flex;justify-content:space-between;align-items:center;font-size:.7rem;color:var(--muted);">
+      <span>#${c.id} · ${c.type==='ox'?'OX':c.type==='cloze'?'빈칸':'일반'}</span>
+      <span>✓ ${h.know} · ✕ ${h.dont}</span>
+    </div>`;
+  document.getElementById('preview-modal').classList.add('open');
+}
+
+function closePreview(){ document.getElementById('preview-modal').classList.remove('open'); }
+function closePreviewBg(e){ if(e.target===document.getElementById('preview-modal')) closePreview(); }
 function toggleSelect(id){if(selectedIds.has(id))selectedIds.delete(id);else selectedIds.add(id);renderList();}
 function toggleSelectAll(){const pool=filtered();if(selectedIds.size===pool.length)selectedIds.clear();else pool.forEach(c=>selectedIds.add(c.id));renderList();}
 function enterSelectMode(){selectMode=true;selectedIds.clear();renderList();}
