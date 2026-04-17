@@ -2367,6 +2367,188 @@ body::before {
   color:#fff; font-weight:700; cursor:pointer; font-size:.9rem;
 }
 
+/* ═══ 필기 메모장 ═══ */
+.memo-btn {
+  display: flex; align-items: center; gap: 5px;
+  padding: 5px 14px; border-radius: 20px;
+  border: 1.5px solid rgba(247,202,201,0.5);
+  background: rgba(250,247,242,0.8);
+  color: var(--muted); font-family: 'Noto Sans KR',sans-serif;
+  font-size: .72rem; font-weight: 600;
+  cursor: pointer; backdrop-filter: blur(6px);
+  transition: all .18s;
+}
+.memo-btn:hover { border-color: var(--rose); background: rgba(247,202,201,0.15); }
+.memo-btn.has-memo { border-color: #c9838a; color: #c9838a; background: rgba(247,202,201,0.2); }
+
+.memo-modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(30,10,20,.6); backdrop-filter: blur(12px);
+  z-index: 700; align-items: flex-end; justify-content: center;
+}
+.memo-modal-overlay.open { display: flex; }
+
+.memo-modal {
+  width: 100%; max-width: 600px;
+  background: linear-gradient(160deg, #fff9f8, #fff3f5);
+  border-radius: 28px 28px 0 0;
+  border: 1.5px solid rgba(247,202,201,0.4);
+  border-bottom: none;
+  padding: 20px 20px 40px;
+  box-shadow: 0 -8px 40px rgba(201,131,138,0.15);
+  animation: memo-slide-up .3s cubic-bezier(.34,1.2,.64,1);
+}
+@keyframes memo-slide-up {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+.memo-modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 12px;
+}
+.memo-modal-title {
+  font-family: 'Pacifico', cursive;
+  font-size: 1rem; color: #c9838a;
+  display: flex; align-items: center; gap: 6px;
+}
+.memo-modal-close {
+  width: 30px; height: 30px; border-radius: 50%;
+  border: 1.5px solid rgba(247,202,201,0.4);
+  background: rgba(247,202,201,0.15);
+  color: var(--muted); cursor: pointer;
+  font-size: .85rem; display: flex; align-items: center; justify-content: center;
+}
+.memo-canvas-wrap {
+  position: relative;
+  background: #fff;
+  border-radius: 16px;
+  border: 1.5px solid rgba(247,202,201,0.4);
+  overflow: hidden;
+  box-shadow: inset 0 2px 8px rgba(201,131,138,0.06);
+}
+.memo-canvas {
+  display: block;
+  touch-action: none;
+  cursor: crosshair;
+}
+/* 줄 배경 */
+.memo-canvas-wrap::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: repeating-linear-gradient(
+    transparent, transparent 31px,
+    rgba(247,202,201,0.25) 31px, rgba(247,202,201,0.25) 32px
+  );
+  pointer-events: none; border-radius: 16px;
+}
+.memo-tools {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 10px; flex-wrap: wrap;
+}
+.memo-color-btn {
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 2px solid transparent; cursor: pointer;
+  transition: all .15s;
+}
+.memo-color-btn.active { border-color: #333; transform: scale(1.2); }
+.memo-tool-btn {
+  padding: 4px 10px; border-radius: 10px;
+  border: 1.5px solid rgba(247,202,201,0.4);
+  background: rgba(250,247,242,0.9);
+  font-size: .7rem; color: var(--muted);
+  cursor: pointer; transition: all .15s;
+}
+.memo-tool-btn:hover { border-color: #c9838a; color: #c9838a; }
+.memo-tool-btn.active { background: rgba(247,202,201,0.3); border-color: #c9838a; color: #c9838a; }
+.memo-size-wrap { display: flex; align-items: center; gap: 4px; }
+.memo-size-slider {
+  -webkit-appearance: none;
+  width: 60px; height: 4px;
+  border-radius: 4px; background: rgba(247,202,201,0.4);
+  outline: none; cursor: pointer;
+}
+.memo-size-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: #c9838a; cursor: pointer;
+}
+.memo-action-row {
+  display: flex; gap: 8px; margin-top: 10px;
+}
+.memo-save-btn {
+  flex: 1; padding: 10px; border-radius: 14px; border: none;
+  background: linear-gradient(135deg, #f7cac9, #c9838a);
+  color: #fff; font-weight: 700; font-size: .85rem;
+  cursor: pointer;
+}
+.memo-clear-btn {
+  padding: 10px 16px; border-radius: 14px;
+  border: 1.5px solid rgba(247,202,201,0.4);
+  background: rgba(250,247,242,0.8);
+  color: var(--muted); font-size: .8rem; cursor: pointer;
+}
+.memo-history-btn {
+  padding: 10px 16px; border-radius: 14px;
+  border: 1.5px solid rgba(247,202,201,0.4);
+  background: rgba(250,247,242,0.8);
+  color: var(--muted); font-size: .8rem; cursor: pointer;
+}
+
+/* 메모 히스토리 */
+.memo-history-view {
+  display: none; position: fixed; inset: 0;
+  background: rgba(250,247,242,0.97); backdrop-filter: blur(12px);
+  z-index: 800; flex-direction: column; padding: 20px;
+  overflow-y: auto;
+}
+.memo-history-view.open { display: flex; }
+.memo-history-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px;
+}
+.memo-history-title {
+  font-family: 'Pacifico', cursive; font-size: 1.1rem; color: #c9838a;
+}
+.memo-history-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 12px; width: 100%;
+}
+.memo-history-item {
+  border-radius: 14px; overflow: hidden;
+  border: 1.5px solid rgba(247,202,201,0.4);
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(201,131,138,0.08);
+}
+.memo-history-item img { width: 100%; display: block; }
+.memo-history-item-label {
+  padding: 6px 10px; font-size: .68rem; color: var(--muted);
+  border-top: 1px solid rgba(247,202,201,0.2);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.memo-history-del {
+  background: none; border: none; color: rgba(201,131,138,0.5);
+  cursor: pointer; font-size: .75rem; padding: 0;
+}
+.memo-history-del:hover { color: #c9838a; }
+
+/* 메모 미리보기 */
+.memo-preview {
+  width: 100%; max-width: 580px;
+  margin-top: 10px;
+  border-radius: 14px; overflow: hidden;
+  border: 1.5px solid rgba(247,202,201,0.4);
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(201,131,138,0.08);
+  animation: cardIn .3s cubic-bezier(.34,1.56,.64,1);
+}
+.memo-preview-label {
+  padding: 6px 12px; font-size: .68rem; color: #c9838a;
+  background: rgba(247,202,201,0.15);
+  border-bottom: 1px solid rgba(247,202,201,0.2);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.memo-preview img { width: 100%; display: block; background: #fff; }
+
 </style>
 </head>
 <body>
@@ -2525,6 +2707,46 @@ body::before {
 
 <!-- 보스전 모달 -->
 <div class="boss-modal-overlay" id="boss-modal-overlay">
+
+<!-- 메모 모달 -->
+<div class="memo-modal-overlay" id="memo-modal-overlay" onclick="closeMemoOnBg(event)">
+  <div class="memo-modal" onclick="event.stopPropagation()">
+    <div class="memo-modal-header">
+      <div class="memo-modal-title">✏️ 풀이 메모</div>
+      <button class="memo-modal-close" onclick="closeMemo()">✕</button>
+    </div>
+    <div class="memo-tools">
+      <div class="memo-color-btn active" style="background:#222;" data-color="#222" onclick="setMemoColor(this)"></div>
+      <div class="memo-color-btn" style="background:#c9838a;" data-color="#c9838a" onclick="setMemoColor(this)"></div>
+      <div class="memo-color-btn" style="background:#6aaa98;" data-color="#6aaa98" onclick="setMemoColor(this)"></div>
+      <div class="memo-color-btn" style="background:#5b7ec9;" data-color="#5b7ec9" onclick="setMemoColor(this)"></div>
+      <div class="memo-color-btn" style="background:#e8954a;" data-color="#e8954a" onclick="setMemoColor(this)"></div>
+      <button class="memo-tool-btn active" id="memo-pen-btn" onclick="setMemoMode('pen')">🖊 펜</button>
+      <button class="memo-tool-btn" id="memo-erase-btn" onclick="setMemoMode('erase')">🧹 지우개</button>
+      <div class="memo-size-wrap">
+        <span style="font-size:.65rem;color:var(--muted);">굵기</span>
+        <input type="range" class="memo-size-slider" id="memo-size" min="1" max="20" value="3">
+      </div>
+    </div>
+    <div class="memo-canvas-wrap">
+      <canvas class="memo-canvas" id="memo-canvas" width="560" height="320"></canvas>
+    </div>
+    <div class="memo-action-row">
+      <button class="memo-clear-btn" onclick="clearMemoCanvas()">🗑 지우기</button>
+      <button class="memo-history-btn" onclick="openMemoHistory()">📚 기록</button>
+      <button class="memo-save-btn" onclick="saveMemo()">💾 저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- 메모 히스토리 -->
+<div class="memo-history-view" id="memo-history-view">
+  <div class="memo-history-header">
+    <div class="memo-history-title">📚 메모 기록</div>
+    <button class="memo-modal-close" onclick="closeMemoHistory()">✕</button>
+  </div>
+  <div class="memo-history-grid" id="memo-history-grid"></div>
+</div>
   <!-- 인트로 -->
   <div class="boss-intro" id="boss-intro-screen">
     <div class="boss-sprite" id="boss-intro-sprite">👾</div>
@@ -2600,12 +2822,15 @@ body::before {
     <div class="prog-label"><span id="prog-text">0/0</span><span class="ql" id="ql"></span></div>
   </div>
   <div id="mbadge-wrap"></div>
-  <div style="display:flex;justify-content:flex-end;width:100%;margin-bottom:4px;">
+  <div style="display:flex;justify-content:flex-end;width:100%;margin-bottom:4px;gap:8px;">
     <button id="btn-prev" onclick="prevCard()" style="display:none;
       padding:5px 14px;border-radius:20px;border:1.5px solid rgba(247,202,201,0.5);
       background:rgba(250,247,242,0.8);color:var(--muted);
       font-family:'Noto Sans KR',sans-serif;font-size:.72rem;font-weight:600;
       cursor:pointer;backdrop-filter:blur(6px);transition:all .18s;">← 이전 카드</button>
+    <button id="btn-memo" class="memo-btn" onclick="openMemo()" style="display:none;">
+      ✏️ 메모
+    </button>
   </div>
   <div class="card-scene" id="card-scene">
     <div class="card-face card-front" id="card-front" onclick="flipCard()"></div>
@@ -3478,7 +3703,24 @@ const DEFAULT_CARDS = [
 {id:8042,type:'cloze',cat:'PART5 · 구조역학 > CH09 기둥',q:'[기둥 최대압축응력]\nσmax = P/A + M/Z\nM = P × e (편심거리)\n핵 범위 — 사각형: e ≤ ___ / 원형: e ≤ ___',a:'l/6 | d/8'},
 {id:8043,type:'ox',cat:'PART5 · 구조역학 > CH09 기둥',q:'편심거리가 핵 범위 안이면 단면 전체에 압축만 작용한다',a:'O',note:'핵 범위 내 → 인장 없음 → 압축만\n핵 범위 초과 → 일부 인장 발생'},
 {id:8044,type:'cloze',cat:'PART5 · 구조역학 > CH10 전단중심',q:'[전단중심]\n① 중심축 하중이 작용하는 경우\n② 보에서 비틀림이 생기지 않고 ___ 만 유발하는 외면의 작용위치',a:'휨변형'},
-{id:8045,type:'normal',cat:'PART5 · 구조역학 > CH10 전단중심',q:'[단면별 전단중심 위치]\n대칭단면(직사각형·I형): 도심=전단중심\nT형·ㄷ형: 전단중심이 단면 밖에 위치\nㄱ형: 꼭짓점(모서리)에 위치',a:'대칭→도심=전단중심 / 비대칭→도심≠전단중심 (도심이 전단중심보다 약측에 위치)'}];
+{id:8045,type:'normal',cat:'PART5 · 구조역학 > CH10 전단중심',q:'[단면별 전단중심 위치]\n대칭단면(직사각형·I형): 도심=전단중심\nT형·ㄷ형: 전단중심이 단면 밖에 위치\nㄱ형: 꼭짓점(모서리)에 위치',a:'대칭→도심=전단중심 / 비대칭→도심≠전단중심 (도심이 전단중심보다 약측에 위치)'},
+
+// ===== PART5 구조역학 기출 OX =====
+{id:8046,type:'ox',cat:'PART5 · 구조역학 > 기출 OX',q:'단순보 중앙에 집중하중 P가 작용할 때 최대처짐은 PL³/48EI이다',a:'O',note:'단순보 중앙 집중하중 최대처짐 공식\n캔틸레버 끝단: PL³/3EI (16배 큼)'},
+{id:8047,type:'ox',cat:'PART5 · 구조역학 > 기출 OX',q:'캔틸레버보에 등분포하중 w가 작용할 때 최대처짐은 wL⁴/8EI이다',a:'O',note:'캔틸레버 등분포하중 처짐 공식\n단순보 등분포: 5wL⁴/384EI'},
+{id:8048,type:'ox',cat:'PART5 · 구조역학 > 기출 OX',q:'양단고정보 중앙에 집중하중 P가 작용할 때 최대처짐은 PL³/192EI이다',a:'O',note:'양단고정 중앙집중 최대처짐\n단순보(PL³/48EI)의 1/4 — 고정이 강해서 처짐 줄어듦'},
+{id:8049,type:'ox',cat:'PART5 · 구조역학 > 기출 OX',q:'양단힌지 기둥의 좌굴하중이 P일 때, 양단고정으로 바꾸면 좌굴하중은 4P가 된다',a:'O',note:'k: 1.0→0.5, (kL)²가 1/4 → 하중 4배\nPe = π²EI/(kL)²'},
+{id:8050,type:'ox',cat:'PART5 · 구조역학 > 기출 OX',q:'일단고정 일단자유 기둥의 좌굴하중은 양단힌지 기둥의 4배이다',a:'X',note:'k=2.0 → (kL)²=4L² → 하중 1/4배\n일단고정일단자유가 가장 취약 (기출 단골 함정!)'},
+{id:8051,type:'ox',cat:'PART5 · 구조역학 > 기출 OX',q:'단면2차모멘트가 클수록 처짐이 작아진다',a:'O',note:'처짐 ∝ 1/EI — EI(휨강성) 클수록 처짐 감소\n→ I형 단면이 직사각형보다 효율적인 이유'},
+{id:8052,type:'ox',cat:'PART5 · 구조역학 > 기출 OX',q:'직사각형 단면의 도심축에 대한 단면2차모멘트는 bh³/12이다',a:'O',note:'직사각형 도심축 Ix = bh³/12\n연단 기준: bh³/3 (도심보다 4배 큼)'},
+{id:8053,type:'ox',cat:'PART5 · 구조역학 > 기출 OX',q:'트러스의 절단법에서 상현재·하현재 부재력은 모멘트법(ΣM=0)으로 구한다',a:'O',note:'절단법 구분:\n상현재·하현재 → 모멘트법\n수직재·경사재 → 전단력법(ΣV=0)'},
+{id:8054,type:'ox',cat:'PART5 · 구조역학 > 기출 OX',q:'정정구조물에서 판별식 N=반력수+부재수+강절점수-2×절점수=0이다',a:'O',note:'N=0 → 정정(안정 또는 불안정)\nN>0 → 부정정(항상 안정)\nN<0 → 불안정'},
+{id:8055,type:'ox',cat:'PART5 · 구조역학 > 기출 OX',q:'최대전단응력은 직사각형 단면에서 단면 중립축(도심)에서 발생한다',a:'O',note:'전단응력 분포: 연단=0, 중립축=최대\nτmax = (3/2)×(V/A) — 평균의 1.5배'},
+{id:8056,type:'ox',cat:'PART5 · 구조역학 > 기출 OX',q:'원형 단면의 최대전단응력은 평균전단응력의 4/3배이다',a:'O',note:'형상별 최대전단응력 배수:\n직사각형·삼각형 = 3/2배\n원형 = 4/3배 ← 자주 출제!'},
+{id:8057,type:'ox',cat:'PART5 · 구조역학 > 기출 OX',q:'단면계수 Z는 단면2차모멘트를 단면적으로 나눈 값이다',a:'X',note:'Z = I/y (도심까지 거리로 나눔, 면적 아님!)\n단면2차반경 r = √(I/A) — 이게 면적으로 나누는 것'},
+{id:8058,type:'ox',cat:'PART5 · 구조역학 > 기출 OX',q:'평행축 정리: Ix = Ix₀ + Ay² (도심축 기준 I에 Ay² 더함)',a:'O',note:'도심에서 거리 y만큼 떨어진 축에 대한 I 계산\n반드시 도심축 I₀에 더해야 함 (임의축 기준 I₀ 사용 불가)'},
+{id:8059,type:'ox',cat:'PART5 · 구조역학 > 기출 OX',q:'온도응력 σt = E × α × ΔT에서 α는 탄성계수이다',a:'X',note:'α = 선팽창계수 / E = 탄성계수\nσt = E(탄성계수) × α(선팽창계수) × ΔT(온도변화)'},
+{id:8060,type:'ox',cat:'PART5 · 구조역학 > 기출 OX',q:'모멘트분배법에서 고정단의 도달율은 1/2이다',a:'O',note:'도달율: 고정단=1/2 / 힌지·자유단=0\n분배모멘트 × 도달율 = 도달모멘트'}];
 
 // ═══════════════════ ENGLISH CARDS ═══════════════════
 const DEFAULT_ENG_CARDS = [
@@ -4124,6 +4366,7 @@ function renderCard() {
   if (!queue.length) { showComplete(); return; }
   const c = queue[0];
   flipped = false;
+  hideMemoPreview();
 
   document.getElementById('mbadge-wrap').innerHTML =
     `<span class="mbadge ${isReview?'mb-review':'mb-new'}">${isReview?'🔁 복습':'✦ 학습'}</span>`;
@@ -4133,6 +4376,10 @@ function renderCard() {
   document.getElementById('prog-fill').style.width = pct+'%';
   document.getElementById('prog-text').textContent = `${cleared.size}/${total}`;
   document.getElementById('ql').textContent = queue.length>1 ? `큐 ${queue.length-1}개` : '';
+
+  // 메모 버튼 표시
+  const memoBtn = document.getElementById('btn-memo');
+  if (memoBtn) { memoBtn.style.display = ''; updateMemoBtn(c.id); }
 
   if (c.type === 'ox') {
     renderOXCard(c);
@@ -4228,7 +4475,12 @@ function renderOXCard(c) {
     <div class="card-cat">${esc(c.cat)}</div>
     <div class="ox-statement">${esc(c.q).replace(/\n/g,'<br>')}</div>
     <div class="ox-result" id="ox-result"></div>
-    <button class="card-edit-btn" onclick="openEdit(${c.id})" style="margin-top:10px">✏ 수정</button>`;
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:10px;">
+      <button class="card-edit-btn" onclick="openEdit(${c.id})">✏ 수정</button>
+      <button class="memo-btn ${localStorage.getItem('memo_'+${c.id})?'has-memo':''}" onclick="memoCurrentCardId=${c.id};openMemo()">
+        ${localStorage.getItem('memo_'+${c.id})?'✏️ 메모 있음':'✏️ 메모'}
+      </button>
+    </div>`;
 }
 
 // cloze 카드: q에 ___ 포함(새 방식) 또는 [{label,value}] JSON(구형) 모두 지원
@@ -4323,6 +4575,7 @@ function answerOX(chosen) {
   res.classList.add('show');
 
   document.getElementById('btn-next').style.display = '';
+  showMemoPreview();
 }
 
 function flipCard() {
@@ -4332,6 +4585,10 @@ function flipCard() {
   document.getElementById('card-back').style.display  = flipped ? '' : 'none';
   document.getElementById('btn-flip').textContent = flipped ? '↩ 질문' : '답 보기';
   document.getElementById('btn-row').style.display = flipped ? 'none' : '';
+
+  // 답 볼 때 메모 미리보기 표시
+  if (flipped) showMemoPreview();
+  else hideMemoPreview();
 }
 
 // ── 영단어 발음 (Web Speech API) ──
@@ -5729,7 +5986,7 @@ let bossSession = {
   boss: null,
   questions: [],
   currentQ: 0,
-  hp: BOSS_QUESTIONS,
+  correctCount: 0,  // 맞힌 개수
   answered: false,
 };
 
@@ -5996,19 +6253,234 @@ function endBossBattle(win) {
     bossData.bossDefeated = true;
     saveBoss();
     spawnGachaStars('SR');
+    document.querySelector('.boss-result-btn').textContent = '확인';
+    document.querySelector('.boss-result-btn').onclick = closeBossModal;
   } else {
     document.getElementById('boss-result-icon').textContent = '💀';
     document.getElementById('boss-result-title').textContent = '패배...';
     document.getElementById('boss-result-title').className = 'boss-result-title lose';
-    document.getElementById('boss-result-desc').textContent = `${bossSession.boss.name}에게 졌다...\n-15pt\n오늘 다시 도전 가능!`;
-    addPoints(PT.bossLose, '보스전 패배');
-    // 패배 시 재도전 가능 (bossDefeated = false 유지)
+    document.getElementById('boss-result-desc').textContent = `${bossSession.boss.name}에게 졌다...\n포인트 차감 없음! 재도전 가능!`;
+    // 패배 시 포인트 차감 없음, 재도전 가능
+    document.querySelector('.boss-result-btn').textContent = '🔄 재도전!';
+    document.querySelector('.boss-result-btn').onclick = () => startBossBattle();
   }
   updateBossBar();
 }
 
 function closeBossModal() {
   document.getElementById('boss-modal-overlay').classList.remove('open');
+}
+
+
+// ═══════════════════ MEMO SYSTEM ═══════════════════
+let memoCanvas, memoCtx;
+let memoDrawing = false;
+let memoColor = '#222';
+let memoMode = 'pen'; // pen | erase
+let memoSize = 3;
+let memoCurrentCardId = null;
+let memoLastX = 0, memoLastY = 0;
+
+function initMemo() {
+  memoCanvas = document.getElementById('memo-canvas');
+  memoCtx = memoCanvas.getContext('2d');
+  memoCtx.lineCap = 'round';
+  memoCtx.lineJoin = 'round';
+
+  // 터치 이벤트
+  memoCanvas.addEventListener('pointerdown', memoStart, {passive:false});
+  memoCanvas.addEventListener('pointermove', memoDraw, {passive:false});
+  memoCanvas.addEventListener('pointerup', memoEnd);
+  memoCanvas.addEventListener('pointercancel', memoEnd);
+
+  document.getElementById('memo-size').addEventListener('input', e => {
+    memoSize = parseInt(e.target.value);
+  });
+}
+
+function getMemoPos(e) {
+  const rect = memoCanvas.getBoundingClientRect();
+  const scaleX = memoCanvas.width / rect.width;
+  const scaleY = memoCanvas.height / rect.height;
+  return {
+    x: (e.clientX - rect.left) * scaleX,
+    y: (e.clientY - rect.top) * scaleY
+  };
+}
+
+function memoStart(e) {
+  e.preventDefault();
+  memoDrawing = true;
+  const pos = getMemoPos(e);
+  memoLastX = pos.x; memoLastY = pos.y;
+  memoCtx.beginPath();
+  memoCtx.arc(pos.x, pos.y, (memoMode==='erase'?memoSize*3:memoSize)/2, 0, Math.PI*2);
+  memoCtx.fillStyle = memoMode==='erase' ? '#fff' : memoColor;
+  memoCtx.fill();
+}
+
+function memoDraw(e) {
+  if (!memoDrawing) return;
+  e.preventDefault();
+  const pos = getMemoPos(e);
+  memoCtx.beginPath();
+  memoCtx.moveTo(memoLastX, memoLastY);
+  memoCtx.lineTo(pos.x, pos.y);
+  memoCtx.strokeStyle = memoMode==='erase' ? '#fff' : memoColor;
+  memoCtx.lineWidth = memoMode==='erase' ? memoSize*3 : memoSize;
+  memoCtx.stroke();
+  memoLastX = pos.x; memoLastY = pos.y;
+}
+
+function memoEnd() { memoDrawing = false; }
+
+function setMemoColor(el) {
+  document.querySelectorAll('.memo-color-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  memoColor = el.dataset.color;
+  if (memoMode==='erase') setMemoMode('pen');
+}
+
+function setMemoMode(mode) {
+  memoMode = mode;
+  document.getElementById('memo-pen-btn').classList.toggle('active', mode==='pen');
+  document.getElementById('memo-erase-btn').classList.toggle('active', mode==='erase');
+}
+
+function clearMemoCanvas() {
+  memoCtx.clearRect(0, 0, memoCanvas.width, memoCanvas.height);
+}
+
+function openMemo() {
+  // 현재 카드 id 가져오기
+  const card = queue[0] || lastCard;
+  if (!card) return;
+  memoCurrentCardId = card.id;
+
+  // 저장된 메모 불러오기
+  clearMemoCanvas();
+  const saved = localStorage.getItem(`memo_${memoCurrentCardId}`);
+  if (saved) {
+    const img = new Image();
+    img.onload = () => memoCtx.drawImage(img, 0, 0);
+    img.src = saved;
+  }
+
+  // 메모 버튼 상태 업데이트
+  updateMemoBtn(memoCurrentCardId);
+  document.getElementById('memo-modal-overlay').classList.add('open');
+}
+
+function closeMemo() {
+  document.getElementById('memo-modal-overlay').classList.remove('open');
+}
+
+function closeMemoOnBg(e) {
+  if (e.target === document.getElementById('memo-modal-overlay')) closeMemo();
+}
+
+function saveMemo() {
+  if (!memoCurrentCardId) return;
+  // 빈 캔버스인지 체크
+  const blank = isCanvasBlank();
+  if (blank) {
+    localStorage.removeItem(`memo_${memoCurrentCardId}`);
+  } else {
+    const dataURL = memoCanvas.toDataURL('image/png');
+    localStorage.setItem(`memo_${memoCurrentCardId}`, dataURL);
+    // 메모 id 목록 저장
+    let ids = JSON.parse(localStorage.getItem('memo_ids')||'[]');
+    if (!ids.includes(memoCurrentCardId)) {
+      ids.push(memoCurrentCardId);
+      localStorage.setItem('memo_ids', JSON.stringify(ids));
+    }
+  }
+  updateMemoBtn(memoCurrentCardId);
+  closeMemo();
+  // 토스트
+  const el = document.getElementById('tier-toast');
+  el.textContent = '✏️ 메모 저장 완료!';
+  el.className = 'tier-toast up show';
+  setTimeout(() => el.classList.remove('show'), 2000);
+}
+
+function isCanvasBlank() {
+  const data = memoCtx.getImageData(0,0,memoCanvas.width,memoCanvas.height).data;
+  return !data.some(v => v !== 0);
+}
+
+function updateMemoBtn(cardId) {
+  const btn = document.getElementById('btn-memo');
+  if (!btn) return;
+  const has = !!localStorage.getItem(`memo_${cardId}`);
+  btn.classList.toggle('has-memo', has);
+  btn.innerHTML = has ? '✏️ 메모 있음' : '✏️ 메모';
+}
+
+function openMemoHistory() {
+  const ids = JSON.parse(localStorage.getItem('memo_ids')||'[]');
+  const grid = document.getElementById('memo-history-grid');
+  grid.innerHTML = '';
+
+  if (ids.length === 0) {
+    grid.innerHTML = '<div style="color:var(--muted);font-size:.8rem;grid-column:1/-1;text-align:center;padding:20px;">저장된 메모가 없어요 ✏️</div>';
+  } else {
+    ids.slice().reverse().forEach(id => {
+      const data = localStorage.getItem(`memo_${id}`);
+      if (!data) return;
+      const card = cards.find(c=>c.id===id) || DEFAULT_ENG_CARDS.find(c=>c.id===id);
+      const label = card ? card.q.substring(0,20).replace(/\n/g,' ') : `카드 #${id}`;
+      const item = document.createElement('div');
+      item.className = 'memo-history-item';
+      item.innerHTML = `
+        <img src="${data}" style="background:#fff;">
+        <div class="memo-history-item-label">
+          <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(label)}</span>
+          <button class="memo-history-del" onclick="deleteMemo(${id},this.closest('.memo-history-item'))">🗑</button>
+        </div>`;
+      grid.appendChild(item);
+    });
+  }
+  document.getElementById('memo-history-view').classList.add('open');
+}
+
+function closeMemoHistory() {
+  document.getElementById('memo-history-view').classList.remove('open');
+}
+
+function deleteMemo(id, el) {
+  localStorage.removeItem(`memo_${id}`);
+  let ids = JSON.parse(localStorage.getItem('memo_ids')||'[]');
+  ids = ids.filter(i=>i!==id);
+  localStorage.setItem('memo_ids', JSON.stringify(ids));
+  el.remove();
+  updateMemoBtn(id);
+}
+
+function showMemoPreview() {
+  hideMemoPreview();
+  const card = queue[0] || lastCard;
+  if (!card) return;
+  const data = localStorage.getItem(`memo_${card.id}`);
+  if (!data) return;
+
+  const el = document.createElement('div');
+  el.className = 'memo-preview';
+  el.id = 'memo-preview-wrap';
+  el.innerHTML = `
+    <div class="memo-preview-label">
+      <span>✏️ 내 풀이 메모</span>
+      <button onclick="memoCurrentCardId=${card.id};openMemo()" style="background:none;border:none;color:#c9838a;font-size:.7rem;cursor:pointer;">수정</button>
+    </div>
+    <img src="${data}">`;
+
+  // study-view 하단에 추가
+  document.getElementById('study-view').appendChild(el);
+}
+
+function hideMemoPreview() {
+  const el = document.getElementById('memo-preview-wrap');
+  if (el) el.remove();
 }
 
 // ═══════════════════ COLLECTION & TITLE SYSTEM ═══════════════════
@@ -6507,6 +6979,7 @@ initQuest();
 updateGachaBtn();
 updateSubtitleWithTitle();
 initBoss();
+initMemo();
 // Safari 음성 목록 미리 워밍업
 if (window.speechSynthesis) {
   window.speechSynthesis.getVoices();
