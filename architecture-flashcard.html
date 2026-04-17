@@ -3678,7 +3678,7 @@ const DEFAULT_CARDS = [
 
 {id:7079,type:'cloze',cat:'PART4 · 강구조 > CH02 부재설계 > S06 플레이트거더·합성부재',q:'[데크플레이트에 강재앵커가 사용된 경우 구조제한]\n데크플레이트의 공칭골깊이(hr): ___ mm 이하\n골의 폭 또는 헌치의 평균폭(wr): ___ mm 이상이어야 함\n데크플레이트는 75mm 이하 / 콘크리트슬래브와 강재보를 연결하는 스터드앵커의 직경: 상단에서의 최소 순폭 이하\n스터드앵커는 부착 후 데크플레이트 상단 위로 ___ mm 이상 돌출\n스터드앵커의 상단 위로 ___ mm 이상의 콘크리트피복\n데크플레이트 상단 위의 콘크리트두께: ___ mm 이상\n데크플레이트는 지지부재에 ___ mm 이하의 간격으로 고정',a:'75 | 50 | 38 | 13 | 50 | 450'},
 
-{id:7080,type:'cloze',cat:'PART4 · 강구조 > CH02 부재설계 > S06 플레이트거더·합성부재',q:'[강재보와 슬래브 사이의 하중전달 - 정모멘트 구간]\n휨모멘트를 받는 강재보와 콘크리트가 합성작용을 하기 위해서\n정모멘트가 최대가 되는 위치와 모멘트가 0이 되는 위치 사이의 총수평 전단력\n다음 3가지 한계상태로부터 구한 값 중 ___ 값으로 함\n① 콘크리트의 압괴\n② 강재단면의 인장항복\n③ 강재앵커의 강도',a:'최솟'},
+{id:7080,type:'cloze',cat:'PART4 · 강구조 > CH02 부재설계 > S06 플레이트거더·합성부재',q:'[강재보와 슬래브 사이의 하중전달 - 정모멘트 구간]\n휨모멘트를 받는 강재보와 콘크리트가 합성작용을 하기 위해서\n정모멘트가 최대가 되는 위치와 모멘트가 0이 되는 위치 사이의 총수평 전단력\n다음 3가지 한계상태로부터 구한 값 중 ___ 값으로 함\n① ___ 의 압괴\n② ___ 단면의 인장항복\n③ ___ 의 강도',a:'최솟 | 콘크리트 | 강재 | 강재앵커'},
 
 {id:7081,type:'cloze',cat:'PART4 · 강구조 > CH02 부재설계 > S06 플레이트거더·합성부재',q:'[강재보와 슬래브 사이의 하중전달 - 부모멘트 구간]\n부모멘트구간의 슬래브 내에 있는 길이방향철근이 강재보와 합성으로 작용하는 경우\n부모멘트가 최대가 되는 위치와 모멘트가 0이 되는 위치 사이의 총수평전단력\n다음 2가지 한계상태로부터 구한 값 중 ___ 값으로 함\n① 슬래브철근의 항복\n② 강재앵커의 강도',a:'최솟'},
 
@@ -4424,13 +4424,51 @@ function prevCard() {
   // 히스토리 되돌리기 (마지막 기록 취소)
   const h = history[lastCard.id];
   if (h) {
-    if (lastCard._wasKnow) { h.know = Math.max(0, h.know-1); sessK = Math.max(0,sessK-1); cleared.delete(lastCard.id); }
-    else { h.dont = Math.max(0, h.dont-1); sessD = Math.max(0,sessD-1); }
+    if (lastCard._wasKnow) {
+      h.know = Math.max(0, h.know-1); sessK = Math.max(0,sessK-1); cleared.delete(lastCard.id);
+      // 맞힘 보상 되돌리기 (중복 카운트 방지)
+      onCardUncorrect();
+      regressQuest('cardCorrect', 1);
+      if (currentSubject === 'arch') regressQuest('archCorrect', 1);
+      if (currentSubject === 'eng') regressQuest('engCorrect', 1);
+      if (isReview) regressQuest('review', 1);
+      onBossUncorrect();
+    } else {
+      h.dont = Math.max(0, h.dont-1); sessD = Math.max(0,sessD-1);
+    }
     delete lastCard._wasKnow;
   }
   lastCard = null;
   document.getElementById('btn-prev').style.display = 'none';
+  save();
   renderCard();
+}
+
+// 되돌리기 헬퍼 함수들
+function onCardUncorrect() {
+  // 티어 포인트 -1 (팝업 없이 조용히)
+  tierData.points = Math.max(0, tierData.points - 1);
+  saveTier();
+  updateTierBadge();
+}
+
+function onBossUncorrect() {
+  if (!bossData) return;
+  bossData.progress = Math.max(0, (bossData.progress||0) - 1);
+  saveBoss();
+  updateBossBar();
+}
+
+function regressQuest(type, n=1) {
+  if (!questData || !questData.quests) return;
+  questData.quests.forEach(q => {
+    if (q.type === type && !q.completed) {
+      q.progress = Math.max(0, (q.progress||0) - n);
+    }
+    // 이미 완료한 퀘스트는 되돌리지 않음 (보상 중복 방지)
+  });
+  saveQuest();
+  updateQuestBar();
 }
 
 function renderCard() {
