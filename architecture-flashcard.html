@@ -3490,11 +3490,6 @@ const DEFAULT_CARDS = [
 {id:6238,type:'ox',cat:'PART3 · RC구조 > CH04 내진설계 > S01 특수모멘트골조',q:'특수모멘트골조 부재의 축방향 철근비는 0.01 이상, 0.10 이하로 한다',a:'X',note:'철근비 상한: 0.06 (0.10은 오답)\n0.01 이상, 0.06 이하\n(15 국가 7급)'},
 {id:6239,type:'ox',cat:'PART3 · RC구조 > CH04 내진설계 > S01 특수모멘트골조',q:'특수모멘트골조 축방향 철근의 겹침이음은 부재의 중앙부에서 부재길이의 1/2 구역 내에서만 한다',a:'O',note:'단부는 지진력 집중 구간이라 겹침이음 금지\n중앙부 1/2 구역에서만 겹침이음 허용\n(15 국가 7급)'},
 {id:6240,type:'ox',cat:'PART3 · RC구조 > CH04 내진설계 > S01 특수모멘트골조',q:'접합부의 접합면에서 기둥들의 설계휨강도 합은 연결된 보의 설계휨강도 합의 1.2배 이상으로 한다',a:'O',note:'강주약보 원칙 — 기둥이 보보다 강해야 연성 거동 확보\n1.2배 = 약한 기둥 파괴 방지 (15 국가 7급)'},
-{id:6248,type:'cloze',cat:'PART3 · RC구조 > CH04 내진설계 > S02 중간모멘트골조',q:'[특수·중간모멘트골조 휨부재 강도 비교]\n▸ 접합면 정휨강도 ≥ 부휨강도 ×\n  · 특수: ___\n  · 중간: ___\n▸ 부재 전 구간 정/부 휨강도 ≥ 양단 최대휨강도 ×\n  · 특수: ___\n  · 중간: ___',a:'1/2 | 1/3 | 1/4 | 1/5',note:'암기법: 분모 2·3·4·5 순서\n특수가 항상 분모 작음(=더 엄격)\n중간은 특수보다 분모 +1'},
-{id:6249,type:'ox',cat:'PART3 · RC구조 > CH04 내진설계 > S02 중간모멘트골조',q:'중간모멘트골조의 휨부재 어느 위치에서나 정 또는 부휨강도는 양측 접합면의 최대휨강도의 1/6 이상이 되어야 한다',a:'X',note:'중간모멘트골조 전 구간: 1/5 이상 (1/6이 아님)\n2·3·4·5만 존재하고 1/6은 없는 숫자\n(17 국가 7급 하반기 - 정답 보기)'},
-{id:6250,type:'ox',cat:'PART3 · RC구조 > CH04 내진설계 > S02 중간모멘트골조',q:'중간모멘트골조의 휨부재 접합면에서 정휨강도는 부휨강도의 1/3 이상이어야 한다',a:'O',note:'중간 접합면 = 1/3 (특수는 1/2로 더 엄격)\n(17 국가 7급 하반기)'},
-{id:6251,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'[원형철근 사용 예외]\n주철근은 원칙적으로 ___ 철근을 사용하나\n다음 3가지는 원형철근 사용 가능:\n① ___\n② ___\n③ ___',a:'이형 | 나선철근 | 강선 | 용접철망',note:'주철근 원형 금지, 그러나 나선철근·강선·용접철망은 예외\n(22 국가 7급 2차 - 정답 보기)'},
-{id:6252,type:'ox',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S06 정착 및 이음 설계',q:'확대머리 전단스터드에서 확대머리의 지름은 전단스터드 지름의 √8배 이상이어야 한다',a:'X',note:'확대머리 전단스터드: 지름 √10배 이상 (√8이 아님)\n⚠ 확대머리 "이형철근"의 순지압면적 4Ab와 혼동 주의\n(22 국가 7급 2차 - 오답 함정)'},
 {id:6241,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S03 압축재·벽체 설계',q:'[벽체 수직전단철근 간격 sv]\n계수 전단력 Vu > φVc/2 초과 시\nsv ≤ 다음 3가지 중 최솟값\n① 벽체 수평길이의 ___ (lw/___)\n② 벽체 두께의 ___ 배 (___ h)\n③ ___ mm',a:'1/5 | 5 | 3 | 3 | 450',note:'암기: 5·3·450 (작은 값이 지배)\n(23 국가 7급, 정답 ③ lw/5, 3h, 450mm)'},
 {id:6242,type:'ox',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S03 압축재·벽체 설계',q:'벽체 수직전단철근 간격은 벽체 수평길이의 1/3, 벽체 두께의 5배, 500mm 중 최솟값 이하로 한다',a:'X',note:'정확한 기준: lw/5, 3h, 450mm\n1/3·5배·500mm는 오답 — 함정 (23 국가 7급)'},
 {id:6243,type:'ox',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S06 정착 및 이음 설계',q:'인장 이형철근의 정착길이는 항상 200mm 이상이어야 한다',a:'X',note:'인장 이형철근: 최소 300mm 이상\n200mm는 압축 이형철근 기준 (17 지방 9급)'},
@@ -3814,6 +3809,56 @@ const DEFAULT_CARDS = [
 {id:7143,type:'ox',cat:'PART4 · 강구조 > CH02 부재설계 > S07 합성기둥',q:'충전형 합성기둥에 사용되는 원형강관의 지름두께비는 1.15E/Fy 이하이어야 한다',a:'X',note:'원형강관 조밀 한계: 0.15 E/Fy (1.15가 아님!)\n약 10배 차이 — 수치 변조 함정\n(16 지방 9급)'},
 {id:7144,type:'ox',cat:'PART4 · 강구조 > CH02 부재설계 > S07 합성기둥',q:'충전형 합성기둥에 사용되는 각형강관의 판폭두께비는 2.26√(E/Fy) 이하이어야 한다',a:'O',note:'각형강관 조밀 한계: 2.26√(E/Fy) — 압축 기준\n비조밀: 3.00√(E/Fy) / 세장: 5.00√(E/Fy)\n(16 지방 9급)'},
 
+{id:7145,type:'cloze',cat:'PART4 · 강구조 > CH02 부재설계 > S02 볼트접합',q:'[고력볼트 유효단면적]\n볼트의 유효단면적 = 공칭단면적 × ___\n설계볼트장력 = 볼트 항복강도(인장강도의 ___ 배) × ___ × 공칭단면적\n⚠ "인장강도 × 유효단면적"이 아님!',a:'0.75 | 0.7 | 0.75',note:'공칭단면적의 75%를 유효단면적으로 사용\n나사부 단면 결손 고려한 값\n(22 서울 9급 기출 함정)'},
+
+{id:7146,type:'ox',cat:'PART4 · 강구조 > CH02 부재설계 > S02 볼트접합',q:'설계볼트장력은 볼트의 인장강도에 볼트의 유효단면적을 곱한 값이다',a:'X',note:'설계볼트장력 = 볼트 인장강도 × 0.7(항복강도 비율) × 공칭단면적 × 0.75(유효단면적 비율)\n→ 인장강도에 바로 유효단면적 곱하는 게 아님\n(22 서울 9급 기출 함정)'},
+
+{id:6280,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[압축연단 극한변형률 εcu]\nfck ≤ 40MPa: ___\nfck > 40MPa: 매 10MPa 강도 증가당 ___씩 감소\n⚠ 압축지배 변형률(0.002)과 구별!',a:'0.003 | 0.0001',note:'압축연단 극한변형률 = 콘크리트 파쇄 기준\n압축지배 변형률 = 철근 항복 기준 (다름!)'},
+
+{id:6281,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[인장지배단면 조건]\n최외단 인장철근 순인장변형률이 ___이상인 단면\nfy > 400MPa인 경우: 철근항복변형률(εy)의 ___배',a:'0.005 | 2.5',note:'인장지배 = 연성 파괴 (철근 항복 후 콘크리트 파쇄)\n고강도 철근은 2.5배 조건 적용'},
+
+{id:6282,type:'ox',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'압축연단 콘크리트가 가정된 극한변형률 0.003에 도달할 때, 최외단 인장철근의 순인장변형률이 압축지배변형률 한계 이하인 단면을 인장지배단면이라 한다',a:'X',note:'압축지배단면 설명임!\n인장지배단면 = εt ≥ 0.005 (15 지방 9급 함정)'},
+
+{id:6283,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[벽돌 설계 관련 - 2012년 구기준]\n지름 10mm 용접철망 벽체 전단면 최소수평철근비: ___\n벽체 수직철근 간격: 벽두께 3배 이하, 또한 ___mm 이하\n수평철근 간격: 벽두께 3배 이하, 또한 ___mm 이하',a:'0.0012 | 450 | 450',note:'2012년 구기준 (현재는 변경됨)\n(14 지방 9급 출제)'},
+
+{id:9302,cat:"영단어",type:"flash",q:"apathy",a:"무관심(명) / 냉담(명) / 무기력(명)\\n⚠ empathy(공감)와 반대 개념\\napathetic(형) = 무관심한\\npathos(그리스어) = 감정","pron":"ˈæpəθi","note":"The voters showed complete apathy toward the election."},
+
+{id:9303,cat:"영단어",type:"flash",q:"commotion",a:"소동(명) / 소란(명) / 동요(명)\\ncommotions = 복수형\\ncause a commotion = 소동을 일으키다\\n⚠ 갑작스럽고 시끄러운 혼란","pron":"kəˈmoʊʃn","note":"There was a great commotion in the street after the accident."},
+
+{id:9304,cat:"영단어",type:"flash",q:"squander",a:"낭비하다(동) / 헤프게 쓰다(동) / 분산시키다(동)\\n⚠ 다의어 주의!\\nsquander money = 돈을 낭비하다\\nsquander troops = 병력을 분산시키다\\nwaste와 유사하지만 더 강한 의미","pron":"ˈskwɑːndər","note":"He squandered his inheritance on gambling."},
+
+{id:9305,cat:"영단어",type:"flash",q:"imperceptible",a:"감지할 수 없는(형) / 미세한(형) / 알아차릴 수 없는(형)\\nin(부정) + perceptible(감지 가능한)\\n↔ perceptible(감지할 수 있는)\\nimperceptibly(부) = 눈에 띄지 않게","pron":"ˌɪmpərˈseptəbl","note":"The change in temperature was almost imperceptible."},
+
+{id:9306,cat:"영단어",type:"flash",q:"compulsory",a:"의무적인(형) / 강제적인(형) / 필수의(형)\\ncompulsory education = 의무교육\\ncompulsory military service = 의무병역\\n↔ voluntary(자발적인), optional(선택적인)","pron":"kəmˈpʌlsəri","note":"Wearing helmets is compulsory for all motorcycle riders."},
+
+{id:9307,cat:"영단어",type:"flash",q:"backward",a:"뒤로(부) / 후진의(형) / 낙후된(형) / 거꾸로(부)\\nback(뒤) + ward(방향)\\n⚠ background(배경)와 혼동 금지!\\nstep backward = 뒤로 한 걸음\\n↔ forward(앞으로)","pron":"ˈbækwərd","note":"He took a step backward when he saw the snake."},
+
+{id:9308,cat:"영단어",type:"flash",q:"background",a:"배경(명) / 배후(명) / 출신·경력(명)\\nback(뒤) + ground(땅)\\n⚠ backward(뒤로)와 혼동 금지!\\nfamily background = 가정 배경\\neducational background = 학력","pron":"ˈbækɡraʊnd","note":"The mountains formed a beautiful background to the village."},
+
+{id:9309,cat:"영단어",type:"flash",q:"grown-up",a:"어른(명) / 성인(명) / 성숙한(형)\\n⚠ '성장한'(grown)과 다름!\\nadult와 동의어\\ngrown-up children = 다 큰 자녀","pron":"ˈɡroʊnʌp","note":"Now that you're a grown-up, you should be responsible."},
+
+{id:9310,cat:"영단어",type:"flash",q:"auditorium",a:"강당(명) / 청중석(명) / 관객석(명)\\naudio(듣다) + rium(장소)\\n⚠ '객석'은 부분 의미만\\n공연·강연을 듣는 공간","pron":"ˌɔːdɪˈtɔːriəm","note":"The school auditorium can seat 500 students."},
+
+{id:9311,cat:"영단어",type:"flash",q:"advance",a:"전진(명) / 발전(명) / 진보(명) / 나아가다(동) / 사전의(형)\\n⚠ '모험'(adventure)와 혼동 금지!\\nadvance payment = 선불\\nin advance = 미리\\nadvanced(형) = 고급의, 발전된","pron":"ədˈvæns","note":"Recent advances in technology have changed our lives."},
+
+{id:9312,cat:"영단어",type:"flash",q:"initiate",a:"시작하다(동) / 착수하다(동) / 가입시키다(동) / 신참(명)\\ninit-(처음) + iate(~하다)\\n⚠ '계획'(plan)과 다름!\\ninitiative(명) = 주도권, 계획\\ninitial(형) = 처음의","pron":"ɪˈnɪʃieɪt","note":"The company will initiate a new project next month."},
+
+{id:9313,cat:"영단어",type:"flash",q:"scrape",a:"긁다(동) / 문지르다(동) / 긁힌 자국(명) / 어려움(명)\\n⚠ '스크랩'(scrap)과 다름!\\nscrape together = 가까스로 모으다\\nget into a scrape = 곤경에 빠지다","pron":"skreɪp","note":"He scraped the ice off the windshield."},
+
+{id:9314,cat:"영단어",type:"flash",q:"overcome",a:"극복하다(동) / 이겨내다(동) / 압도하다(동)\\nover(넘다) + come(오다) = 넘어서 오다\\n⚠ '결과'(outcome)와 혼동 금지!\\novercome difficulties = 어려움을 극복하다","pron":"ˌoʊvərˈkʌm","note":"She managed to overcome her fear of public speaking."},
+
+{id:9315,cat:"영단어",type:"flash",q:"derive",a:"유래하다(동) / 끌어내다(동) / 얻다(동) / 파생하다(동)\\nderive from = ~에서 유래하다\\nderive pleasure from = ~에서 즐거움을 얻다\\nderivation(명) = 유래, 파생","pron":"dɪˈraɪv","note":"This word derives from Latin."},
+
+{id:9316,cat:"영단어",type:"flash",q:"textile",a:"직물(명) / 옷감(명) / 섬유의(형)\\ntext-(짜다) + ile\\n⚠ '질감'(texture)과 헷갈리지 마!\\ntextile industry = 섬유 산업\\ntexture = 질감 / textile = 직물","pron":"ˈtekstaɪl","note":"Korea has a strong textile industry."},
+
+{id:9317,cat:"영단어",type:"flash",q:"side effect",a:"부작용(명) / 부수적 효과(명)\\n⚠ '부가효과'(추가 효과)와 다름!\\n주로 약·치료의 부정적 영향\\ndrug side effects = 약물 부작용","pron":"ˈsaɪd ɪˌfekt","note":"The medicine has some serious side effects."},
+
+{id:9318,cat:"영단어",type:"flash",q:"perspiration",a:"땀(명) / 발한(명) / 노력(명)\\nper(완전히) + spire(숨쉬다)\\nsweat의 격식 표현\\nGenius is 1% inspiration and 99% perspiration\\n= 천재는 1%의 영감과 99%의 노력","pron":"ˌpɜːrspəˈreɪʃn","note":"Beads of perspiration formed on his forehead."},
+
+{id:9319,cat:"영단어",type:"flash",q:"procrastinator",a:"미루는 사람(명) / 꾸물거리는 사람(명)\\nprocrastinate(동) = 미루다, 꾸물거리다\\npro-(앞으로) + crastinus(내일)\\n= '내일로 미루다'\\nprocrastination(명) = 미룸, 지연","pron":"proʊˈkræstɪˌneɪtər","note":"He's a procrastinator who always finishes work at the last minute."},
+
+{id:9320,cat:"영단어",type:"flash",q:"reliance",a:"의존(명) / 의지(명) / 신뢰(명)\\nrely(동) = 의지하다 + ance(명사형)\\nreliance on = ~에 대한 의존\\nself-reliance = 자립\\nreliable(형) = 믿을 만한","pron":"rɪˈlaɪəns","note":"Our reliance on technology has increased dramatically."},
+
 // ===== PART5 · 구조역학 =====
 {id:8001,type:'cloze',cat:'PART5 · 구조역학 > CH01 총론',q:'[모멘트 합의 크기]\nM₀ = (P₁ × x₁) ___ (P₂ × x₂)',a:'−'},
 {id:8002,type:'cloze',cat:'PART5 · 구조역학 > CH01 총론',q:'[구조물의 판별식]\nN = ___ + ___ + ___ − 2절점수\n(반력수 + 부재수 + 강절점수 − 2절점수)',a:'반력수 | 부재수 | 강절점수'},
@@ -3845,7 +3890,7 @@ const DEFAULT_CARDS = [
 {id:8028,type:'cloze',cat:'PART5 · 구조역학 > CH07 처짐',q:'[캔틸레버보 처짐 공식]\n끝단 집중하중: δ = ___\n등분포하중: δ = ___',a:'PL³/3EI | wL⁴/8EI'},
 {id:8029,type:'cloze',cat:'PART5 · 구조역학 > CH07 처짐',q:'[단순보 처짐 공식]\n중앙 집중하중: δ = ___\n등분포하중: δ = ___',a:'PL³/48EI | 5wL⁴/384EI'},
 {id:8030,type:'cloze',cat:'PART5 · 구조역학 > CH07 처짐',q:'[처짐각 공식 — 캔틸레버]\n집중하중: θ = ___\n등분포하중: θ = ___',a:'PL²/2EI | wL³/6EI'},
-
+{id:8031,type:'cloze',cat:'PART5 · 구조역학 > CH07 처짐',q:'[처짐각 공식 — 단순보 단부에 모멘트 M]\nθA = ___ / SA = ___',a:'Ml/EI | Ml²/2EI'},
 {id:8032,type:'cloze',cat:'PART5 · 구조역학 > CH07 처짐',q:'[처짐 비교 — 같은 조건]\n캔틸레버 집중하중 vs 단순보 집중하중\n캔틸레버가 단순보보다 ___ 배 크다\n(PL³/3EI ÷ PL³/48EI = ___)',a:'16 | 16'},
 {id:8033,type:'cloze',cat:'PART5 · 구조역학 > CH08 부정정구조물',q:'[양단고정보 — 등분포하중]\n단부 모멘트: MA = MB = ___\n중앙 모멘트: MC = ___\n최대처짐: δ = ___',a:'−wl²/12 | wl²/24 | wl⁴/384EI'},
 {id:8034,type:'cloze',cat:'PART5 · 구조역학 > CH08 부정정구조물',q:'[양단고정보 — 중앙 집중하중]\n반력: RA = RB = ___\n단부·중앙 모멘트: MA = MB = MC = ___\n최대처짐: δ = ___',a:'P/2 | Pl/8 | Pl³/192EI'},
@@ -4169,25 +4214,6 @@ const DEFAULT_ENG_CARDS = [
 {id:9280,cat:"영단어",type:"flash",q:"overruled",a:"기각되다 / 무효화되다(동 수동태)\noverrule(동) = 기각하다·무효화하다\nobjection overruled = 이의 기각 (법정 용어)\n≒ rejected, dismissed",pron:"ˌoʊvərˈruːld",note:"The judge overruled the defense attorney's objection."},
 {id:9281,cat:"영단어",type:"flash",q:"mandates",a:"명령하다 / 위임하다(동) / 명령·위임(명)\nmandate(명) = 권한·명령·임무\n⚠ mandatory(의무적인)와 어근 같음\nunder a mandate = 위임받아",pron:"ˈmændeɪts",note:"The new law mandates that all vehicles pass safety inspections."},
 {id:9282,cat:"영단어",type:"flash",q:"preoccupied",a:"몰두한 / 딴생각에 빠진(형)\npreoccupy(동) = ~에 몰두하게 하다\nbe preoccupied with = ~에 몰두해있다\n≒ absorbed, distracted",pron:"priːˈɒkjupaɪd",note:"She seemed preoccupied and didn't hear what he said."},
-{id:9283,cat:"영단어",type:"flash",q:"utter",a:"완전한 / 전적인(형) / 발언하다(동)\nutter confusion = 완전한 혼란\nutter silence = 완전한 침묵\n⚠ 동사로는 '말하다' 의미\n≒ complete, absolute",pron:"ˈʌtər",note:"There was utter chaos after the announcement."},
-{id:9284,cat:"영단어",type:"flash",q:"rhetorical",a:"수사학의 / 웅변술의(형)\nrhetorical question = 수사의문문\nrhetorical device = 수사기법\n⚠ rhetoric(명) = 수사학·웅변술\n실제 답변 기대 안 하는 질문",pron:"rɪˈtɔrɪkəl",note:"His speech was full of rhetorical questions to engage the audience."},
-{id:9285,cat:"영단어",type:"flash",q:"supremacy",a:"최고권 / 패권 / 우월성(명)\nsupreme(형) = 최고의·최상의\nwhite supremacy = 백인 우월주의\nair supremacy = 제공권\n≒ dominance, superiority",pron:"suˈpreməsi",note:"The country sought military supremacy in the region."},
-{id:9286,cat:"영단어",type:"flash",q:"cradle",a:"요람(명) / 발상지(명) / 감싸 안다·떠받치다(동)\nthe cradle of civilization = 문명의 요람\ncradle the baby = 아기를 품에 안다\nfrom cradle to grave = 요람에서 무덤까지",pron:"ˈkreɪdəl",note:"Mesopotamia is often called the cradle of civilization."},
-{id:9287,cat:"영단어",type:"flash",q:"sheer",a:"완전한·순전한(형) / 깎아지른 듯한(형)\n⚠ utter과 비슷하지만 '순수한' 뉘앙스 강함\nsheer determination = 순수한 의지력\nsheer cliff = 절벽\n≒ pure, absolute",pron:"ʃɪr",note:"It was sheer luck that prevented the accident."},
-{id:9288,cat:"영단어",type:"flash",q:"ingested",a:"섭취한 / 먹은(형·과거분사)\ningest(동) = 섭취하다·먹다\ningest poison = 독을 섭취하다\ningestion(명) = 섭취·섭식\n⚠ 의학·과학 지문에서 사용",pron:"ɪnˈdʒestɪd",note:"The patient had accidentally ingested a toxic substance."},
-{id:9289,cat:"영단어",type:"flash",q:"civil",a:"시민의 / 민간의 / 예의바른(형)\n⚠ '도시'가 아님!\ncivil rights = 시민권\ncivil war = 내전\ncivilization(명) = 문명",pron:"ˈsɪvəl",note:"The civil rights movement changed American society."},
-{id:9290,cat:"영단어",type:"flash",q:"appeal",a:"호소하다(동) / 매력·호소(명)\n⚠ '나타내다'가 아님!\nappeal to = ~에 호소하다\nappeal for help = 도움을 호소하다\nappealing(형) = 매력적인",pron:"əˈpiːl",note:"The charity appealed for donations to help the victims."},
-{id:9291,cat:"영단어",type:"flash",q:"delicate",a:"섬세한 / 연약한 / 미묘한(형)\n⚠ '고치기'가 아님!\ndelicate situation = 미묘한 상황\ndelicate health = 허약한 건강\n≒ fragile, sensitive",pron:"ˈdelɪkət",note:"The ancient manuscript was too delicate to handle."},
-{id:9292,cat:"영단어",type:"flash",q:"gaze",a:"응시하다(동) / 응시(명)\n⚠ '뫼다'가 아님!\ngaze at = ~를 응시하다\nsteady gaze = 고정된 시선\n≒ stare, look intently",pron:"ɡeɪz",note:"She gazed out the window at the beautiful sunset."},
-{id:9293,cat:"영단어",type:"flash",q:"shepherd",a:"목자 / 양치기(명) / 인도하다(동)\n⚠ '세퍼드(개 품종)'와 혼동 주의!\nshepherd dog = 목양견\nGerman Shepherd = 저먼 셰퍼드\n≒ pastor(목사), guide",pron:"ˈʃepərd",note:"The shepherd watched over his flock of sheep."},
-{id:9294,cat:"영단어",type:"flash",q:"loyalty",a:"충성심 / 충실함 / 의리(명)\nloyal(형) = 충성스러운\nbe loyal to = ~에 충성하다\ncustomer loyalty = 고객 충성도\n≒ faithfulness, devotion",pron:"ˈlɔɪəlti",note:"His loyalty to the company was rewarded with a promotion."},
-{id:9295,cat:"영단어",type:"flash",q:"innate",a:"타고난 / 선천적인(형)\ninnate ability = 타고난 능력\n⚠ inner(내부의)와 혼동 주의\n≒ inborn, natural\n↔ acquired(후천적인)",pron:"ɪˈneɪt",note:"Children have an innate ability to learn languages."},
-{id:9296,cat:"영단어",type:"flash",q:"carbon",a:"탄소(명)\ncarbon dioxide = 이산화탄소\ncarbon footprint = 탄소 발자국\nlow-carbon = 저탄소\n⚠ 환경·과학 지문 필수 어휘",pron:"ˈkɑrbən",note:"Reducing carbon emissions is crucial for the environment."},
-{id:9297,cat:"영단어",type:"flash",q:"instinct",a:"본능 / 직감(명)\ninstinctive(형) = 본능적인\nsurvival instinct = 생존 본능\nby instinct = 본능적으로\n≒ intuition(직관)",pron:"ˈɪnstɪŋkt",note:"Animals rely on instinct to find food and avoid danger."},
-{id:9298,cat:"영단어",type:"flash",q:"analogy",a:"유추 / 비유 / 유사성(명)\n⚠ '방석'이 아님!\nmake an analogy = 유추하다\nby analogy = 유추에 의해\nanalogous(형) = 유사한",pron:"əˈnælədʒi",note:"He drew an analogy between the brain and a computer."},
-{id:9299,cat:"영단어",type:"flash",q:"affluent",a:"부유한 / 풍부한(형)\n⚠ fluent(유창한)와 혼동 주의!\naffluent society = 풍요사회\naffluence(명) = 부유함\n≠ fluent = 유창한",pron:"ˈæfluənt",note:"Many affluent families live in this neighborhood."},
-{id:9300,cat:"영단어",type:"flash",q:"come about",a:"일어나다 / 발생하다 / 생기다(구동사)\n⚠ '생기게다'가 아님!\nHow did this come about? = 어떻게 이런 일이?\n≒ happen, occur, arise",pron:"kʌm əˈbaʊt",note:"The accident came about due to poor weather conditions."},
-{id:9301,cat:"영단어",type:"flash",q:"committee",a:"위원회 / 위원단(명)\n⚠ community(공동체)와 혼동 주의!\ncommittee meeting = 위원회 회의\ncommittee member = 위원\n≠ community = 공동체",pron:"kəˈmɪti",note:"The committee will review the proposal next week."},
 {id:9283,cat:"영단어",type:"flash",q:"immigrant",a:"이민자(명)\n⚠ emigrant(타국으로 떠나는 사람)와 구별!\nimmigrant = 들어오는 사람\nimmigration(명) = 이민·입국",pron:"ˈɪmɪɡrənt",note:"Many immigrants arrived in the country seeking a better life."},
 {id:9284,cat:"영단어",type:"flash",q:"artificial",a:"인공적인 / 인위적인(형)\n⚠ architectural(건축의)와 혼동 주의!\nartificial intelligence = 인공지능(AI)\n↔ natural(자연적인)",pron:"ˌɑːrtɪˈfɪʃəl",note:"The lake was artificial, built to supply water to the city."},
 {id:9285,cat:"영단어",type:"flash",q:"physics",a:"물리학(명)\n⚠ philosophy(철학)와 혼동 주의!\nphysics = ph+y+sics\nphysical(형) = 물리적인·신체의",pron:"ˈfɪzɪks",note:"She studied physics at university and became a researcher."},
