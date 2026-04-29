@@ -4744,9 +4744,13 @@ function renderFlashCard(c) {
       background:rgba(233,30,140,0.05);border-radius:20px;
       padding:3px 12px;display:inline-block;">/${esc(c.pron)}/</div>` : ''}
     <div class="card-hint">탭하면 답 확인 · 알면 바로 ✓</div>`;
+  // 답에 줄바꿈 적용
+  let cardAnswerText = c.a.replace(/\n/g, '###BR###');
+  cardAnswerText = esc(cardAnswerText);
+  cardAnswerText = cardAnswerText.replace(/###BR###/g, '<br>');
   document.getElementById('card-back').innerHTML = `
     <div class="card-ans-label">ANSWER</div>
-    <div class="card-ans">${esc(c.a).replace(/\n/g,'<br>')}</div>
+    <div class="card-ans">${cardAnswerText}</div>
     ${c.note && currentSubject==='eng'
       ? `<div class="card-example">💬 ${esc(c.note)}</div>`
       : c.note ? `<div class="card-note"><b style="color:#8a6f2e;">📖 풀이노트</b><br>${esc(c.note)}</div>` : ''}
@@ -5215,7 +5219,11 @@ function openPreview(id){
   } else if (c.type === 'cloze') {
     answerHTML = `<div style="font-size:.9rem;color:var(--text);background:rgba(247,202,201,0.15);padding:10px 14px;border-radius:10px;margin:10px 0;line-height:1.7;"><b style="color:#c9838a;">정답:</b> ${esc(c.a).replace(/\|/g,' <b style="color:#c9838a;">|</b> ')}</div>`;
   } else {
-    answerHTML = `<div style="font-size:.9rem;color:var(--text);background:rgba(247,202,201,0.15);padding:10px 14px;border-radius:10px;margin:10px 0;line-height:1.7;white-space:pre-line;">${esc(c.a)}</div>`;
+    // 줄바꿈만 적용
+    let answerText = c.a.replace(/\n/g, '###BR###');
+    answerText = esc(answerText);
+    answerText = answerText.replace(/###BR###/g, '<br>');
+    answerHTML = `<div style="font-size:.9rem;color:var(--text);background:rgba(247,202,201,0.15);padding:10px 14px;border-radius:10px;margin:10px 0;line-height:1.7;">${answerText}</div>`;
   }
 
   const memoData = localStorage.getItem(`memo_${c.id}`);
