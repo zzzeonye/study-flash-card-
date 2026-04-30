@@ -2512,6 +2512,237 @@ body::before {
   font-size: .65rem; color: var(--muted); text-align:right;
 }
 
+/* 메인 데일리 진행률 위젯 */
+.daily-widget {
+  width: 100%; max-width: 580px;
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 14px;
+  background: rgba(255,252,254,0.9);
+  border: 1.5px solid rgba(184,224,212,0.5);
+  border-radius: 14px;
+  margin-bottom: 8px;
+  box-shadow: 0 2px 8px rgba(130,168,152,0.08);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.daily-widget:hover {
+  border-color: rgba(130,168,152,0.7);
+  background: rgba(255,252,254,1);
+}
+.daily-widget.complete {
+  border-color: rgba(130,168,152,0.7);
+  background: linear-gradient(135deg, rgba(255,252,254,0.95), rgba(184,224,212,0.2));
+}
+.daily-widget-content { flex:1; display:flex; flex-direction:column; gap:3px; }
+.daily-widget-label {
+  font-size: .78rem; font-weight: 700; color: var(--text);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.daily-widget-bar {
+  height: 6px; border-radius: 6px;
+  background: rgba(184,224,212,0.2); overflow:hidden;
+}
+.daily-widget-fill {
+  height: 100%; border-radius: 6px;
+  background: linear-gradient(90deg, #b8e0d4, #82a898);
+  transition: width .4s ease;
+}
+.daily-widget-info {
+  font-size: .65rem; color: var(--muted); text-align:right;
+}
+.daily-widget-mood {
+  font-size: 1.4rem;
+  margin-left: 2px;
+}
+
+.boss-mute-btn {
+  position: absolute;
+  top: 16px; right: 16px;
+  width: 36px; height: 36px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 50%;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.2s;
+}
+.boss-mute-btn:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+/* ═══ 사주 모달 ═══ */
+.saju-modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(30,0,50,.5); backdrop-filter: blur(6px);
+  z-index: 500; align-items: center; justify-content: center;
+}
+.saju-modal-overlay.open { display: flex; }
+.saju-modal {
+  background: var(--surface);
+  border-radius: 24px;
+  padding: 24px 20px;
+  width: 92%; max-width: 380px;
+  max-height: 85vh; overflow-y: auto;
+  border: 1.5px solid rgba(247,202,201,0.4);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+.saju-modal-title {
+  font-family: 'Pacifico', cursive;
+  font-size: 1.15rem;
+  text-align: center;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+.saju-modal-sub {
+  font-size: .68rem;
+  color: var(--muted);
+  text-align: center;
+  margin-bottom: 16px;
+  line-height: 1.5;
+  word-break: keep-all;
+}
+.saju-input-row {
+  margin-bottom: 12px;
+}
+.saju-label {
+  display: block;
+  font-size: .72rem;
+  color: var(--muted);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.saju-input {
+  width: 100%;
+  padding: 9px 12px;
+  font-size: .9rem;
+  font-family: inherit;
+  background: rgba(255,255,255,0.7);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  box-sizing: border-box;
+}
+.saju-input:focus {
+  outline: none;
+  border-color: rgba(247,202,201,0.6);
+}
+.saju-save-btn {
+  width: 100%;
+  padding: 10px;
+  background: linear-gradient(135deg, #f7cac9, #c9838a);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: .9rem;
+  cursor: pointer;
+  margin-top: 4px;
+}
+.saju-result {
+  margin-top: 16px;
+  padding: 14px;
+  background: rgba(255,252,254,0.6);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.saju-result-title {
+  font-size: .75rem;
+  color: var(--muted);
+  font-weight: 600;
+  margin-bottom: 10px;
+  text-align: center;
+}
+.saju-pillars {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.saju-pillar {
+  text-align: center;
+  padding: 8px 4px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.saju-pillar-label {
+  font-size: .6rem;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.saju-pillar-stem {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 1px;
+}
+.saju-pillar-branch {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+.saju-summary {
+  font-size: .78rem;
+  color: var(--text);
+  line-height: 1.6;
+  word-break: keep-all;
+}
+.saju-summary strong { color: #c9838a; }
+
+/* 일진 정보 박스 (데일리 모달 안) */
+.daily-saju-section {
+  background: rgba(255,250,235,0.5);
+  border: 1px solid rgba(232,196,104,0.3);
+  border-radius: 12px;
+  padding: 11px 12px;
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+.daily-saju-header {
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: .78rem;
+  color: var(--text);
+}
+.daily-saju-pill {
+  display: inline-block;
+  padding: 1px 7px;
+  border-radius: 8px;
+  font-size: .7rem;
+  font-weight: 700;
+  margin-right: 4px;
+}
+.daily-saju-summary {
+  font-size: .72rem;
+  color: var(--muted);
+  margin-top: 4px;
+  line-height: 1.5;
+  word-break: keep-all;
+}
+.daily-saju-detail {
+  display: none;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border);
+  font-size: .73rem;
+  color: var(--text);
+  line-height: 1.7;
+  word-break: keep-all;
+}
+.daily-saju-section.expanded .daily-saju-detail { display: block; }
+.daily-saju-section.expanded .daily-saju-summary { display: none; }
+
+/* 오행 색상 (천간 기준) */
+.wood   { color: #5fb89a; }    /* 목(木) - 초록 */
+.wood-bg   { background: rgba(95,184,154,0.18); }
+.fire   { color: #d65d6f; }    /* 화(火) - 빨강 */
+.fire-bg   { background: rgba(214,93,111,0.18); }
+.earth  { color: #c9a36b; }    /* 토(土) - 황 */
+.earth-bg  { background: rgba(201,163,107,0.2); }
+.metal  { color: #999; }       /* 금(金) - 회색/흰색 */
+.metal-bg  { background: rgba(150,150,150,0.18); }
+.water  { color: #4a90c8; }    /* 수(水) - 검정/파랑 */
+.water-bg  { background: rgba(74,144,200,0.18); }
+
 /* 보스전 모달 */
 .boss-modal-overlay {
   display: none; position: fixed; inset: 0;
@@ -2723,13 +2954,13 @@ body::before {
   overflow: hidden;
   font-size: 0.78rem;
   line-height: 1.6;
-  color: rgba(80, 60, 70, 0.28);
+  color: rgba(80, 60, 70, 0.55);
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 500;
   white-space: pre-wrap;
   word-break: keep-all;
   pointer-events: none;
-  z-index: 1;
+  z-index: 3;
 }
 .memo-canvas {
   display: block;
@@ -2915,6 +3146,7 @@ body::before {
   <div class="drawer-title">더보기</div>
   <button class="drawer-btn" id="drawer-quest" onclick="openQuestModal();closeDrawer()">📋 오늘의 퀘스트</button>
   <button class="drawer-btn" id="drawer-daily" onclick="openDailyModal();closeDrawer()">✅ 데일리 체크</button>
+  <button class="drawer-btn" id="drawer-saju" onclick="openSajuModal();closeDrawer()">🔮 사주·일진</button>
   <button class="drawer-btn" id="drawer-tier" onclick="openTierModal();closeDrawer()">🏆 티어 현황</button>
   <button class="drawer-btn" id="drawer-collection" onclick="openCollectionModal();closeDrawer()">📖 도감 &amp; 칭호</button>
   <button class="drawer-btn" id="drawer-calendar" onclick="switchTab('calendar');closeDrawer()">📅 출석 캘린더</button>
@@ -3048,6 +3280,19 @@ body::before {
   </div>
 </div>
 
+<!-- 메인 데일리 진행률 위젯 -->
+<div class="daily-widget" id="daily-widget" onclick="openDailyModal()">
+  <span style="font-size:1rem;">✅</span>
+  <div class="daily-widget-content">
+    <div class="daily-widget-label" id="daily-widget-label">오늘 데일리 체크</div>
+    <div class="daily-widget-bar">
+      <div class="daily-widget-fill" id="daily-widget-fill" style="width:0%"></div>
+    </div>
+    <div class="daily-widget-info" id="daily-widget-info">0 / 0 완료</div>
+  </div>
+  <span class="daily-widget-mood" id="daily-widget-mood"></span>
+</div>
+
 <!-- 보스전 모달 -->
 <div class="boss-modal-overlay" id="boss-modal-overlay">
   <!-- 인트로 -->
@@ -3064,6 +3309,7 @@ body::before {
 
   <!-- 전투 화면 -->
   <div class="boss-battle-screen" id="boss-battle-screen" style="display:none;">
+    <button class="boss-mute-btn" id="boss-mute-btn" onclick="toggleBossMute()" title="BGM 음소거">🔊</button>
     <div class="boss-battle-header">
       <div class="boss-battle-sprite" id="boss-battle-sprite">👾</div>
       <div class="boss-battle-hp-wrap">
@@ -3096,10 +3342,10 @@ body::before {
       <button class="memo-modal-close" onclick="closeMemo()">✕</button>
     </div>
     <div class="memo-tools">
-      <div class="memo-color-btn active" style="background:#222;" data-color="#222" onclick="setMemoColor(this)"></div>
-      <div class="memo-color-btn" style="background:#c9838a;" data-color="#c9838a" onclick="setMemoColor(this)"></div>
-      <div class="memo-color-btn" style="background:#6aaa98;" data-color="#6aaa98" onclick="setMemoColor(this)"></div>
-      <div class="memo-color-btn" style="background:#5b7ec9;" data-color="#5b7ec9" onclick="setMemoColor(this)"></div>
+      <div class="memo-color-btn active" style="background:#2c2825;" data-color="#2c2825" onclick="setMemoColor(this)"></div>
+      <div class="memo-color-btn" style="background:#e88b9c;" data-color="#e88b9c" onclick="setMemoColor(this)"></div>
+      <div class="memo-color-btn" style="background:#5fb89a;" data-color="#5fb89a" onclick="setMemoColor(this)"></div>
+      <div class="memo-color-btn" style="background:#4a90c8;" data-color="#4a90c8" onclick="setMemoColor(this)"></div>
       <div class="memo-color-btn" style="background:#e8954a;" data-color="#e8954a" onclick="setMemoColor(this)"></div>
       <button class="memo-tool-btn active" id="memo-pen-btn" onclick="setMemoMode('pen')">🖊 펜</button>
       <button class="memo-tool-btn" id="memo-highlight-btn" onclick="setMemoMode('highlight')">🖍 형광펜</button>
@@ -3166,6 +3412,19 @@ body::before {
 
     <!-- 자기 상태 기록 -->
     <div class="daily-state-section" id="daily-state-section">
+      <!-- 일진 정보 (사주 입력했을 때만) -->
+      <div class="daily-saju-section" id="daily-saju-section" style="display:none;" onclick="toggleSajuDetail(this)">
+        <div class="daily-saju-header">
+          <div>
+            <span class="daily-saju-pill" id="daily-saju-pill"></span>
+            <span id="daily-saju-label" style="font-weight:600;"></span>
+          </div>
+          <span style="font-size:.65rem;color:var(--muted);" id="daily-saju-relation"></span>
+        </div>
+        <div class="daily-saju-summary" id="daily-saju-summary"></div>
+        <div class="daily-saju-detail" id="daily-saju-detail"></div>
+      </div>
+
       <div class="daily-state-title">오늘 컨디션</div>
       <div class="daily-mood-row" id="daily-mood-row">
         <button class="mood-btn" data-mood="😊" title="매우 좋음">😊</button>
@@ -3210,6 +3469,48 @@ body::before {
 
     <div id="daily-items-wrap"></div>
     <button class="daily-modal-close" onclick="closeDailyModal()">닫기</button>
+  </div>
+</div>
+
+<!-- 사주 입력 모달 -->
+<div class="saju-modal-overlay" id="saju-modal-overlay" onclick="closeSajuModal(event)">
+  <div class="saju-modal">
+    <div class="saju-modal-title">🔮 사주 정보</div>
+    <div class="saju-modal-sub">생년월일 입력하면 매일 일진 자동 표시 + 컨디션과의 패턴 분석</div>
+
+    <div class="saju-input-row">
+      <label class="saju-label">양력 생년월일</label>
+      <input type="date" id="saju-birth-date" class="saju-input">
+    </div>
+
+    <div class="saju-input-row">
+      <label class="saju-label">태어난 시간 (선택)</label>
+      <select id="saju-birth-hour" class="saju-input">
+        <option value="">시간 모름</option>
+        <option value="0">자시 (23:00~01:00)</option>
+        <option value="2">축시 (01:00~03:00)</option>
+        <option value="4">인시 (03:00~05:00)</option>
+        <option value="6">묘시 (05:00~07:00)</option>
+        <option value="8">진시 (07:00~09:00)</option>
+        <option value="10">사시 (09:00~11:00)</option>
+        <option value="12">오시 (11:00~13:00)</option>
+        <option value="14">미시 (13:00~15:00)</option>
+        <option value="16">신시 (15:00~17:00)</option>
+        <option value="18">유시 (17:00~19:00)</option>
+        <option value="20">술시 (19:00~21:00)</option>
+        <option value="22">해시 (21:00~23:00)</option>
+      </select>
+    </div>
+
+    <button class="saju-save-btn" onclick="saveSaju()">💾 저장</button>
+
+    <div id="saju-result" class="saju-result" style="display:none;">
+      <div class="saju-result-title">내 사주</div>
+      <div id="saju-pillars" class="saju-pillars"></div>
+      <div id="saju-summary" class="saju-summary"></div>
+    </div>
+
+    <button class="daily-modal-close" onclick="closeSajuModal()" style="margin-top:14px;">닫기</button>
   </div>
 </div>
 <div class="tabs">
@@ -5993,7 +6294,16 @@ function renderCalendar() {
         stateIndicator = `<div style="position:absolute;top:1px;left:2px;display:flex;gap:1px;">${stateMarks.join('')}</div>`;
       }
 
+      // 일진 오행 색 띠 (사주 입력했을 때만)
+      let sajuStripe = '';
+      if (loadSaju()) {
+        const info = getDayInfo(dayDate);
+        const elColors = { wood:'#5fb89a', fire:'#d65d6f', earth:'#c9a36b', metal:'#999', water:'#4a90c8' };
+        sajuStripe = `<div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:${elColors[info.element]};opacity:0.55;border-radius:3px 0 0 3px;"></div>`;
+      }
+
       html += `<div class="${cls}" style="position:relative;cursor:pointer;" onclick="openDailyForDate('${year}-${month+1}-${day}')">
+        ${sajuStripe}
         ${stamp ? `<div class="cal-stamp">${stamp}</div>` : `<div class="cal-day-num">${day}</div>`}
         ${stamp ? `<div class="cal-day-num">${day}</div>` : ''}
         ${stateIndicator}
@@ -6509,6 +6819,7 @@ function playBossNote(freq, duration, type='square', vol=0.05) {
 function startBossBgm() {
   if (bossBgmInterval) return;
   if (soundTheme === 'off') return;
+  if (bossMuted) return;
   if (audioCtx.state === 'suspended') audioCtx.resume();
 
   bossBgmStep = 0;
@@ -6547,6 +6858,19 @@ function stopBossBgm() {
   if (bossBgmInterval) {
     clearInterval(bossBgmInterval);
     bossBgmInterval = null;
+  }
+}
+
+let bossMuted = false;
+function toggleBossMute() {
+  bossMuted = !bossMuted;
+  const btn = document.getElementById('boss-mute-btn');
+  if (bossMuted) {
+    stopBossBgm();
+    if (btn) btn.textContent = '🔇';
+  } else {
+    startBossBgm();
+    if (btn) btn.textContent = '🔊';
   }
 }
 
@@ -7284,18 +7608,34 @@ function closeBossModal() {
 // ═══════════════════ MEMO SYSTEM ═══════════════════
 let memoCanvas, memoCtx;
 let memoDrawing = false;
-let memoColor = '#222';
+let memoColor = '#2c2825';
 let memoMode = 'pen'; // pen | erase | highlight
 let memoSize = 4;
 let memoCurrentCardId = null;
 let memoLastX = 0, memoLastY = 0;
-const HIGHLIGHT_COLOR = 'rgba(255, 235, 80, 0.45)'; // 노란 형광펜
+const HIGHLIGHT_COLOR = '#fff066'; // 노란 형광펜 (밝은 노랑)
 
 function initMemo() {
   memoCanvas = document.getElementById('memo-canvas');
   memoCtx = memoCanvas.getContext('2d');
+
+  // 고해상도 디스플레이 대응 (Retina iPad 등)
+  const dpr = window.devicePixelRatio || 1;
+  if (dpr > 1) {
+    const w = memoCanvas.width;
+    const h = memoCanvas.height;
+    memoCanvas.width = w * dpr;
+    memoCanvas.height = h * dpr;
+    memoCanvas.style.width = w + 'px';
+    memoCanvas.style.height = h + 'px';
+    memoCtx.scale(dpr, dpr);
+  }
+
+  // 부드러운 렌더링 (안티-에일리어싱)
   memoCtx.lineCap = 'round';
   memoCtx.lineJoin = 'round';
+  memoCtx.imageSmoothingEnabled = true;
+  memoCtx.imageSmoothingQuality = 'high';
 
   // 터치 이벤트
   memoCanvas.addEventListener('pointerdown', memoStart, {passive:false});
@@ -7313,11 +7653,10 @@ function setMemoSize(size) {
 
 function getMemoPos(e) {
   const rect = memoCanvas.getBoundingClientRect();
-  const scaleX = memoCanvas.width / rect.width;
-  const scaleY = memoCanvas.height / rect.height;
+  // CSS 픽셀 기준 좌표 (DPR scale은 ctx에서 이미 적용됨)
   return {
-    x: (e.clientX - rect.left) * scaleX,
-    y: (e.clientY - rect.top) * scaleY
+    x: e.clientX - rect.left,
+    y: e.clientY - rect.top
   };
 }
 
@@ -7330,12 +7669,13 @@ function applyMemoStyle() {
     memoCtx.lineWidth = memoSize * 2;
     memoCtx.globalAlpha = 1;
   } else if (memoMode === 'highlight') {
-    // 형광펜 - 굵은 선 + 반투명 + multiply
-    memoCtx.globalCompositeOperation = 'multiply';
+    // 형광펜 - darken 합성으로 글씨 위에 칠해도 글씨 보임
+    // strokeStyle을 단색으로, 알파는 globalAlpha로 통째로 (stroke 내 누적 방지)
+    memoCtx.globalCompositeOperation = 'darken';
     memoCtx.strokeStyle = HIGHLIGHT_COLOR;
     memoCtx.fillStyle = HIGHLIGHT_COLOR;
     memoCtx.lineWidth = memoSize * 4;
-    memoCtx.globalAlpha = 1;
+    memoCtx.globalAlpha = 0.55;
   } else {
     // 일반 펜
     memoCtx.globalCompositeOperation = 'source-over';
@@ -7637,11 +7977,21 @@ function updateSubtitleWithTitle() {
   loadCollectionMeta();
   const sub = document.getElementById('app-subtitle');
   if (!sub) return;
+  // D-day 계산 (시험일: 2026-6-20)
+  const examDate = new Date(2026, 5, 20);
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  const dDay = Math.ceil((examDate - today) / (1000*60*60*24));
+  let ddayText = '';
+  if (dDay > 0) ddayText = ` · D-${dDay}`;
+  else if (dDay === 0) ddayText = ' · 시험 당일!';
+  else ddayText = ' · 시험 종료';
+
   if (collectionMeta.equippedTitle) {
     const t = TITLE_DEFS.find(t=>t.id===collectionMeta.equippedTitle);
-    if (t) { sub.textContent = `${t.icon} ${t.name} · 9급 건축직 시험 대비`; return; }
+    if (t) { sub.textContent = `${t.icon} ${t.name}${ddayText}`; return; }
   }
-  sub.textContent = '♥ 9급 건축직 공무원 시험 대비';
+  sub.textContent = `♥ 9급 건축직${ddayText}`;
 }
 
 function renderCollectionDogam() {
@@ -7960,6 +8310,35 @@ function openDailyForDate(dateStr) {
   document.getElementById('daily-modal-overlay').classList.add('open');
 }
 
+// 메인 화면 데일리 위젯 업데이트
+function updateDailyWidget() {
+  const widget = document.getElementById('daily-widget');
+  if (!widget) return;
+  const today = new Date();
+  const prog = getDailyProgress(today);
+  const todayKey = getDailyKey(today);
+  const state = getStateForDate(todayKey);
+
+  if (!prog || prog.total === 0) {
+    document.getElementById('daily-widget-info').textContent = '항목 없음';
+    document.getElementById('daily-widget-fill').style.width = '0%';
+    document.getElementById('daily-widget-mood').textContent = state.mood || '';
+    return;
+  }
+
+  const pct = Math.round(prog.pct * 100);
+  document.getElementById('daily-widget-fill').style.width = pct + '%';
+  document.getElementById('daily-widget-info').textContent = `${prog.done} / ${prog.total} 완료`;
+
+  // 국어 시험지 있는 날 표시
+  const hasKorean = !!KOREAN_TEST_SCHEDULE[todayKey];
+  const koreanMark = hasKorean ? ` <span style="color:#c9838a;font-size:.65rem;">📖${KOREAN_TEST_SCHEDULE[todayKey]}회</span>` : '';
+  document.getElementById('daily-widget-label').innerHTML = `오늘 데일리 체크${koreanMark}`;
+
+  document.getElementById('daily-widget-mood').textContent = state.mood || '';
+  widget.classList.toggle('complete', prog.pct >= 1);
+}
+
 function openDailyModal() {
   currentDailyDate = new Date();
   renderDailyModal();
@@ -8016,7 +8395,7 @@ function setMood(mood) {
     if (typeof playMagic === 'function') playMagic('know');
   }
   renderDailyState();
-  if (document.getElementById('calendar-view').style.display === 'block') renderCalendar();
+  updateDailyWidget(); if (document.getElementById('calendar-view').style.display === 'block') renderCalendar();
 }
 
 function setSleepQuality(q) {
@@ -8041,7 +8420,7 @@ function saveDailyState() {
   const note = document.getElementById('daily-note').value.trim();
   setStateForDate(dateKey, 'sleepHours', hours);
   setStateForDate(dateKey, 'note', note);
-  if (document.getElementById('calendar-view').style.display === 'block') renderCalendar();
+  updateDailyWidget(); if (document.getElementById('calendar-view').style.display === 'block') renderCalendar();
 }
 
 function toggleDailyState(key) {
@@ -8054,7 +8433,7 @@ function toggleDailyState(key) {
     setStateForDate(dateKey, 'period', true);
   }
   renderDailyState();
-  if (document.getElementById('calendar-view').style.display === 'block') renderCalendar();
+  updateDailyWidget(); if (document.getElementById('calendar-view').style.display === 'block') renderCalendar();
 }
 
 // 생리 주기 계산 (가장 최근 시작일로부터 며칠째인지)
@@ -8095,6 +8474,35 @@ function getPeriodCycleInfo(date) {
 function renderDailyState() {
   const dateKey = getDailyKey(currentDailyDate);
   const state = getStateForDate(dateKey);
+
+  // 일진 정보 표시
+  const sajuSection = document.getElementById('daily-saju-section');
+  if (sajuSection) {
+    const saju = loadSaju();
+    if (saju && saju.birthDate) {
+      sajuSection.style.display = 'block';
+      const info = getDayInfo(currentDailyDate);
+      const pill = document.getElementById('daily-saju-pill');
+      pill.textContent = `${info.label}`;
+      pill.className = `daily-saju-pill ${info.element}-bg ${info.element}`;
+      document.getElementById('daily-saju-label').textContent = `${info.elementName}의 날`;
+      document.getElementById('daily-saju-relation').textContent =
+        info.relation ? `${info.relation === '일진 = 본인 일주' ? '⭐' : ''}${info.relation}` : '';
+      document.getElementById('daily-saju-summary').textContent = info.elementDesc;
+      // 자세히
+      let detail = `<strong>${info.label}</strong> (${info.hanja})<br>`;
+      detail += `오행: <strong class="${info.element}">${info.elementName}</strong> · 동물: ${info.animal}<br>`;
+      detail += `${info.elementDesc}<br>`;
+      if (info.relation) {
+        detail += `<br><strong>본인 일주와의 관계:</strong> ${info.relation}<br>${info.relationDesc}`;
+      }
+      document.getElementById('daily-saju-detail').innerHTML = detail;
+      // 닫혀있는 상태로 시작
+      sajuSection.classList.remove('expanded');
+    } else {
+      sajuSection.style.display = 'none';
+    }
+  }
 
   // 컨디션 이모지
   document.querySelectorAll('.mood-btn').forEach(btn => {
@@ -8275,6 +8683,7 @@ function toggleDailyCheck(dateKey, itemKey, e) {
   }
 
   renderDailyModal();
+  updateDailyWidget();
   // 캘린더가 열려있으면 갱신
   if (document.getElementById('calendar-view').style.display === 'block') {
     renderCalendar();
@@ -8297,6 +8706,288 @@ function getDailyProgress(date) {
     }
   });
   return { done, total: items.length, pct: done / items.length };
+}
+
+// ═══════════════════ SAJU SYSTEM (사주·일진) ═══════════════════
+// 천간 10개
+const STEMS = ['갑','을','병','정','무','기','경','신','임','계'];
+const STEM_HANJA = ['甲','乙','丙','丁','戊','己','庚','辛','壬','癸'];
+// 오행 (천간별)
+const STEM_ELEMENT = ['wood','wood','fire','fire','earth','earth','metal','metal','water','water'];
+// 음양 (천간별)
+const STEM_YINYANG = ['양','음','양','음','양','음','양','음','양','음'];
+
+// 지지 12개
+const BRANCHES = ['자','축','인','묘','진','사','오','미','신','유','술','해'];
+const BRANCH_HANJA = ['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
+// 오행 (지지별)
+const BRANCH_ELEMENT = ['water','earth','wood','wood','earth','fire','fire','earth','metal','metal','earth','water'];
+const BRANCH_ANIMAL = ['쥐','소','호랑이','토끼','용','뱀','말','양','원숭이','닭','개','돼지'];
+const BRANCH_HOUR = ['23-1시','1-3시','3-5시','5-7시','7-9시','9-11시','11-13시','13-15시','15-17시','17-19시','19-21시','21-23시'];
+
+// 60갑자 계산 (천간 × 지지 = 60주기)
+// 기준일: 1900년 1월 31일 = 갑진일 (인덱스 40 → 갑자 기준 40번째)
+// 더 정확한 검증된 기준: 2000년 1월 7일 = 갑자일
+const REF_DATE = new Date(2000, 0, 7); // 갑자일
+function getDayPillar(date) {
+  const d = new Date(date);
+  d.setHours(12, 0, 0, 0);
+  const ref = new Date(REF_DATE);
+  ref.setHours(12, 0, 0, 0);
+  const diffDays = Math.round((d - ref) / (1000*60*60*24));
+  let idx = ((diffDays % 60) + 60) % 60;
+  return {
+    stem: idx % 10,
+    branch: idx % 12,
+    sixtyIdx: idx
+  };
+}
+
+// 연주: 입춘 기준 (간단 버전 - 입춘 ≈ 2/4)
+function getYearPillar(date) {
+  let year = date.getFullYear();
+  // 2/4 이전이면 전 년도로
+  if (date.getMonth() === 0 || (date.getMonth() === 1 && date.getDate() < 4)) {
+    year--;
+  }
+  // 1984년 = 갑자년 기준
+  const offset = ((year - 1984) % 60 + 60) % 60;
+  return {
+    stem: offset % 10,
+    branch: offset % 12,
+    sixtyIdx: offset
+  };
+}
+
+// 시주: 일주의 천간으로 시주 천간 결정
+function getHourPillar(dayStem, hourBranchIdx) {
+  // 갑·기일 → 갑자시 시작 / 을·경 → 병자시 / 병·신 → 무자시 / 정·임 → 경자시 / 무·계 → 임자시
+  const startStems = [0, 2, 4, 6, 8]; // 갑/을/병/정/무 일별 자시 천간
+  const startStem = startStems[dayStem % 5];
+  const stem = (startStem + hourBranchIdx) % 10;
+  return { stem, branch: hourBranchIdx };
+}
+
+// 천간끼리의 합·충
+const STEM_HARMONY = { 0:5, 5:0, 1:6, 6:1, 2:7, 7:2, 3:8, 8:3, 4:9, 9:4 };  // 갑기, 을경, 병신, 정임, 무계
+const STEM_CLASH = { 0:6, 6:0, 1:7, 7:1, 2:8, 8:2, 3:9, 9:3 }; // 갑경충, 을신충 등 (무기는 충 없음)
+
+// 지지끼리의 합·충
+const BRANCH_HARMONY = { 0:1, 1:0, 2:11, 11:2, 3:10, 10:3, 4:9, 9:4, 5:8, 8:5, 6:7, 7:6 }; // 자축, 인해, 묘술, 진유, 사신, 오미
+const BRANCH_CLASH = { 0:6, 6:0, 1:7, 7:1, 2:8, 8:2, 3:9, 9:3, 4:10, 10:4, 5:11, 11:5 }; // 자오, 축미, 인신, 묘유, 진술, 사해
+
+// 십신 계산 (일간 기준 vs 다른 천간)
+function getTenGod(dayStem, otherStem) {
+  const dayYY = dayStem % 2; // 0=양, 1=음
+  const otherYY = otherStem % 2;
+  const dayEl = Math.floor(dayStem / 2);   // 0=목 1=화 2=토 3=금 4=수
+  const otherEl = Math.floor(otherStem / 2);
+  const sameYY = dayYY === otherYY;
+  const diff = (otherEl - dayEl + 5) % 5;
+  // diff: 0=비겁, 1=식상, 2=재성, 3=관성, 4=인성
+  const groups = [
+    sameYY ? '비견' : '겁재',     // 0
+    sameYY ? '식신' : '상관',     // 1
+    sameYY ? '편재' : '정재',     // 2
+    sameYY ? '편관' : '정관',     // 3
+    sameYY ? '편인' : '정인',     // 4
+  ];
+  return groups[diff];
+}
+
+// 사주 저장/로드
+function loadSaju() {
+  try { return JSON.parse(localStorage.getItem('sajuInfo') || 'null'); } catch { return null; }
+}
+function saveSajuData(data) {
+  localStorage.setItem('sajuInfo', JSON.stringify(data));
+}
+
+function calculateSaju(birthDate, hourIdx) {
+  const date = new Date(birthDate);
+  const yp = getYearPillar(date);
+  const dp = getDayPillar(date);
+  // 월주는 절기 기반이라 정확도 낮음 → 간단히 월별 매핑 (실용 목적)
+  // 입춘부터 인월(2)→묘(3)→진(4)... 시작
+  let monthBranch = (date.getMonth() + 2) % 12; // 1월=축, 2월=인 (대략)
+  if (date.getDate() < 6) monthBranch = (monthBranch + 11) % 12; // 절기 전이면 전월
+  // 월간: 연간으로 결정 (두두법)
+  const yearStartMonthStems = [2, 4, 6, 8, 0]; // 갑/을/병/정/무 연도별 인월 천간
+  const monthStem = (yearStartMonthStems[yp.stem % 5] + ((monthBranch - 2 + 12) % 12)) % 10;
+  const mp = { stem: monthStem, branch: monthBranch };
+
+  let hp = null;
+  if (hourIdx !== null && hourIdx !== undefined && hourIdx !== '') {
+    hp = getHourPillar(dp.stem, parseInt(hourIdx));
+  }
+  return { year: yp, month: mp, day: dp, hour: hp };
+}
+
+function openSajuModal() {
+  document.getElementById('saju-modal-overlay').classList.add('open');
+  const saju = loadSaju();
+  if (saju && saju.birthDate) {
+    document.getElementById('saju-birth-date').value = saju.birthDate;
+    document.getElementById('saju-birth-hour').value = saju.hourIdx ?? '';
+    renderSajuResult(saju);
+  }
+}
+
+function closeSajuModal(e) {
+  if (!e || e.target === document.getElementById('saju-modal-overlay')) {
+    document.getElementById('saju-modal-overlay').classList.remove('open');
+  }
+}
+
+function toggleSajuDetail(el) {
+  el.classList.toggle('expanded');
+}
+
+function saveSaju() {
+  const birthDate = document.getElementById('saju-birth-date').value;
+  const hourIdx = document.getElementById('saju-birth-hour').value;
+  if (!birthDate) { alert('생년월일을 입력해주세요'); return; }
+  const data = { birthDate, hourIdx };
+  saveSajuData(data);
+  renderSajuResult(data);
+  if (typeof playMagic === 'function') playMagic('know');
+  // 캘린더·데일리도 갱신
+  if (document.getElementById('calendar-view').style.display === 'block') renderCalendar();
+}
+
+function renderSajuResult(data) {
+  const result = document.getElementById('saju-result');
+  if (!data || !data.birthDate) { result.style.display = 'none'; return; }
+  result.style.display = 'block';
+
+  const saju = calculateSaju(data.birthDate, data.hourIdx);
+  const pillars = [
+    { label: '연주', p: saju.year },
+    { label: '월주', p: saju.month },
+    { label: '일주', p: saju.day },
+    { label: '시주', p: saju.hour }
+  ];
+
+  let html = '';
+  pillars.forEach(({label, p}) => {
+    if (!p) {
+      html += `<div class="saju-pillar"><div class="saju-pillar-label">${label}</div><div style="font-size:.7rem;color:var(--muted);">미상</div></div>`;
+      return;
+    }
+    const stemEl = STEM_ELEMENT[p.stem];
+    const branchEl = BRANCH_ELEMENT[p.branch];
+    html += `
+      <div class="saju-pillar">
+        <div class="saju-pillar-label">${label}</div>
+        <div class="saju-pillar-stem ${stemEl}">${STEMS[p.stem]}<span style="font-size:.65rem;color:var(--muted);">(${STEM_HANJA[p.stem]})</span></div>
+        <div class="saju-pillar-branch ${branchEl}">${BRANCHES[p.branch]}<span style="font-size:.65rem;color:var(--muted);">(${BRANCH_HANJA[p.branch]})</span></div>
+      </div>`;
+  });
+  document.getElementById('saju-pillars').innerHTML = html;
+
+  // 일간 해석
+  const dayStem = saju.day.stem;
+  const dayBranch = saju.day.branch;
+  const dayEl = STEM_ELEMENT[dayStem];
+  const elementName = { wood:'목(木)', fire:'화(火)', earth:'토(土)', metal:'금(金)', water:'수(水)' };
+  const elementDesc = {
+    wood: '성장·시작·뻗어나가는 기운. 새로운 도전을 좋아하고 추진력 있음',
+    fire: '열정·표현·확산의 기운. 밝고 사교적이며 감정 표현이 풍부함',
+    earth: '안정·중재·신뢰의 기운. 차분하고 책임감 있으며 끈기 있음',
+    metal: '결단·정의·정리의 기운. 원칙적이고 분별력 있으며 추진력 강함',
+    water: '지혜·유연·흐름의 기운. 깊이 생각하고 적응력 좋으며 직관적'
+  };
+  const yyStr = STEM_YINYANG[dayStem];
+  const animalName = BRANCH_ANIMAL[dayBranch];
+
+  let summary = `<strong>일주: ${STEMS[dayStem]}${BRANCHES[dayBranch]}</strong> (${STEM_HANJA[dayStem]}${BRANCH_HANJA[dayBranch]})<br>`;
+  summary += `너의 본질(일간) = <strong>${yyStr}${elementName[dayEl]}</strong><br>`;
+  summary += `→ ${elementDesc[dayEl]}<br><br>`;
+  summary += `타고난 성향: <strong>${animalName}띠 일주</strong>의 기질을 일상에서 가장 강하게 띠고 있어.`;
+  document.getElementById('saju-summary').innerHTML = summary;
+}
+
+// 그날의 일진 정보 + 본인 사주와의 관계
+function getDayInfo(date) {
+  const dp = getDayPillar(date);
+  const saju = loadSaju();
+  const myDay = saju && saju.birthDate ? getDayPillar(new Date(saju.birthDate)) : null;
+
+  const stemEl = STEM_ELEMENT[dp.stem];
+  const branchEl = BRANCH_ELEMENT[dp.branch];
+  const stemName = STEMS[dp.stem];
+  const branchName = BRANCHES[dp.branch];
+  const elName = { wood:'목', fire:'화', earth:'토', metal:'금', water:'수' };
+
+  // 관계 판정
+  let relation = null, relationDesc = '', relationType = 'normal';
+  if (myDay) {
+    if (dp.stem === myDay.stem && dp.branch === myDay.branch) {
+      relation = '일진 = 본인 일주'; relationType = 'same';
+      relationDesc = '본인 기운이 가장 강한 날. 자기 본연의 모습 그대로 행동하면 잘 풀려.';
+    } else if (STEM_HARMONY[dp.stem] === myDay.stem) {
+      relation = '천간 합'; relationType = 'good';
+      relationDesc = '사람·기회와 잘 맞춰지는 날. 협업·만남·계약에 유리.';
+    } else if (STEM_CLASH[dp.stem] === myDay.stem) {
+      relation = '천간 충'; relationType = 'caution';
+      relationDesc = '의지와 외부 압력이 부딪히는 날. 결정 미루고 차분히.';
+    } else if (BRANCH_HARMONY[dp.branch] === myDay.branch) {
+      relation = '지지 합'; relationType = 'good';
+      relationDesc = '환경·관계가 자연스럽게 도와주는 날. 사람 만나기 좋음.';
+    } else if (BRANCH_CLASH[dp.branch] === myDay.branch) {
+      relation = '지지 충'; relationType = 'caution';
+      relationDesc = '변동·움직임 큰 날. 컨디션 기복 가능. 무리한 일정 피하기.';
+    } else if (dp.stem === myDay.stem) {
+      relation = '비겁(천간 같음)'; relationType = 'good';
+      relationDesc = '자기 페이스대로 갈 수 있는 날. 독립적인 일에 유리.';
+    } else {
+      const tg = getTenGod(myDay.stem, dp.stem);
+      relation = `${tg}(${stemName}일)`;
+      relationDesc = getTenGodDesc(tg);
+    }
+  }
+
+  // 오행 한 줄 평
+  const elDayDesc = {
+    wood: '시작·성장의 기운. 새 일 시작, 공부, 계획 짜기 좋음',
+    fire: '열정·표현의 기운. 발표·소통·창작에 유리',
+    earth: '안정·정리의 기운. 정리·복습·차분한 일 잘 됨',
+    metal: '결단·집중의 기운. 마무리·결정·정리에 강함',
+    water: '지혜·휴식의 기운. 사색·계획·휴식에 좋음'
+  };
+
+  return {
+    pillar: dp,
+    stemName, branchName,
+    stemEl, branchEl,
+    stemKor: STEMS[dp.stem],
+    branchKor: BRANCHES[dp.branch],
+    label: `${stemName}${branchName}일`,
+    hanja: `${STEM_HANJA[dp.stem]}${BRANCH_HANJA[dp.branch]}`,
+    element: stemEl,
+    elementName: elName[stemEl],
+    elementDesc: elDayDesc[stemEl],
+    relation,
+    relationDesc,
+    relationType,
+    animal: BRANCH_ANIMAL[dp.branch]
+  };
+}
+
+function getTenGodDesc(tg) {
+  const map = {
+    '비견': '경쟁·동료·자기 페이스의 날. 협업도 OK',
+    '겁재': '에너지 분산되기 쉬움. 지출·과로 조심',
+    '식신': '여유·표현 좋은 날. 즐기는 활동 OK',
+    '상관': '창의력 ↑, 말 조심. 표현 적극적인 날',
+    '편재': '활동량·기회 ↑. 외부 활동 좋음',
+    '정재': '꾸준한 노력의 보람. 정리·계획 잘 됨',
+    '편관': '압박감·도전. 결단력 발휘하는 날',
+    '정관': '책임감·규칙적인 일. 공부·업무 집중',
+    '편인': '직관·통찰. 혼자 생각하는 시간 좋음',
+    '정인': '학습·정리·돌봄받는 기운. 공부에 최적'
+  };
+  return map[tg] || '평이한 날';
 }
 
 // ═══════════════════ TIER SYSTEM ═══════════════════
@@ -8472,6 +9163,7 @@ updateGachaBtn();
 updateSubtitleWithTitle();
 initBoss();
 initMemo();
+updateDailyWidget();
 // Safari 음성 목록 미리 워밍업
 if (window.speechSynthesis) {
   window.speechSynthesis.getVoices();
