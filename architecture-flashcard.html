@@ -2303,6 +2303,17 @@ body::before {
   margin-bottom: 16px;
 }
 .boss-battle-sprite { font-size: 2rem; }
+@keyframes bossShake {
+  0%,100% { transform: translateX(0) translateY(0); }
+  10% { transform: translateX(-8px) translateY(-2px); }
+  20% { transform: translateX(8px) translateY(2px); }
+  30% { transform: translateX(-6px) translateY(-1px); }
+  40% { transform: translateX(6px) translateY(1px); }
+  50% { transform: translateX(-4px); }
+  60% { transform: translateX(4px); }
+  70% { transform: translateX(-2px); }
+  80% { transform: translateX(2px); }
+}
 .boss-battle-hp-wrap { flex:1; }
 .boss-battle-hp-bar {
   height: 8px; border-radius: 8px;
@@ -6065,6 +6076,171 @@ function playMagic(type) {
 const FLOATY_EMOJIS = ['⭐','🌟','✨','💫','🎯','🔥','💥','🎉','🌈','🍀','🦋','🌸','🎈','💎','🪄','🐣','🐥','🍭','🫧','🌙'];
 let floatyCount = 0;
 
+// ═══════════════════ 포켓몬 스타일 보스 배틀 BGM/SFX ═══════════════════
+let bossBgmInterval = null;
+let bossBgmStep = 0;
+
+// 포켓몬 RBY 야생전투 BGM 메인 멜로디 (단순화 버전)
+// [주파수, 박자] - 박자는 0.15초 단위
+const BOSS_BGM_MELODY = [
+  // 인트로 두두둥
+  [659, 1], [784, 1], [1047, 2], [988, 1], [1047, 1], [988, 2],
+  // 메인 라인
+  [880, 1], [988, 1], [1047, 1], [988, 1], [880, 1], [784, 1], [659, 2],
+  [659, 1], [784, 1], [880, 1], [784, 1], [659, 1], [587, 1], [523, 2],
+  [659, 1], [784, 1], [988, 1], [1047, 1], [1175, 1], [1047, 1], [988, 2],
+  [880, 1], [784, 1], [659, 1], [587, 1], [523, 2], [0, 2],
+];
+// 베이스 라인 (저음 두두둥)
+const BOSS_BGM_BASS = [
+  [165, 4], [196, 4], [220, 4], [196, 4],
+  [165, 4], [147, 4], [131, 4], [165, 4],
+];
+
+function playBossNote(freq, duration, type='square', vol=0.05) {
+  if (freq === 0 || soundTheme === 'off') return;
+  const ctx = audioCtx;
+  if (ctx.state === 'suspended') ctx.resume();
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = type;
+  osc.frequency.setValueAtTime(freq, now);
+  gain.gain.setValueAtTime(0, now);
+  gain.gain.linearRampToValueAtTime(vol * globalVolume, now + 0.01);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+  osc.connect(gain); gain.connect(ctx.destination);
+  osc.start(now); osc.stop(now + duration);
+}
+
+function startBossBgm() {
+  if (bossBgmInterval) return;
+  if (soundTheme === 'off') return;
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+
+  bossBgmStep = 0;
+  let melodyIdx = 0, melodyTimer = 0;
+  let bassIdx = 0, bassTimer = 0;
+
+  const TICK = 150; // ms (0.15초)
+
+  bossBgmInterval = setInterval(() => {
+    // 메인 멜로디
+    if (melodyTimer <= 0) {
+      const note = BOSS_BGM_MELODY[melodyIdx];
+      if (note) {
+        playBossNote(note[0], note[1] * 0.14, 'square', 0.04);
+        melodyTimer = note[1];
+      }
+      melodyIdx = (melodyIdx + 1) % BOSS_BGM_MELODY.length;
+    }
+    melodyTimer--;
+
+    // 베이스 라인 (8비트 두두둥)
+    if (bassTimer <= 0) {
+      const bass = BOSS_BGM_BASS[bassIdx];
+      if (bass) {
+        playBossNote(bass[0], 0.13, 'triangle', 0.06);
+        bassTimer = 1;
+      }
+      // 베이스는 매 박자마다 두번 (두두둥 효과)
+      bassIdx = (bassIdx + 1) % (BOSS_BGM_BASS.length * 4);
+    }
+    bassTimer--;
+  }, TICK);
+}
+
+function stopBossBgm() {
+  if (bossBgmInterval) {
+    clearInterval(bossBgmInterval);
+    bossBgmInterval = null;
+  }
+}
+
+// 공격음 (적이 맞을 때 - 포켓몬 "타격" 효과)
+function playBossHit() {
+  if (soundTheme === 'off') return;
+  const ctx = audioCtx;
+  if (ctx.state === 'suspended') ctx.resume();
+  const now = ctx.currentTime;
+  // 노이즈 버스트 (퍽!)
+  const bufSize = ctx.sampleRate * 0.15;
+  const buf = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+  const data = buf.getChannelData(0);
+  for (let i = 0; i < bufSize; i++) {
+    data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i/bufSize, 2);
+  }
+  const noise = ctx.createBufferSource();
+  noise.buffer = buf;
+  const gain = ctx.createGain();
+  gain.gain.setValueAtTime(0.15 * globalVolume, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+  // 저주파 필터로 묵직하게
+  const filter = ctx.createBiquadFilter();
+  filter.type = 'lowpass';
+  filter.frequency.value = 800;
+  noise.connect(filter); filter.connect(gain); gain.connect(ctx.destination);
+  noise.start(now); noise.stop(now + 0.15);
+
+  // 동시에 하강 톤 (퓨우우웅)
+  const osc = ctx.createOscillator();
+  const oscGain = ctx.createGain();
+  osc.type = 'sawtooth';
+  osc.frequency.setValueAtTime(400, now);
+  osc.frequency.exponentialRampToValueAtTime(80, now + 0.15);
+  oscGain.gain.setValueAtTime(0.08 * globalVolume, now);
+  oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+  osc.connect(oscGain); oscGain.connect(ctx.destination);
+  osc.start(now); osc.stop(now + 0.15);
+}
+
+// 피해음 (내가 틀렸을 때 - 슬픈 하강음)
+function playBossDamage() {
+  if (soundTheme === 'off') return;
+  const ctx = audioCtx;
+  if (ctx.state === 'suspended') ctx.resume();
+  const now = ctx.currentTime;
+  // 디스코드 음 (삐릭삐릭 하강)
+  [659, 523, 440, 330].forEach((f, i) => {
+    setTimeout(() => {
+      playBossNote(f, 0.12, 'square', 0.06);
+    }, i * 80);
+  });
+}
+
+// 승리 팡파르 (포켓몬 승리 BGM 시작 부분)
+function playBossVictory() {
+  if (soundTheme === 'off') return;
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  // 도-도-도-미-도-미- (승리 트럼펫)
+  const notes = [
+    [523, 0.12, 0], [523, 0.12, 130], [523, 0.12, 260],
+    [659, 0.4, 390], [523, 0.12, 800], [659, 0.4, 930],
+    [784, 0.6, 1380]
+  ];
+  notes.forEach(([f, d, t]) => {
+    setTimeout(() => playBossNote(f, d, 'square', 0.07), t);
+  });
+}
+
+// 패배 음 (포켓몬 기절 효과)
+function playBossDefeat() {
+  if (soundTheme === 'off') return;
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  // 하강 글리산도
+  const ctx = audioCtx;
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'sawtooth';
+  osc.frequency.setValueAtTime(440, now);
+  osc.frequency.exponentialRampToValueAtTime(55, now + 1.0);
+  gain.gain.setValueAtTime(0.1 * globalVolume, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 1.0);
+  osc.connect(gain); gain.connect(ctx.destination);
+  osc.start(now); osc.stop(now + 1.0);
+}
+
 function spawnFloaty() {
   const field = document.getElementById('floaty-field');
   const emoji = FLOATY_EMOJIS[Math.floor(Math.random() * FLOATY_EMOJIS.length)];
@@ -6517,6 +6693,7 @@ function startBossBattle() {
   document.getElementById('boss-battle-screen').style.display = 'flex';
   document.getElementById('boss-battle-screen').style.flexDirection = 'column';
   document.getElementById('boss-battle-sprite').textContent = bossSession.boss.sprite;
+  startBossBgm();
   renderBossQuestion();
 }
 
@@ -6536,13 +6713,17 @@ function renderBossQuestion() {
   const ansWrap = document.getElementById('boss-answer-wrap');
 
   if (q.type === 'cloze') {
-    // cloze: 문제 + 정답 전체 보여주고 O/X 자기판단
+    // cloze: 문제만 먼저 보여주고, 답 보기 버튼으로 공개 → O/X 자가판단
     const qText = q.q.replace(/___/g, '　　　').replace(/\|/g, ' / ');
     const aText = q.a.split('|').map((a,i) => `${i+1}. ${a.trim()}`).join('\n');
     document.getElementById('boss-question').innerHTML =
       `<div style="margin-bottom:10px;">${esc(qText)}</div>
-       <div style="border-top:1px solid rgba(255,255,255,0.1);padding-top:10px;font-size:.78rem;color:rgba(255,255,255,0.5);">정답</div>
-       <div style="color:#b8e0d4;font-size:.82rem;line-height:1.8;">${esc(aText)}</div>`;
+       <div id="boss-answer-reveal-area" style="border-top:1px solid rgba(255,255,255,0.1);padding-top:10px;">
+         <button id="boss-reveal-btn" onclick="revealBossAnswer('${esc(aText).replace(/'/g, "\\'").replace(/\n/g, '\\n')}')" 
+           style="width:100%;padding:10px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.2);border-radius:8px;color:rgba(255,255,255,0.7);font-family:inherit;font-size:.82rem;cursor:pointer;">
+           👀 답 보기
+         </button>
+       </div>`;
     ansWrap.innerHTML = `
       <div style="font-size:.72rem;color:rgba(255,255,255,0.4);text-align:center;margin-bottom:6px;">맞혔나요?</div>
       <div style="display:flex;gap:8px;">
@@ -6593,12 +6774,30 @@ function renderBossQuestion() {
   }
 }
 
+function revealBossAnswer(aText) {
+  const area = document.getElementById('boss-answer-reveal-area');
+  if (!area) return;
+  // \n을 실제 줄바꿈으로 변환
+  const decoded = aText.replace(/\\n/g, '\n');
+  area.innerHTML = `
+    <div style="font-size:.78rem;color:rgba(255,255,255,0.5);margin-bottom:6px;">정답</div>
+    <div style="color:#b8e0d4;font-size:.82rem;line-height:1.8;white-space:pre-line;">${decoded}</div>`;
+}
+
 function answerBossOX(correct) {
   if (bossSession.answered) return;
   bossSession.answered = true;
   document.querySelectorAll('.boss-ans-btn').forEach(b => b.disabled = true);
 
   if (correct) {
+    playBossHit();
+    // 보스 스프라이트 흔들기
+    const sprite = document.getElementById('boss-battle-sprite');
+    if (sprite) {
+      sprite.style.animation = 'none';
+      void sprite.offsetWidth;
+      sprite.style.animation = 'bossShake 0.4s ease';
+    }
     bossSession.hp--;
     const hpPct = (bossSession.hp / BOSS_QUESTIONS) * 100;
     document.getElementById('boss-battle-hp-fill').style.width = hpPct + '%';
@@ -6606,6 +6805,7 @@ function answerBossOX(correct) {
     if (bossSession.hp <= 0) { setTimeout(() => endBossBattle(true), 500); return; }
     document.getElementById('boss-next-btn').style.display = 'block';
   } else {
+    playBossDamage();
     setTimeout(() => endBossBattle(false), 800);
   }
 }
@@ -6617,6 +6817,13 @@ function answerBoss(btn, correct, chosen) {
 
   if (chosen === correct) {
     btn.classList.add('correct');
+    playBossHit();
+    const sprite = document.getElementById('boss-battle-sprite');
+    if (sprite) {
+      sprite.style.animation = 'none';
+      void sprite.offsetWidth;
+      sprite.style.animation = 'bossShake 0.4s ease';
+    }
     bossSession.hp--;
     const hpPct = (bossSession.hp / BOSS_QUESTIONS) * 100;
     document.getElementById('boss-battle-hp-fill').style.width = hpPct + '%';
@@ -6624,6 +6831,7 @@ function answerBoss(btn, correct, chosen) {
     if (bossSession.hp <= 0) { setTimeout(() => endBossBattle(true), 700); return; }
   } else {
     btn.classList.add('wrong');
+    playBossDamage();
     document.querySelectorAll('.boss-ans-btn').forEach(b => {
       if (b.textContent.trim() === correct) b.classList.add('correct');
     });
@@ -6643,11 +6851,13 @@ function nextBossQuestion() {
 }
 
 function endBossBattle(win) {
+  stopBossBgm();
   document.getElementById('boss-battle-screen').style.display = 'none';
   document.getElementById('boss-result-screen').style.display = 'flex';
   document.getElementById('boss-result-screen').style.flexDirection = 'column';
 
   if (win) {
+    playBossVictory();
     document.getElementById('boss-result-icon').textContent = '🎉';
     document.getElementById('boss-result-title').textContent = '승리!';
     document.getElementById('boss-result-title').className = 'boss-result-title win';
@@ -6660,6 +6870,7 @@ function endBossBattle(win) {
     document.querySelector('.boss-result-btn').textContent = '확인';
     document.querySelector('.boss-result-btn').onclick = closeBossModal;
   } else {
+    playBossDefeat();
     document.getElementById('boss-result-icon').textContent = '💀';
     document.getElementById('boss-result-title').textContent = '패배...';
     document.getElementById('boss-result-title').className = 'boss-result-title lose';
@@ -6672,6 +6883,7 @@ function endBossBattle(win) {
 }
 
 function closeBossModal() {
+  stopBossBgm();
   document.getElementById('boss-modal-overlay').classList.remove('open');
 }
 
