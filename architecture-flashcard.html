@@ -980,6 +980,36 @@ header{
   -webkit-text-fill-color: transparent;
 }
 
+/* 캘린더 네비 (이전/오늘/다음) */
+.cal-nav {
+  display: flex; gap: 8px; justify-content: center;
+  margin-bottom: 14px;
+}
+.cal-nav-btn {
+  padding: 7px 14px;
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  font-size: .8rem;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.cal-nav-btn:hover {
+  border-color: var(--rose);
+  background: rgba(247,202,201,0.1);
+}
+.cal-today-btn {
+  background: linear-gradient(135deg, rgba(247,202,201,0.3), rgba(184,224,212,0.3));
+}
+.cal-today-btn.active {
+  background: linear-gradient(135deg, #f7cac9, #c9838a);
+  color: white;
+  border-color: #c9838a;
+}
+
 /* ── STATS ── */
 .stats-section{margin-bottom:22px;position:relative;z-index:1;}
 .stats-section-title{
@@ -3484,22 +3514,9 @@ body::before {
     </div>
 
     <div class="saju-input-row">
-      <label class="saju-label">태어난 시간 (선택)</label>
-      <select id="saju-birth-hour" class="saju-input">
-        <option value="">시간 모름</option>
-        <option value="0">자시 (23:00~01:00)</option>
-        <option value="2">축시 (01:00~03:00)</option>
-        <option value="4">인시 (03:00~05:00)</option>
-        <option value="6">묘시 (05:00~07:00)</option>
-        <option value="8">진시 (07:00~09:00)</option>
-        <option value="10">사시 (09:00~11:00)</option>
-        <option value="12">오시 (11:00~13:00)</option>
-        <option value="14">미시 (13:00~15:00)</option>
-        <option value="16">신시 (15:00~17:00)</option>
-        <option value="18">유시 (17:00~19:00)</option>
-        <option value="20">술시 (19:00~21:00)</option>
-        <option value="22">해시 (21:00~23:00)</option>
-      </select>
+      <label class="saju-label">태어난 시간 (선택, 30분 단위)</label>
+      <input type="time" id="saju-birth-hour" class="saju-input" step="1800">
+      <div style="font-size:.62rem;color:var(--muted);margin-top:4px;">시간을 모르면 비워두세요. 정확할수록 시주(時柱) 해석이 정밀해집니다.</div>
     </div>
 
     <button class="saju-save-btn" onclick="saveSaju()">💾 저장</button>
@@ -6248,10 +6265,30 @@ function getStampData() {
   }
   return data;
 }
+// 캘린더 보기 중인 달 (전역, 처음엔 이번 달)
+let calViewDate = null;
+
+function calPrevMonth() {
+  if (!calViewDate) calViewDate = new Date();
+  calViewDate = new Date(calViewDate.getFullYear(), calViewDate.getMonth() - 1, 1);
+  renderCalendar();
+}
+function calNextMonth() {
+  if (!calViewDate) calViewDate = new Date();
+  calViewDate = new Date(calViewDate.getFullYear(), calViewDate.getMonth() + 1, 1);
+  renderCalendar();
+}
+function calToday() {
+  calViewDate = new Date();
+  renderCalendar();
+}
+
 function renderCalendar() {
   const stampData = getStampData();
   const today = new Date();
   const todayStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+
+  if (!calViewDate) calViewDate = new Date();
 
   let streak = 0;
   const d = new Date(today);
@@ -6262,10 +6299,20 @@ function renderCalendar() {
   }
 
   let html = `<div class="cal-streak">🔥 연속 출석 <b>${streak}</b>일 · 총 <b>${Object.keys(stampData).length}</b>일 학습</div>`;
+
+  // 네비게이션 버튼
+  const isCurrentMonth = (calViewDate.getFullYear() === today.getFullYear() && calViewDate.getMonth() === today.getMonth());
+  html += `<div class="cal-nav">
+    <button class="cal-nav-btn" onclick="calPrevMonth()">‹ 이전</button>
+    <button class="cal-nav-btn cal-today-btn ${isCurrentMonth ? 'active' : ''}" onclick="calToday()">오늘</button>
+    <button class="cal-nav-btn" onclick="calNextMonth()">다음 ›</button>
+  </div>`;
+
   const DOWS = ['일','월','화','수','목','금','토'];
 
-  for (let m = 5; m >= 0; m--) {
-    const base = new Date(today.getFullYear(), today.getMonth() - m, 1);
+  // 해당 달 1개만 렌더
+  {
+    const base = new Date(calViewDate.getFullYear(), calViewDate.getMonth(), 1);
     const year = base.getFullYear(), month = base.getMonth();
     const monthLabel = `${year}년 ${month+1}월`;
     const firstDow = base.getDay();
@@ -8784,6 +8831,24 @@ function getHourPillar(dayStem, hourBranchIdx) {
   return { stem, branch: hourBranchIdx };
 }
 
+// HH:MM 문자열 → 12지 시지 인덱스 (0=자, 1=축, ...)
+// 자시: 23:00~01:00 / 축시: 01:00~03:00 / ... / 해시: 21:00~23:00
+function timeToBranchIdx(timeStr) {
+  if (!timeStr) return null;
+  const [h, m] = timeStr.split(':').map(Number);
+  if (isNaN(h)) return null;
+  // 분 포함 총 분 단위
+  const totalMin = h * 60 + (m || 0);
+  // 23:00 ~ 01:00 = 자시 (인덱스 0)
+  if (totalMin >= 23*60 || totalMin < 60) return 0;
+  // 01:00 ~ 03:00 = 축시
+  // 시지 = floor((시간 - 1) / 2) + 1
+  return Math.floor((totalMin - 60) / 120) + 1;
+}
+
+// 야자시 보정: 23:00 이후 출생자는 일주(日柱)도 다음날 기준
+// 단순화 위해 적용 안 함 (조자시/야자시 학파 차이 있음)
+
 // 천간끼리의 합·충
 const STEM_HARMONY = { 0:5, 5:0, 1:6, 6:1, 2:7, 7:2, 3:8, 8:3, 4:9, 9:4 };  // 갑기, 을경, 병신, 정임, 무계
 const STEM_CLASH = { 0:6, 6:0, 1:7, 7:1, 2:8, 8:2, 3:9, 9:3 }; // 갑경충, 을신충 등 (무기는 충 없음)
@@ -8819,7 +8884,7 @@ function saveSajuData(data) {
   localStorage.setItem('sajuInfo', JSON.stringify(data));
 }
 
-function calculateSaju(birthDate, hourIdx) {
+function calculateSaju(birthDate, birthTime) {
   const date = new Date(birthDate);
   const yp = getYearPillar(date);
   const dp = getDayPillar(date);
@@ -8833,8 +8898,15 @@ function calculateSaju(birthDate, hourIdx) {
   const mp = { stem: monthStem, branch: monthBranch };
 
   let hp = null;
-  if (hourIdx !== null && hourIdx !== undefined && hourIdx !== '') {
-    hp = getHourPillar(dp.stem, parseInt(hourIdx));
+  let branchIdx = null;
+  if (typeof birthTime === 'string' && birthTime.includes(':')) {
+    branchIdx = timeToBranchIdx(birthTime);
+  } else if (birthTime !== null && birthTime !== undefined && birthTime !== '') {
+    // 옛 형식 hourIdx (정수) 호환
+    branchIdx = Math.floor(parseInt(birthTime) / 2);
+  }
+  if (branchIdx !== null) {
+    hp = getHourPillar(dp.stem, branchIdx);
   }
   return { year: yp, month: mp, day: dp, hour: hp };
 }
@@ -8844,7 +8916,15 @@ function openSajuModal() {
   const saju = loadSaju();
   if (saju && saju.birthDate) {
     document.getElementById('saju-birth-date').value = saju.birthDate;
-    document.getElementById('saju-birth-hour').value = saju.hourIdx ?? '';
+    // 새 형식 우선, 없으면 옛 hourIdx → 시간 추정
+    let timeVal = saju.birthTime || '';
+    if (!timeVal && saju.hourIdx !== undefined && saju.hourIdx !== null && saju.hourIdx !== '') {
+      // 옛 hourIdx (시간을 짝수로 저장)는 시지 시작 시각 추정
+      const hourMap = ['23:30', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00'];
+      const hi = parseInt(saju.hourIdx);
+      timeVal = hourMap[Math.floor(hi/2)] || '';
+    }
+    document.getElementById('saju-birth-hour').value = timeVal;
     renderSajuResult(saju);
   }
 }
@@ -8861,9 +8941,9 @@ function toggleSajuDetail(el) {
 
 function saveSaju() {
   const birthDate = document.getElementById('saju-birth-date').value;
-  const hourIdx = document.getElementById('saju-birth-hour').value;
+  const birthTime = document.getElementById('saju-birth-hour').value;
   if (!birthDate) { alert('생년월일을 입력해주세요'); return; }
-  const data = { birthDate, hourIdx };
+  const data = { birthDate, birthTime };
   saveSajuData(data);
   renderSajuResult(data);
   if (typeof playMagic === 'function') playMagic('know');
@@ -8876,7 +8956,7 @@ function renderSajuResult(data) {
   if (!data || !data.birthDate) { result.style.display = 'none'; return; }
   result.style.display = 'block';
 
-  const saju = calculateSaju(data.birthDate, data.hourIdx);
+  const saju = calculateSaju(data.birthDate, data.birthTime || data.hourIdx);
   const pillars = [
     { label: '연주', p: saju.year },
     { label: '월주', p: saju.month },
