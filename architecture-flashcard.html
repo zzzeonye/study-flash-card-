@@ -1868,6 +1868,285 @@ body::before {
 }
 .quest-item.just-done { animation: quest-complete .4s ease; }
 
+/* ═══ 데일리 체크 모달 ═══ */
+.daily-modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(30,0,50,.5); backdrop-filter: blur(6px);
+  z-index: 500; align-items: center; justify-content: center;
+}
+.daily-modal-overlay.open { display: flex; }
+.daily-modal {
+  background: var(--surface);
+  border-radius: 24px;
+  padding: 22px 18px;
+  width: 92%; max-width: 400px;
+  max-height: 85vh; overflow-y: auto;
+  border: 1.5px solid rgba(247,202,201,0.4);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+.daily-modal-header {
+  text-align: center; margin-bottom: 14px;
+}
+.daily-modal-title {
+  font-family: 'Pacifico', cursive;
+  font-size: 1.15rem;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+.daily-date-nav {
+  display: flex; align-items: center; justify-content: center;
+  gap: 12px;
+}
+.daily-nav-btn {
+  background: transparent; border: 1px solid var(--border);
+  border-radius: 10px; padding: 4px 12px;
+  color: var(--muted); cursor: pointer; font-size: .85rem;
+}
+.daily-current-date {
+  font-size: .9rem; color: var(--text);
+  font-weight: 600; min-width: 130px;
+}
+.daily-progress-bar {
+  width: 100%; height: 8px;
+  background: rgba(0,0,0,0.06);
+  border-radius: 4px; overflow: hidden;
+  margin-bottom: 4px;
+}
+.daily-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #b8e0d4, #82a898);
+  transition: width 0.3s;
+}
+.daily-progress-label {
+  text-align: center; font-size: .72rem;
+  color: var(--muted); margin-bottom: 14px;
+}
+.daily-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 11px 12px;
+  background: rgba(255,255,255,0.5);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.daily-item:hover {
+  background: rgba(255,255,255,0.8);
+  border-color: rgba(247,202,201,0.5);
+}
+.daily-item.done {
+  background: rgba(184,224,212,0.25);
+  border-color: rgba(130,168,152,0.4);
+  opacity: 0.7;
+}
+.daily-item.done .daily-item-label {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+.daily-checkbox {
+  width: 22px; height: 22px;
+  border: 2px solid var(--border);
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  background: white;
+  font-size: 0.95rem;
+  color: #82a898;
+  transition: all 0.2s;
+}
+.daily-item.done .daily-checkbox {
+  background: #82a898;
+  border-color: #82a898;
+  color: white;
+}
+.daily-item.overdue {
+  background: rgba(247,202,201,0.12);
+  border-color: rgba(201,131,138,0.3);
+}
+.daily-item.overdue:hover {
+  background: rgba(247,202,201,0.2);
+}
+.daily-item-label {
+  flex: 1; font-size: .85rem;
+  color: var(--text);
+}
+.daily-item-icon {
+  font-size: 1rem;
+}
+.daily-item-badge {
+  font-size: .65rem; color: var(--muted);
+  padding: 2px 6px;
+  background: rgba(0,0,0,0.04);
+  border-radius: 6px;
+}
+.daily-section-title {
+  font-size: .72rem; color: var(--muted);
+  font-weight: 600;
+  margin: 12px 0 6px;
+  padding-left: 4px;
+}
+.daily-modal-close {
+  width: 100%; padding: 10px; border-radius: 14px;
+  border: 1.5px solid rgba(247,202,201,0.4);
+  background: transparent; color: var(--muted);
+  font-size: .85rem; cursor: pointer;
+  margin-top: 10px;
+}
+@keyframes daily-check-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+.daily-checkbox.just-checked { animation: daily-check-pop .3s ease; }
+
+/* ═══ 데일리 상태 기록 ═══ */
+.daily-state-section {
+  background: rgba(255,252,254,0.5);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px 12px 10px;
+  margin-bottom: 14px;
+}
+.daily-state-title {
+  font-size: .72rem;
+  color: var(--muted);
+  font-weight: 600;
+  margin-bottom: 6px;
+  padding-left: 2px;
+}
+.daily-mood-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+.mood-btn {
+  flex: 1;
+  font-size: 1.4rem;
+  background: transparent;
+  border: 1.5px solid transparent;
+  border-radius: 10px;
+  padding: 4px 0;
+  cursor: pointer;
+  transition: all 0.2s;
+  opacity: 0.45;
+}
+.mood-btn:hover {
+  opacity: 0.8;
+  background: rgba(0,0,0,0.03);
+}
+.mood-btn.selected {
+  opacity: 1;
+  background: rgba(247,202,201,0.25);
+  border-color: rgba(247,202,201,0.5);
+  transform: scale(1.1);
+}
+.daily-state-grid {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.daily-state-cell {
+  flex: 1;
+  background: rgba(255,255,255,0.5);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 10px;
+}
+.daily-state-label {
+  font-size: .7rem;
+  color: var(--muted);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.daily-state-sub {
+  font-size: .65rem;
+  color: var(--muted);
+}
+.daily-sleep-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.daily-sleep-row input[type="range"] {
+  flex: 1;
+  accent-color: #82a898;
+}
+.daily-sleep-num {
+  font-size: .75rem;
+  color: var(--text);
+  font-weight: 600;
+  min-width: 50px;
+  text-align: right;
+}
+.daily-quality-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.daily-stars {
+  display: flex;
+  gap: 1px;
+}
+.daily-stars span {
+  font-size: 1rem;
+  cursor: pointer;
+  color: #ddd;
+  transition: color 0.15s;
+}
+.daily-stars span.active { color: #e8c468; }
+.daily-stars span:hover { color: #e8c468; }
+.daily-period-row {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 4px;
+}
+.period-btn {
+  flex: 1;
+  padding: 5px 6px;
+  font-size: .7rem;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.period-btn:hover { background: rgba(247,202,201,0.1); }
+.period-btn.active {
+  background: rgba(247,202,201,0.4);
+  border-color: rgba(201,131,138,0.5);
+  color: #c9838a;
+  font-weight: 600;
+}
+.daily-period-info {
+  font-size: .62rem;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 3px;
+  min-height: 12px;
+}
+.daily-note {
+  width: 100%;
+  padding: 8px 10px;
+  font-size: .78rem;
+  font-family: inherit;
+  background: rgba(255,255,255,0.5);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  resize: none;
+  box-sizing: border-box;
+}
+.daily-note:focus {
+  outline: none;
+  border-color: rgba(247,202,201,0.5);
+}
+
+
+
 /* ═══ 가챠 시스템 ═══ */
 .gacha-btn-wrap {
   width: 100%; max-width: 580px;
@@ -2626,6 +2905,7 @@ body::before {
 <div class="drawer" id="drawer">
   <div class="drawer-title">더보기</div>
   <button class="drawer-btn" id="drawer-quest" onclick="openQuestModal();closeDrawer()">📋 오늘의 퀘스트</button>
+  <button class="drawer-btn" id="drawer-daily" onclick="openDailyModal();closeDrawer()">✅ 데일리 체크</button>
   <button class="drawer-btn" id="drawer-tier" onclick="openTierModal();closeDrawer()">🏆 티어 현황</button>
   <button class="drawer-btn" id="drawer-collection" onclick="openCollectionModal();closeDrawer()">📖 도감 &amp; 칭호</button>
   <button class="drawer-btn" id="drawer-calendar" onclick="switchTab('calendar');closeDrawer()">📅 출석 캘린더</button>
@@ -2848,6 +3128,71 @@ body::before {
     <div id="quest-items-wrap"></div>
     <div class="quest-bonus-bar" id="quest-bonus-bar">🎁 3개 모두 완료 시 보너스 +5pt</div>
     <button class="quest-modal-close" onclick="closeQuestModal()">닫기</button>
+  </div>
+</div>
+
+<!-- 데일리 체크 모달 -->
+<div class="daily-modal-overlay" id="daily-modal-overlay" onclick="closeDailyModal(event)">
+  <div class="daily-modal">
+    <div class="daily-modal-header">
+      <div class="daily-modal-title">✅ 데일리 체크</div>
+      <div class="daily-date-nav">
+        <button class="daily-nav-btn" onclick="dailyNavDate(-1)">◀</button>
+        <div class="daily-current-date" id="daily-current-date"></div>
+        <button class="daily-nav-btn" onclick="dailyNavDate(1)">▶</button>
+      </div>
+    </div>
+    <div class="daily-progress-bar">
+      <div class="daily-progress-fill" id="daily-progress-fill" style="width:0%"></div>
+    </div>
+    <div class="daily-progress-label" id="daily-progress-label">0 / 0 완료</div>
+
+    <!-- 자기 상태 기록 -->
+    <div class="daily-state-section" id="daily-state-section">
+      <div class="daily-state-title">오늘 컨디션</div>
+      <div class="daily-mood-row" id="daily-mood-row">
+        <button class="mood-btn" data-mood="😊" title="매우 좋음">😊</button>
+        <button class="mood-btn" data-mood="🙂" title="좋음">🙂</button>
+        <button class="mood-btn" data-mood="😌" title="무난">😌</button>
+        <button class="mood-btn" data-mood="😐" title="보통">😐</button>
+        <button class="mood-btn" data-mood="😟" title="안 좋음">😟</button>
+        <button class="mood-btn" data-mood="🥺" title="우울">🥺</button>
+        <button class="mood-btn" data-mood="😪" title="피곤·아픔">😪</button>
+      </div>
+
+      <div class="daily-state-grid">
+        <div class="daily-state-cell">
+          <div class="daily-state-label">💤 수면</div>
+          <div class="daily-sleep-row">
+            <input type="range" id="daily-sleep-hours" min="0" max="12" step="0.5" value="7"
+              oninput="updateSleepLabel()" onchange="saveDailyState()">
+            <span class="daily-sleep-num" id="daily-sleep-num">7시간</span>
+          </div>
+          <div class="daily-quality-row">
+            <span class="daily-state-sub">질</span>
+            <div class="daily-stars" id="daily-stars">
+              <span data-q="1">☆</span><span data-q="2">☆</span><span data-q="3">☆</span><span data-q="4">☆</span><span data-q="5">☆</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="daily-state-cell">
+          <div class="daily-state-label">🌸 생리</div>
+          <div class="daily-period-row">
+            <button class="period-btn" id="period-start-btn" onclick="toggleDailyState('periodStart')">시작일</button>
+            <button class="period-btn" id="period-on-btn" onclick="toggleDailyState('period')">진행 중</button>
+          </div>
+          <div class="daily-period-info" id="daily-period-info"></div>
+        </div>
+      </div>
+
+      <textarea class="daily-note" id="daily-note" rows="2"
+        placeholder="메모 (특이사항, 오늘 있었던 일...)"
+        onchange="saveDailyState()"></textarea>
+    </div>
+
+    <div id="daily-items-wrap"></div>
+    <button class="daily-modal-close" onclick="closeDailyModal()">닫기</button>
   </div>
 </div>
 <div class="tabs">
@@ -5602,9 +5947,40 @@ function renderCalendar() {
       const stamp = stampData[ds];
       const isToday = ds === todayStr;
       const cls = `cal-day${stamp?' stamped':''}${isToday?' today':''}`;
-      html += `<div class="${cls}">
+
+      // 데일리 체크 진행률
+      const dayDate = new Date(year, month, day);
+      const dailyProg = getDailyProgress(dayDate);
+      const dayStateKey = `${year}-${month+1}-${day}`;
+      const dayState = getStateForDate(dayStateKey);
+      let progIndicator = '';
+      let stateIndicator = '';
+
+      if (dailyProg && dailyProg.total > 0) {
+        let color = '#ccc';
+        if (dailyProg.pct >= 1)       color = '#82a898';
+        else if (dailyProg.pct > 0)   color = '#e8c468';
+        else                          color = '#e8d0d3';
+
+        const hasKoreanTest = !!KOREAN_TEST_SCHEDULE[`${year}-${month+1}-${day}`];
+        const koreanMark = hasKoreanTest ? '<div style="position:absolute;top:1px;right:2px;font-size:.55rem;">📖</div>' : '';
+
+        progIndicator = `${koreanMark}<div style="position:absolute;bottom:1px;left:50%;transform:translateX(-50%);width:${Math.max(20, dailyProg.pct*30)}%;max-width:80%;height:3px;background:${color};border-radius:2px;"></div>`;
+      }
+
+      // 컨디션 이모지 + 생리 표시
+      const stateMarks = [];
+      if (dayState.mood) stateMarks.push(`<span style="font-size:.6rem;">${dayState.mood}</span>`);
+      if (dayState.period) stateMarks.push('<span style="color:#c9838a;font-size:.6rem;">🌸</span>');
+      if (stateMarks.length > 0) {
+        stateIndicator = `<div style="position:absolute;top:1px;left:2px;display:flex;gap:1px;">${stateMarks.join('')}</div>`;
+      }
+
+      html += `<div class="${cls}" style="position:relative;cursor:pointer;" onclick="openDailyForDate('${year}-${month+1}-${day}')">
         ${stamp ? `<div class="cal-stamp">${stamp}</div>` : `<div class="cal-day-num">${day}</div>`}
         ${stamp ? `<div class="cal-day-num">${day}</div>` : ''}
+        ${stateIndicator}
+        ${progIndicator}
       </div>`;
     }
     html += `</div></div>`;
@@ -7428,6 +7804,439 @@ function closeQuestModal(e) {
   if (!e || e.target === document.getElementById('quest-modal-overlay')) {
     document.getElementById('quest-modal-overlay').classList.remove('open');
   }
+}
+
+// ═══════════════════ DAILY CHECK SYSTEM ═══════════════════
+// 국어 시험지 일정 (안 푸는 날에는 "데일리 국어"가 안 나옴)
+// 형식: 'YYYY-M-D': 회차번호
+const KOREAN_TEST_SCHEDULE = {
+  // 5월 (58~65회)
+  '2026-5-2': 58,  '2026-5-7': 59,  '2026-5-9': 60,  '2026-5-14': 61,
+  '2026-5-20': 62, '2026-5-22': 63, '2026-5-27': 64, '2026-5-29': 65,
+  // 6월 (66~70회)
+  '2026-6-3': 66,  '2026-6-5': 67,  '2026-6-10': 68, '2026-6-12': 69, '2026-6-17': 70
+};
+
+// 데일리 항목 정의 (date 기준 동적 생성)
+function getDailyItems(dateStr) {
+  // dateStr: 'YYYY-M-D'
+  const d = new Date(dateStr.split('-').map((v,i)=>i===1?+v-1:+v).reduce((a,_,i,arr)=>i===0?[arr[0],arr[1],arr[2]]:a));
+  const parts = dateStr.split('-').map(Number);
+  const date = new Date(parts[0], parts[1]-1, parts[2]);
+  const dow = date.getDay(); // 0=일, 6=토
+
+  const items = [
+    { key: 'ai_korhist',  icon: '🏛️', label: '한국사 AI 2문제',  group: 'AI 문제' },
+    { key: 'ai_archplan', icon: '🏗️', label: '건축계획 AI 2문제', group: 'AI 문제' },
+    { key: 'ai_archstr',  icon: '🔧', label: '건축구조 AI 2문제', group: 'AI 문제' },
+    { key: 'eng_daily',   icon: '✨', label: '데일리 영어',         group: '데일리' },
+  ];
+
+  // 국어 시험지: 지정된 날만
+  if (KOREAN_TEST_SCHEDULE[dateStr]) {
+    items.push({
+      key: 'kor_test',
+      icon: '📖',
+      label: `데일리 국어 (${KOREAN_TEST_SCHEDULE[dateStr]}회)`,
+      group: '데일리',
+      badge: `${KOREAN_TEST_SCHEDULE[dateStr]}회`
+    });
+  }
+
+  // 주간평가: 토·일에만 표시 (둘 중 하루만 체크하면 OK)
+  if (dow === 0 || dow === 6) {
+    items.push({
+      key: 'weekly_eval',
+      icon: '📊',
+      label: '주간평가 (토·일 중 하루)',
+      group: '주간',
+      weekly: true
+    });
+  }
+
+  return items;
+}
+
+function getDailyKey(date) {
+  return `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
+}
+
+function loadDailyData() {
+  try {
+    return JSON.parse(localStorage.getItem('dailyCheck') || '{}');
+  } catch { return {}; }
+}
+
+function saveDailyData(data) {
+  localStorage.setItem('dailyCheck', JSON.stringify(data));
+}
+
+// 주간평가 체크 여부 확인 (해당 주의 토/일 중 하나라도 체크되어 있으면 true)
+function isWeeklyEvalDone(date) {
+  const data = loadDailyData();
+  // 해당 날짜의 토·일 찾기
+  const dow = date.getDay();
+  const sat = new Date(date);
+  const sun = new Date(date);
+  if (dow === 0) { // 일요일
+    sat.setDate(sat.getDate() - 1);
+  } else if (dow === 6) { // 토요일
+    sun.setDate(sun.getDate() + 1);
+  } else {
+    return false; // 평일에는 표시 안 됨
+  }
+  const satKey = getDailyKey(sat);
+  const sunKey = getDailyKey(sun);
+  return !!(data[satKey]?.weekly_eval || data[sunKey]?.weekly_eval);
+}
+
+let currentDailyDate = new Date();
+
+function openDailyForDate(dateStr) {
+  // dateStr: 'YYYY-M-D'
+  const parts = dateStr.split('-').map(Number);
+  currentDailyDate = new Date(parts[0], parts[1]-1, parts[2]);
+  renderDailyModal();
+  document.getElementById('daily-modal-overlay').classList.add('open');
+}
+
+function openDailyModal() {
+  currentDailyDate = new Date();
+  renderDailyModal();
+  document.getElementById('daily-modal-overlay').classList.add('open');
+}
+
+function closeDailyModal(e) {
+  if (!e || e.target === document.getElementById('daily-modal-overlay')) {
+    document.getElementById('daily-modal-overlay').classList.remove('open');
+  }
+}
+
+function dailyNavDate(delta) {
+  currentDailyDate.setDate(currentDailyDate.getDate() + delta);
+  renderDailyModal();
+}
+
+// ── 자기 상태 기록 (컨디션·수면·생리·메모) ──
+function loadDailyState() {
+  try {
+    return JSON.parse(localStorage.getItem('dailyState') || '{}');
+  } catch { return {}; }
+}
+
+function saveDailyStateData(data) {
+  localStorage.setItem('dailyState', JSON.stringify(data));
+}
+
+function getStateForDate(dateKey) {
+  const all = loadDailyState();
+  return all[dateKey] || {};
+}
+
+function setStateForDate(dateKey, key, value) {
+  const all = loadDailyState();
+  if (!all[dateKey]) all[dateKey] = {};
+  all[dateKey][key] = value;
+  // 빈 값이면 삭제
+  if (value === null || value === undefined || value === '' || value === false) {
+    delete all[dateKey][key];
+    if (Object.keys(all[dateKey]).length === 0) delete all[dateKey];
+  }
+  saveDailyStateData(all);
+}
+
+function setMood(mood) {
+  const dateKey = getDailyKey(currentDailyDate);
+  const cur = getStateForDate(dateKey);
+  // 같은 거 다시 누르면 취소
+  if (cur.mood === mood) {
+    setStateForDate(dateKey, 'mood', null);
+  } else {
+    setStateForDate(dateKey, 'mood', mood);
+    if (typeof playMagic === 'function') playMagic('know');
+  }
+  renderDailyState();
+  if (document.getElementById('calendar-view').style.display === 'block') renderCalendar();
+}
+
+function setSleepQuality(q) {
+  const dateKey = getDailyKey(currentDailyDate);
+  const cur = getStateForDate(dateKey);
+  if (cur.sleepQuality === q) {
+    setStateForDate(dateKey, 'sleepQuality', null);
+  } else {
+    setStateForDate(dateKey, 'sleepQuality', q);
+  }
+  renderDailyState();
+}
+
+function updateSleepLabel() {
+  const v = parseFloat(document.getElementById('daily-sleep-hours').value);
+  document.getElementById('daily-sleep-num').textContent = `${v}시간`;
+}
+
+function saveDailyState() {
+  const dateKey = getDailyKey(currentDailyDate);
+  const hours = parseFloat(document.getElementById('daily-sleep-hours').value);
+  const note = document.getElementById('daily-note').value.trim();
+  setStateForDate(dateKey, 'sleepHours', hours);
+  setStateForDate(dateKey, 'note', note);
+  if (document.getElementById('calendar-view').style.display === 'block') renderCalendar();
+}
+
+function toggleDailyState(key) {
+  const dateKey = getDailyKey(currentDailyDate);
+  const cur = getStateForDate(dateKey);
+  const newVal = !cur[key];
+  setStateForDate(dateKey, key, newVal);
+  // 시작일 누르면 진행 중도 자동 켜기
+  if (key === 'periodStart' && newVal) {
+    setStateForDate(dateKey, 'period', true);
+  }
+  renderDailyState();
+  if (document.getElementById('calendar-view').style.display === 'block') renderCalendar();
+}
+
+// 생리 주기 계산 (가장 최근 시작일로부터 며칠째인지)
+function getPeriodCycleInfo(date) {
+  const all = loadDailyState();
+  const starts = Object.keys(all).filter(k => all[k].periodStart);
+  if (starts.length === 0) return null;
+
+  // 날짜 객체로 변환 후 정렬
+  const startDates = starts.map(k => {
+    const p = k.split('-').map(Number);
+    return new Date(p[0], p[1]-1, p[2]);
+  }).sort((a,b) => a - b);
+
+  // 현재 날짜 이전의 가장 최근 시작일
+  const target = new Date(date); target.setHours(0,0,0,0);
+  let lastStart = null;
+  for (let i = startDates.length - 1; i >= 0; i--) {
+    if (startDates[i] <= target) { lastStart = startDates[i]; break; }
+  }
+  if (!lastStart) return null;
+
+  const dayOfCycle = Math.floor((target - lastStart) / (1000*60*60*24)) + 1;
+
+  // 평균 주기 (시작일 2개 이상이면 계산)
+  let avgCycle = 28; // 기본값
+  if (startDates.length >= 2) {
+    const diffs = [];
+    for (let i = 1; i < startDates.length; i++) {
+      diffs.push((startDates[i] - startDates[i-1]) / (1000*60*60*24));
+    }
+    avgCycle = Math.round(diffs.reduce((a,b)=>a+b, 0) / diffs.length);
+  }
+
+  return { dayOfCycle, avgCycle, lastStart };
+}
+
+function renderDailyState() {
+  const dateKey = getDailyKey(currentDailyDate);
+  const state = getStateForDate(dateKey);
+
+  // 컨디션 이모지
+  document.querySelectorAll('.mood-btn').forEach(btn => {
+    btn.classList.toggle('selected', btn.dataset.mood === state.mood);
+    btn.onclick = () => setMood(btn.dataset.mood);
+  });
+
+  // 수면 시간
+  const sleepInput = document.getElementById('daily-sleep-hours');
+  sleepInput.value = state.sleepHours != null ? state.sleepHours : 7;
+  document.getElementById('daily-sleep-num').textContent = `${sleepInput.value}시간`;
+
+  // 수면 질
+  document.querySelectorAll('.daily-stars span').forEach(s => {
+    const q = parseInt(s.dataset.q);
+    s.classList.toggle('active', state.sleepQuality && q <= state.sleepQuality);
+    s.textContent = (state.sleepQuality && q <= state.sleepQuality) ? '★' : '☆';
+    s.onclick = () => setSleepQuality(q);
+  });
+
+  // 생리
+  document.getElementById('period-start-btn').classList.toggle('active', !!state.periodStart);
+  document.getElementById('period-on-btn').classList.toggle('active', !!state.period);
+
+  // 주기 정보
+  const cycInfo = getPeriodCycleInfo(currentDailyDate);
+  const infoEl = document.getElementById('daily-period-info');
+  if (cycInfo) {
+    const next = new Date(cycInfo.lastStart);
+    next.setDate(next.getDate() + cycInfo.avgCycle);
+    const today = new Date(currentDailyDate); today.setHours(0,0,0,0);
+    const daysToNext = Math.floor((next - today) / (1000*60*60*24));
+    if (daysToNext > 0) {
+      infoEl.textContent = `주기 ${cycInfo.dayOfCycle}일째 · 다음 예상 ${daysToNext}일 후`;
+    } else if (daysToNext === 0) {
+      infoEl.textContent = `주기 ${cycInfo.dayOfCycle}일째 · 다음 예상일 오늘`;
+    } else {
+      infoEl.textContent = `주기 ${cycInfo.dayOfCycle}일째`;
+    }
+  } else {
+    infoEl.textContent = '시작일을 기록하면 주기 자동 계산';
+  }
+
+  // 메모
+  document.getElementById('daily-note').value = state.note || '';
+}
+
+function renderDailyModal() {
+  const date = currentDailyDate;
+  const dateKey = getDailyKey(date);
+  const data = loadDailyData();
+  const todayChecks = data[dateKey] || {};
+
+  // 날짜 표시
+  const days = ['일','월','화','수','목','금','토'];
+  const today = new Date();
+  const isToday = (today.toDateString() === date.toDateString());
+  const dateLabel = `${date.getMonth()+1}월 ${date.getDate()}일 (${days[date.getDay()]})${isToday ? ' · 오늘' : ''}`;
+  document.getElementById('daily-current-date').textContent = dateLabel;
+
+  // 항목 렌더
+  const items = getDailyItems(dateKey);
+  const grouped = {};
+  items.forEach(item => {
+    if (!grouped[item.group]) grouped[item.group] = [];
+    grouped[item.group].push(item);
+  });
+
+  let html = '';
+  let totalCount = 0, doneCount = 0;
+  Object.keys(grouped).forEach(group => {
+    html += `<div class="daily-section-title">${group}</div>`;
+    grouped[group].forEach(item => {
+      let isDone = !!todayChecks[item.key];
+      // 주간평가는 같은 주의 토/일 중 하나라도 체크되면 done
+      if (item.weekly) {
+        isDone = isWeeklyEvalDone(date);
+      }
+      totalCount++;
+      if (isDone) doneCount++;
+      const badgeHtml = item.badge ? `<span class="daily-item-badge">${item.badge}</span>` : '';
+      html += `
+        <div class="daily-item ${isDone ? 'done' : ''}" onclick="toggleDailyCheck('${dateKey}','${item.key}',event)">
+          <div class="daily-checkbox">${isDone ? '✓' : ''}</div>
+          <span class="daily-item-icon">${item.icon}</span>
+          <span class="daily-item-label">${item.label}</span>
+          ${badgeHtml}
+        </div>`;
+    });
+  });
+
+  // ⏰ 미완료 누적 (오늘 보고 있을 때만 표시, 최근 7일치)
+  if (isToday) {
+    const overdue = getOverdueItems(date, 7);
+    if (overdue.length > 0) {
+      html += `<div class="daily-section-title" style="color:#c9838a;">⏰ 어제 못 한 것 (밀린 항목)</div>`;
+      overdue.forEach(o => {
+        const badgeHtml = o.item.badge ? `<span class="daily-item-badge">${o.item.badge}</span>` : '';
+        const dayDiff = Math.floor((date - o.date) / (1000*60*60*24));
+        const ago = dayDiff === 1 ? '어제' : `${dayDiff}일 전`;
+        html += `
+          <div class="daily-item overdue" onclick="toggleDailyCheck('${o.dateKey}','${o.item.key}',event)">
+            <div class="daily-checkbox"></div>
+            <span class="daily-item-icon">${o.item.icon}</span>
+            <span class="daily-item-label">${o.item.label}</span>
+            <span class="daily-item-badge" style="background:rgba(201,131,138,0.15);color:#c9838a;">${ago}</span>
+            ${badgeHtml}
+          </div>`;
+      });
+    }
+  }
+
+  document.getElementById('daily-items-wrap').innerHTML = html;
+
+  // 진행률 (당일 항목만 기준)
+  const pct = totalCount > 0 ? Math.round((doneCount / totalCount) * 100) : 0;
+  document.getElementById('daily-progress-fill').style.width = pct + '%';
+  document.getElementById('daily-progress-label').textContent = `${doneCount} / ${totalCount} 완료`;
+
+  // 자기 상태 렌더
+  renderDailyState();
+}
+
+// 미완료 항목 누적 (대상 날짜 이전 N일 동안)
+function getOverdueItems(targetDate, lookbackDays) {
+  const data = loadDailyData();
+  const overdue = [];
+  for (let i = 1; i <= lookbackDays; i++) {
+    const d = new Date(targetDate);
+    d.setDate(d.getDate() - i);
+    const dKey = getDailyKey(d);
+    const items = getDailyItems(dKey);
+    const checks = data[dKey] || {};
+    items.forEach(item => {
+      // 주간평가는 그 주 토/일 중 하나라도 체크되면 done이라 미완 표시 X
+      if (item.weekly) {
+        if (!isWeeklyEvalDone(d)) {
+          // 토·일 둘 다 지났을 때만 밀린 걸로 간주
+          // (현재 주의 토·일이면 아직 기회 있음 → 표시 X)
+          const today = new Date();
+          today.setHours(0,0,0,0);
+          // 해당 주의 일요일이 오늘 이전이면 진짜 밀린 것
+          const dow = d.getDay();
+          const sun = new Date(d);
+          if (dow !== 0) sun.setDate(sun.getDate() + (7 - dow));
+          if (sun < today) {
+            // 토요일 자리에서만 한 번 표시 (중복 방지)
+            if (dow === 6) overdue.push({date: d, dateKey: dKey, item});
+          }
+        }
+        return;
+      }
+      if (!checks[item.key]) {
+        overdue.push({date: d, dateKey: dKey, item});
+      }
+    });
+  }
+  return overdue;
+}
+
+function toggleDailyCheck(dateKey, itemKey, e) {
+  const data = loadDailyData();
+  if (!data[dateKey]) data[dateKey] = {};
+  const wasChecked = !!data[dateKey][itemKey];
+  data[dateKey][itemKey] = !wasChecked;
+  saveDailyData(data);
+
+  // 체크 시 효과음 + 애니메이션
+  if (!wasChecked) {
+    if (typeof playMagic === 'function') playMagic('know');
+    if (e && e.currentTarget) {
+      const cb = e.currentTarget.querySelector('.daily-checkbox');
+      if (cb) {
+        cb.classList.add('just-checked');
+        setTimeout(() => cb.classList.remove('just-checked'), 300);
+      }
+    }
+  }
+
+  renderDailyModal();
+  // 캘린더가 열려있으면 갱신
+  if (document.getElementById('calendar-view').style.display === 'block') {
+    renderCalendar();
+  }
+}
+
+// 캘린더에서 사용 - 해당 날짜의 데일리 진행률 (0~1)
+function getDailyProgress(date) {
+  const dateKey = getDailyKey(date);
+  const items = getDailyItems(dateKey);
+  if (items.length === 0) return null;
+  const data = loadDailyData();
+  const checks = data[dateKey] || {};
+  let done = 0;
+  items.forEach(item => {
+    if (item.weekly) {
+      if (isWeeklyEvalDone(date)) done++;
+    } else if (checks[item.key]) {
+      done++;
+    }
+  });
+  return { done, total: items.length, pct: done / items.length };
 }
 
 // ═══════════════════ TIER SYSTEM ═══════════════════
