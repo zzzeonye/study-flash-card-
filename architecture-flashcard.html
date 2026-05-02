@@ -2074,15 +2074,74 @@ body::before {
 }
 .daily-state-grid {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   margin-bottom: 10px;
 }
 .daily-state-cell {
-  flex: 1;
+  flex: 1 1 calc(50% - 5px);
+  min-width: 0;
   background: rgba(255,255,255,0.5);
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 8px 10px;
+  box-sizing: border-box;
+}
+
+/* 점심 카테고리 버튼 */
+.daily-lunch-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4px;
+  margin-top: 4px;
+}
+.lunch-btn {
+  background: rgba(255,255,255,0.6);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 5px 4px;
+  font-size: .65rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s;
+  color: var(--text);
+  white-space: nowrap;
+}
+.lunch-btn:hover { background: rgba(247,202,201,0.2); }
+.lunch-btn.active {
+  background: rgba(232,196,104,0.3);
+  border-color: #c9838a;
+  color: #c9838a;
+  font-weight: 700;
+}
+
+/* 점심 후 졸음 1~5 */
+.daily-drowsy-row {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+}
+.drowsy-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.6);
+  border: 1px solid var(--border);
+  font-size: .8rem;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.drowsy-num:hover { background: rgba(247,202,201,0.2); }
+.drowsy-num.active {
+  background: linear-gradient(135deg, #f7cac9, #c9838a);
+  color: #fff;
+  border-color: #c9838a;
 }
 .daily-state-label {
   font-size: .7rem;
@@ -2963,6 +3022,13 @@ body::before {
   background: rgba(20,5,35,0.95);
   border-radius: 24px; padding: 20px;
   border: 1.5px solid rgba(247,202,201,0.2);
+  max-height: 92vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.boss-battle-screen::-webkit-scrollbar { width: 6px; }
+.boss-battle-screen::-webkit-scrollbar-thumb {
+  background: rgba(247,202,201,0.3); border-radius: 4px;
 }
 .boss-battle-header {
   display: flex; align-items: center; gap: 10px;
@@ -3004,6 +3070,26 @@ body::before {
   color: #fff; font-size: .88rem; line-height: 1.6;
   margin-bottom: 14px; min-height: 80px;
   white-space: pre-wrap;
+  max-height: 50vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.boss-question::-webkit-scrollbar { width: 5px; }
+.boss-question::-webkit-scrollbar-thumb {
+  background: rgba(247,202,201,0.4); border-radius: 4px;
+}
+/* cloze 빈칸 강조 - 다크 배경에 잘 보이게 */
+.boss-blank {
+  display: inline-block;
+  min-width: 50px;
+  border-bottom: 2px solid #f7cac9;
+  background: rgba(247,202,201,0.15);
+  border-radius: 4px;
+  padding: 0 8px;
+  margin: 0 2px;
+  color: #f7cac9;
+  font-weight: 600;
+  text-align: center;
 }
 .boss-answer-wrap { display:flex; flex-direction:column; gap:8px; }
 .boss-ans-btn {
@@ -3634,6 +3720,27 @@ body::before {
             <button class="period-btn" id="period-on-btn" onclick="toggleDailyState('period')">진행 중</button>
           </div>
           <div class="daily-period-info" id="daily-period-info"></div>
+        </div>
+
+        <div class="daily-state-cell">
+          <div class="daily-state-label">🍱 점심</div>
+          <div class="daily-lunch-row" id="daily-lunch-row">
+            <button class="lunch-btn" data-lunch="carb_heavy" title="탄수 폭격 (밥+면 등)" onclick="setLunch('carb_heavy')">🍚 탄수</button>
+            <button class="lunch-btn" data-lunch="normal" title="평소 (밥+반찬)" onclick="setLunch('normal')">🍙 보통</button>
+            <button class="lunch-btn" data-lunch="protein" title="단백질 위주" onclick="setLunch('protein')">🥗 단백</button>
+            <button class="lunch-btn" data-lunch="noodle" title="면·빵 위주" onclick="setLunch('noodle')">🍜 면빵</button>
+          </div>
+        </div>
+
+        <div class="daily-state-cell">
+          <div class="daily-state-label">😴 점심 후 졸음</div>
+          <div class="daily-drowsy-row" id="daily-drowsy-row">
+            <span class="drowsy-num" data-d="1" onclick="setDrowsy(1)" title="안 졸림">1</span>
+            <span class="drowsy-num" data-d="2" onclick="setDrowsy(2)" title="조금">2</span>
+            <span class="drowsy-num" data-d="3" onclick="setDrowsy(3)" title="평소">3</span>
+            <span class="drowsy-num" data-d="4" onclick="setDrowsy(4)" title="심함">4</span>
+            <span class="drowsy-num" data-d="5" onclick="setDrowsy(5)" title="죽겠음">5</span>
+          </div>
         </div>
       </div>
 
@@ -4518,6 +4625,8 @@ const DEFAULT_CARDS = [
 
 {id:7006,type:'cloze',cat:'PART4 · 강구조 > CH01 총론 > S01 강재의 특성',q:'[강재의 용접성] 탄소량에 의해 크게 영향받음\n용접성 나타내는 지표: ___\n용접성에 영향 미치는 원소 함유량으로 계산: ___당량\n용접성에 영향 미치는 원소: 규소(Si), ___(Mn), 니켈(Ni), 크롬(Cr), 몰리브덴(Mo), 바나듐(V), 구리(Cu)',a:'탄소당량 | 탄소 | 망간',note:'⚠ 함정: 알칼리금속(Na·K·Ca·Mg)은 합금원소 X!\nCeq = C + Mn/6 + (Cr+Mo+V)/5 + (Cu+Ni)/15\nCeq ↑ → 용접성 ↓ (균열 위험)\n(13 지방 9급 — Na 함정)'},
 {id:7151,type:'ox',cat:'PART4 · 강구조 > CH01 총론 > S01 강재의 특성',q:'Na(나트륨)는 강재의 탄소당량을 산정하는 구성 성분이다',a:'X',note:'Na·K·Ca·Mg 같은 알칼리금속/알칼리토금속은 강재 합금원소 X\n탄소당량 합금원소: C, Mn, Si, Cr, Mo, V, Ni, Cu\n암기: "망크몰바 + 구니"\n(13 지방 9급 정답 ③)'},
+{id:7152,type:'cloze',cat:'PART4 · 강구조 > CH02 강구조 부재설계 > S01 접합부 설계',q:'[강구조 모멘트골조 3종 - 핵심 수치]\n● 특수모멘트골조 (SMF):\n  - 접합부 회전능력: ___ rad 이상\n  - 회전 시 보 공칭소성모멘트의 ___ % 이상 유지\n  - 반응수정계수 R = ___\n● 중간모멘트골조 (IMF):\n  - 접합부 회전능력: ___ rad 이상\n● 보통모멘트골조 (OMF):\n  - 접합부 회전능력 검증 ___\n  - 반응수정계수 R = ___',a:'0.04 | 80 | 8 | 0.02 | 안 함 | 3.5',note:'⚠ 함정: 특수 0.03(X) → 0.04 / 70%(X) → 80%\n암기: "특수=4 / 중간=2 / 보통=3.5"\nrad: 4-2 / R: 8-4.5-3.5\n(21 국가 9급 정답 ③)'},
+{id:7153,type:'ox',cat:'PART4 · 강구조 > CH02 강구조 부재설계 > S01 접합부 설계',q:'특수모멘트골조의 접합부는 0.04 rad의 층간변위에서 보 공칭소성모멘트의 70% 이상을 유지해야 한다',a:'X',note:'70%가 아니라 80% 이상!\n특수모멘트골조 접합부 핵심:\n- 회전능력: 0.04 rad\n- 모멘트 유지: 80% 이상\n(21 국가 9급 ④선지 함정)'},
 
 {id:7007,type:'cloze',cat:'PART4 · 강구조 > CH01 총론 > S01 강재의 특성',q:'[탄소강 분류] 탄소 함유량 기준\n저탄소강: ___ % 미만\n연탄소강: ___ ~ ___ %\n중탄소강: ___ ~ ___ %\n고탄소강: ___ ~ ___ %\n구조용 강재로 주로 쓰이는 것: ___',a:'0.15 | 0.15 | 0.29 | 0.3 | 0.59 | 0.6 | 1.7 | 연탄소강'},
 
@@ -4824,6 +4933,8 @@ const DEFAULT_CARDS = [
 {id:8012,type:'cloze',cat:'PART5 · 구조역학 > CH02 단면성질',q:'[단면계수 Z]\n정의: Z = Ix / y\n직사각형: ___\n삼각형(하단): ___ / (상단): ___\n원형: ___',a:'bh²/6 | bh²/12 | bh²/24 | πd³/32'},
 {id:8068,type:'cloze',cat:'PART5 · 구조역학 > CH02 단면성질',q:'[단면2차모멘트 I vs 단면계수 Z - 도형별 통합]\n● 직사각형 (b·h):\n  - I = ___ \n  - Z = ___\n● 원형 (지름 D):\n  - I = ___\n  - Z = ___\n● 삼각형 (b·h):\n  - I = ___\n  - Z(하단) = ___\n암기: Z = I / y (y = 중립축에서 가장 먼 거리)',a:'bh³/12 | bh²/6 | πD⁴/64 | πD³/32 | bh³/36 | bh²/12',note:'⚠ 헷갈림 포인트:\n● 원형 I·Z 분모: 64 vs 32 (Z는 I/y, y=D/2니까 64→32)\n● 직사각형 Z = I/(h/2) = (bh³/12)/(h/2) = bh²/6\n● 단위: I=mm⁴, Z=mm³\n● 삼각형 I 분모는 36 (직사각형의 1/3)'},
 {id:8069,type:'ox',cat:'PART5 · 구조역학 > 기출 OX',q:'지름 D인 원형 단면의 단면계수 Z = πD⁴/64 이다',a:'X',note:'πD⁴/64 는 단면2차모멘트(I)!\n원형 단면계수 Z = πD³/32 (분모 32, 차수 3승)\n\nZ = I/y에서 y = D/2이므로\nZ = (πD⁴/64) ÷ (D/2) = πD³/32\n→ 분모는 64 → 32, 차수는 4 → 3\n\n암기: I·Z 헷갈리면 단위로 확인! I=mm⁴, Z=mm³'},
+{id:8070,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[RC보 인장철근 2단 배근 시 유효깊이 d 계산]\n조건: 폭 b, 전체깊이 h, 피복 c, 스터럽 직경 ds, 인장철근 직경 db, 1·2단 동일량\n\n● 1단 중심 (하단부터): c + ds + ___\n● 1단↔2단 순간격: max( ___ mm, db) \n● 2단 중심: 1단중심 + db + ___\n● 인장철근 도심: 1단·2단 ___ (철근량 같을 때)\n● d = h - 인장철근 도심',a:'db/2 | 25 | 순간격 | 단순평균',note:'예시 (20 지방 9급): b=400, h=700, c=40, ds=10, db=25\n1단중심 = 40+10+12.5 = 62.5\n순간격 = max(25,25) = 25\n2단중심 = 62.5+25+25 = 112.5\n도심 = (62.5+112.5)/2 = 87.5\nd = 700-87.5 = 612.5mm\n\n⚠ 흔한 실수:\n- 순간격(25) 빼먹음 → 답 작아짐\n- 1단만 가정 → d = 637.5mm (틀림)'},
+{id:8071,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[RC보 철근 순간격 (다단 배근·동일단)]\nKDS 기준: max( ___ mm, ___ )\n● 굵은골재 최대치수의 ___ 배 이상도 만족',a:'25 | 철근직경 | 4/3'},
 {id:8013,type:'cloze',cat:'PART5 · 구조역학 > CH02 단면성질',q:'[단면2차반경 r]\nr = √(___ / ___)\n→ 기둥의 세장비 검토에 사용',a:'I | A'},
 {id:8014,type:'cloze',cat:'PART5 · 구조역학 > CH02 단면성질',q:'[단면2차반경 r — 도형별]\n직사각형: ___\n삼각형: ___\n원형: ___',a:'h/2√3 | h/3√2 | d/4'},
 {id:8015,type:'cloze',cat:'PART5 · 구조역학 > CH02 단면성질',q:'[극단면2차모멘트 Ip]\nIp = ___ + ___\n→ 부재의 비틀림 계산에 사용',a:'Ix | Iy'},
@@ -5301,6 +5412,7 @@ const DEFAULT_ENG_CARDS = [
 {id:9415,cat:"영단어",type:"flash",q:"come about",a:"발생하다 / 일어나다(동)\\n⚠ come to mind(생각나다)와 혼동 금지!\\n어떤 일이 둘러서(about) 와(come) = 생기다\\n≒ happen, occur, arise\\nHow did it come about? = 어떻게 그런 일이?\\nThe change came about gradually = 변화가 점차 일어났다",pron:"kʌm əˈbaʊt",note:"The accident came about because of carelessness."},
 {id:9416,cat:"영단어",type:"flash",q:"interrelated",a:"서로 연관된 / 상호 관련된(형)\\n⚠ independent(독립된)와 반대!\\ninter-(서로) + related(관련된)\\nThe two issues are interrelated = 두 문제는 서로 연관됨\\ninterrelated factors = 상호 관련된 요인들\\n≒ interconnected, interdependent",pron:"ˌɪntərɪˈleɪtɪd",note:"All language skills are interrelated and develop together."},
 {id:9417,cat:"영단어",type:"flash",q:"pettiness",a:"사소함 / 옹졸함 / 쩨쩨함(명)\\n⚠ 부정적 뉘앙스! 단순한 small이 아님\\npetty(사소한·옹졸한) + ness\\npetty crime = 경범죄\\npetty cash = 소액 잔돈\\npetty argument = 사소한 다툼\\nthe pettiness of office politics = 사내 정치의 옹졸함\\n≒ triviality(사소함), narrow-mindedness(편협함)",pron:"ˈpetinəs",note:"His pettiness over small matters surprised everyone. (21 지역인재 9급)"},
+{id:9418,cat:"영단어",type:"flash",q:"manipulate",a:"조종하다 / 교묘하게 다루다 / 조작하다(동)\\n⚠ manufacture(제조하다)와 혼동 금지!\\nmanipulate = 사람·정보·도구를 조종\\nmanufacture = 물건 제작·생산\\n부정적 뉘앙스 많음\\nmanipulate data = 데이터 조작\\nmanipulate people = 사람 조종\\nmanipulate a tool = 도구 능숙히 다루기 (중립)\\n≒ control, exploit, doctor(조작)",pron:"məˈnɪpjuleɪt",note:"Politicians often manipulate public opinion through media."},
 ];
 
 // ═══════════════════ STATE ═══════════════════
@@ -7585,6 +7697,7 @@ function renderGachaHistory() {
 // ═══════════════════ BOSS SYSTEM ═══════════════════
 const BOSS_GOAL = 50; // 하루 N개 맞히면 보스 등장
 const BOSS_QUESTIONS = 5;
+const BOSS_WEAK_RATIO = 0.6; // 약점 카드 비율 60%
 
 const BOSS_LIST = [
   { name:'망각의 군주',    sprite:'👾', desc:'틀린 카드를 소환한다...' },
@@ -7601,11 +7714,37 @@ let bossData = {
   bossDefeated: false,
   bossAvailable: false,
 };
+// 약점 카드 저장소 (id → 틀린 횟수)
+let bossWeakCards = {};
+function loadBossWeakCards() {
+  const s = localStorage.getItem('boss_weak_cards');
+  bossWeakCards = s ? JSON.parse(s) : {};
+}
+function saveBossWeakCards() {
+  localStorage.setItem('boss_weak_cards', JSON.stringify(bossWeakCards));
+}
+function addWeakCard(id) {
+  loadBossWeakCards();
+  bossWeakCards[id] = (bossWeakCards[id] || 0) + 1;
+  saveBossWeakCards();
+}
+function removeWeakCard(id) {
+  loadBossWeakCards();
+  delete bossWeakCards[id];
+  saveBossWeakCards();
+}
+function getWeakCount() {
+  loadBossWeakCards();
+  return Object.keys(bossWeakCards).length;
+}
+
 let bossSession = {
   boss: null,
   questions: [],
   currentQ: 0,
-  correctCount: 0,  // 맞힌 개수
+  correctCount: 0,    // 맞힌 개수
+  wrongCardIds: [],   // 이번 회차에서 틀린 카드 id 목록
+  results: [],        // 각 문제 결과: {id, correct: true/false, q, a}
   answered: false,
 };
 
@@ -7689,10 +7828,12 @@ function openBossModal() {
   const boss = BOSS_LIST[Math.floor(Math.random() * BOSS_LIST.length)];
   bossSession.boss = boss;
 
-  // 문제 선택 — 틀린 카드 가중치 높게
+  // 문제 선택 — 약점 60% + 새 40%
   bossSession.questions = selectBossQuestions();
   bossSession.currentQ = 0;
-  bossSession.hp = BOSS_QUESTIONS;
+  bossSession.correctCount = 0;
+  bossSession.wrongCardIds = [];
+  bossSession.results = [];
   bossSession.answered = false;
 
   // 인트로 화면
@@ -7705,34 +7846,40 @@ function openBossModal() {
 }
 
 function selectBossQuestions() {
-  const pool = cards.filter(c => history[c.id] && (history[c.id].know + history[c.id].dont) > 0);
-  if (pool.length === 0) return shuffle([...cards]).slice(0, BOSS_QUESTIONS);
+  loadBossWeakCards();
+  const weakIds = Object.keys(bossWeakCards).map(Number);
 
-  // 가중치: dont 횟수 많을수록 높은 확률
-  const weighted = [];
-  for (const c of pool) {
-    const h = history[c.id];
-    const weight = Math.max(1, (h.dont||0) * 3 + 1); // 틀린 횟수 × 3 + 기본1
-    for (let i=0; i<weight; i++) weighted.push(c);
-  }
-  shuffle(weighted);
+  // 약점 카드 풀 (실제 카드 데이터로 변환, 존재하는 카드만)
+  const weakPool = cards.filter(c => weakIds.includes(c.id));
 
-  // 중복 제거하면서 5개 선택
-  const selected = [];
-  const usedIds = new Set();
-  for (const c of weighted) {
-    if (!usedIds.has(c.id)) {
-      selected.push(c);
-      usedIds.add(c.id);
-      if (selected.length >= BOSS_QUESTIONS) break;
-    }
-  }
-  // 부족하면 나머지 채우기
+  // 새 카드 풀 (약점 X + 한 번이라도 본 카드 우선)
+  const seenIds = new Set(Object.keys(history).map(Number));
+  const seenNotWeak = cards.filter(c => seenIds.has(c.id) && !weakIds.includes(c.id));
+  const unseenCards = cards.filter(c => !seenIds.has(c.id) && !weakIds.includes(c.id));
+  const newPool = [...seenNotWeak, ...unseenCards];
+
+  // 약점 60% (3문제) + 새 40% (2문제) 목표
+  const targetWeak = Math.min(weakPool.length, Math.round(BOSS_QUESTIONS * BOSS_WEAK_RATIO));
+  const targetNew = BOSS_QUESTIONS - targetWeak;
+
+  shuffle(weakPool);
+  shuffle(newPool);
+
+  const selected = [
+    ...weakPool.slice(0, targetWeak),
+    ...newPool.slice(0, targetNew)
+  ];
+
+  // 부족하면 모든 카드에서 채우기
   if (selected.length < BOSS_QUESTIONS) {
-    const rest = cards.filter(c=>!usedIds.has(c.id));
+    const usedIds = new Set(selected.map(c => c.id));
+    const rest = cards.filter(c => !usedIds.has(c.id));
     shuffle(rest);
     selected.push(...rest.slice(0, BOSS_QUESTIONS - selected.length));
   }
+
+  // 순서 섞기 (약점/새 구분 안 보이게)
+  shuffle(selected);
   return selected;
 }
 
@@ -7747,25 +7894,26 @@ function startBossBattle() {
 
 function renderBossQuestion() {
   const q = bossSession.questions[bossSession.currentQ];
-  if (!q) { endBossBattle(true); return; }
+  if (!q) { endBossBattle(); return; }
 
   bossSession.answered = false;
   document.getElementById('boss-next-btn').style.display = 'none';
   document.getElementById('boss-q-num').textContent = `문제 ${bossSession.currentQ+1} / ${BOSS_QUESTIONS}`;
 
-  // HP 바
-  const hpPct = (bossSession.hp / BOSS_QUESTIONS) * 100;
-  document.getElementById('boss-battle-hp-fill').style.width = hpPct + '%';
-  document.getElementById('boss-battle-hp-label').textContent = `HP ${bossSession.hp}/${BOSS_QUESTIONS}`;
+  // 점수 게이지 (맞춘 개수 기반)
+  const scorePct = (bossSession.correctCount / BOSS_QUESTIONS) * 100;
+  document.getElementById('boss-battle-hp-fill').style.width = scorePct + '%';
+  document.getElementById('boss-battle-hp-label').textContent = `점수 ${bossSession.correctCount}/${BOSS_QUESTIONS}`;
 
   const ansWrap = document.getElementById('boss-answer-wrap');
 
   if (q.type === 'cloze') {
     // cloze: 문제만 먼저 보여주고, 답 보기 버튼으로 공개 → O/X 자가판단
-    const qText = q.q.replace(/___/g, '　　　').replace(/\|/g, ' / ');
+    // 빈칸을 명확한 박스로 표시 (다크모드에서도 잘 보이게)
+    const qHtml = esc(q.q).replace(/___/g, '<span class="boss-blank">　　</span>').replace(/\|/g, ' / ');
     const aText = q.a.split('|').map((a,i) => `${i+1}. ${a.trim()}`).join('\n');
     document.getElementById('boss-question').innerHTML =
-      `<div style="margin-bottom:10px;">${esc(qText)}</div>
+      `<div style="margin-bottom:10px;">${qHtml}</div>
        <div id="boss-answer-reveal-area" style="border-top:1px solid rgba(255,255,255,0.1);padding-top:10px;">
          <button id="boss-reveal-btn" onclick="revealBossAnswer('${esc(aText).replace(/'/g, "\\'").replace(/\n/g, '\\n')}')" 
            style="width:100%;padding:10px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.2);border-radius:8px;color:rgba(255,255,255,0.7);font-family:inherit;font-size:.82rem;cursor:pointer;">
@@ -7837,25 +7985,46 @@ function answerBossOX(correct) {
   bossSession.answered = true;
   document.querySelectorAll('.boss-ans-btn').forEach(b => b.disabled = true);
 
+  const q = bossSession.questions[bossSession.currentQ];
+  // 결과 기록
+  bossSession.results.push({ id: q.id, correct: correct, q: q.q, a: q.a });
+
   if (correct) {
     playBossHit();
-    // 보스 스프라이트 흔들기
     const sprite = document.getElementById('boss-battle-sprite');
     if (sprite) {
       sprite.style.animation = 'none';
       void sprite.offsetWidth;
       sprite.style.animation = 'bossShake 0.4s ease';
     }
-    bossSession.hp--;
-    const hpPct = (bossSession.hp / BOSS_QUESTIONS) * 100;
-    document.getElementById('boss-battle-hp-fill').style.width = hpPct + '%';
-    document.getElementById('boss-battle-hp-label').textContent = `HP ${bossSession.hp}/${BOSS_QUESTIONS}`;
-    if (bossSession.hp <= 0) { setTimeout(() => endBossBattle(true), 500); return; }
-    document.getElementById('boss-next-btn').style.display = 'block';
+    bossSession.correctCount++;
+    // 약점 카드였으면 → 졸업
+    if (bossWeakCards[q.id]) {
+      removeWeakCard(q.id);
+    }
+    const scorePct = (bossSession.correctCount / BOSS_QUESTIONS) * 100;
+    document.getElementById('boss-battle-hp-fill').style.width = scorePct + '%';
+    document.getElementById('boss-battle-hp-label').textContent = `점수 ${bossSession.correctCount}/${BOSS_QUESTIONS}`;
   } else {
     playBossDamage();
-    setTimeout(() => endBossBattle(false), 800);
+    bossSession.wrongCardIds.push(q.id);
+    addWeakCard(q.id);
+    // 답을 안 봤을 수도 있으니 강제로 노출
+    const area = document.getElementById('boss-answer-reveal-area');
+    if (area && q.a) {
+      const aText = q.a.split('|').map((a,i) => `${i+1}. ${a.trim()}`).join('\n');
+      area.innerHTML = `
+        <div style="font-size:.78rem;color:#f7cac9;margin-bottom:6px;">💀 정답</div>
+        <div style="color:#b8e0d4;font-size:.95rem;line-height:1.8;white-space:pre-line;font-weight:600;">${esc(aText)}</div>`;
+    }
   }
+  // 마지막 문제면 결과로, 아니면 다음 버튼 표시
+  if (bossSession.currentQ >= BOSS_QUESTIONS - 1) {
+    document.getElementById('boss-next-btn').textContent = '🏁 결과 보기';
+  } else {
+    document.getElementById('boss-next-btn').textContent = '➡️ 다음 문제';
+  }
+  document.getElementById('boss-next-btn').style.display = 'block';
 }
 
 function answerBoss(btn, correct, chosen) {
@@ -7863,7 +8032,13 @@ function answerBoss(btn, correct, chosen) {
   bossSession.answered = true;
   document.querySelectorAll('.boss-ans-btn').forEach(b => b.disabled = true);
 
-  if (chosen === correct) {
+  const q = bossSession.questions[bossSession.currentQ];
+  const isCorrect = (chosen === correct);
+
+  // 결과 기록
+  bossSession.results.push({ id: q.id, correct: isCorrect, q: q.q, a: correct });
+
+  if (isCorrect) {
     btn.classList.add('correct');
     playBossHit();
     const sprite = document.getElementById('boss-battle-sprite');
@@ -7872,19 +8047,38 @@ function answerBoss(btn, correct, chosen) {
       void sprite.offsetWidth;
       sprite.style.animation = 'bossShake 0.4s ease';
     }
-    bossSession.hp--;
-    const hpPct = (bossSession.hp / BOSS_QUESTIONS) * 100;
-    document.getElementById('boss-battle-hp-fill').style.width = hpPct + '%';
-    document.getElementById('boss-battle-hp-label').textContent = `HP ${bossSession.hp}/${BOSS_QUESTIONS}`;
-    if (bossSession.hp <= 0) { setTimeout(() => endBossBattle(true), 700); return; }
+    bossSession.correctCount++;
+    // 약점 카드였으면 → 약점에서 제거 (졸업!)
+    if (bossWeakCards[q.id]) {
+      removeWeakCard(q.id);
+    }
+    // 점수 게이지 갱신
+    const scorePct = (bossSession.correctCount / BOSS_QUESTIONS) * 100;
+    document.getElementById('boss-battle-hp-fill').style.width = scorePct + '%';
+    document.getElementById('boss-battle-hp-label').textContent = `점수 ${bossSession.correctCount}/${BOSS_QUESTIONS}`;
   } else {
     btn.classList.add('wrong');
     playBossDamage();
     document.querySelectorAll('.boss-ans-btn').forEach(b => {
       if (b.textContent.trim() === correct) b.classList.add('correct');
     });
-    setTimeout(() => endBossBattle(false), 1200);
-    return;
+    bossSession.wrongCardIds.push(q.id);
+    addWeakCard(q.id); // 약점 카드 추가
+    // 정답을 question 영역 아래 명확히 표시
+    const qEl = document.getElementById('boss-question');
+    if (qEl) {
+      const ansHtml = `<div style="margin-top:14px;padding-top:12px;border-top:2px solid #f7cac9;">
+        <div style="font-size:.72rem;color:#f7cac9;margin-bottom:4px;">💀 정답</div>
+        <div style="color:#b8e0d4;font-size:1rem;font-weight:600;">${esc(correct)}</div>
+      </div>`;
+      qEl.innerHTML += ansHtml;
+    }
+  }
+  // 마지막 문제면 결과로, 아니면 다음 버튼 표시
+  if (bossSession.currentQ >= BOSS_QUESTIONS - 1) {
+    document.getElementById('boss-next-btn').textContent = '🏁 결과 보기';
+  } else {
+    document.getElementById('boss-next-btn').textContent = '➡️ 다음 문제';
   }
   document.getElementById('boss-next-btn').style.display = 'block';
 }
@@ -7892,41 +8086,79 @@ function answerBoss(btn, correct, chosen) {
 function nextBossQuestion() {
   bossSession.currentQ++;
   if (bossSession.currentQ >= BOSS_QUESTIONS) {
-    endBossBattle(true);
+    endBossBattle();
   } else {
     renderBossQuestion();
   }
 }
 
-function endBossBattle(win) {
+function endBossBattle() {
   stopBossBgm();
   document.getElementById('boss-battle-screen').style.display = 'none';
   document.getElementById('boss-result-screen').style.display = 'flex';
   document.getElementById('boss-result-screen').style.flexDirection = 'column';
 
+  const score = bossSession.correctCount;
+  const total = BOSS_QUESTIONS;
+  const win = score === total; // 5/5 만점 = 승리
+  const partial = score >= 3;  // 3점 이상 = 부분 보상
+
+  // 약점 카드 통계
+  const weakCount = getWeakCount();
+  const wrongIds = bossSession.wrongCardIds;
+  const newWeakCount = wrongIds.filter(id => bossWeakCards[id] === 1).length;
+  const studiedCount = bossSession.results.filter(r => r.correct && bossWeakCards[r.id] === undefined).length;
+  // (졸업한 약점 = 정답 맞췄고 이제 약점 풀에서 빠진 카드)
+  const graduatedCount = bossSession.results.filter(r => {
+    if (!r.correct) return false;
+    // 이번에 맞췄고, 약점 풀에 더 이상 없는 카드
+    return bossWeakCards[r.id] === undefined && wrongIds.indexOf(r.id) === -1;
+  }).length;
+
+  // 결과 desc 구성
+  let descLines = [];
+  descLines.push(`${score} / ${total} 정답`);
+  if (graduatedCount > 0) descLines.push(`✨ 약점 -${graduatedCount}개 졸업!`);
+  if (newWeakCount > 0) descLines.push(`📚 새 약점 +${newWeakCount}개`);
+  descLines.push(`🔥 누적 약점: ${weakCount}개`);
+
   if (win) {
     playBossVictory();
     document.getElementById('boss-result-icon').textContent = '🎉';
-    document.getElementById('boss-result-title').textContent = '승리!';
+    document.getElementById('boss-result-title').textContent = '완벽 승리!';
     document.getElementById('boss-result-title').className = 'boss-result-title win';
-    document.getElementById('boss-result-desc').textContent = `${bossSession.boss.name}을 쓰러뜨렸다!\n+20pt & 뽑기권 1장 획득!`;
-    addPoints(PT.bossWin, '보스전 승리');
+    descLines.unshift(`${bossSession.boss.name}을 완벽히 쓰러뜨렸다!`);
+    descLines.push('+20pt & 뽑기권 1장 획득!');
+    addPoints(PT.bossWin, '보스전 완벽 승리');
     addGachaTicket(1);
     bossData.bossDefeated = true;
     saveBoss();
     spawnGachaStars('SR');
     document.querySelector('.boss-result-btn').textContent = '확인';
     document.querySelector('.boss-result-btn').onclick = closeBossModal;
+  } else if (partial) {
+    // 3~4점: 부분 보상
+    playBossDefeat();
+    document.getElementById('boss-result-icon').textContent = '💪';
+    document.getElementById('boss-result-title').textContent = '아쉬워!';
+    document.getElementById('boss-result-title').className = 'boss-result-title lose';
+    descLines.unshift(`${bossSession.boss.name}에게 살짝 부족...`);
+    descLines.push('+5pt 부분 보상');
+    addPoints(5, '보스전 부분 점수');
+    document.querySelector('.boss-result-btn').textContent = '🔄 재도전!';
+    document.querySelector('.boss-result-btn').onclick = () => retryBoss();
   } else {
+    // 0~2점: 패배
     playBossDefeat();
     document.getElementById('boss-result-icon').textContent = '💀';
     document.getElementById('boss-result-title').textContent = '패배...';
     document.getElementById('boss-result-title').className = 'boss-result-title lose';
-    document.getElementById('boss-result-desc').textContent = `${bossSession.boss.name}에게 졌다...\n포인트 차감 없음! 재도전 가능!`;
-    // 패배 시 포인트 차감 없음, 재도전 가능
+    descLines.unshift(`${bossSession.boss.name}에게 졌다...`);
+    descLines.push('포인트 차감 없음. 재도전 가능!');
     document.querySelector('.boss-result-btn').textContent = '🔄 재도전!';
     document.querySelector('.boss-result-btn').onclick = () => retryBoss();
   }
+  document.getElementById('boss-result-desc').textContent = descLines.join('\n');
   updateBossBar();
 }
 
@@ -7935,11 +8167,13 @@ function closeBossModal() {
   document.getElementById('boss-modal-overlay').classList.remove('open');
 }
 
-// 보스 재도전: 새 문제 다시 뽑고 HP·진행상태 리셋
+// 보스 재도전: 새 문제 다시 뽑고 진행상태 리셋
 function retryBoss() {
   bossSession.questions = selectBossQuestions();
   bossSession.currentQ = 0;
-  bossSession.hp = BOSS_QUESTIONS;
+  bossSession.correctCount = 0;
+  bossSession.wrongCardIds = [];
+  bossSession.results = [];
   bossSession.answered = false;
   startBossBattle();
 }
@@ -8559,12 +8793,13 @@ function closeQuestModal(e) {
 // ═══════════════════ DAILY CHECK SYSTEM ═══════════════════
 // 국어 시험지 일정 (안 푸는 날에는 "데일리 국어"가 안 나옴)
 // 형식: 'YYYY-M-D': 회차번호
+// 주말 제외, 평일에만 배치 (시험 6/20)
 const KOREAN_TEST_SCHEDULE = {
   // 5월 (58~65회)
-  '2026-5-2': 58,  '2026-5-7': 59,  '2026-5-9': 60,  '2026-5-14': 61,
-  '2026-5-20': 62, '2026-5-22': 63, '2026-5-27': 64, '2026-5-29': 65,
+  '2026-5-4': 58,  '2026-5-7': 59,  '2026-5-11': 60, '2026-5-14': 61,
+  '2026-5-19': 62, '2026-5-22': 63, '2026-5-26': 64, '2026-5-29': 65,
   // 6월 (66~70회)
-  '2026-6-3': 66,  '2026-6-5': 67,  '2026-6-10': 68, '2026-6-12': 69, '2026-6-17': 70
+  '2026-6-2': 66,  '2026-6-5': 67,  '2026-6-10': 68, '2026-6-12': 69, '2026-6-17': 70
 };
 
 // 데일리 항목 정의 (date 기준 동적 생성)
@@ -8749,6 +8984,31 @@ function setSleepQuality(q) {
   renderDailyState();
 }
 
+// 점심 카테고리
+function setLunch(cat) {
+  const dateKey = getDailyKey(currentDailyDate);
+  const cur = getStateForDate(dateKey);
+  if (cur.lunch === cat) {
+    setStateForDate(dateKey, 'lunch', null);
+  } else {
+    setStateForDate(dateKey, 'lunch', cat);
+    if (typeof playMagic === 'function') playMagic('know');
+  }
+  renderDailyState();
+}
+
+// 점심 후 졸음 강도 1~5
+function setDrowsy(level) {
+  const dateKey = getDailyKey(currentDailyDate);
+  const cur = getStateForDate(dateKey);
+  if (cur.drowsy === level) {
+    setStateForDate(dateKey, 'drowsy', null);
+  } else {
+    setStateForDate(dateKey, 'drowsy', level);
+  }
+  renderDailyState();
+}
+
 function updateSleepLabel() {
   const v = parseFloat(document.getElementById('daily-sleep-hours').value);
   document.getElementById('daily-sleep-num').textContent = `${v}시간`;
@@ -8926,6 +9186,17 @@ function renderDailyState() {
   } else {
     infoEl.textContent = '시작일을 기록하면 주기 자동 계산';
   }
+
+  // 점심 카테고리
+  document.querySelectorAll('.lunch-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.lunch === state.lunch);
+  });
+
+  // 점심 후 졸음
+  document.querySelectorAll('.drowsy-num').forEach(s => {
+    const d = parseInt(s.dataset.d);
+    s.classList.toggle('active', state.drowsy && d === state.drowsy);
+  });
 
   // 메모
   document.getElementById('daily-note').value = state.note || '';
