@@ -2359,7 +2359,19 @@ body::before {
 .gacha-grade-sr .gacha-card-grade  { color: #fff; background: rgba(0,0,0,0.2); }
 .gacha-grade-r .gacha-card-grade   { color: #fff; background: rgba(0,0,0,0.2); }
 
-.gacha-card-emoji { font-size: 4rem; }
+.gacha-card-emoji {
+  font-size: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 96px;
+}
+.gacha-card-emoji img {
+  width: 96px;
+  height: 96px;
+  image-rendering: pixelated;
+  object-fit: contain;
+}
 .gacha-card-name  { font-size: .85rem; font-weight: 700; text-align: center; color: rgba(0,0,0,0.7); }
 .gacha-grade-sr .gacha-card-name,
 .gacha-grade-r .gacha-card-name { color: #fff; }
@@ -2548,6 +2560,90 @@ body::before {
   border-color: #42a5f5;
   background: rgba(66,165,245,0.08);
 }
+
+/* ═══ 포켓몬 도감 그리드 ═══ */
+.pokedex-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  gap: 6px;
+  padding: 4px 0;
+}
+.pokedex-item {
+  aspect-ratio: 1 / 1.15;
+  border-radius: 8px;
+  border: 1.5px solid rgba(247,202,201,0.3);
+  background: rgba(255,252,254,0.08);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  overflow: hidden;
+  transition: transform .15s ease;
+}
+.pokedex-item:hover {
+  transform: scale(1.05);
+  z-index: 2;
+}
+.pokedex-item img {
+  width: 48px; height: 48px;
+  image-rendering: pixelated;
+  object-fit: contain;
+}
+.pokedex-item img.silhouette {
+  filter: brightness(0) opacity(0.35);
+}
+.pokedex-item .pdx-num {
+  position: absolute; top: 2px; left: 3px;
+  font-size: .5rem; font-weight: 700;
+  color: var(--muted);
+  font-family: 'DM Mono', monospace;
+}
+.pokedex-item .pdx-count {
+  position: absolute; top: 2px; right: 3px;
+  font-size: .55rem; font-weight: 700;
+  color: var(--accent);
+  background: rgba(255,255,255,0.7);
+  border-radius: 4px;
+  padding: 0 3px;
+}
+.pokedex-item .pdx-name {
+  font-size: .48rem;
+  color: var(--text);
+  text-align: center;
+  line-height: 1.1;
+  margin-top: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+.pokedex-item.locked {
+  opacity: 0.6;
+}
+.pokedex-item.locked .pdx-name {
+  color: var(--muted);
+  font-style: italic;
+}
+.pokedex-item.caught.grade-ssr {
+  border-color: #ffd700;
+  background: rgba(255,215,0,0.12);
+  box-shadow: 0 0 8px rgba(255,215,0,0.25);
+}
+.pokedex-item.caught.grade-sr {
+  border-color: #9c27b0;
+  background: rgba(156,39,176,0.1);
+}
+.pokedex-item.caught.grade-r {
+  border-color: #42a5f5;
+  background: rgba(66,165,245,0.1);
+}
+.pokedex-item.caught.grade-n {
+  border-color: rgba(158,158,158,0.5);
+  background: rgba(255,255,255,0.05);
+}
+
 .collection-modal-close {
   width: 100%; padding: 10px; border-radius: 14px;
   border: 1.5px solid rgba(247,202,201,0.4);
@@ -4534,6 +4630,10 @@ const DEFAULT_CARDS = [
 {id:6293,type:'ox',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'비프리스트레스트 기성콘크리트 말뚝으로 해수에 노출되는 경우의 콘크리트 피복두께는 80mm 이상이다',a:'O',note:'비프리해수 = 80mm (균열 가능 + 해수 = 가장 두꺼움)\n프리해수 = 65mm (균열 적어 더 얇음)\n(KDS 41 19 00 표 4.1-2)'},
 {id:6294,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'[기초용 콘크리트 또는 충전재의 최소 설계기준압축강도 (KDS 41 19 00 표 4.1-1)]\n● 내진설계범주 A, B, C 기초: ___ MPa\n● 내진설계범주 D, 경량골조·2층 이하: ___ MPa\n● 내진설계범주 D, 그 외 구조 기초: ___ MPa\n● 기성콘크리트파일: ___ MPa\n● 천공정착피어: ___ MPa\n● 마이크로파일: ___ MPa\n● 프리스트레스트 기성콘크리트파일: ___ MPa',a:'18 | 18 | 21 | 27 | 27 | 27 | 35',note:'암기: "내진ABC=18, 내진D그외=21, 일반파일=27, 프리=35"\n프리스트레스트는 항상 +8 더 큼 (35)\n(23 군무원 9급 1번)'},
 {id:6295,type:'ox',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'프리스트레스트 기성콘크리트 파일의 최소 설계기준압축강도는 30 MPa 이상이다',a:'X',note:'정답: 35 MPa 이상\n프리스트레스트는 가장 큰 강도 요구\n수치 변조 함정 (30, 27, 40 등)\n(23 군무원 9급 1번 정답)'},
+{id:6296,type:'cloze',cat:'PART5 · 구조역학 > CH04 처짐',q:'[단면이 다른 캔틸레버 보 - 자유단 처짐 (정형 패턴)]\nA고정 — AB(2EI, L) — B(하중 P↓) — BC(EI, L) — C자유단\n\n● 1단계 - B점 처짐: δ_B = PL³ / (3 × ___)\n● 2단계 - B점 회전각: θ_B = PL² / (2 × ___)\n● 3단계 - BC는 하중 X → 자체 처짐 ___\n● 4단계 - 합산: δ_C = δ_B + θ_B × ___\n\n→ BC 구간의 EI는 ___ (모멘트 = 0이므로)',a:'2EI | 2EI | 0 | L | 무시',note:'핵심 통찰: 모멘트=0인 구간은 EI 무관, 회전만 따라감\nδ_C = PL³/(6EI) + PL³/(4EI) = 5PL³/(12EI)\n(19 국가 9급 8번 정답 ④)'},
+{id:6297,type:'ox',cat:'PART4 · 강구조 > CH02 부재설계',q:'인장역작용을 사용하기 위해서는 웨브의 3면이 플랜지나 스티프너에 의해 지지되어 있어야 한다',a:'X',note:'정답: 4면이 모두 지지되어야 함\nTFA(Tension Field Action) = 사선 인장재처럼 작용 → 4면 다 막혀야 인장 갇힘\n적용 불가: 단부 패널, 웨브 구멍, a/h>3\n(20 국가 7급 9번 정답)'},
+{id:6298,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 슬래브 설계',q:'[직접설계법(DDM) 5가지 제한사항 - 시험 필수 암기]\n● 각 방향 ___경간 이상 연속\n● 슬래브 판 단변/장변 비 ___ 이하 (직사각형)\n● 연속 받침부 중심간 경간 차이 ≤ 긴 경간의 ___\n● 연직 ___하중만 작용 (집중하중 X)\n● 활하중 ≤ 고정하중의 ___배 이하\n● 기둥 어긋남 ≤ 경간의 ___ %',a:'3 | 2 | 1/3 | 등분포 | 2 | 10',note:'⚠ 함정: 활하중 3배 (X) → 2배\n⚠ 함정: 집중하중 (X) → 등분포만\n암기: "3·2·1/3·2·10%"\n(22 건축기사 3월 50번 정답 ④)'},
+{id:6299,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[RC 보 배근 4대 원칙 - 단골 함정]\n● 보 하부근 이음 위치: ___ (응력 작은 곳)\n● 보 상부근 이음 위치: ___ (응력 작은 곳)\n● 스터럽(전단철근) 배치: ___ 에 촘촘히 (전단력 큰 곳)\n● 캔틸레버 보 주근(인장철근): ___ 에 배치 (상부 인장)\n● 장기처짐 감소: ___ 철근 추가 (크리프 억제)',a:'단부 | 중앙부 | 단부 | 상부 | 압축',note:'핵심 원칙: "인장 부위에 철근, 응력 작은 곳에서 이음"\n캔틸레버는 위쪽이 늘어남 → 상부근\n장기처짐은 압축철근(복근)으로 줄임\n(14 서울 9급 18번)'},
 {id:6167,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'[지반에 직접 콘크리트를 치는 경우]\n설계 시 전체 두께에서 ___ mm를 제외한 값을 유효 단면으로 계산\n→ 바닥면 불균일 및 흙과의 혼합으로 인한 유효 두께 감소 고려',a:'50'},
 {id:6168,type:'ox',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'구조용 무근콘크리트를 기둥에 사용할 수 없다',a:'O'},
 {id:6169,type:'ox',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'구조용 무근콘크리트를 말뚝 위의 기초판에 사용할 수 없다 (지반 위는 가능)',a:'O'},
@@ -7490,44 +7590,108 @@ function applyVol(gainNode, baseVol) {
 
 
 // ═══════════════════ GACHA SYSTEM ═══════════════════
-const GACHA_POOL = {
+// ═══════════════════ POKEMON DATA ═══════════════════
+// 도감번호 1~250 + 전설 포켓몬
+// 스프라이트: https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{id}.png
+const POKEMON_DATA = {
+  // ═════ N등급 (흔한 1단계 + 약한 진화 전 단계) ═════
   N: [
-    {emoji:'🐣', name:'갓 태어난 병아리'},
-    {emoji:'🌱', name:'새싹'},
-    {emoji:'🐾', name:'귀여운 발자국'},
-    {emoji:'🍡', name:'분홍 경단'},
-    {emoji:'🌸', name:'벚꽃 한 잎'},
-    {emoji:'🐤', name:'노란 병아리'},
-    {emoji:'🫧', name:'비눗방울'},
-    {emoji:'🍓', name:'딸기'},
-    {emoji:'🌼', name:'데이지'},
-    {emoji:'🐇', name:'흰 토끼'},
+    {id:10,name:'캐터피'},{id:11,name:'단데기'},{id:13,name:'뿔충이'},{id:14,name:'딱충이'},
+    {id:16,name:'구구'},{id:17,name:'피죤'},{id:19,name:'꼬렛'},{id:20,name:'레트라'},
+    {id:21,name:'깨비참'},{id:22,name:'깨비드릴조'},{id:23,name:'아보'},{id:25,name:'피카츄'},
+    {id:27,name:'모래두지'},{id:29,name:'니드런♀'},{id:32,name:'니드런♂'},{id:35,name:'삐'},
+    {id:37,name:'식스테일'},{id:39,name:'푸린'},{id:41,name:'주뱃'},{id:43,name:'뚜벅쵸'},
+    {id:46,name:'파라스'},{id:48,name:'콘팡'},{id:50,name:'디그다'},{id:52,name:'나옹'},
+    {id:54,name:'고라파덕'},{id:56,name:'망키'},{id:58,name:'가디'},{id:60,name:'발챙이'},
+    {id:63,name:'캐이시'},{id:66,name:'알통몬'},{id:69,name:'모다피'},{id:72,name:'왕눈해'},
+    {id:74,name:'꼬마돌'},{id:77,name:'포니타'},{id:79,name:'야돈'},{id:81,name:'코일'},
+    {id:84,name:'두두'},{id:86,name:'쥬쥬'},{id:88,name:'질퍽이'},{id:90,name:'셀러'},
+    {id:92,name:'고오스'},{id:96,name:'슬리프'},{id:98,name:'크랩'},{id:100,name:'찌리리공'},
+    {id:102,name:'아라리'},{id:104,name:'탕구리'},{id:108,name:'내루미'},{id:109,name:'또가스'},
+    {id:111,name:'뿔카노'},{id:114,name:'덩쿠리'},{id:116,name:'쏘드라'},{id:118,name:'콘치'},
+    {id:120,name:'별가사리'},{id:129,name:'잉어킹'},{id:133,name:'이브이'},{id:138,name:'암나이트'},
+    {id:140,name:'투구'},
+    // 2세대 일반
+    {id:161,name:'꼬리선'},{id:163,name:'부우부'},{id:165,name:'레디바'},{id:167,name:'페이검'},
+    {id:170,name:'초라기'},{id:172,name:'피츄'},{id:173,name:'삐삐'},{id:174,name:'푸푸린'},
+    {id:175,name:'토게피'},{id:177,name:'네이티'},{id:179,name:'메리프'},{id:183,name:'마릴'},
+    {id:187,name:'통통코'},{id:191,name:'해너츠'},{id:194,name:'우파'},{id:198,name:'니로우'},
+    {id:200,name:'무우마'},{id:204,name:'피콘'},{id:209,name:'블루'},{id:213,name:'단단지'},
+    {id:216,name:'깜지곰'},{id:218,name:'마그케인'},{id:220,name:'꾸꾸리'},{id:223,name:'총어'},
+    {id:228,name:'델빌'},{id:231,name:'코코파스'},{id:240,name:'마그마그'},{id:241,name:'밀탱크'},
   ],
+
+  // ═════ R등급 (진화형 + 강한 1단계) ═════
   R: [
-    {emoji:'🦋', name:'푸른 나비'},
-    {emoji:'🌙', name:'반달'},
-    {emoji:'🐬', name:'돌고래'},
-    {emoji:'🦄', name:'유니콘'},
-    {emoji:'🌊', name:'파도'},
-    {emoji:'🦊', name:'여우'},
-    {emoji:'🍀', name:'네잎클로버'},
-    {emoji:'🌈', name:'무지개'},
+    {id:1,name:'이상해씨'},{id:4,name:'파이리'},{id:7,name:'꼬부기'},
+    {id:12,name:'버터플'},{id:15,name:'독침붕'},{id:18,name:'피죤투'},
+    {id:24,name:'아보크'},{id:26,name:'라이츄'},{id:28,name:'고지'},
+    {id:31,name:'니드퀸'},{id:34,name:'니드킹'},{id:36,name:'픽시'},{id:38,name:'나인테일'},
+    {id:40,name:'푸크린'},{id:42,name:'골뱃'},{id:44,name:'냄새꼬'},
+    {id:47,name:'파라섹트'},{id:49,name:'도나리'},{id:51,name:'닥트리오'},{id:53,name:'페르시온'},
+    {id:55,name:'골덕'},{id:57,name:'성원숭'},{id:59,name:'윈디'},{id:61,name:'슈륙챙이'},
+    {id:62,name:'강챙이'},{id:64,name:'윤겔라'},{id:67,name:'근육몬'},{id:70,name:'우츠동'},
+    {id:73,name:'독파리'},{id:75,name:'데구리'},{id:78,name:'날쌩마'},
+    {id:80,name:'야도란'},{id:82,name:'레어코일'},{id:83,name:'파오리'},{id:85,name:'두트리오'},
+    {id:87,name:'쥬레곤'},{id:89,name:'질뻐기'},{id:91,name:'파르셀'},
+    {id:93,name:'고우스트'},{id:95,name:'롱스톤'},{id:97,name:'슬리퍼'},{id:99,name:'킹크랩'},
+    {id:101,name:'붐볼'},{id:103,name:'나시'},{id:105,name:'텅구리'},{id:106,name:'시라소몬'},
+    {id:107,name:'홍수몬'},{id:110,name:'또도가스'},{id:112,name:'코뿌리'},{id:113,name:'럭키'},
+    {id:115,name:'캥카'},{id:117,name:'시드라'},{id:119,name:'왕콘치'},{id:121,name:'아쿠스타'},
+    {id:122,name:'마임맨'},{id:123,name:'스라크'},{id:124,name:'루주라'},{id:125,name:'에레브'},
+    {id:126,name:'마그마'},{id:127,name:'쁘사이저'},{id:128,name:'켄타로스'},
+    {id:131,name:'라프라스'},{id:132,name:'메타몽'},{id:134,name:'샤미드'},{id:135,name:'쥬피썬더'},
+    {id:136,name:'부스터'},{id:137,name:'폴리곤'},{id:139,name:'암스타'},{id:141,name:'투구푸스'},
+    {id:147,name:'미뇽'},{id:148,name:'신뇽'},
+    // 2세대 진화
+    {id:160,name:'장크로다일'},{id:166,name:'레디안'},{id:168,name:'아리아도스'},{id:171,name:'랜턴'},
+    {id:176,name:'토게틱'},{id:178,name:'네이티오'},{id:181,name:'전룡'},{id:184,name:'마릴리'},
+    {id:185,name:'꼬지모'},{id:189,name:'솜솜코'},{id:192,name:'해루미'},{id:195,name:'누오'},
+    {id:199,name:'야도킹'},{id:202,name:'마자용'},{id:205,name:'쏘콘'},{id:208,name:'강철톤'},
+    {id:210,name:'그랑블루'},{id:211,name:'침바루'},{id:214,name:'헤라크로스'},{id:215,name:'포푸니'},
+    {id:217,name:'링곰'},{id:219,name:'마그카르고'},{id:221,name:'메꾸리'},{id:222,name:'코산호'},
+    {id:224,name:'대포무노'},{id:226,name:'만타인'},{id:227,name:'무장조'},{id:229,name:'헬가'},
+    {id:230,name:'킹드라'},{id:232,name:'코리갑'},{id:233,name:'폴리곤2'},{id:234,name:'노라키'},
+    {id:237,name:'카포에라'},{id:242,name:'해피너스'},
   ],
+
+  // ═════ SR등급 (최종진화 + 준전설 + 600족) ═════
   SR: [
-    {emoji:'🦋', name:'별빛 나비 ✦'},
-    {emoji:'🐉', name:'꿈의 드래곤'},
-    {emoji:'🌺', name:'마법의 히비스커스'},
-    {emoji:'🦅', name:'황금 독수리'},
-    {emoji:'🌙', name:'보름달 요정'},
-    {emoji:'🐋', name:'하늘 고래'},
+    {id:2,name:'이상해풀'},{id:3,name:'이상해꽃'},
+    {id:5,name:'리자드'},{id:6,name:'리자몽'},
+    {id:8,name:'어니부기'},{id:9,name:'거북왕'},
+    {id:30,name:'니드리나'},{id:33,name:'니드리노'},
+    {id:45,name:'라플레시아'},{id:65,name:'후딘'},{id:68,name:'괴력몬'},{id:71,name:'우츠보트'},
+    {id:76,name:'딱구리'},{id:94,name:'팬텀'},{id:130,name:'갸라도스'},
+    {id:142,name:'프테라'},{id:143,name:'잠만보'},{id:149,name:'망나뇽'},
+    // 2세대 최종진화·준전설
+    {id:154,name:'메가니움'},{id:157,name:'블레이범'},
+    {id:169,name:'크로뱃'},{id:182,name:'아르코'},{id:186,name:'왕구리'},
+    {id:196,name:'에브이'},{id:197,name:'블래키'},
+    {id:212,name:'핫삼'},{id:225,name:'딜리버드'},
+    {id:235,name:'루브도'},{id:248,name:'마기라스'},
   ],
+
+  // ═════ SSR등급 (전설·환상 포켓몬) ═════
   SSR: [
-    {emoji:'⭐', name:'전설의 별'},
-    {emoji:'🌟', name:'슈퍼노바'},
-    {emoji:'💫', name:'유성'},
-    {emoji:'👑', name:'여왕의 왕관'},
-    {emoji:'🔮', name:'예언의 수정구'},
+    // 1세대 전설
+    {id:144,name:'프리저'},{id:145,name:'썬더'},{id:146,name:'파이어'},
+    {id:150,name:'뮤츠'},{id:151,name:'뮤'},
+    // 2세대 전설
+    {id:243,name:'라이코'},{id:244,name:'엔테이'},{id:245,name:'스이쿤'},
+    {id:249,name:'루기아'},{id:250,name:'칠색조'},
+    {id:251,name:'세레비'},
   ],
+};
+
+const POKEMON_SPRITE_URL = (id) => `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
+
+// ═══════════════════ GACHA POOL (호환용 매핑) ═══════════════════
+const GACHA_POOL = {
+  N:   POKEMON_DATA.N.map(p => ({id:p.id, name:p.name, sprite:POKEMON_SPRITE_URL(p.id)})),
+  R:   POKEMON_DATA.R.map(p => ({id:p.id, name:p.name, sprite:POKEMON_SPRITE_URL(p.id)})),
+  SR:  POKEMON_DATA.SR.map(p => ({id:p.id, name:p.name, sprite:POKEMON_SPRITE_URL(p.id)})),
+  SSR: POKEMON_DATA.SSR.map(p => ({id:p.id, name:p.name, sprite:POKEMON_SPRITE_URL(p.id)})),
 };
 
 const GACHA_RATES = { N:0.60, R:0.25, SR:0.12, SSR:0.03 };
@@ -7630,11 +7794,13 @@ function doPull() {
   const front = document.getElementById('gacha-card-front');
   front.className = 'gacha-card-face gacha-card-front ' + GRADE_COLORS[grade];
   document.getElementById('gacha-result-grade').textContent = grade;
-  document.getElementById('gacha-result-emoji').textContent = item.emoji;
-  document.getElementById('gacha-result-name').textContent = item.name;
+  // 포켓몬 스프라이트로 표시
+  const emojiEl = document.getElementById('gacha-result-emoji');
+  emojiEl.innerHTML = `<img src="${item.sprite}" alt="${item.name}" style="width:96px;height:96px;image-rendering:pixelated;" onerror="this.outerHTML='❓'">`;
+  document.getElementById('gacha-result-name').textContent = `No.${String(item.id).padStart(3,'0')} ${item.name}`;
 
-  // 히스토리 저장
-  gachaData.history.unshift({ grade, emoji: item.emoji, name: item.name, date: new Date().toLocaleDateString() });
+  // 히스토리 저장 (포켓몬 id 사용)
+  gachaData.history.unshift({ grade, pokeId: item.id, name: item.name, date: new Date().toLocaleDateString() });
   if (gachaData.history.length > 30) gachaData.history = gachaData.history.slice(0, 30);
   saveGacha();
   updateGachaBtn();
@@ -7688,8 +7854,9 @@ function spawnGachaStars(grade) {
 }
 
 function showSSROverlay(item) {
-  document.getElementById('gacha-ssr-emoji').textContent = item.emoji;
-  document.getElementById('gacha-ssr-name').textContent = item.name;
+  const ssrEl = document.getElementById('gacha-ssr-emoji');
+  ssrEl.innerHTML = `<img src="${item.sprite}" alt="${item.name}" style="width:160px;height:160px;image-rendering:pixelated;" onerror="this.outerHTML='⭐'">`;
+  document.getElementById('gacha-ssr-name').textContent = `No.${String(item.id).padStart(3,'0')} ${item.name}`;
   document.getElementById('gacha-ssr-overlay').classList.add('open');
   spawnGachaStars('SSR');
 }
@@ -7702,11 +7869,15 @@ function renderGachaHistory() {
   loadGacha();
   const wrap = document.getElementById('gacha-history-wrap');
   if (!wrap) return;
-  wrap.innerHTML = gachaData.history.slice(0,20).map(h =>
-    `<div class="gacha-history-item grade-${h.grade.toLowerCase()}" title="${h.name} (${h.grade})">
-      ${h.emoji}
-    </div>`
-  ).join('');
+  wrap.innerHTML = gachaData.history.slice(0,20).map(h => {
+    // pokeId가 있으면 스프라이트, 없으면 기존 emoji (구버전 호환)
+    const display = h.pokeId
+      ? `<img src="${POKEMON_SPRITE_URL(h.pokeId)}" style="width:36px;height:36px;image-rendering:pixelated;" alt="${h.name}" onerror="this.outerHTML='❓'">`
+      : (h.emoji || '❓');
+    return `<div class="gacha-history-item grade-${h.grade.toLowerCase()}" title="${h.name} (${h.grade})">
+      ${display}
+    </div>`;
+  }).join('');
 }
 
 
@@ -8589,32 +8760,46 @@ function renderCollectionDogam() {
   loadGacha();
   const wrap = document.getElementById('collection-grades-wrap');
   const grades = ['SSR','SR','R','N'];
-  const gradeLabels = { SSR:'⭐ SSR', SR:'💜 SR', R:'💙 R', N:'⬜ N' };
+  const gradeLabels = { SSR:'⭐ SSR (전설)', SR:'💜 SR (희귀)', R:'💙 R (레어)', N:'⬜ N (일반)' };
   const gradeCls = { SSR:'cgt-ssr', SR:'cgt-sr', R:'cgt-r', N:'cgt-n' };
 
-  // 카드별 카운트
-  const cardMap = {};
+  // 획득 카운트 집계 (pokeId 기준)
+  const caughtMap = {};
   for (const h of gachaData.history) {
-    const key = h.emoji + h.name;
-    if (!cardMap[key]) cardMap[key] = { ...h, count: 0 };
-    cardMap[key].count++;
+    if (!h.pokeId) continue; // 구버전 데이터 스킵
+    if (!caughtMap[h.pokeId]) caughtMap[h.pokeId] = 0;
+    caughtMap[h.pokeId]++;
   }
 
+  // 등급별 전체 포켓몬 + 획득 여부
   wrap.innerHTML = grades.map(grade => {
-    const cards = Object.values(cardMap).filter(c=>c.grade===grade);
-    if (!cards.length) return `<div class="collection-grade-group">
-      <span class="collection-grade-title ${gradeCls[grade]}">${gradeLabels[grade]}</span>
-      <div style="font-size:.72rem;color:var(--muted);padding:4px 0;">아직 없음</div>
-    </div>`;
+    const allPokemon = POKEMON_DATA[grade] || [];
+    // 도감번호 순으로 정렬
+    const sorted = [...allPokemon].sort((a,b)=>a.id-b.id);
+    const caughtCount = sorted.filter(p => caughtMap[p.id]).length;
+    const totalCount = sorted.length;
+
     return `<div class="collection-grade-group">
-      <span class="collection-grade-title ${gradeCls[grade]}">${gradeLabels[grade]} (${cards.length}종)</span>
-      <div class="collection-cards-grid">
-        ${cards.map(c=>`
-          <div class="collection-card-item grade-${grade.toLowerCase()}">
-            <span class="cc-count">×${c.count}</span>
-            ${c.emoji}
-            <span class="cc-name">${c.name}</span>
-          </div>`).join('')}
+      <span class="collection-grade-title ${gradeCls[grade]}">${gradeLabels[grade]} ${caughtCount}/${totalCount}</span>
+      <div class="pokedex-grid">
+        ${sorted.map(p => {
+          const caught = caughtMap[p.id];
+          const sprite = POKEMON_SPRITE_URL(p.id);
+          if (caught) {
+            return `<div class="pokedex-item caught grade-${grade.toLowerCase()}" title="${p.name}">
+              <span class="pdx-num">#${String(p.id).padStart(3,'0')}</span>
+              <img src="${sprite}" alt="${p.name}" onerror="this.outerHTML='❓'">
+              ${caught > 1 ? `<span class="pdx-count">×${caught}</span>` : ''}
+              <span class="pdx-name">${p.name}</span>
+            </div>`;
+          } else {
+            return `<div class="pokedex-item locked" title="???">
+              <span class="pdx-num">#${String(p.id).padStart(3,'0')}</span>
+              <img src="${sprite}" alt="???" class="silhouette" onerror="this.outerHTML='❓'">
+              <span class="pdx-name">???</span>
+            </div>`;
+          }
+        }).join('')}
       </div>
     </div>`;
   }).join('');
