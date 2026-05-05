@@ -3742,9 +3742,12 @@ body::before {
       <div class="ticket-info-list">
         <div>📋 데일리 퀘스트 1개 완료마다 (+1)</div>
         <div>🎁 데일리 퀘스트 3개 다 완료 (+1 보너스)</div>
-        <div>🔥 연속 학습 5일/10일/20일/30일/50일/100일</div>
+        <div>🔥 연속 학습 5/10/20/30/50/100일</div>
         <div style="padding-left:14px;color:rgba(0,0,0,0.4);">→ +2 / +3 / +5 / +7 / +10 / +20장</div>
-        <div>👾 보스 격파 (+1)</div>
+        <div>👾 보스 격파 (+1, 무한 도전!)</div>
+        <div>🏆 보스 누적 5/10/30/50/100마리</div>
+        <div style="padding-left:14px;color:rgba(0,0,0,0.4);">→ +3 / +5 / +10 / +15 / +30장</div>
+        <div>🔥 하루에 보스 5마리 (+2)</div>
         <div>📈 티어 승급 (+1)</div>
       </div>
     </div>
@@ -4525,7 +4528,7 @@ const DEFAULT_CARDS = [
   {id:5320,cat:'PART2 · 일반구조 > CH04 조적구조',type:'cloze',q:'[보강벽돌쌓기]\n● 벽돌 공동부의 모르타르·콘크리트 1회 타설 높이: ___ m 이하\n● 보강벽돌쌓기 철근 피복두께: ___ mm 이상\n● 칸막이벽에서 콩자갈 콘크리트/모르타르 충전: ___ mm 이상',a:'1.5 | 20 | 10'},
   {id:5321,cat:'PART2 · 일반구조 > CH04 조적구조',type:'cloze',q:'[벽돌 물축임]\n● 붉은벽돌: 벽돌쌓기 ___ 전에 물축임\n● 시멘트벽돌: 쌓기 ___ 에 물축임\n● 내화벽돌: 물축임 ___ 것이 원칙',a:'하루 | 직전 | 하지 않는'},
   {id:5322,cat:'PART2 · 일반구조 > CH04 조적구조',type:'cloze',q:'[특수 벽돌쌓기 종류]\n● 벽면 내쌓기: 한 켜 ___ B, 두 켜 ___ B, 내미는 한도 ___ B 이하\n● 내쌓기는 ___ 쌓기로 하는 것이 강도·시공상 유리\n● 창대쌓기: 창대 벽돌 윗면을 ___ 도 내외로 경사지어 옆세워 쌓음\n● 벽돌면에 구멍을 내어 쌓는 방식: ___ 쌓기\n● 45도로 모서리가 면에 나오도록 쌓는 방식: ___ 쌓기',a:'1/8 | 1/4 | 2.0 | 마구리 | 15 | 영롱 | 엇모'},
-  {id:5323,cat:'PART2 · 일반구조 > CH04 조적구조',type:'cloze',q:'[석재 종류별 특징·가공순서]\n● 화강암: 조직 균일, 경도·강도·내마모성·색채·광택 우수, ___ 약함\n● 대리석: 강도 ___ , 내화성·내산성 약함, 풍화 쉬워 ___ 재 사용 X, ___ 장식 재료로 사용\n● 돌의 가공순서: ___ → ___ → ___ → ___ → ___\n  (혹두기·정다듬·도드락다듬·잔다듬·물갈기)',a:'내화성 | 크지만 | 외장 | 실내 | 혹두기(쇠메) | 정다듬(정) | 도드락다듬(도드락망치) | 잔다듬(날망치) | 물갈기(금강사·숫돌)'},
+  {id:5323,cat:'PART2 · 일반구조 > CH04 조적구조',type:'cloze',q:'[석재 종류별 특징·가공순서]\n● 화강암: 조직 균일, 경도·강도·내마모성·색채·광택 우수, ___ 약함\n● 대리석: 강도 크지만 내화성·내산성 약함, 풍화 쉬워 ___ 재 사용 X, ___ 장식 재료로 사용\n● 돌의 가공순서 (5단계):\n  ___ → ___ → ___ → ___ → ___',a:'내화성 | 외장 | 실내 | 혹두기 | 정다듬 | 도드락다듬 | 잔다듬 | 물갈기',note:'화강암 = 불에 약함 (내화성 ↓)\n대리석 = 산성비에 약함 → 외장재 X, 실내 장식만\n\n[가공 도구]\n혹두기 = 쇠메\n정다듬 = 정\n도드락다듬 = 도드락망치\n잔다듬 = 날망치\n물갈기 = 금강사·숫돌\n\n암기: "혹·정·도·잔·물" (거친→매끈한 순서)'},
   {id:5324,cat:'PART2 · 일반구조 > CH04 조적구조',type:'cloze',q:'[나라별 벽돌쌓기]\n● ___ 식쌓기: 한 켜 마구리쌓기, 다음 켜 길이쌓기 교대 / 마구리쌓기 켜에 이오토막·반절 사용\n● ___ 식쌓기: 한 켜 마구리, 다음 켜 길이쌓기 교대 / 길이쌓기 켜에 칠오토막 사용\n● ___ 식쌓기: 5켜 길이쌓기, 다음 한 켜 마구리쌓기\n● ___ 식쌓기: 같은 켜에 길이쌓기와 마구리쌓기 교대 사용',a:'영 | 화란 | 미 | 불'},
   {id:5325,cat:'PART2 · 일반구조 > CH04 조적구조',type:'cloze',q:'[창대]\n창 밑에 돌·벽돌을 옆세워 쌓고 모르타르로 마감\n윗면은 경사지게 하여 빗물이 ___ 물흘림 경사를 두고\n그 아래에는 ___ 홈을 파서 물이 벽에 흘러들어 가지 않도록 함',a:'흐르도록 | 물끊기'},
   {id:5326,cat:'PART2 · 일반구조 > CH04 조적구조',type:'cloze',q:'[아치쌓기]\n상부에서 오는 수직하중이 아치의 중심선 따라 좌우로 나누어져 ___ 력만 받음\n부재 하부에 ___ 력 안 생김\n● 개구부 너비 ___ m 이하: 평아치\n● 폭이 ___ m 넘는 개구부 상부: 아치 X, ___ 인방보 사용\n● 환기구멍 등 작은 개구부라도 아치를 트는 것이 ___',a:'압축 | 인장 | 1.0 | 1.8 | 철근콘크리트 | 원칙'},
@@ -4828,6 +4831,16 @@ const DEFAULT_CARDS = [
 {id:6297,type:'ox',cat:'PART4 · 강구조 > CH02 부재설계',q:'인장역작용을 사용하기 위해서는 웨브의 3면이 플랜지나 스티프너에 의해 지지되어 있어야 한다',a:'X',note:'정답: 4면이 모두 지지되어야 함\nTFA(Tension Field Action) = 사선 인장재처럼 작용 → 4면 다 막혀야 인장 갇힘\n적용 불가: 단부 패널, 웨브 구멍, a/h>3\n(20 국가 7급 9번 정답)'},
 {id:6298,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 슬래브 설계',q:'[직접설계법(DDM) 5가지 제한사항 - 시험 필수 암기]\n● 각 방향 ___경간 이상 연속\n● 슬래브 판 단변/장변 비 ___ 이하 (직사각형)\n● 연속 받침부 중심간 경간 차이 ≤ 긴 경간의 ___\n● 연직 ___하중만 작용 (집중하중 X)\n● 활하중 ≤ 고정하중의 ___배 이하\n● 기둥 어긋남 ≤ 경간의 ___ %',a:'3 | 2 | 1/3 | 등분포 | 2 | 10',note:'⚠ 함정: 활하중 3배 (X) → 2배\n⚠ 함정: 집중하중 (X) → 등분포만\n암기: "3·2·1/3·2·10%"\n(22 건축기사 3월 50번 정답 ④)'},
 {id:6299,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[RC 보 배근 4대 원칙 - 단골 함정]\n● 보 하부근 이음 위치: ___ (응력 작은 곳)\n● 보 상부근 이음 위치: ___ (응력 작은 곳)\n● 스터럽(전단철근) 배치: ___ 에 촘촘히 (전단력 큰 곳)\n● 캔틸레버 보 주근(인장철근): ___ 에 배치 (상부 인장)\n● 장기처짐 감소: ___ 철근 추가 (크리프 억제)',a:'단부 | 중앙부 | 단부 | 상부 | 압축',note:'핵심 원칙: "인장 부위에 철근, 응력 작은 곳에서 이음"\n캔틸레버는 위쪽이 늘어남 → 상부근\n장기처짐은 압축철근(복근)으로 줄임\n(14 서울 9급 18번)'},
+{id:6300,type:'cloze',cat:'PART6 · 건축계획·기타 > CH04 내진·내풍·소방',q:'[지진력저항시스템 - 반응수정계수(R) 4원칙]\n● 직교 2축에 다른 시스템 → ___ 의 R값 사용\n● 같은 방향에 다른 시스템 조합 → R값 ___ 사용\n● 연직(상하) 다른 시스템: 상부=자기 R, 하부=R값 ___\n● 공유되는 부재의 상세 → R값 ___ 기준 적용\n\n[추가] 이중골조시스템에서 모멘트골조는 설계지진력의 최소 ___% 분담',a:'각각 | 최솟값 | 최솟값 | 최댓값 | 25',note:'⭐ 핵심 암기:\n"지진력 부담 = 작은 R" (안전측, 빡세게 설계)\n"부재 디테일 = 큰 R" (큰 변형 견디게)\n예외: 직교 2축만 독립 (X·Y 따로)\n\n[R값 의미]\nR ↑ = 연성 ↑ (변형 잘 견딤, 지진력 작게 받음)\nR ↓ = 취성 (약함, 지진력 크게 받음)\n예: 모멘트골조 R=8 / 전단벽 R=5\n\n[원리]\n- 같은 방향: 약한 놈 먼저 부서짐 → 작은 R 기준\n- 연직 하부: 위 변형 다 받음 → 작은 R 기준\n- 공유 부재: 큰 변형 대비해 빡세게 디테일 → 큰 R 기준\n(11 지방 9급 20번)'},
+{id:6301,type:'ox',cat:'PART6 · 건축계획·기타 > CH04 내진·내풍·소방',q:'서로 다른 구조시스템을 조합하여 같은 방향으로 작용하는 횡력에 저항하도록 사용한 경우, 반응수정계수 값은 각 시스템의 최댓값을 사용하여야 한다',a:'X',note:'정답: 최솟값 (안전측)\n같은 방향에서 약한 시스템이 먼저 파괴됨 → 작은 R값 기준 = 지진력 크게 받게 = 빡세게 설계\n⚠ 함정: 최댓값 vs 최솟값 (단어 변조)\n(11 지방 9급 20번 정답)'},
+{id:6302,type:'ox',cat:'PART6 · 건축계획·기타 > CH04 내진·내풍·소방',q:'반응수정계수가 서로 다른 시스템에 의하여 공유되는 구조 부재의 경우, 그 중 큰 반응수정계수에 상응하는 상세를 갖도록 설계하여야 한다',a:'O',note:'공유 부재는 큰 R값 기준 디테일링\n이유: R값 큰 시스템이 큰 변형 일으킬 수 있음 → 부재가 그 변형 견뎌야 함 → 연성 디테일 필수\n⚠ "지진력 분담"과 "부재 디테일"은 정반대\n- 분담: 작은 R\n- 디테일: 큰 R\n(11 지방 9급 20번)'},
+{id:6303,type:'ox',cat:'PART6 · 건축계획·기타 > CH04 내진·내풍·소방',q:'이중골조시스템에서 모멘트골조는 설계지진력의 최소 25%를 부담하여야 한다',a:'O',note:'이중골조 = 모멘트골조 + 전단벽/가새골조\n모멘트골조 = 보조 시스템\n전단벽이 파괴되어도 모멘트골조가 25% 이상 받쳐줘야 → 안전 확보\n수치 변조 함정 (15%, 20%, 30% 등)\n(11 지방 9급 20번)'},
+{id:6304,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S03 기둥 설계',q:'[장주효과 무시 가능 세장비 한계]\n● 횡구속 골조: kℓu/r ≤ ___ - ___ × (M₁/M₂) ≤ ___\n● 비횡구속 골조: kℓu/r ≤ ___\n\n[부호 규칙]\n● 단일곡률 (single curvature): M₁/M₂ = ( ___ ) 양수\n● 복곡률 (double curvature): M₁/M₂ = ( ___ ) 음수\n● M₁ = ___ 단부모멘트, M₂ = ___ 단부모멘트',a:'34 | 12 | 40 | 22 | + | − | 작은 | 큰',note:'⭐ 핵심 암기: "34, 12, 40 / 22"\n\n계산 예 (22 서울 9급 2월):\n- 단부모멘트 200, 300 (단일곡률)\n- M₁/M₂ = +200/300 = +2/3\n- 한계 = 34 - 12×(2/3) = 34 - 8 = 26\n\n⚠ 함정 패턴:\n1) 횡구속(34-12·) vs 비횡구속(22) 헷갈림\n2) 단일곡률(+) vs 복곡률(−) 부호\n3) M₁(작은값) vs M₂(큰값) 위치 바뀜\n\n장주효과 = 좌굴 영향, 무시 못 하면 모멘트 증대계수 적용 필요'},
+{id:6305,type:'ox',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S03 기둥 설계',q:'재료의 파괴에 앞서 좌굴이 선행되는 기둥을 단주라 한다',a:'X',note:'정답: 장주(long/slender column)\n● 단주 = 재료 파괴(압축강도 도달)가 먼저 → 좌굴 X\n● 장주 = 좌굴이 먼저 일어남 (재료 강도 도달 전)\n\n구분 기준: 세장비 (slenderness ratio)\n- 세장비 작음 → 단주\n- 세장비 큼 → 장주 (좌굴 위험)\n\n⚠ 함정: 단주 ↔ 장주 정의 바꿔치기\n(21 지방 9급 경채 10번 정답)'},
+{id:6306,type:'cloze',cat:'PART3 · RC구조 > CH04 내진설계 > S01 특수모멘트골조',q:'[특수모멘트골조 휨부재 기하 요구사항 4가지]\n● 부재 순경간 ≥ 유효깊이의 ___ 배\n● 부재 폭/깊이 비 (b/h) ≥ ___\n● 부재 폭 ≥ ___ mm\n● 부재 폭 ≤ 지지부재 폭 + (휨부재 깊이의 ___ × 양측)',a:'4 | 0.3 | 250 | 3/4',note:'⭐ 핵심 수치 4개:\n"4·0.3·250·3/4"\n\n⚠ 빈출 함정 (수치 변조):\n- 부재 폭 200mm (X) → 250mm (○) ⭐⭐⭐\n- 폭/깊이 0.25 (X) → 0.3 (○)\n- 순경간 3d (X) → 4d (○)\n- 양측 1/2 (X) → 3/4 (○)\n\n[규정 이유]\n- b/h ≥ 0.3 → 너무 얇은 보 금지 (비틀림·횡좌굴 방지)\n- 폭 ≥ 250 → 충분한 단면 확보\n- 순경간 ≥ 4d → 깊은보 거동 X, 일반 휨거동 보장\n- 폭 ≤ 기둥+0.75h × 양측 → 보 폭 제한\n(17 지방 9급 13번)'},
+{id:6307,type:'ox',cat:'PART3 · RC구조 > CH04 내진설계 > S01 특수모멘트골조',q:'특수모멘트골조 휨부재의 폭은 200 mm 이상이어야 한다',a:'X',note:'정답: 250 mm 이상\n⚠ 빈출 수치 변조 함정\n특수모멘트골조 휨부재 4대 기하조건 중 가장 자주 출제되는 함정\n(17 지방 9급 13번 정답)'},
+{id:6308,type:'ox',cat:'PART3 · RC구조 > CH04 내진설계 > S01 특수모멘트골조',q:'특수모멘트골조 휨부재의 부재 깊이에 대한 폭의 비는 0.3 이상이어야 한다',a:'O',note:'b/h ≥ 0.3\n→ 보가 너무 얇으면 비틀림·횡좌굴 위험 ↑\n수치 변조 함정 (0.25, 0.4 등)\n(17 지방 9급 13번)'},
+{id:6309,type:'ox',cat:'PART3 · RC구조 > CH04 내진설계 > S01 특수모멘트골조',q:'특수모멘트골조 휨부재의 순경간은 유효깊이의 4배 이상이어야 한다',a:'O',note:'순경간 ≥ 4d\n→ 깊은보(deep beam) 거동 X, 일반 휨거동 보장\n수치 변조 함정 (3d, 5d 등)\n(17 지방 9급 13번)'},
 {id:6167,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'[지반에 직접 콘크리트를 치는 경우]\n설계 시 전체 두께에서 ___ mm를 제외한 값을 유효 단면으로 계산\n→ 바닥면 불균일 및 흙과의 혼합으로 인한 유효 두께 감소 고려',a:'50'},
 {id:6168,type:'ox',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'구조용 무근콘크리트를 기둥에 사용할 수 없다',a:'O'},
 {id:6169,type:'ox',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'구조용 무근콘크리트를 말뚝 위의 기초판에 사용할 수 없다 (지반 위는 가능)',a:'O'},
@@ -5724,6 +5737,7 @@ const DEFAULT_ENG_CARDS = [
 {id:9420,cat:"영단어",type:"flash",q:"invent",a:"발명하다 / 처음 만들어내다(동)\n⚠ '발전하다'는 develop! invent ≠ 발전하다\ninvent = 처음으로 만들어냄 (없던 것을 창조)\ndevelop = 점차 향상·개발 (있던 것을 발전)\ninvent the telephone = 전화를 발명하다\ninvent a story = 이야기를 지어내다\ndevelop a skill = 기술을 발전시키다\n≒ create, devise, originate\n명사: invention(발명품), inventor(발명가)",pron:"ɪnˈvent",note:"Edison invented the light bulb (전구를 발명) vs Edison developed his ideas (생각을 발전)"},
 {id:9421,cat:"영단어",type:"flash",q:"basement",a:"지하실 / 지하층(명)\n⚠ '기초'는 foundation! basement ≠ 기초\n⭐ 건축직 빈출 어휘!\nbasement = 건물의 지하 층\nfoundation = 건물의 기초/토대\nbase = 밑부분/기반\nbasement parking = 지하 주차장\nbuild a strong foundation = 튼튼한 기초를 쌓다\n건물 층 구조: basement → ground floor → 1F → 2F\n≒ cellar(저장용 지하실)",pron:"ˈbeɪsmənt",note:"The basement of the building has a parking lot. (건물 지하실에 주차장)"},
 {id:9422,cat:"영단어",type:"flash",q:"critic",a:"비평가 / 평론가(명, 사람)\n⚠ '위기의'는 critical! critic ≠ 위기\n4종 헷갈림 정리:\n• critic (명, 사람) = 비평가\n• critical (형) = 비판적인·중대한·위기의\n• criticize (동) = 비판하다\n• crisis (명) = 위기 (위험한 상황)\nfilm critic = 영화 평론가\ncritical moment = 결정적 순간\neconomic crisis = 경제 위기\n≒ reviewer(평론가), commentator",pron:"ˈkrɪtɪk",note:"The critic gave a critical review during the financial crisis. (한 문장에 3개 다)"},
+{id:9423,cat:"영단어",type:"flash",q:"optimistic",a:"낙관적인 / 희망적인 (형)\n⚠ '최상의'와 혼동 금지!\n어원: optim(최상의) + istic(~한) → 최상으로 보는 → 낙관적인\n\n2종 헷갈림 정리:\n• optimistic (형) = 낙관적인 (희망적으로 보는)\n  → 사람의 태도/관점\n• optimal/optimum (형) = 최적의, 최상의\n  → 객관적 최선의 상태\n\nbe optimistic about ~ = ~에 대해 낙관적이다\noptimistic view = 낙관적 견해\noptimal solution = 최적해\n≒ hopeful, positive\n↔ pessimistic (비관적인)",pron:"ˌɒptɪˈmɪstɪk",note:"She is optimistic about her future, but the optimal strategy hasn't been found yet."},
 ];
 
 // ═══════════════════ STATE ═══════════════════
@@ -8201,6 +8215,8 @@ let bossData = {
   todayCorrect: 0,
   bossDefeated: false,
   bossAvailable: false,
+  totalKills: 0,        // 누적 격파 수 (전체)
+  todayKills: 0,        // 오늘 격파 수
 };
 // 약점 카드 저장소 (id → 틀린 횟수)
 let bossWeakCards = {};
@@ -8239,10 +8255,17 @@ let bossSession = {
 function loadBoss() {
   const s = localStorage.getItem('boss_data');
   if (s) bossData = JSON.parse(s);
-  // 날짜 바뀌면 리셋
+  // 누적 필드 초기화 (구버전 호환)
+  if (typeof bossData.totalKills !== 'number') bossData.totalKills = 0;
+  if (typeof bossData.todayKills !== 'number') bossData.todayKills = 0;
+  // 날짜 바뀌면 일별 카운트만 리셋 (누적은 유지)
   const today = getTodayStr();
   if (bossData.date !== today) {
-    bossData = { date:today, todayCorrect:0, bossDefeated:false, bossAvailable:false };
+    bossData.date = today;
+    bossData.todayCorrect = 0;
+    bossData.bossDefeated = false;
+    bossData.bossAvailable = false;
+    bossData.todayKills = 0;
     saveBoss();
   }
 }
@@ -8257,7 +8280,8 @@ function initBoss() {
 
 function onBossCorrect() {
   loadBoss();
-  if (bossData.bossDefeated) return; // 이미 오늘 클리어
+  // 보스 출현 중이면 카운트 안 함 (도전 중)
+  if (bossData.bossAvailable) return;
   bossData.todayCorrect = Math.min(BOSS_GOAL, (bossData.todayCorrect||0) + 1);
   if (bossData.todayCorrect >= BOSS_GOAL && !bossData.bossAvailable) {
     bossData.bossAvailable = true;
@@ -8285,20 +8309,14 @@ function updateBossBar() {
   const pct = Math.min(100, Math.round((bossData.todayCorrect||0) / BOSS_GOAL * 100));
   fill.style.width = pct + '%';
 
-  if (bossData.bossDefeated) {
-    icon.textContent = '✅';
-    barLabel.textContent = '오늘 보스 클리어!';
-    label.textContent = '내일 또 도전';
-    bar.classList.remove('ready');
-    bar.style.cursor = 'default';
-  } else if (bossData.bossAvailable) {
+  if (bossData.bossAvailable) {
     icon.textContent = '👾';
     barLabel.textContent = '⚔️ 보스 출현! 탭하여 도전!';
     label.textContent = '도전 가능!';
     bar.classList.add('ready');
   } else {
     icon.textContent = '👾';
-    barLabel.textContent = '보스 등장까지';
+    barLabel.textContent = `보스 등장까지 (누적 ${bossData.totalKills||0}마리 격파)`;
     label.textContent = `${bossData.todayCorrect||0} / ${BOSS_GOAL}`;
     bar.classList.remove('ready');
     bar.style.cursor = 'default';
@@ -8307,7 +8325,7 @@ function updateBossBar() {
 
 function tryOpenBoss() {
   loadBoss();
-  if (!bossData.bossAvailable || bossData.bossDefeated) return;
+  if (!bossData.bossAvailable) return;
   openBossModal();
 }
 
@@ -8616,14 +8634,52 @@ function endBossBattle() {
     document.getElementById('boss-result-title').textContent = '완벽 승리!';
     document.getElementById('boss-result-title').className = 'boss-result-title win';
     descLines.unshift(`${bossSession.boss.name}을 완벽히 쓰러뜨렸다!`);
-    descLines.push('+20pt & 뽑기권 1장 획득!');
+
+    // 누적 격파 카운트
+    bossData.totalKills = (bossData.totalKills||0) + 1;
+    bossData.todayKills = (bossData.todayKills||0) + 1;
+
+    // 기본 보상
     addPoints(PT.bossWin, '보스전 완벽 승리');
     addGachaTicket(1);
-    bossData.bossDefeated = true;
+    descLines.push('+20pt & 🎟+1');
+
+    // 누적 마일스톤 보상 (한 번만 지급)
+    const KILL_MILESTONES = {
+      5:   3,
+      10:  5,
+      30:  10,
+      50:  15,
+      100: 30,
+    };
+    if (KILL_MILESTONES[bossData.totalKills]) {
+      const bonus = KILL_MILESTONES[bossData.totalKills];
+      addGachaTicket(bonus);
+      descLines.push(`🏆 누적 ${bossData.totalKills}마리 보상! 🎟+${bonus}`);
+    }
+
+    // 오늘 5마리 보상 (하루 안에)
+    if (bossData.todayKills === 5) {
+      addGachaTicket(2);
+      descLines.push('🔥 오늘 5마리! 🎟+2');
+    }
+
+    descLines.push(`(누적 ${bossData.totalKills}마리 / 오늘 ${bossData.todayKills}마리)`);
+
+    bossData.bossDefeated = true; // 결과 표시용
+    // 진행도 리셋해서 다음 보스 준비
+    bossData.todayCorrect = 0;
+    bossData.bossAvailable = false;
     saveBoss();
     spawnGachaStars('SR');
     document.querySelector('.boss-result-btn').textContent = '확인';
-    document.querySelector('.boss-result-btn').onclick = closeBossModal;
+    document.querySelector('.boss-result-btn').onclick = () => {
+      // 닫으면 다음 보스 준비 상태
+      bossData.bossDefeated = false;
+      saveBoss();
+      updateBossBar();
+      closeBossModal();
+    };
   } else if (partial) {
     // 3~4점: 부분 보상
     playBossDefeat();
