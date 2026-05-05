@@ -3349,6 +3349,42 @@ body::before {
   font-weight: 600;
   text-align: center;
 }
+/* 보스 cloze 빈칸 - 클릭 가능 */
+.boss-cloze-blank {
+  display: inline-block;
+  min-width: 56px;
+  padding: 2px 12px;
+  margin: 0 3px;
+  border: 2px dashed rgba(247,202,201,0.5);
+  border-radius: 8px;
+  background: rgba(247,202,201,0.12);
+  color: #f7cac9;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+}
+.boss-cloze-blank:hover {
+  background: rgba(247,202,201,0.25);
+  transform: scale(1.05);
+}
+.boss-cloze-blank.revealed {
+  border-style: solid;
+  border-color: rgba(184,224,212,0.6);
+  background: rgba(184,224,212,0.18);
+  color: #b8e0d4;
+  cursor: default;
+  animation: bossBlankReveal 0.3s ease;
+}
+.boss-cloze-blank.revealed:hover {
+  transform: none;
+}
+@keyframes bossBlankReveal {
+  0% { transform: scale(0.95); opacity: 0; }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
 .boss-answer-wrap { display:flex; flex-direction:column; gap:8px; }
 .boss-ans-btn {
   padding: 10px 14px; border-radius: 12px;
@@ -8414,20 +8450,19 @@ function renderBossQuestion() {
   const ansWrap = document.getElementById('boss-answer-wrap');
 
   if (q.type === 'cloze') {
-    // cloze: 문제만 먼저 보여주고, 답 보기 버튼으로 공개 → O/X 자가판단
-    // 빈칸을 명확한 박스로 표시 (다크모드에서도 잘 보이게)
-    const qHtml = esc(q.q).replace(/___/g, '<span class="boss-blank">　　</span>').replace(/\|/g, ' / ');
-    const aText = q.a.split('|').map((a,i) => `${i+1}. ${a.trim()}`).join('\n');
-    document.getElementById('boss-question').innerHTML =
-      `<div style="margin-bottom:10px;">${qHtml}</div>
-       <div id="boss-answer-reveal-area" style="border-top:1px solid rgba(255,255,255,0.1);padding-top:10px;">
-         <button id="boss-reveal-btn" onclick="revealBossAnswer('${esc(aText).replace(/'/g, "\\'").replace(/\n/g, '\\n')}')" 
-           style="width:100%;padding:10px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.2);border-radius:8px;color:rgba(255,255,255,0.7);font-family:inherit;font-size:.82rem;cursor:pointer;">
-           👀 답 보기
-         </button>
-       </div>`;
+    // cloze: 빈칸 하나씩 탭해서 답 공개 (학습 모드와 동일)
+    const answers = q.a.split('|').map(s => s.trim());
+    let blankIdx = 0;
+    const qHtml = esc(q.q).replace(/\n/g, '<br>').replace(/___/g, () => {
+      const idx = blankIdx;
+      const ans = (answers[idx] || answers[0] || '?').replace(/'/g, "\\'").replace(/"/g, "&quot;");
+      blankIdx++;
+      return `<span class="boss-cloze-blank" id="boss-cb-${idx}" onclick="revealBossBlank(${idx}, '${ans}')">?</span>`;
+    });
+    document.getElementById('boss-question').innerHTML = `<div style="line-height:2;">${qHtml}</div>
+      <div style="font-size:.65rem;color:rgba(255,255,255,0.4);margin-top:10px;text-align:center;">빈칸 탭 → 답 공개</div>`;
     ansWrap.innerHTML = `
-      <div style="font-size:.72rem;color:rgba(255,255,255,0.4);text-align:center;margin-bottom:6px;">맞혔나요?</div>
+      <div style="font-size:.72rem;color:rgba(255,255,255,0.4);text-align:center;margin-bottom:6px;">스스로 채점하세요</div>
       <div style="display:flex;gap:8px;">
         <button class="boss-ans-btn" style="flex:1;text-align:center;border-color:rgba(130,168,152,0.4);"
           onclick="answerBossOX(true)">✓ 맞혔어!</button>
@@ -8484,6 +8519,15 @@ function revealBossAnswer(aText) {
   area.innerHTML = `
     <div style="font-size:.78rem;color:rgba(255,255,255,0.5);margin-bottom:6px;">정답</div>
     <div style="color:#b8e0d4;font-size:.82rem;line-height:1.8;white-space:pre-line;">${decoded}</div>`;
+}
+
+// 보스 cloze 빈칸 하나 공개
+function revealBossBlank(idx, val) {
+  const el = document.getElementById('boss-cb-' + idx);
+  if (!el || el.classList.contains('revealed')) return;
+  el.textContent = val;
+  el.classList.add('revealed');
+  playReveal();
 }
 
 function answerBossOX(correct) {
