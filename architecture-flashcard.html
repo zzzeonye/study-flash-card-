@@ -3813,7 +3813,7 @@ body::before {
 </div>
 
 <!-- 떠다니는 포켓몬들 (홈 화면) -->
-<div id="pet-pokemon-wrap" class="pet-pokemon-wrap"></div>
+<!-- 떠다니는 포켓몬 제거됨 - 정답 시 등장으로 변경 -->
 <div class="subject-row">
   <button class="subject-btn active" id="subj-arch" onclick="switchSubject('arch')">🏛 건축구조</button>
   <button class="subject-btn" id="subj-eng" onclick="switchSubject('eng')">✨ 영단어</button>
@@ -7867,10 +7867,32 @@ function playBossDefeat() {
 
 function spawnFloaty() {
   const field = document.getElementById('floaty-field');
-  const emoji = FLOATY_EMOJIS[Math.floor(Math.random() * FLOATY_EMOJIS.length)];
   const el = document.createElement('div');
   el.className = 'floaty';
-  el.textContent = emoji;
+
+  // 25% 확률로 보유 포켓몬 등장 (이모지 대신)
+  const usePokemon = Math.random() < 0.25;
+  let pokemonId = null;
+  if (usePokemon) {
+    try {
+      loadGacha();
+      const caughtIds = [...new Set(gachaData.history.filter(h=>h.pokeId).map(h=>h.pokeId))];
+      if (caughtIds.length > 0) {
+        pokemonId = caughtIds[Math.floor(Math.random() * caughtIds.length)];
+      }
+    } catch(e) { pokemonId = null; }
+  }
+
+  if (pokemonId) {
+    // 포켓몬 스프라이트
+    el.innerHTML = `<img src="${POKEMON_SPRITE_URL(pokemonId)}" style="width:48px;height:48px;image-rendering:pixelated;" onerror="this.parentElement.textContent='${FLOATY_EMOJIS[Math.floor(Math.random() * FLOATY_EMOJIS.length)]}';">`;
+    el.style.fontSize = '0';  // 폴백 이모지 방지
+  } else {
+    // 기본 이모지
+    const emoji = FLOATY_EMOJIS[Math.floor(Math.random() * FLOATY_EMOJIS.length)];
+    el.textContent = emoji;
+  }
+
   // 화면 전체 랜덤 위치 (카드 중앙 피해서 양옆 + 상하 분산)
   const W = window.innerWidth;
   const H = window.innerHeight;
@@ -9221,9 +9243,6 @@ function renderCollectionDogam() {
     const summary = `<div style="font-size:.62rem;color:var(--muted);margin-bottom:6px;text-align:center;font-family:'DM Mono',monospace;">${caughtCount} / ${totalCount}</div>`;
     page.innerHTML = summary + `<div class="pokedex-grid">${renderPage(grade)}</div>`;
   });
-
-  // 페트 시스템도 갱신 (홈에서 돌아다니는 포켓몬)
-  updatePetPokemon();
 }
 
 // ═══ 도감 탭 전환 ═══
@@ -9291,56 +9310,6 @@ function setupPokedexSwipe() {
       switchPokedexTab(tabs[curIdx - 1]);
     }
   });
-}
-
-// ═══════════════════ PET POKEMON SYSTEM ═══════════════════
-// 획득한 포켓몬 중 일부가 홈 화면에서 돌아다님
-const PET_ACTIONS = ['walking', 'sleeping', 'eating', 'jumping'];
-
-function updatePetPokemon() {
-  loadGacha();
-  const wrap = document.getElementById('pet-pokemon-wrap');
-  if (!wrap) return;
-
-  // 획득한 포켓몬 id 리스트
-  const caughtIds = [...new Set(gachaData.history.filter(h=>h.pokeId).map(h=>h.pokeId))];
-  if (caughtIds.length === 0) {
-    wrap.innerHTML = '';
-    return;
-  }
-
-  // 최대 3마리만 동시 표시 (랜덤 선택)
-  const shuffled = [...caughtIds].sort(()=>Math.random()-0.5);
-  const selected = shuffled.slice(0, Math.min(3, caughtIds.length));
-
-  wrap.innerHTML = selected.map((id, i) => {
-    const action = PET_ACTIONS[Math.floor(Math.random() * PET_ACTIONS.length)];
-    const sprite = POKEMON_SPRITE_URL(id);
-    let style = '';
-    if (action === 'walking') {
-      // 걷기는 left를 애니메이션으로 처리
-      style = `animation-delay: -${Math.random() * 30}s;`;
-    } else {
-      // 다른 행동은 고정 위치
-      const pos = 10 + (i * 30) + Math.random() * 15;
-      style = `left: ${pos}%;`;
-    }
-    return `<img src="${sprite}" class="pet-pokemon ${action}" style="${style}" onerror="this.style.display='none'" title="클릭해서 행동 바꾸기" onclick="changePetAction(this)">`;
-  }).join('');
-}
-
-function changePetAction(el) {
-  // 클릭하면 행동 바꾸기
-  PET_ACTIONS.forEach(a => el.classList.remove(a));
-  const newAction = PET_ACTIONS[Math.floor(Math.random() * PET_ACTIONS.length)];
-  el.classList.add(newAction);
-  if (newAction === 'walking') {
-    el.style.animationDelay = `-${Math.random() * 30}s`;
-    el.style.left = '';
-  } else {
-    el.style.animationDelay = '';
-    el.style.left = (10 + Math.random() * 80) + '%';
-  }
 }
 
 // 칭호 새로 해금됐는지 체크 (뽑기 후 호출)
@@ -9809,7 +9778,43 @@ function getPeriodCycleInfo(date) {
     avgCycle = Math.round(diffs.reduce((a,b)=>a+b, 0) / diffs.length);
   }
 
-  return { dayOfCycle, avgCycle, lastStart };
+  // 시기 분류 (배란일 = 다음 예상 생리 14일 전 기준)
+  // 28일 주기 기준: 1~5 생리기, 6~9 난포기, 10~16 가임기(13~14 배란), 17~28 황체기
+  // 주기 길이에 따라 비율 조정
+  const ovulationDay = avgCycle - 14; // 다음 생리 14일 전이 배란일
+  let phase = '';
+  let phaseEmoji = '';
+  let phaseDesc = '';
+
+  if (dayOfCycle <= 5) {
+    phase = '생리기';
+    phaseEmoji = '🌷';
+    phaseDesc = '컨디션 낮음, 무리 X';
+  } else if (dayOfCycle < ovulationDay - 4) {
+    phase = '난포기';
+    phaseEmoji = '🌱';
+    phaseDesc = '컨디션 ↑, 집중력 좋음';
+  } else if (dayOfCycle >= ovulationDay - 4 && dayOfCycle <= ovulationDay + 1) {
+    if (dayOfCycle === ovulationDay) {
+      phase = '배란일';
+      phaseEmoji = '✨';
+      phaseDesc = '가임기 정점';
+    } else {
+      phase = '가임기';
+      phaseEmoji = '🌸';
+      phaseDesc = '임신 가능성 ↑';
+    }
+  } else {
+    phase = '황체기';
+    phaseEmoji = '🌙';
+    phaseDesc = 'PMS 가능, 컨디션 변동';
+    // 황체기 후반 (생리 1주일 전)
+    if (dayOfCycle >= avgCycle - 5) {
+      phaseDesc = 'PMS 시기, 다음 생리 임박';
+    }
+  }
+
+  return { dayOfCycle, avgCycle, lastStart, phase, phaseEmoji, phaseDesc, ovulationDay };
 }
 
 function renderDailyState() {
@@ -9917,13 +9922,19 @@ function renderDailyState() {
     next.setDate(next.getDate() + cycInfo.avgCycle);
     const today = new Date(currentDailyDate); today.setHours(0,0,0,0);
     const daysToNext = Math.floor((next - today) / (1000*60*60*24));
-    if (daysToNext > 0) {
-      infoEl.textContent = `주기 ${cycInfo.dayOfCycle}일째 · 다음 예상 ${daysToNext}일 후`;
-    } else if (daysToNext === 0) {
-      infoEl.textContent = `주기 ${cycInfo.dayOfCycle}일째 · 다음 예상일 오늘`;
-    } else {
-      infoEl.textContent = `주기 ${cycInfo.dayOfCycle}일째`;
-    }
+
+    // 생리 진행 중이면 "생리 N일째" 표시 (1일째부터 시작), 아니면 안 표시
+    const periodDayLabel = state.period ? `생리 ${cycInfo.dayOfCycle}일째 · ` : '';
+
+    // 시기 표시 (이모지 + 시기 이름)
+    const phaseLabel = `${cycInfo.phaseEmoji} ${cycInfo.phase}`;
+
+    let nextLabel = '';
+    if (daysToNext > 0) nextLabel = ` · 다음 ${daysToNext}일 후`;
+    else if (daysToNext === 0) nextLabel = ' · 다음 예상일 오늘';
+
+    infoEl.innerHTML = `<div>${phaseLabel}${nextLabel}</div>
+      <div style="font-size:.65rem;color:var(--muted);margin-top:2px;">${periodDayLabel}주기 ${cycInfo.dayOfCycle}일차 · ${cycInfo.phaseDesc}</div>`;
   } else {
     infoEl.textContent = '시작일을 기록하면 주기 자동 계산';
   }
@@ -10947,16 +10958,6 @@ updateSubtitleWithTitle();
 initBoss();
 initMemo();
 updateDailyWidget();
-updatePetPokemon(); // 떠다니는 포켓몬 시작
-// 페트 주기적 행동 변경 (10초마다 한 마리씩 행동 바꿈)
-setInterval(() => {
-  const pets = document.querySelectorAll('.pet-pokemon');
-  if (pets.length === 0) return;
-  const randomPet = pets[Math.floor(Math.random() * pets.length)];
-  changePetAction(randomPet);
-}, 10000);
-// 페트 30초마다 새로 뽑기 (다양한 포켓몬 보이게)
-setInterval(updatePetPokemon, 30000);
 // Safari 음성 목록 미리 워밍업
 if (window.speechSynthesis) {
   window.speechSynthesis.getVoices();
