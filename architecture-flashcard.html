@@ -4877,6 +4877,9 @@ const DEFAULT_CARDS = [
 {id:6307,type:'ox',cat:'PART3 · RC구조 > CH04 내진설계 > S01 특수모멘트골조',q:'특수모멘트골조 휨부재의 폭은 200 mm 이상이어야 한다',a:'X',note:'정답: 250 mm 이상\n⚠ 빈출 수치 변조 함정\n특수모멘트골조 휨부재 4대 기하조건 중 가장 자주 출제되는 함정\n(17 지방 9급 13번 정답)'},
 {id:6308,type:'ox',cat:'PART3 · RC구조 > CH04 내진설계 > S01 특수모멘트골조',q:'특수모멘트골조 휨부재의 부재 깊이에 대한 폭의 비는 0.3 이상이어야 한다',a:'O',note:'b/h ≥ 0.3\n→ 보가 너무 얇으면 비틀림·횡좌굴 위험 ↑\n수치 변조 함정 (0.25, 0.4 등)\n(17 지방 9급 13번)'},
 {id:6309,type:'ox',cat:'PART3 · RC구조 > CH04 내진설계 > S01 특수모멘트골조',q:'특수모멘트골조 휨부재의 순경간은 유효깊이의 4배 이상이어야 한다',a:'O',note:'순경간 ≥ 4d\n→ 깊은보(deep beam) 거동 X, 일반 휨거동 보장\n수치 변조 함정 (3d, 5d 등)\n(17 지방 9급 13번)'},
+{id:6310,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 휨·압축부재 제한사항',q:'[RC 휨·압축부재 제한사항 - 핵심 수치 정리]\n[압축부재 주철근]\n● 단면적: 전체 단면적의 ___배 이상, ___배 이하\n● 겹침이음 시 철근비: ___ 이하\n● 최소 개수: 사각/원형 띠철근 ___개, 삼각형 ___개, 나선철근 ___개\n\n[휨부재]\n● 보의 횡지지 간격: 압축 플랜지/압축면 최소 폭의 ___배 이하 ⭐\n\n[슬래브·기초판 휨철근]\n● 위험단면 아닌 경우 최대 간격: 두께의 ___배 또는 ___mm 중 작은 값',a:'0.01 | 0.08 | 0.04 | 4 | 3 | 6 | 50 | 3 | 450',note:'⭐ 핵심 수치 외우기:\n"01·08·04 / 4·3·6 / 50 / 3·450"\n\n[KDS 14 20 20 원문 검증 완료]\n\n빈출 함정 패턴:\n- 보 횡지지 75배 ❌ → 50배 ⭕ (가장 자주!)\n- 주철근 개수 3개 ❌ → 4개 ⭕\n- 슬래브 2배 ❌ → 3배 ⭕\n(17 국가 9급 11번)'},
+{id:6311,type:'ox',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 휨·압축부재 제한사항',q:'보의 횡지지 간격은 압축 플랜지 또는 압축면의 최소 폭의 75배를 초과하지 않아야 한다',a:'X',note:'정답: 50배 ⭐⭐⭐\nKDS 14 20 20 원문: "보의 횡지지 간격은 압축 플랜지 또는 압축면의 최소 폭의 50배를 초과하지 않도록 하여야 한다"\n→ 9급 빈출 수치 변조 함정 (75배, 100배 등)\n(17 국가 9급 11번 정답)'},
+{id:6312,type:'ox',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 휨·압축부재 제한사항',q:'비합성 압축부재의 축방향 주철근 단면적은 전체 단면적의 0.01배 이상, 0.08배 이하로 하여야 한다',a:'O',note:'KDS 14 20 20 원문 그대로\n● 최소 ρ_min = 0.01 (1%)\n● 최대 ρ_max = 0.08 (8%)\n● 겹침이음 시 = 0.04 이하\n암기: "01·08·04"\n(17 국가 9급 11번)'},
 {id:6167,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'[지반에 직접 콘크리트를 치는 경우]\n설계 시 전체 두께에서 ___ mm를 제외한 값을 유효 단면으로 계산\n→ 바닥면 불균일 및 흙과의 혼합으로 인한 유효 두께 감소 고려',a:'50'},
 {id:6168,type:'ox',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'구조용 무근콘크리트를 기둥에 사용할 수 없다',a:'O'},
 {id:6169,type:'ox',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'구조용 무근콘크리트를 말뚝 위의 기초판에 사용할 수 없다 (지반 위는 가능)',a:'O'},
@@ -5774,6 +5777,8 @@ const DEFAULT_ENG_CARDS = [
 {id:9421,cat:"영단어",type:"flash",q:"basement",a:"지하실 / 지하층(명)\n⚠ '기초'는 foundation! basement ≠ 기초\n⭐ 건축직 빈출 어휘!\nbasement = 건물의 지하 층\nfoundation = 건물의 기초/토대\nbase = 밑부분/기반\nbasement parking = 지하 주차장\nbuild a strong foundation = 튼튼한 기초를 쌓다\n건물 층 구조: basement → ground floor → 1F → 2F\n≒ cellar(저장용 지하실)",pron:"ˈbeɪsmənt",note:"The basement of the building has a parking lot. (건물 지하실에 주차장)"},
 {id:9422,cat:"영단어",type:"flash",q:"critic",a:"비평가 / 평론가(명, 사람)\n⚠ '위기의'는 critical! critic ≠ 위기\n4종 헷갈림 정리:\n• critic (명, 사람) = 비평가\n• critical (형) = 비판적인·중대한·위기의\n• criticize (동) = 비판하다\n• crisis (명) = 위기 (위험한 상황)\nfilm critic = 영화 평론가\ncritical moment = 결정적 순간\neconomic crisis = 경제 위기\n≒ reviewer(평론가), commentator",pron:"ˈkrɪtɪk",note:"The critic gave a critical review during the financial crisis. (한 문장에 3개 다)"},
 {id:9423,cat:"영단어",type:"flash",q:"optimistic",a:"낙관적인 / 희망적인 (형)\n⚠ '최상의'와 혼동 금지!\n어원: optim(최상의) + istic(~한) → 최상으로 보는 → 낙관적인\n\n2종 헷갈림 정리:\n• optimistic (형) = 낙관적인 (희망적으로 보는)\n  → 사람의 태도/관점\n• optimal/optimum (형) = 최적의, 최상의\n  → 객관적 최선의 상태\n\nbe optimistic about ~ = ~에 대해 낙관적이다\noptimistic view = 낙관적 견해\noptimal solution = 최적해\n≒ hopeful, positive\n↔ pessimistic (비관적인)",pron:"ˌɒptɪˈmɪstɪk",note:"She is optimistic about her future, but the optimal strategy hasn't been found yet."},
+{id:9424,cat:"영단어",type:"flash",q:"though",a:"비록 ~이긴 하지만 / ~에도 불구하고 (양보 접속사·부사)\n⚠ through(~을 통해)와 혼동 금지!\n\n4종 헷갈림 정리 (th- 시리즈 ⭐⭐⭐):\n• though [ðoʊ] = 비록 ~이지만 (양보)\n• through [θruː] = ~을 통해 (전치사)\n• thorough [ˈθʌrə] = 철저한, 빈틈없는 (형)\n• thought [θɔːt] = 생각 (think 과거·과거분사)\n\nThough it rained, we went out. = 비록 비가 왔지만 나갔다\nas though = 마치 ~인 것처럼 (= as if)\neven though = ~인데도\n\n구분 팁: th-OUGH(양보), th-ROUGH(통과), th-OROUGH(철저), th-OUGHT(생각)\n≒ although, even though",pron:"ðoʊ",note:"Though tired, she finished her work. (피곤했지만 일을 끝냈다)"},
+{id:9425,cat:"영단어",type:"flash",q:"instinct",a:"본능 / 직감 (명)\n⚠ '본성의'(형용사형)와 혼동 금지!\n\n어근 -tinct 4형제 (모두 헷갈림 ⭐):\n• instinct (명) = 본능, 직감\n  → 어원: in(안) + stinct(찌르다) → 안에서 찌르는 것\n• instinctive (형) = 본능적인\n  → instinct + ive\n• distinct (형) = 뚜렷한, 구별되는\n  → 어원: dis(분리) + stinct → 따로 떨어진\n• extinct (형) = 멸종된, 꺼진\n  → 어원: ex(밖) + stinct(찌르다) → 밖으로 뽑힌\n\nanimal instinct = 동물의 본능\ninstinctive reaction = 본능적 반응\ndistinct difference = 뚜렷한 차이\nextinct species = 멸종 위기종\n\nby instinct = 본능적으로\n≒ intuition (직관), gut feeling",pron:"ˈɪnstɪŋkt",note:"Birds have an instinct to fly south in winter."},
 ];
 
 // ═══════════════════ STATE ═══════════════════
@@ -6589,7 +6594,8 @@ function renderList(){
   const lv=document.getElementById('list-view');
   const query=(document.getElementById('list-search')?.value||'').trim().toLowerCase();
   const catFilter=(document.getElementById('list-cat-filter')?.value||'');
-  let pool=filtered();
+  // 검색 중이면 전체 카드 대상, 아니면 선택된 단원만
+  let pool = query ? [...cards] : filtered();
   if(catFilter) pool=pool.filter(c=>c.cat===catFilter);
   if(query) {
     // 공백 제거 + 빈칸(___) 제거 정규화
