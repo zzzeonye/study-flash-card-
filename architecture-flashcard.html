@@ -4880,6 +4880,7 @@ const DEFAULT_CARDS = [
 {id:6310,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 휨·압축부재 제한사항',q:'[RC 휨·압축부재 제한사항 - 핵심 수치 정리]\n[압축부재 주철근]\n● 단면적: 전체 단면적의 ___배 이상, ___배 이하\n● 겹침이음 시 철근비: ___ 이하\n● 최소 개수: 사각/원형 띠철근 ___개, 삼각형 ___개, 나선철근 ___개\n\n[휨부재]\n● 보의 횡지지 간격: 압축 플랜지/압축면 최소 폭의 ___배 이하 ⭐\n\n[슬래브·기초판 휨철근]\n● 위험단면 아닌 경우 최대 간격: 두께의 ___배 또는 ___mm 중 작은 값',a:'0.01 | 0.08 | 0.04 | 4 | 3 | 6 | 50 | 3 | 450',note:'⭐ 핵심 수치 외우기:\n"01·08·04 / 4·3·6 / 50 / 3·450"\n\n[KDS 14 20 20 원문 검증 완료]\n\n빈출 함정 패턴:\n- 보 횡지지 75배 ❌ → 50배 ⭕ (가장 자주!)\n- 주철근 개수 3개 ❌ → 4개 ⭕\n- 슬래브 2배 ❌ → 3배 ⭕\n(17 국가 9급 11번)'},
 {id:6311,type:'ox',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 휨·압축부재 제한사항',q:'보의 횡지지 간격은 압축 플랜지 또는 압축면의 최소 폭의 75배를 초과하지 않아야 한다',a:'X',note:'정답: 50배 ⭐⭐⭐\nKDS 14 20 20 원문: "보의 횡지지 간격은 압축 플랜지 또는 압축면의 최소 폭의 50배를 초과하지 않도록 하여야 한다"\n→ 9급 빈출 수치 변조 함정 (75배, 100배 등)\n(17 국가 9급 11번 정답)'},
 {id:6312,type:'ox',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 휨·압축부재 제한사항',q:'비합성 압축부재의 축방향 주철근 단면적은 전체 단면적의 0.01배 이상, 0.08배 이하로 하여야 한다',a:'O',note:'KDS 14 20 20 원문 그대로\n● 최소 ρ_min = 0.01 (1%)\n● 최대 ρ_max = 0.08 (8%)\n● 겹침이음 시 = 0.04 이하\n암기: "01·08·04"\n(17 국가 9급 11번)'},
+{id:6313,type:'cloze',cat:'PART4 · 강구조 > CH01 강재의 성질',q:'[전단탄성계수 G 공식 - 9급 빈출]\nG = ___ / [ ___ × (1 + ___) ]\n\n● 분자: ___ (탄성계수)\n● 분모: ___ × (1 + ν), ν는 ___\n\n[강재 표준값]\n● E = 2.0 × 10⁵ N/mm² = ___ N/mm²\n● ν = 0.25일 때 → G = ___ N/mm²\n● G/E 비율 = ___ (강재 ν=0.25 기준)',a:'E | 2 | ν | E | 2 | 포아송비 | 200000 | 80000 | 0.4',note:'⭐ 한 줄 암기: "G = E / 2(1+ν)"\n\n[유도/이유]\n축방향 변형 → 포아송 효과로 옆으로 줄어듦 → 전단변형률에 영향 → 2(1+ν) 분모\n\n[빈출 함정]\n❌ G = E / (1+ν) — "2" 빠뜨림 → 답 2배 차이\n❌ G = E / 2(1-ν) — 부호 (+ → -) 바꿈\n\n[강재 표준 계산]\nE = 200,000, ν = 0.25\n→ G = 200,000 / 2(1.25) = 200,000 / 2.5 = 80,000\n\n[케이스별]\n● ν=0 → G/E = 0.50\n● ν=0.25 → G/E = 0.40 ⭐ 강재\n● ν=0.30 → G/E = 0.385\n(15 서울 9급 13번)'},
 {id:6167,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'[지반에 직접 콘크리트를 치는 경우]\n설계 시 전체 두께에서 ___ mm를 제외한 값을 유효 단면으로 계산\n→ 바닥면 불균일 및 흙과의 혼합으로 인한 유효 두께 감소 고려',a:'50'},
 {id:6168,type:'ox',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'구조용 무근콘크리트를 기둥에 사용할 수 없다',a:'O'},
 {id:6169,type:'ox',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'구조용 무근콘크리트를 말뚝 위의 기초판에 사용할 수 없다 (지반 위는 가능)',a:'O'},
@@ -6692,6 +6693,50 @@ function openPreview(id){
 
   const pronHTML = c.pron ? `<div style="font-size:.75rem;color:var(--muted);margin-bottom:4px;">/${esc(c.pron)}/</div>` : '';
 
+  // ═══ 관련 카드 찾기 ═══
+  // 1) 같은 단원(cat)에서 키워드 매칭, 2) 검색어가 있으면 그 키워드로
+  const query = (document.getElementById('list-search')?.value||'').trim().toLowerCase();
+  const norm = s => (s||'').toLowerCase().replace(/\s+/g,'').replace(/_{2,}/g,'');
+  // 현재 카드의 핵심 키워드 추출 (q에서 한글/영문 단어 추출)
+  const extractKeywords = (text) => {
+    const words = (text||'').match(/[가-힣]{2,}|[a-zA-Z]{3,}/g) || [];
+    // 자주 나오는 일반어 제외
+    const stopwords = new Set(['이상','이하','경우','경우의','대해','대한','없는','있는','하는','하고','하여','한다','된다','다음','중에','다음과','또는','또한','한것','옳은','옳지','않은','것은','것을','것이','때의','상부','하부','내부','외부','전체','단면','단면적','부재','구조','구조의','구조물','설계','설계기준','콘크리트','콘크리트의','철근','철근의','경우는','경우에','수치','계산','문제','옳은것','않은것']);
+    return words.filter(w => !stopwords.has(w));
+  };
+  const keywords = [...new Set([...extractKeywords(c.q), ...extractKeywords(c.a||'')])].slice(0, 8);
+
+  // 관련 카드 점수 매기기
+  const scored = cards.filter(x => x.id !== c.id).map(x => {
+    let score = 0;
+    if (x.cat === c.cat) score += 2;
+    const xtext = norm((x.q||'') + (x.a||'') + (x.note||''));
+    keywords.forEach(kw => {
+      if (xtext.includes(norm(kw))) score += 3;
+    });
+    if (query && xtext.includes(norm(query))) score += 5;
+    return { card: x, score };
+  }).filter(s => s.score >= 3)
+    .sort((a,b) => b.score - a.score)
+    .slice(0, 5);
+
+  let relatedHTML = '';
+  if (scored.length > 0) {
+    relatedHTML = `
+      <div style="margin-top:14px;padding-top:12px;border-top:1px dashed rgba(247,202,201,0.3);">
+        <div style="font-size:.72rem;color:#c9838a;margin-bottom:8px;">🔗 관련 카드 (${scored.length}개)</div>
+        ${scored.map(s => {
+          const rc = s.card;
+          const typeIcon = rc.type==='ox'?'⭕':rc.type==='cloze'?'📝':'📋';
+          const qShort = esc(rc.q).replace(/\n/g,' · ').slice(0, 80);
+          return `<div onclick="openPreview(${rc.id})" style="padding:8px 12px;margin-bottom:5px;background:rgba(255,255,255,0.5);border:1px solid rgba(247,202,201,0.3);border-radius:8px;cursor:pointer;font-size:.78rem;line-height:1.5;">
+            <span style="font-size:.7rem;color:var(--muted);">${typeIcon} #${rc.id}</span>
+            <div style="margin-top:2px;">${qShort}${rc.q.length > 80 ? '...' : ''}</div>
+          </div>`;
+        }).join('')}
+      </div>`;
+  }
+
   document.getElementById('preview-content').innerHTML = `
     <div style="font-size:.7rem;color:var(--muted);margin-bottom:8px;">${esc(c.cat)}</div>
     ${pronHTML}
@@ -6702,7 +6747,8 @@ function openPreview(id){
     <div style="margin-top:14px;display:flex;justify-content:space-between;align-items:center;font-size:.7rem;color:var(--muted);">
       <span>#${c.id} · ${c.type==='ox'?'OX':c.type==='cloze'?'빈칸':'일반'}</span>
       <span>✓ ${h.know} · ✕ ${h.dont}</span>
-    </div>`;
+    </div>
+    ${relatedHTML}`;
   document.getElementById('preview-modal').classList.add('open');
 }
 
