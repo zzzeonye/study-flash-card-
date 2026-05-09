@@ -8723,12 +8723,15 @@ function answerBoss(btn, correct, chosen) {
     });
     bossSession.wrongCardIds.push(q.id);
     addWeakCard(q.id); // 약점 카드 추가
-    // 정답을 question 영역 아래 명확히 표시
+    // 정답을 question 영역 아래 명확히 표시 (OX는 note도 함께 표시)
     const qEl = document.getElementById('boss-question');
     if (qEl) {
+      const noteHtml = (q.type === 'ox' && q.note) ? 
+        `<div style="margin-top:8px;color:#fff;font-size:.85rem;line-height:1.6;white-space:pre-line;font-weight:400;">${esc(q.note)}</div>` : '';
       const ansHtml = `<div style="margin-top:14px;padding-top:12px;border-top:2px solid #f7cac9;">
         <div style="font-size:.72rem;color:#f7cac9;margin-bottom:4px;">💀 정답</div>
         <div style="color:#b8e0d4;font-size:1rem;font-weight:600;">${esc(correct)}</div>
+        ${noteHtml}
       </div>`;
       qEl.innerHTML += ansHtml;
     }
@@ -9720,8 +9723,12 @@ function getDailyItems(dateStr) {
     { key: 'ai_korhist',  icon: '🏛️', label: '한국사 AI 2문제',  group: 'AI 문제' },
     { key: 'ai_archplan', icon: '🏗️', label: '건축계획 AI 2문제', group: 'AI 문제' },
     { key: 'ai_archstr',  icon: '🔧', label: '건축구조 AI 2문제', group: 'AI 문제' },
-    { key: 'eng_daily',   icon: '✨', label: '데일리 영어',         group: '데일리' },
   ];
+
+  // 데일리 영어: 평일(월~금)만
+  if (dow !== 0 && dow !== 6) {
+    items.push({ key: 'eng_daily', icon: '✨', label: '데일리 영어', group: '데일리' });
+  }
 
   // 국어 시험지: 지정된 날만
   if (KOREAN_TEST_SCHEDULE[dateStr]) {
