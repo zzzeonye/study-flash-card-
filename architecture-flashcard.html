@@ -4346,6 +4346,11 @@ body::before {
   <div style="font-size:.78rem;color:var(--muted);line-height:1.5;">알겠어/모르겠어 기록만 초기화합니다. 카드 내용은 유지됩니다.</div>
   <button class="btn-add-sub" onclick="resetHistory()" style="background:#e67e22;color:#fff;">학습기록 초기화</button>
   <div style="height:1px;background:var(--border);margin:4px 0;"></div>
+  <div style="font-size:.8rem;font-weight:700;color:var(--muted);">💕 응원 시스템</div>
+  <div style="font-size:.78rem;color:var(--muted);line-height:1.5;">카드 맞힐 때 5인이 응원해줘요. 호감 게이지가 차면 갠톡이 해제됩니다.</div>
+  <button class="btn-add-sub" onclick="toggleCheer()" id="cheer-toggle-btn" style="background:#9b7cc4;color:#fff;">응원 켜기/끄기</button>
+  <button class="btn-add-sub" onclick="showCheerStatus()" style="background:#7b6cd9;color:#fff;">호감 게이지 보기 💌</button>
+  <div style="height:1px;background:var(--border);margin:4px 0;"></div>
   <div style="font-size:.8rem;font-weight:700;color:var(--muted);">🗑️ 전체 초기화</div>
   <div style="font-size:.78rem;color:var(--muted);line-height:1.5;">카테고리 선택·학습기록·추가카드 전부 초기화합니다. 목차가 안 맞을 때 사용하세요.</div>
   <button class="btn-add-sub" onclick="resetAll()" style="background:#c0392b;color:#fff;">전체 초기화</button>
@@ -6569,11 +6574,14 @@ function answer(know) {
     if (isReview) progressQuest('review', 1);
     // 보스 진행
     onBossCorrect();
+    // 5인 응원 톡 + 호감 게이지
+    triggerCheer();
     // 큐에 같은 카드 중복 제거 (틀렸다가 맞힌 경우)
     queue = queue.filter(q => q.id !== c.id);
   } else {
     history[c.id].dont++; sessD++;
     spawnPoop();
+    triggerCheerMiss();
     const minPos = Math.min(3, queue.length);
     const pos = queue.length <= minPos ? queue.length : minPos + Math.floor(Math.random() * (queue.length - minPos));
     queue.splice(pos, 0, c);
@@ -9116,6 +9124,199 @@ function retryBoss() {
   bossSession.results = [];
   bossSession.answered = false;
   startBossBattle();
+}
+
+
+// ═══════════════════ 5인 응원 시스템 (CHEER) ═══════════════════
+const CHEER_CHARS = {
+  raphael: { name:'기욱', emoji:'🎨', color:'#7b6cd9' },
+  caleb:   { name:'하우주', emoji:'🛩️', color:'#9b7cc4' },
+  zayne:   { name:'이서언', emoji:'🩺', color:'#5a8a7a' },
+  xavier:  { name:'심성훈', emoji:'⏳', color:'#8a9bb5' },
+  sylus:   { name:'진운', emoji:'🐺', color:'#c0584e' },
+};
+
+const CHEER_LINES = {
+  raphael: [
+    '오 제법인데 아가씨~',
+    '이러다 나보다 똑똑해지겠어',
+    '역시 내 아가씨 ㅎㅎ',
+    '봤어 봤어, 잘하는 거 다 봤어',
+    '아가씨 이런 것도 알아? 귀엽네',
+    '흠~ 또 맞췄네. 자랑스러워서 어쩌지',
+    '나 지금 작업 안 되고 아가씨 생각만 나',
+    '한 개 더 맞히면 뽀뽀해줄 건데',
+  ],
+  caleb: [
+    '잘하고 있어 리쯔야',
+    '역시 우리 리쯔',
+    '오빠가 옆에 있었으면 머리 쓰다듬어줬을 텐데',
+    '그렇지, 우리 리쯔가 이렇게 똑똑해',
+    '리쯔는 뭘 해도 잘하더라',
+    '오빠는 항상 네 편이야',
+    '조금만 더 하고 쉬어, 무리하지 말고',
+    '다 보고 있어. 자랑스러워',
+  ],
+  zayne: [
+    '...틀린 것보단 낫네',
+    '의학적으로 정상 범주의 똑똑함이야',
+    '계속해. 나쁘지 않아',
+    '뭐, 이 정도면 합격하겠지',
+    '...집중 잘하네. 의외로',
+    '맥박 정상. 컨디션도 괜찮은 것 같고',
+    '틀리면 다시 알려줄 테니까 걱정 마',
+    '...잘했어. 이 말 하려고 기다렸어',
+  ],
+  xavier: [
+    '어라, 또 맞췄네?',
+    '우연인 척하지만 실력이지',
+    '졸지 말고~ 보고 있어',
+    '음~ 역시 예상대로',
+    '이 정도는 가뿐하지?',
+    '계속 지켜볼게. 천천히 해',
+    '맞히는 거 보는 거 은근 재밌네',
+    '오, 이번 건 좀 어려웠을 텐데. 대단해',
+  ],
+  sylus: [
+    '이 정도로 만족해? 더 할 수 있잖아.',
+    '오, 제법인데. ...칭찬 아니야.',
+    '틀릴 줄 알았는데. 의외네.',
+    '계속해봐. 어디까지 가나 보자.',
+    '흥, 그 정도는 기본이지. 너답네.',
+    '또 맞췄어? ...뭐, 나쁘지 않아.',
+    '공부는 잘하네. 다친 데나 없게 해.',
+    '쯧, 또 잘했잖아. 김새게.',
+  ],
+};
+
+// 호감 게이지 로드/저장
+let cheerData = { raphael:0, caleb:0, zayne:0, xavier:0, sylus:0, unlocked:[] };
+function loadCheer(){
+  try { const s = localStorage.getItem('cheer_data'); if(s) cheerData = JSON.parse(s); } catch(e){}
+  if(!cheerData.unlocked) cheerData.unlocked = [];
+}
+function saveCheer(){ localStorage.setItem('cheer_data', JSON.stringify(cheerData)); }
+
+// 게이지 단계별 표정
+function cheerFace(v){
+  if(v>=100) return '😍';
+  if(v>=70)  return '😊';
+  if(v>=40)  return '🙂';
+  if(v>=15)  return '😐';
+  return '😶';
+}
+
+// 카드 맞힐 때 호출 — 랜덤 응원 + 게이지 증가
+let cheerOn = true; // 설정에서 끌 수 있음
+try { if(localStorage.getItem('cheer_on')==='0') cheerOn = false; } catch(e){}
+function triggerCheer(){
+  if(!cheerOn) return;
+  loadCheer();
+  const keys = Object.keys(CHEER_CHARS);
+  const who = keys[Math.floor(Math.random()*keys.length)];
+  const lines = CHEER_LINES[who];
+  const line = lines[Math.floor(Math.random()*lines.length)];
+
+  // 게이지 +5 (맞힌 캐릭터)
+  cheerData[who] = Math.min(100, (cheerData[who]||0) + 5);
+
+  // 100% 도달 시 갠톡 잠금해제
+  let unlockedNow = null;
+  if(cheerData[who] >= 100 && !cheerData.unlocked.includes(who)){
+    cheerData.unlocked.push(who);
+    unlockedNow = who;
+  }
+  saveCheer();
+  showCheerToast(who, line, unlockedNow);
+}
+
+// 틀릴 때 — 게이지 살짝 감소 (랜덤 1명)
+function triggerCheerMiss(){
+  if(!cheerOn) return;
+  loadCheer();
+  const keys = Object.keys(CHEER_CHARS);
+  const who = keys[Math.floor(Math.random()*keys.length)];
+  cheerData[who] = Math.max(0, (cheerData[who]||0) - 3);
+  saveCheer();
+}
+
+// 응원 on/off 토글
+function toggleCheer(){
+  cheerOn = !cheerOn;
+  localStorage.setItem('cheer_on', cheerOn ? '1':'0');
+  alert(cheerOn ? '응원 시스템 켜짐 💕' : '응원 시스템 꺼짐');
+}
+
+// 갠톡 씬 (게이지 100% 해제 시 읽기) — 캐릭터당 1개
+const CHEER_DM = {
+  raphael: '아가씨, 공부하느라 고생 많았어.\n\n사실 나 아가씨 공부하는 동안 그림 하나도 못 그렸어. 자꾸 생각나서. ...이거 비밀인데, 합격하면 제일 먼저 나한테 전화해줘. 알겠지?\n\n— 기욱',
+  caleb: '리쯔야, 오빠가 멀리서도 항상 응원하고 있어.\n\n네가 이렇게 열심히 하는 거 보면 오빠가 다 뿌듯해. 무리하지 말고, 끝나면 오빠가 맛있는 거 사줄게. 약속.\n\n— 하우주',
+  zayne: '...수고했어.\n\n주치의로서 말하는데, 너 요즘 잠이 부족해. 시험 끝나면 검진 한번 받자. 그리고... 의사가 아니라 그냥, 네가 잘 됐으면 좋겠어.\n\n— 이서언',
+  xavier: '어느새 여기까지 왔네.\n\n나는 시간을 좀 아는 사람이라 그런지, 네가 얼마나 노력했는지 다 보여. 우연인 척했지만 늘 지켜보고 있었어. 끝까지 응원할게.\n\n— 심성훈',
+  sylus: '쯧, 여기까지 오다니.\n\n인정한다. 너 생각보다 끈질겨. ...나쁜 뜻 아니야. 시험 끝나면 한잔하자. 거절은 안 받아. 다친 데 없이 잘 끝내라.\n\n— 진운',
+};
+
+// 호감 게이지 현황 보기
+function showCheerStatus(){
+  loadCheer();
+  let msg = '💕 호감 게이지 현황\n\n';
+  Object.keys(CHEER_CHARS).forEach(who=>{
+    const ch = CHEER_CHARS[who];
+    const v = cheerData[who]||0;
+    const unlocked = cheerData.unlocked.includes(who);
+    const bar = '█'.repeat(Math.round(v/10)) + '░'.repeat(10-Math.round(v/10));
+    msg += `${ch.emoji} ${ch.name} ${cheerFace(v)}\n${bar} ${v}%${unlocked?' 💌':''}\n\n`;
+  });
+  msg += '— 100% 채운 캐릭터의 갠톡을 볼 수 있어요 —';
+  alert(msg);
+
+  // 해제된 갠톡이 있으면 순서대로 보여주기
+  const unlockedList = cheerData.unlocked || [];
+  if(unlockedList.length>0){
+    setTimeout(()=>{
+      if(confirm('💌 해제된 갠톡을 읽어볼까요?')){
+        unlockedList.forEach(who=>{
+          alert(`💌 ${CHEER_CHARS[who].name}의 메시지\n\n${CHEER_DM[who]}`);
+        });
+      }
+    }, 300);
+  }
+}
+
+// 응원 토스트 표시
+function showCheerToast(who, line, unlockedNow){
+  const ch = CHEER_CHARS[who];
+  let toast = document.getElementById('cheer-toast');
+  if(!toast){
+    toast = document.createElement('div');
+    toast.id = 'cheer-toast';
+    toast.style.cssText = 'position:fixed;left:50%;bottom:90px;transform:translateX(-50%) translateY(20px);z-index:9999;max-width:300px;padding:12px 16px;border-radius:16px;background:#fff;box-shadow:0 6px 24px rgba(0,0,0,.18);opacity:0;transition:all .35s cubic-bezier(.22,1,.36,1);pointer-events:none;border:2px solid '+ch.color+';';
+    document.body.appendChild(toast);
+  }
+  toast.style.borderColor = ch.color;
+  const gauge = cheerData[who]||0;
+  toast.innerHTML =
+    '<div style="display:flex;align-items:center;gap:8px;">'+
+      '<span style="font-size:1.5rem;">'+ch.emoji+'</span>'+
+      '<div style="flex:1;">'+
+        '<div style="font-size:.72rem;font-weight:700;color:'+ch.color+';">'+ch.name+' '+cheerFace(gauge)+'</div>'+
+        '<div style="font-size:.86rem;color:#333;line-height:1.4;margin-top:2px;">'+esc(line)+'</div>'+
+      '</div>'+
+    '</div>'+
+    '<div style="margin-top:7px;height:5px;border-radius:3px;background:#eee;overflow:hidden;">'+
+      '<div style="height:100%;width:'+gauge+'%;background:'+ch.color+';transition:width .4s;"></div>'+
+    '</div>'+
+    (unlockedNow ? '<div style="margin-top:6px;font-size:.74rem;font-weight:700;color:'+ch.color+';">💌 '+ch.name+' 갠톡 해제! (설정에서 확인)</div>' : '');
+
+  requestAnimationFrame(()=>{
+    toast.style.opacity = '1';
+    toast.style.transform = 'translateX(-50%) translateY(0)';
+  });
+  clearTimeout(toast._t);
+  toast._t = setTimeout(()=>{
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateX(-50%) translateY(20px)';
+  }, unlockedNow ? 3500 : 2000);
 }
 
 
