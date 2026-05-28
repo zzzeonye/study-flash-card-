@@ -3878,6 +3878,7 @@ body::before {
   <div class="boss-intro" id="boss-intro-screen">
     <div class="boss-sprite" id="boss-intro-sprite">👾</div>
     <div class="boss-name" id="boss-intro-name">오늘의 보스</div>
+    <div id="boss-intro-mode" style="font-size:.78rem;color:#b8e0d4;margin:4px 0;opacity:.8;">통과 4문제 / 완벽 5문제</div>
     <div class="boss-hp-wrap">
       <div class="boss-hp-bar"><div class="boss-hp-fill" id="boss-intro-hp" style="width:100%"></div></div>
       <div class="boss-hp-label">HP ████████████ 5/5</div>
@@ -5130,6 +5131,14 @@ const DEFAULT_CARDS = [
 {id:7063,type:'cloze',cat:'PART4 · 강구조 > CH02 부재설계 > S05 압축재',q:'[조립압축재 긴결간격]\n덧판을 사용한 조립압축재의 파스너 및 단속용접 최대간격\n가장 얇은 덧판두께의 ___ √(E/Fy) 배 또는 ___ mm 이하\n도장 내후성 강재로 만든 조립압축재의 긴결간격: 가장 얇은 판두께의 ___ 배 또는 ___ mm 이하\n최대연단거리: 가장 얇은 판두께의 ___ 배 또는 ___ mm 초과할 수 없음\n2개 이상의 압연형강으로 구성된 조립압축재: 접합재 사이의 개재세장비가 조립압축재 전체세장비의 ___ 배를 초과하지 않도록',a:'0.75 | 300 | 14 | 170 | 8 | 120 | 3/4'},
 
 {id:7064,type:'cloze',cat:'PART4 · 강구조 > CH02 부재설계 > S05 압축재',q:'[래티스형식 조립압축재]\n단일래티스 부재의 세장비: ___ 이하\n복래티스의 경우: ___ 이하\n그 교차점을 접합\n압축력을 받는 래티스의 길이: 단일래티스 경우 주부재와 래티스를 접합하는 용접 또는 파스너 사이의 비지지된 래티스의 길이\n복래티스의 경우: 이 길이의 ___ %\n부재축에 대한 래티스 부재의 경사각: 단일래티스 ___ ° 이상 / 복래티스 ___ ° 이상\n조립부재의 플랜지요소의 재축방향의 용접 또는 파스너열 사이 거리가 ___ mm를 초과하면 래티스는 복래티스로 하거나 ㄱ형강으로 하는 것이 바람직',a:'140 | 200 | 70 | 60 | 45 | 380'},
+{id:7170,type:'ox',cat:'PART4 · 강구조 > CH02 부재설계 > S05 압축재',q:'조립부재의 재축방향의 접합간격은 소재세장비가 조립압축재의 최대세장비를 초과하도록 한다',a:'X',note:'⚠ "초과하도록" → "초과하지 않도록"이 맞음!\n\n이유: 소재가 조립부재보다 먼저 좌굴되면 안 됨\n→ 소재 세장비 ≤ 조립부재 세장비 유지해야 안전\n(13 지방 9급)'},
+{id:7171,type:'ox',cat:'PART4 · 강구조 > CH02 부재설계 > S05 압축재',q:'단일래티스의 경우 부재축에 대한 래티스 부재의 기울기는 50° 이상으로 한다',a:'X',note:'⚠ 50°가 아니라 60° 이상!\n• 단일래티스: 60° 이상\n• 복래티스: 45° 이상\n\n암기: "단단(60) 복부(45)"\n(13 지방 9급)'},
+{id:7172,type:'ox',cat:'PART4 · 강구조 > CH02 부재설계 > S05 압축재',q:'압축력을 받는 래티스의 길이는 단일래티스의 경우 주부재와 접합되는 비지지된 대각선의 길이이며, 복래티스의 경우 이 길이의 50%로 한다',a:'X',note:'⚠ 50%가 아니라 70%!\n복래티스는 X자로 교차해서 보강하므로 더 안정적\n→ 압축력 받는 길이가 단일의 70%로 줄어듦\n(13 지방 9급)'},
+{id:7173,type:'ox',cat:'PART4 · 강구조 > CH02 부재설계 > S02 볼트접합',q:'밀착조임은 진동이나 하중변화에 따른 고력볼트의 풀림이나 피로가 설계에 고려되는 경우 사용된다',a:'X',note:'⚠ 반대! 밀착조임은 진동·하중변화 "없는" 일반 정적 하중에 사용\n진동·피로 우려 시 → 전인장조임(완전조임) 사용\n\n[고력볼트 조임 3종]\n• 밀착조임: 일반 정적 하중\n• 전인장조임: 진동·피로·풀림 우려 시 ⭐\n• 마찰조임: 미끄럼 절대 안 됨 (가장 엄격)\n(15 국가 9급)'},
+{id:7174,type:'cloze',cat:'PART2 · 일반구조 > CH01 구조계획 > S02 하중',q:'[유사 활하중 KDS 41 10 15 - 4종 수치]\n● 난간 손스침 집중하중: ___ kN (임의 방향)\n● 난간 손스침 등분포 - 2세대 이하 주거: ___ kN/m\n● 난간 손스침 등분포 - 기타 구조물: ___ kN/m\n● 내벽 횡하중 적용 높이: ___ m 이상\n● 내벽 횡하중: ___ kN/m² (벽면 직각)\n● 고정사다리 집중하중: ___ kN\n● 고정사다리 작용 간격: ___ m 높이마다',a:'0.9 | 0.4 | 0.8 | 1.8 | 0.25 | 1.5 | 3',note:'⭐ 통째로 외울 것! 23 군무원 9급에 4개 다 출제됨\n\n[빈출 함정]\n❌ 내벽 2.0m (X) → 1.8m\n❌ 내벽 0.2 kN/m² (X) → 0.25\n❌ 사다리 1.0 kN (X) → 1.5\n\n한 줄: "0.9 / 0.4·0.8 / 1.8·0.25 / 1.5·3"\n(23 군무원 9급)'},
+{id:7175,type:'ox',cat:'PART2 · 일반구조 > CH01 구조계획 > S02 하중',q:'건축물 내부에 설치되는 높이 2.0m 이상의 각종 내벽은 벽면에 직각방향으로 작용하는 0.2 kN/m² 이상의 등분포하중에 대하여 안전하도록 설계한다',a:'X',note:'⚠ 함정 2개!\n• 높이 2.0m → 1.8m 이상\n• 0.2 kN/m² → 0.25 kN/m²\n(23 군무원 9급)'},
+{id:7176,type:'cloze',cat:'PART2 · 일반구조 > CH01 구조계획 > S03 풍하중·설하중',q:'[특별풍하중 - 풍진동 형상비 기준]\n● 풍직각방향진동·비틀림진동: H/√Af ≥ ___\n● 와류진동·공기력불안정진동\n  - 사각형 평면: H/√BD ≥ ___\n  - 원형 평면: H/Dm ≥ ___\n● 인접효과 우려 신축건축물 - 형상비 ___ 이상\n● 풍상측 장애물 폭의 ___ 배 이내 거리',a:'3 | 4.0 | 7 | 3 | 10',note:'⭐ 헷갈리지 말 것!\n• 풍직각/비틀림 = 3 (일반 진동)\n• 와류/공기력불안정 사각형 = 4.0 ⚠ 함정\n• 와류/공기력불안정 원형 = 7 (와류 잘 안 생김)\n• 인접효과 = 3 / 거리 10배\n\n[빈출 함정]\n❌ 사각형 와류진동 3 → 4.0\n❌ 원형 와류진동 4 → 7'},
+{id:7177,type:'ox',cat:'PART2 · 일반구조 > CH01 구조계획 > S03 풍하중·설하중',q:'와류진동 및 공기력불안정진동으로 인해 사각형 평면인 건축물의 경우 형상비가 3 이상일 때 특별풍하중을 적용하여 설계하여야 한다',a:'X',note:'⚠ 3 → 4.0이 맞음!\n사각형 평면 + 와류·공기력불안정 = H/√BD ≥ 4.0\n\n참고:\n• 풍직각·비틀림진동 = 형상비 3 이상 (이게 3)\n• 인접효과 우려 = 형상비 3 이상 (이것도 3)\n• 와류·공기력불안정 사각형 = 4.0\n• 와류·공기력불안정 원형 = 7'},
 
 {id:7065,type:'cloze',cat:'PART4 · 강구조 > CH02 부재설계 > S05 압축재',q:'[유공 커버플레이트 조립압축재 - 띠판]\n단부에 사용되는 띠판의 폭: 조립부재개재를 연결하는 용접 또는 파스너열 ___ 간격 이상\n부재 중간에 사용되는 띠판의 폭: 부재단부 띠판길이의 ___ 이상\n띠판의 두께: 조립부재개재를 연결시키는 용접 또는 파스너열 사이 거리의 ___ 이상\n띠판의 조립부재 접합은 용접접합의 경우 용접길이는 띠판길이의 ___ 이상이어야 하고 볼트접합의 경우 띠판 최소 ___ 개 이상의 파스너를 파스너 직경의 ___ 배 이하 간격으로 접합',a:'파스너열 | 1/2 | 1/50 | 1/3 | 3 | 6'},
 
@@ -5239,6 +5248,13 @@ const DEFAULT_CARDS = [
 {id:7160,type:'ox',cat:'PART4 · 강구조 > CH02 부재설계 > S05 압축재',q:'비콤팩트단면은 완전소성 응력분포가 발생할 수 있고, 국부좌굴이 발생하기 전에 충분한 곡률연성비를 발휘할 수 있는 단면이다',a:'X',note:'이건 콤팩트(조밀)단면 설명!\n비콤팩트 = 항복은 OK, 회전능력 3 미만\n→ 소성힌지 형성 X → 탄성설계만 가능\n(15 지방 9급 ② 함정)'},
 {id:7161,type:'cloze',cat:'PART4 · 강구조 > CH02 부재설계 > S04 휨재',q:'[횡비틀림좌굴강도 보정계수 Cb - 케이스별 값]\n● 등모멘트 (양단 동일): Cb = ___\n● 단순보 + 등분포하중: Cb = ___\n● 단순보 + 중앙 집중하중: Cb = ___\n\n암기: "균·등·중 = ___·___·___"',a:'1.0 | 1.14 | 1.32 | 1.0 | 1.14 | 1.32',note:'⭐ Cb = 모멘트 분포가 균일하지 않을수록 좌굴강도↑ 보정\n→ 균일(1.0) < 등분포(1.14) < 중앙집중(1.32)\n\n9급은 공식 X, 결과값만 암기!\n공식 (7급용): Cb = 12.5Mmax / (2.5Mmax + 3MA + 4MB + 3MC)'},
 {id:7162,type:'ox',cat:'PART4 · 강구조 > CH02 부재설계 > S04 휨재',q:'단순보에 중앙 집중하중이 작용할 때 횡비틀림좌굴강도 보정계수 Cb는 1.32이다',a:'O',note:'중앙 집중하중 = 1.32 ⭕\n등분포하중 = 1.14\n등모멘트 = 1.0\n\n암기: "균·등·중 = 1.0·1.14·1.32"\n모멘트 분포가 들쭉날쭉할수록 Cb 값 ↑'},
+{id:7163,type:'ox',cat:'PART2 · 일반구조 > CH01 구조계획 > S05 구조방식',q:'케이블은 하중과 상관없이 케이블의 모양이 일정하다',a:'X',note:'⚠ 케이블은 하중에 따라 모양 변함!\n• 자중만 → 현수선(catenary)\n• 등분포 하중 → 포물선\n• 집중 하중 → 꺾인 직선\n\n케이블의 핵심 특징 = 가요성(flexibility)\n(19 지방 경채 9급)'},
+{id:7164,type:'ox',cat:'PART2 · 일반구조 > CH01 구조계획 > S05 구조방식',q:'케이블을 지지하는 기둥에 휨모멘트를 유발시킨다',a:'O',note:'⚠ 헷갈리지 말 것!\n• 케이블 자체 → 인장만 받음 ⭕\n• 케이블이 기둥에 전달하는 힘 → 수평력 → 기둥에 휨모멘트 발생 ⭕\n\n그래서 케이블 구조 기둥(주탑)은 버팀줄(스테이)로 보강\n(19 지방 경채 9급)'},
+{id:7165,type:'ox',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'용접철망은 냉간신선 공정을 통하여 가공되므로 연신율이 감소되어 큰 연성이 필요한 부위에 사용할 경우 주의가 필요하다',a:'O',note:'냉간신선(cold drawing): 상온에서 강선을 가늘게 뽑는 공정\n→ 강도 ↑, 연신율 ↓, 연성 ↓ (취성 ↑)\n→ 지진력 등 큰 연성 필요한 부위 주의\n(19 국가 9급)'},
+{id:7166,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S06 정착 및 이음 설계',q:'[인장 용접이형철망 겹침이음 - 교차철선 유무]\n교차철선 있음: 이형철선 겹침이음길이의 ___ 배\n교차철선 없음: 이형철선 겹침이음길이의 ___ 배\n(공통 최소: 200mm 이상)',a:'1.3 | 1.0',note:'⚠ 함정: 교차철선 없을 때를 1.3배로 외우면 X!\n암기법: "교차철선 있어야 + 혜택"\n→ 교차철선 = 추가 정착 → 1.3배 (혜택)\n→ 교차철선 X = 그냥 = 1.0배\n(19 국가 9급)'},
+{id:7167,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S06 정착 및 이음 설계',q:'[인장 용접이형철망 정착길이 - 교차철선 유무]\n정착길이 내 교차철선 있음 → 철망계수 = ___\n정착길이 내 교차철선 없음 → 철망계수 = ___',a:'1.5 | 1.0',note:'⚠ 함정: "교차철선 없을 때 철망계수 1.5"는 오답!\n교차철선이 있어야 부착 좋아져서 1.5 적용\n(19 국가 9급)'},
+{id:7168,type:'ox',cat:'PART3 · RC구조 > CH04 내진설계 > S01 특수모멘트골조',q:'철근의 실제 항복강도에 대한 실제 극한인장강도의 비가 1.25 이상이어야 한다',a:'O',note:'⭐ fu/fy ≥ 1.25 (내진설계 필수!)\n"A에 대한 B의 비" = B/A → "항복강도에 대한 극한인장강도의 비" = fu/fy\n\n• fu = 실제 극한인장강도\n• fy = 실제 항복강도\n\n이유: 항복 후에도 강도가 더 올라가서 연성 거동 유도\n→ 철근이 갑자기 끊어지지 않고 충분히 변형하면서 지진 에너지 흡수\n\n⚠ 함정 변형:\n- 1.15 (X) / 1.20 (X) / 1.25 (○)\n(17 국가 9급)'},
+{id:7169,type:'ox',cat:'PART3 · RC구조 > CH04 내진설계 > S01 특수모멘트골조',q:'지진력에 저항하는 부재의 경량콘크리트 설계기준압축강도는 35 MPa을 초과할 수 없다',a:'O',note:'⭐ 내진설계 시 경량콘크리트 fck ≤ 35 MPa\n\n예외: 실험에 의하여 경량콘크리트를 사용한 부재가 같은 강도의 보통중량콘크리트를 사용한 부재의 강도 및 인성 이상을 갖는 것이 확인되면 더 큰 압축강도 사용 가능\n\n⚠ 합성부재의 경우는 다름! (합성부재는 42MPa)\n(17 국가 9급)'},
 {id:6285,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'[강도설계법 - 강재 사용 규정]\n● 원형철근: ___철근, ___, 용접철망으로만 사용 가능 (주철근 X)\n● 항복점이 뚜렷한 경우: 항복점 응력 = ___\n● 확대머리 전단스터드: 확대머리 지름 ≥ √___ × 스터드 지름\n● 부식 방지: 아연도금·에폭시수지 도장 ___',a:'나선 | 강선 | 항복강도(fy) | 10 | 가능',note:'⚠ 함정:\n- 항복점 응력 = 인장강도 (X) → 항복강도\n- √8 (X) → √10\n- 도장 불가 (X) → 가능\n(22 국가 7급 2차 ① 정답)'},
 {id:6286,type:'ox',cat:'PART3 · RC구조 > 기출 OX',q:'압축연단 변형률이 극한변형률에 도달한 시점에서 최외단 인장철근의 순인장변형률이 항복변형률의 2.5배 및 0.004 이상인 경우 강도감소계수 0.85를 적용한다',a:'X',note:'⚠ 0.004가 아니라 0.005!\n인장지배 한계 = max(0.005, 2.5εy)\n0.004는 휨부재 최소 허용 변형률 (다른 것)\n\n인장지배일 때 φ=0.85 (0.85 자체는 맞음)\n함정은 0.004 → 0.005\n(21 지방 7급 ② 정답)'},
 {id:6251,type:'ox',cat:'PART3 · RC구조 > CH05 기초 > S02 현장타설콘크리트말뚝',q:'현장타설 콘크리트말뚝의 허용압축응력 저감 없이 사용 가능한 세장비 한계값은 6이다',a:'X',note:'현장타설 콘크리트말뚝: 80\n6은 수치 변조 오답\n(15 국가 9급)'},
@@ -5891,6 +5907,9 @@ const DEFAULT_ENG_CARDS = [
 {id:9490,cat:"영단어",type:"flash",q:"insomnia",a:"불면증 (명사)\n\n⚠ '병'(X) → 너무 광범위! 정확히 '잠 못 자는 병'\n\n어원: in(부정) + somn(잠) + ia(병) → 잠 못 자는 병\n\n동족어 (somn=잠):\n• insomnia = 불면증\n• somnambulism = 몽유병\n• somnolent = 졸린·졸음 오는\n\n• suffer from insomnia = 불면증을 앓다\n• chronic insomnia = 만성 불면증\n• insomniac (명) = 불면증 환자\n\n9급 자주 출제 의학용어!\n\n≒ sleeplessness\n↔ hypersomnia (과다수면증)",pron:"ɪnˈsɑːmniə",note:"She has suffered from insomnia for years."},
 {id:9491,cat:"영단어",type:"flash",q:"production",a:"생산·제작·생산량 (명사)\n\n⚠ '제품'(X) → product! 비슷한 단어 구분 필수\n\n• product = 제품 (결과물 하나)\n• production = 생산 (행위·과정) ⭐\n• productive = 생산적인 (형)\n• producer = 생산자\n• produce = 생산하다 (동) / 농산물 (명)\n\n• mass production = 대량생산\n  (X mass product)\n• production line = 생산라인\n• in production = 생산 중인\n• film production = 영화 제작\n\n어원: pro(앞으로) + duc(이끌다) → 앞으로 만들어내다\n\n≒ manufacturing, output, creation",pron:"prəˈdʌkʃən",note:"The factory increased its production this year."},
 {id:9492,cat:"영단어",type:"flash",q:"globe",a:"지구·세계 / 지구본 (명사)\n\n⚠ '지구본'만 외우면 부족! 주된 의미는 '지구·세계'\n\n두 의미:\n① 지구·세계 (= the Earth, the world) ⭐\n② 지구본 (= a model of the Earth)\n\n• around the globe = 전 세계 곳곳에\n• across the globe = 전 세계에 걸쳐\n• travel the globe = 세계를 여행하다\n\n동족어:\n• global = 세계적인 (형)\n• globalization = 세계화\n• globally = 세계적으로\n\n9급 독해는 '지구·세계' 의미로 더 많이 출제!\n\n≒ world, Earth, planet",pron:"ɡloʊb",note:"People from around the globe gathered for the event."},
+{id:9493,cat:"영단어",type:"flash",q:"register",a:"등록하다·기록하다 (동) / 등록·기록부 (명)\n\n⚠ 'resist(저항하다)'와 혼동 주의! ⭐⭐⭐\n• register [레지스터] = 등록\n• resist [리지스트] = 저항\n\n주된 용법:\n• register for a course = 강좌에 등록하다\n• register to vote = 투표자 등록을 하다\n• cash register = 금전등록기\n\n동족어:\n• registration (명) = 등록\n• registry (명) = 등기소\n\n암기법: 회원가입 'Register' 버튼 → 등록!\n\n≒ enroll, sign up, record",pron:"ˈredʒɪstər",note:"You need to register for the exam by next Friday."},
+{id:9494,cat:"영단어",type:"flash",q:"instinct",a:"본능 (명사) ⭐\n\n⚠ '본능적인'이 아니라 '본능'! 명사임 주의\n• instinct (명) = 본능\n• instinctive (형) = 본능적인\n• instinctively (부) = 본능적으로\n\n주된 용법:\n• by instinct = 본능적으로\n• follow one's instinct = 본능을 따르다\n• maternal instinct = 모성 본능\n• survival instinct = 생존 본능\n\n예문: Animals act on instinct.\n(동물은 본능에 따라 행동한다)\n\n암기법: 'in(안에) + stinct(찌르다)' → 안에서 찌르는 것 = 본능\n\n≒ intuition, nature, urge",pron:"ˈɪnstɪŋkt",note:"She trusted her instinct and made the right decision."},
+{id:9495,cat:"영단어",type:"flash",q:"deadly",a:"치명적인 (형용사) ⭐\n\n⚠ -ly로 끝나는데 형용사! '치명적으로'(부사) 아님\n• deadly (형) = 치명적인\n• fatally (부) = 치명적으로\n\n-ly 끝나지만 형용사인 단어들:\n• friendly (친근한)\n• lovely (사랑스러운)\n• lonely (외로운)\n• elderly (나이 든)\n• deadly (치명적인) ← 이거!\n\n주된 용법:\n• a deadly weapon = 치명적인 무기\n• a deadly disease = 치명적인 질병\n• deadly poison = 맹독\n\n부사로 쓰일 땐 '극도로' 의미:\n• deadly serious = 극도로 진지한 (이건 부사)\n\n≒ fatal, lethal, mortal",pron:"ˈdedli",note:"COVID-19 proved to be a deadly virus worldwide."},
 ];
 
 // ═══════════════════ STATE ═══════════════════
@@ -8427,6 +8446,11 @@ function renderGachaHistory() {
 const BOSS_GOAL = 50; // 하루 N개 맞히면 보스 등장
 const BOSS_QUESTIONS = 5;
 const BOSS_WEAK_RATIO = 0.6; // 약점 카드 비율 60%
+const BOSS_PASS_SCORE = 4;   // 통과 기준 (4/5 = 80%, 85% Rule)
+const BOSS_PERFECT_SCORE = 5; // 완벽 클리어 (보너스)
+const WEAK_GRADUATE_STREAK = 2; // 연속 N회 정답 시 약점 졸업 (간격반복)
+const WEAK_OVERFLOW_LIMIT = 20; // 약점 N개 초과 시 복습모드 강제
+const WEAK_REVIEW_BATCH = 5;    // 복습모드 한 판 카드 수
 
 const BOSS_LIST = [
   { name:'망각의 군주',    sprite:'👾', desc:'틀린 카드를 소환한다...' },
@@ -8445,18 +8469,31 @@ let bossData = {
   totalKills: 0,        // 누적 격파 수 (전체)
   todayKills: 0,        // 오늘 격파 수
 };
-// 약점 카드 저장소 (id → 틀린 횟수)
+// 약점 카드 저장소
+// 구버전 (number): 틀린 횟수만 추적
+// 신버전 (object): { wrong: 틀린횟수, streak: 연속정답, cooldown: 쉬어야할판수 }
 let bossWeakCards = {};
 function loadBossWeakCards() {
   const s = localStorage.getItem('boss_weak_cards');
   bossWeakCards = s ? JSON.parse(s) : {};
+  // 구버전 마이그레이션: number → object
+  for (const id in bossWeakCards) {
+    if (typeof bossWeakCards[id] === 'number') {
+      bossWeakCards[id] = { wrong: bossWeakCards[id], streak: 0, cooldown: 0 };
+    }
+  }
 }
 function saveBossWeakCards() {
   localStorage.setItem('boss_weak_cards', JSON.stringify(bossWeakCards));
 }
 function addWeakCard(id) {
   loadBossWeakCards();
-  bossWeakCards[id] = (bossWeakCards[id] || 0) + 1;
+  if (!bossWeakCards[id]) {
+    bossWeakCards[id] = { wrong: 0, streak: 0, cooldown: 0 };
+  }
+  bossWeakCards[id].wrong = (bossWeakCards[id].wrong || 0) + 1;
+  bossWeakCards[id].streak = 0;   // 틀리면 연속정답 리셋
+  bossWeakCards[id].cooldown = 1; // 방금 틀렸으니 다음 판은 쉼
   saveBossWeakCards();
 }
 function removeWeakCard(id) {
@@ -8464,9 +8501,40 @@ function removeWeakCard(id) {
   delete bossWeakCards[id];
   saveBossWeakCards();
 }
+// 약점 카드 정답 시: streak 증가, 2회 연속이면 졸업
+function progressWeakCard(id) {
+  loadBossWeakCards();
+  if (!bossWeakCards[id]) return false; // 약점 아님
+  bossWeakCards[id].streak = (bossWeakCards[id].streak || 0) + 1;
+  bossWeakCards[id].cooldown = 1; // 맞췄어도 다음 판은 쉼 (간격반복)
+  if (bossWeakCards[id].streak >= WEAK_GRADUATE_STREAK) {
+    delete bossWeakCards[id];
+    saveBossWeakCards();
+    return true; // 졸업!
+  }
+  saveBossWeakCards();
+  return false;
+}
+// 매 판 시작 시 cooldown 감소
+function tickWeakCardCooldown() {
+  loadBossWeakCards();
+  for (const id in bossWeakCards) {
+    if (bossWeakCards[id].cooldown > 0) {
+      bossWeakCards[id].cooldown -= 1;
+    }
+  }
+  saveBossWeakCards();
+}
 function getWeakCount() {
   loadBossWeakCards();
   return Object.keys(bossWeakCards).length;
+}
+// 쿨다운 없는 약점 카드만 (출제 가능한 것)
+function getAvailableWeakIds() {
+  loadBossWeakCards();
+  return Object.keys(bossWeakCards)
+    .filter(id => (bossWeakCards[id].cooldown || 0) === 0)
+    .map(Number);
 }
 
 let bossSession = {
@@ -8475,8 +8543,10 @@ let bossSession = {
   currentQ: 0,
   correctCount: 0,    // 맞힌 개수
   wrongCardIds: [],   // 이번 회차에서 틀린 카드 id 목록
+  graduatedIds: [],   // 이번 회차에 졸업한 약점카드 id 목록 (2회 연속 정답)
   results: [],        // 각 문제 결과: {id, correct: true/false, q, a}
   answered: false,
+  isReviewMode: false, // 약점 과부하 복습 모드
 };
 
 function loadBoss() {
@@ -8561,17 +8631,30 @@ function openBossModal() {
   const boss = BOSS_LIST[Math.floor(Math.random() * BOSS_LIST.length)];
   bossSession.boss = boss;
 
-  // 문제 선택 — 약점 60% + 새 40%
+  // 문제 선택 — 약점 60% + 새 40% (selectBossQuestions가 isReviewMode 세팅)
   bossSession.questions = selectBossQuestions();
   bossSession.currentQ = 0;
   bossSession.correctCount = 0;
   bossSession.wrongCardIds = [];
+  bossSession.graduatedIds = [];
   bossSession.results = [];
   bossSession.answered = false;
 
   // 인트로 화면
   document.getElementById('boss-intro-sprite').textContent = boss.sprite;
   document.getElementById('boss-intro-name').textContent = boss.name;
+  
+  // 모드 표시 (복습모드 / 일반모드)
+  const modeEl = document.getElementById('boss-intro-mode');
+  if (modeEl) {
+    if (bossSession.isReviewMode) {
+      modeEl.innerHTML = '📚 약점 복습 모드 (약점 20개+)<br>통과 4문제 / 완벽 5문제';
+      modeEl.style.color = '#f7cac9';
+    } else {
+      modeEl.innerHTML = '통과 4문제 / 완벽 5문제';
+      modeEl.style.color = '#b8e0d4';
+    }
+  }
   document.getElementById('boss-intro-screen').style.display = 'flex';
   document.getElementById('boss-battle-screen').style.display = 'none';
   document.getElementById('boss-result-screen').style.display = 'none';
@@ -8580,18 +8663,30 @@ function openBossModal() {
 
 function selectBossQuestions() {
   loadBossWeakCards();
-  const weakIds = Object.keys(bossWeakCards).map(Number);
-
-  // 약점 카드 풀 (실제 카드 데이터로 변환, 존재하는 카드만)
-  const weakPool = cards.filter(c => weakIds.includes(c.id));
-
-  // 새 카드 풀 (약점 X + 한 번이라도 본 카드 우선)
+  
+  // 매 판 시작 시 쿨다운 감소
+  tickWeakCardCooldown();
+  
+  const allWeakIds = Object.keys(bossWeakCards).map(Number);
+  const availableWeakIds = getAvailableWeakIds(); // 쿨다운 없는 것만
+  
+  // ⚠️ 약점 과부하 모드: 약점이 너무 많이 쌓이면 복습모드 강제
+  // 복습모드: 5문제 전부 약점에서만 출제 (쿨다운 무시)
+  bossSession.isReviewMode = false;
+  if (allWeakIds.length >= WEAK_OVERFLOW_LIMIT) {
+    bossSession.isReviewMode = true;
+    const reviewPool = cards.filter(c => allWeakIds.includes(c.id));
+    shuffle(reviewPool);
+    return reviewPool.slice(0, WEAK_REVIEW_BATCH);
+  }
+  
+  // 일반 모드: 약점 60% + 새 카드 40%
+  const weakPool = cards.filter(c => availableWeakIds.includes(c.id));
   const seenIds = new Set(Object.keys(history).map(Number));
-  const seenNotWeak = cards.filter(c => seenIds.has(c.id) && !weakIds.includes(c.id));
-  const unseenCards = cards.filter(c => !seenIds.has(c.id) && !weakIds.includes(c.id));
+  const seenNotWeak = cards.filter(c => seenIds.has(c.id) && !allWeakIds.includes(c.id));
+  const unseenCards = cards.filter(c => !seenIds.has(c.id) && !allWeakIds.includes(c.id));
   const newPool = [...seenNotWeak, ...unseenCards];
 
-  // 약점 60% (3문제) + 새 40% (2문제) 목표
   const targetWeak = Math.min(weakPool.length, Math.round(BOSS_QUESTIONS * BOSS_WEAK_RATIO));
   const targetNew = BOSS_QUESTIONS - targetWeak;
 
@@ -8603,7 +8698,7 @@ function selectBossQuestions() {
     ...newPool.slice(0, targetNew)
   ];
 
-  // 부족하면 모든 카드에서 채우기
+  // 부족하면 나머지 카드(쿨다운 약점도 포함 OK)로 채우기
   if (selected.length < BOSS_QUESTIONS) {
     const usedIds = new Set(selected.map(c => c.id));
     const rest = cards.filter(c => !usedIds.has(c.id));
@@ -8739,9 +8834,11 @@ function answerBossOX(correct) {
       sprite.style.animation = 'bossShake 0.4s ease';
     }
     bossSession.correctCount++;
-    // 약점 카드였으면 → 졸업
-    if (bossWeakCards[q.id]) {
-      removeWeakCard(q.id);
+    // 약점 카드였으면 → 연속정답 카운트 (2회 연속이면 졸업)
+    const graduated = progressWeakCard(q.id);
+    if (graduated) {
+      bossSession.graduatedIds = bossSession.graduatedIds || [];
+      bossSession.graduatedIds.push(q.id);
     }
     const scorePct = (bossSession.correctCount / BOSS_QUESTIONS) * 100;
     document.getElementById('boss-battle-hp-fill').style.width = scorePct + '%';
@@ -8750,13 +8847,16 @@ function answerBossOX(correct) {
     playBossDamage();
     bossSession.wrongCardIds.push(q.id);
     addWeakCard(q.id);
-    // 답을 안 봤을 수도 있으니 강제로 노출
+    // 답을 안 봤을 수도 있으니 강제로 노출 (note 해설도 함께)
     const area = document.getElementById('boss-answer-reveal-area');
     if (area && q.a) {
       const aText = q.a.split('|').map((a,i) => `${i+1}. ${a.trim()}`).join('\n');
+      const noteHtml = q.note ? 
+        `<div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(247,202,201,.3);color:#fff;font-size:.85rem;line-height:1.6;white-space:pre-line;font-weight:400;">${esc(q.note)}</div>` : '';
       area.innerHTML = `
         <div style="font-size:.78rem;color:#f7cac9;margin-bottom:6px;">💀 정답</div>
-        <div style="color:#b8e0d4;font-size:.95rem;line-height:1.8;white-space:pre-line;font-weight:600;">${esc(aText)}</div>`;
+        <div style="color:#b8e0d4;font-size:.95rem;line-height:1.8;white-space:pre-line;font-weight:600;">${esc(aText)}</div>
+        ${noteHtml}`;
     }
   }
   // 마지막 문제면 결과로, 아니면 다음 버튼 표시
@@ -8789,9 +8889,11 @@ function answerBoss(btn, correct, chosen) {
       sprite.style.animation = 'bossShake 0.4s ease';
     }
     bossSession.correctCount++;
-    // 약점 카드였으면 → 약점에서 제거 (졸업!)
-    if (bossWeakCards[q.id]) {
-      removeWeakCard(q.id);
+    // 약점 카드였으면 → 연속정답 카운트 (2회 연속이면 졸업!)
+    const graduated = progressWeakCard(q.id);
+    if (graduated) {
+      bossSession.graduatedIds = bossSession.graduatedIds || [];
+      bossSession.graduatedIds.push(q.id);
     }
     // 점수 게이지 갱신
     const scorePct = (bossSession.correctCount / BOSS_QUESTIONS) * 100;
@@ -8844,43 +8946,56 @@ function endBossBattle() {
 
   const score = bossSession.correctCount;
   const total = BOSS_QUESTIONS;
-  const win = score === total; // 5/5 만점 = 승리
-  const partial = score >= 3;  // 3점 이상 = 부분 보상
+  const isReview = bossSession.isReviewMode === true;
+  // 복습모드: 4/5 이상 = 통과, 5/5 = 완벽
+  // 일반모드: 5/5 = 완벽승, 4/5 = 일반승, 3/5 = 부분, 0~2 = 패배
+  const perfect = score >= BOSS_PERFECT_SCORE;   // 5/5
+  const win = score >= BOSS_PASS_SCORE;          // 4/5 이상
+  const partial = score === 3;
 
-  // 약점 카드 통계
+  // 약점 카드 통계 (graduatedIds는 진짜 졸업한 것만)
   const weakCount = getWeakCount();
   const wrongIds = bossSession.wrongCardIds;
-  const newWeakCount = wrongIds.filter(id => bossWeakCards[id] === 1).length;
-  const studiedCount = bossSession.results.filter(r => r.correct && bossWeakCards[r.id] === undefined).length;
-  // (졸업한 약점 = 정답 맞췄고 이제 약점 풀에서 빠진 카드)
-  const graduatedCount = bossSession.results.filter(r => {
-    if (!r.correct) return false;
-    // 이번에 맞췄고, 약점 풀에 더 이상 없는 카드
-    return bossWeakCards[r.id] === undefined && wrongIds.indexOf(r.id) === -1;
-  }).length;
+  const newWeakCount = wrongIds.length; // 이번 판에서 새로 약점 추가된 수
+  const graduatedCount = (bossSession.graduatedIds || []).length;
 
   // 결과 desc 구성
   let descLines = [];
+  if (isReview) descLines.push('📚 약점 복습 모드');
   descLines.push(`${score} / ${total} 정답`);
   if (graduatedCount > 0) descLines.push(`✨ 약점 -${graduatedCount}개 졸업!`);
   if (newWeakCount > 0) descLines.push(`📚 새 약점 +${newWeakCount}개`);
   descLines.push(`🔥 누적 약점: ${weakCount}개`);
+  
+  // 약점 과부하 경고
+  if (weakCount >= WEAK_OVERFLOW_LIMIT) {
+    descLines.push(`⚠️ 약점이 많아요! 다음 판은 복습 모드로 진행됩니다.`);
+  }
 
   if (win) {
     playBossVictory();
-    document.getElementById('boss-result-icon').textContent = '🎉';
-    document.getElementById('boss-result-title').textContent = '완벽 승리!';
+    document.getElementById('boss-result-icon').textContent = perfect ? '🎉' : '✨';
+    document.getElementById('boss-result-title').textContent = perfect ? '완벽 승리!' : '승리!';
     document.getElementById('boss-result-title').className = 'boss-result-title win';
-    descLines.unshift(`${bossSession.boss.name}을 완벽히 쓰러뜨렸다!`);
+    descLines.unshift(perfect 
+      ? `${bossSession.boss.name}을 완벽히 쓰러뜨렸다!` 
+      : `${bossSession.boss.name}을 쓰러뜨렸다!`);
 
     // 누적 격파 카운트
     bossData.totalKills = (bossData.totalKills||0) + 1;
     bossData.todayKills = (bossData.todayKills||0) + 1;
 
-    // 기본 보상
-    addPoints(PT.bossWin, '보스전 완벽 승리');
+    // 기본 보상 (4/5 통과)
+    addPoints(PT.bossWin, '보스전 승리');
     addGachaTicket(1);
-    descLines.push('+20pt & 🎟+1');
+    descLines.push(`+${PT.bossWin}pt & 🎟+1`);
+    
+    // 완벽 보너스 (5/5)
+    if (perfect) {
+      addGachaTicket(1);
+      addPoints(10, '완벽 클리어 보너스');
+      descLines.push('🌟 완벽 보너스 +10pt & 🎟+1');
+    }
 
     // 누적 마일스톤 보상 (한 번만 지급)
     const KILL_MILESTONES = {
@@ -8919,13 +9034,13 @@ function endBossBattle() {
       closeBossModal();
     };
   } else if (partial) {
-    // 3~4점: 부분 보상
+    // 3점: 아쉬운 부분 보상
     playBossDefeat();
     document.getElementById('boss-result-icon').textContent = '💪';
     document.getElementById('boss-result-title').textContent = '아쉬워!';
     document.getElementById('boss-result-title').className = 'boss-result-title lose';
-    descLines.unshift(`${bossSession.boss.name}에게 살짝 부족...`);
-    descLines.push('+5pt 부분 보상');
+    descLines.unshift(`${bossSession.boss.name}에게 한 끗 부족...`);
+    descLines.push('+5pt 부분 보상 (4문제만 맞히면 통과!)');
     addPoints(5, '보스전 부분 점수');
     document.querySelector('.boss-result-btn').textContent = '🔄 재도전!';
     document.querySelector('.boss-result-btn').onclick = () => retryBoss();
@@ -8955,6 +9070,7 @@ function retryBoss() {
   bossSession.currentQ = 0;
   bossSession.correctCount = 0;
   bossSession.wrongCardIds = [];
+  bossSession.graduatedIds = [];
   bossSession.results = [];
   bossSession.answered = false;
   startBossBattle();
