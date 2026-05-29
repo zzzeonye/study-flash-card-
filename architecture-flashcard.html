@@ -4442,7 +4442,7 @@ const DEFAULT_CARDS = [
   {id:5040,cat:'PART2 · 일반구조 > CH01 구조계획 > S02 하중',type:'cloze',q:'[활하중 저감계수 예외 - 0.8까지 적용 가능 항목]\n● 5kN/㎡ 초과 활하중: 저감 X, 단 ___ 이상 지지부재 C는 ___ 까지\n● 승용차 전용 주차장: 저감 X, 단 ___ 이상 지지부재 C는 ___ 까지\n● 공중집회 용도(5kN/㎡ 이하): ___',a:'2개 층 | 0.8 | 2개 층 | 0.8 | 절대 저감 불가',note:'⚠ 공중집회는 어떤 경우에도 저감 X (0.8 적용 X)\n5kN/㎡ 초과·승용차 주차장만 2개 층 이상 지지 시 0.8 가능\n현행 KDS 41 기준: 0.8 (옛 기준 0.7은 폐기)'},
   {id:5042,cat:'PART2 · 일반구조 > CH01 구조계획 > S02 하중',type:'ox',q:'승용차 전용 주차장의 활하중은 저감할 수 없으나, 2개 이상을 지지하는 부재의 저감계수 C는 0.7까지 적용할 수 있다',a:'X',note:'⚠ 두 가지 함정:\n1) "2개 이상" → 정확히는 "2개 층 이상 지지부재"\n2) "0.7" → 현행 KDS는 0.8\n\n14 국가 9급 출제 당시(2014)는 0.7이었으나\n현행 KDS 41 개정 후 0.8\n→ 시험 당시 ④번 정답 / 현재는 ④번도 틀림 (③번만 정답)\n\n암기: 승용차·5kN초과 모두 → 2개 층 이상 → C 0.8'},
   {id:5041,cat:'PART2 · 일반구조 > CH01 구조계획 > S02 하중',type:'cloze',q:'[1방향 슬래브 영향면적]\n슬래브 경간 × 슬래브 경간의 ___ 배 이하 슬래브 폭',a:'1.5'},
-  {id:5042,cat:'PART2 · 일반구조 > CH01 구조계획 > S03 풍하중·설하중',type:'cloze',q:'바람이 불어와 맞닿는 쪽: ___\n반대쪽(빠져나가는 쪽): ___',a:'풍상측 | 풍하측'},
+  {id:6400,cat:'PART2 · 일반구조 > CH01 구조계획 > S03 풍하중·설하중',type:'cloze',q:'바람이 불어와 맞닿는 쪽: ___\n반대쪽(빠져나가는 쪽): ___',a:'풍상측 | 풍하측'},
   {id:5043,cat:'PART2 · 일반구조 > CH01 구조계획 > S03 풍하중·설하중',type:'cloze',q:'건축물 높이(H)를 바닥면 평균길이(√BD)로 나눈 비율: ___',a:'형상비'},
   {id:5044,cat:'PART2 · 일반구조 > CH01 구조계획 > S03 풍하중·설하중',type:'cloze',q:'평균변위에 대한 최대변위의 비를 통계적 값으로 나타낸 계수: ___',a:'가스트영향계수'},
   {id:5045,cat:'PART2 · 일반구조 > CH01 구조계획 > S03 풍하중·설하중',type:'cloze',q:'공진효과를 고려하지 않는 안정된 구조물\n→ 형상비에 따라 구분: ___',a:'강체건축구조물'},
@@ -4508,10 +4508,10 @@ const DEFAULT_CARDS = [
 {id:5103,cat:'PART2 · 일반구조 > CH01 구조계획 > S04 지진하중·내진설계',type:'cloze',q:'[평면 비정형 ④면외 어긋남]\n수직부재의 ___ 등과 같이 횡력전달 경로에서의 ___',a:'면 어긋남 | 불연속성'},
 {id:5104,cat:'PART2 · 일반구조 > CH01 구조계획 > S04 지진하중·내진설계',type:'cloze',q:'[평면 비정형 ⑤비평행 시스템]\n횡력저항수직요소가 직교 주축에 ___ 않거나 대칭이 ___ 인 경우',a:'평행하지 | 아닌'},
 {id:5105,cat:'PART2 · 일반구조 > CH01 구조계획 > S04 지진하중·내진설계',type:'cloze',q:'[수직 비정형 ④횡력저항요소의 수직 비정형]\n횡력저항요소 면 어긋남 > 그 요소의 ___ / 또는 인접 하부층 저항요소에 ___ 가 일어나는 경우',a:'길이 | 강성감소'},
-  {id:5102,cat:'PART2 · 일반구조 > CH01 구조계획 > S04 지진하중·내진설계',type:'cloze',q:'허용층간변위\n내진(특): ___ × 층고\n내진(Ⅰ): ___ × 층고\n내진(Ⅱ): ___ × 층고',a:'0.010 | 0.015 | 0.020'},
-  {id:5103,cat:'PART2 · 일반구조 > CH01 구조계획 > S04 지진하중·내진설계',type:'ox',q:'등가정적해석법에서 층간변위 산정 시\n변위증폭계수를 고려할 필요가 있다',a:'O'},
-  {id:5104,cat:'PART2 · 일반구조 > CH01 구조계획 > S04 지진하중·내진설계',type:'cloze',q:'[밑면전단력] 지진응답계수에 고정하중과 유효건물중량을 곱한 값\n창고 활하중 최소 ___ % / 설하중 1.5kN/㎡ 초과 평지붕 설하중 ___ % 유효중량 포함',a:'25% | 20%'},
-  {id:5105,cat:'PART2 · 일반구조 > CH01 구조계획 > S04 지진하중·내진설계',type:'cloze',q:'[밑면전단력] 칸막이 하중 포함 시\n칸막이 실제중량과 ___ kN/㎡ 중 큰 값 / 영구설비: ___',a:'0.5 | 총하중'},
+  {id:6401,cat:'PART2 · 일반구조 > CH01 구조계획 > S04 지진하중·내진설계',type:'cloze',q:'허용층간변위\n내진(특): ___ × 층고\n내진(Ⅰ): ___ × 층고\n내진(Ⅱ): ___ × 층고',a:'0.010 | 0.015 | 0.020'},
+  {id:6402,cat:'PART2 · 일반구조 > CH01 구조계획 > S04 지진하중·내진설계',type:'ox',q:'등가정적해석법에서 층간변위 산정 시\n변위증폭계수를 고려할 필요가 있다',a:'O'},
+  {id:6403,cat:'PART2 · 일반구조 > CH01 구조계획 > S04 지진하중·내진설계',type:'cloze',q:'[밑면전단력] 지진응답계수에 고정하중과 유효건물중량을 곱한 값\n창고 활하중 최소 ___ % / 설하중 1.5kN/㎡ 초과 평지붕 설하중 ___ % 유효중량 포함',a:'25% | 20%'},
+  {id:6404,cat:'PART2 · 일반구조 > CH01 구조계획 > S04 지진하중·내진설계',type:'cloze',q:'[밑면전단력] 칸막이 하중 포함 시\n칸막이 실제중량과 ___ kN/㎡ 중 큰 값 / 영구설비: ___',a:'0.5 | 총하중'},
   {id:5106,cat:'PART2 · 일반구조 > CH01 구조계획 > S04 지진하중·내진설계',type:'cloze',q:'[지진응답계수]\n설계스펙트럼가속도·중요도계수에 ___ \n고유주기·반응수정계수에 ___',a:'비례 | 반비례'},
   {id:5107,cat:'PART2 · 일반구조 > CH01 구조계획 > S04 지진하중·내진설계',type:'cloze',q:'산정식에 따른 지진응답계수는 ___ 이상\n반응수정계수 = 건축물 ___ 별로 내진성 고려하는 계수',a:'0.01 | 구조시스템'},
   {id:5108,cat:'PART2 · 일반구조 > CH01 구조계획 > S04 지진하중·내진설계',type:'cloze',q:'[기본진동주기] RC·철골 모멘트저항골조\n12층 이하, 층 최소높이 3m 이상 → 근사 고유주기 = 층수 × ___',a:'0.1'},
@@ -4613,7 +4613,7 @@ const DEFAULT_CARDS = [
   {id:5339,cat:'PART2 · 일반구조 > CH04 조적구조',type:'cloze',q:'[조적조 경험적설계법 - 전단벽]\n● 조적벽이 구조물 횡안정성 확보 위해 사용 시 전단벽들이 횡력과 ___ 한 방향으로 배치\n● 조적 전단벽의 공칭두께: 최소 ___ mm 이상\n● 횡안정성을 위해 전단벽이 요구되는 각 방향에 대해 해당 방향으로 배치된 전단벽 길이의 합계가 건물의 장변길이의 ___ % 이상',a:'평행 | 200 | 50'},
   {id:5340,cat:'PART2 · 일반구조 > CH04 조적구조',type:'cloze',q:'[조적조 경험적설계법 - 전단벽 간 최대간격 (벽체 간 간격 : 전단벽 길이)]\n● 현장타설 콘크리트: ___\n● 프리캐스트 콘크리트: ___\n● 콘크리트 타설 철재 데크: ___\n● 무타설 철재 데크·목재 다이어프램: ___ 비율 초과 X',a:'5:1 | 4:1 | 3:1 | 2:1'},
   {id:5341,cat:'PART2 · 일반구조 > CH04 조적구조',type:'cloze',q:'[조적조 경험적설계법 - 2층 이상·패러핏벽]\n● 2층 이상의 건물에서 조적내력벽 공칭두께: ___ mm 이상\n● 층고가 ___ mm를 넘지 않는 1층 건물의 속찬조적벽 공칭두께: ___ mm 이상\n  (이때 높이 ___ mm 이하의 박공지붕 추가 사용 가능)\n● 패러핏벽 두께: ___ mm 이상, 높이는 두께의 ___ 배를 넘을 수 없음\n● 패러핏벽은 하부 벽체보다 ___ 않아야 함',a:'200 | 2700 | 150 | 1800 | 200 | 3 | 얇지'},
-  {id:5119,cat:'PART2 · 일반구조 > CH02 조적구조 > S01 보강콘크리트 블록구조',type:'cloze',q:'[보강콘크리트 블록구조 모멘트저항 벽체골조 설계 제한]\nBeam(보): 폭 대비 깊이 비 ___ 이하 / 최소 순경간 보 깊이의 ___ 배 이상\n피어(Pier): 깊이 대비 높이 비 ___ 이하 / 최대 공칭깊이 ___ mm 이하',a:'6 | 2 | 5 | 2400',note:'피어 깊이대비높이비: 5이하 (3은 오답)'},
+  {id:6405,cat:'PART2 · 일반구조 > CH02 조적구조 > S01 보강콘크리트 블록구조',type:'cloze',q:'[보강콘크리트 블록구조 모멘트저항 벽체골조 설계 제한]\nBeam(보): 폭 대비 깊이 비 ___ 이하 / 최소 순경간 보 깊이의 ___ 배 이상\n피어(Pier): 깊이 대비 높이 비 ___ 이하 / 최대 공칭깊이 ___ mm 이하',a:'6 | 2 | 5 | 2400',note:'피어 깊이대비높이비: 5이하 (3은 오답)'},
   {id:5202,cat:'PART2 · 일반구조 > CH02 조적구조 > S01 보강콘크리트 블록구조',type:'cloze',q:'[보강조적조 내진설계 부재 최소치수 - 강도설계법]\n● 보\n폭: ___ mm 이상\n깊이: ___ mm 이상\n● 피어 유효폭: ___ mm 이상 ~ ___ mm 이하\n● 기둥\n폭: ___ mm 이상\n횡지지 간격: 폭의 ___ 배 이상',a:'200 | 200 | 150 | 400 | 300 | 30',note:'⭐ 핵심 수치:\n● 보 = 200·200 (폭·깊이)\n● 피어 = 150~400 (유효폭)\n● 기둥 = 300·30배 (폭·횡지지)\n\n⚠ 함정 패턴:\n- 피어 200~500 (X) → 150~400 (O)\n- 기둥 횡지지 30배 이하 (X) → 30배 이상 (O)\n(22 지방 9급, 학원 모의고사 출제)'},
   {id:5203,cat:'PART2 · 일반구조 > CH02 조적구조 > S01 보강콘크리트 블록구조',type:'ox',q:'보강조적조 강도설계법 내진설계에서 피어 유효폭은 200mm 이상이어야 하며, 500mm를 넘을 수 없다',a:'X',note:'200~500 (X) → 150~400 (O)\n피어 유효폭 = 150mm 이상 ~ 400mm 이하\n\n암기: "피어 = 150~400"\n(22 지방 9급 정답 ②)'},
   {id:5158,cat:'PART2 · 일반구조 > CH02 조적구조 > S01 보강콘크리트 블록구조',type:'ox',q:'보강조적조 강도설계법 내진설계에서 기둥의 횡지지 간격은 폭의 30배 이상이어야 한다',a:'O',note:'⭐ 30배 이상이 맞음! (30배 이하 X)\n● 기둥 폭: 300mm 이상\n● 기둥 횡지지 간격: 폭의 30배 이상\n\n전체 정리:\n- 보: 200·200 (폭·깊이)\n- 피어: 150~400 (유효폭)\n- 기둥: 300·30배 이상\n(학원 모의고사 출제)'},
@@ -4640,6 +4640,8 @@ const DEFAULT_CARDS = [
   {id:5140,cat:'PART2 · 일반구조 > CH01 구조계획 > S05 구조방식',type:'ox',q:'케이블 부재는 원칙적으로 인장력과 압축력 모두에 저항하는 선형 탄성부재다',a:'X',note:'케이블 부재: 인장력에만 저항 (압축력 저항 불가)'},
   {id:5141,cat:'PART2 · 일반구조 > CH01 구조계획 > S05 구조방식',type:'cloze',q:'케이블 재료의 단기허용인장력 = 장기허용인장력 × ___',a:'1.33'},
   {id:5142,cat:'PART2 · 일반구조 > CH01 구조계획 > S05 구조방식',type:'cloze',q:'[아치구조] 추력 보강 방법\n___ 설치 / ___ 아치 연결 / ___ 로 구속 / 벽체·기둥 무게 증가',a:'버트레스 | 연속 | 타이 바'},
+  {id:5344,cat:'PART2 · 일반구조 > CH01 구조계획 > S05 구조방식',type:'ox',q:'아치구조에서 추력(thrust)은 아치의 압축선을 따라 지지점에 전달되는 힘이다',a:'O',note:'⭐ 추력 = 하중이 아치의 압축선(thrust line)을 타고 흘러 지지점에서 바깥(수평)으로 벌어지려는 힘\n\n[추력 핵심 4가지]\n• 압축선 따라 지지점에 전달 ⭕\n• 수평 방향으로 벌어짐 (수직 X)\n• 아치 높이(rise)에 반비례 (납작할수록 ↑)\n• 크기 커도 버트레스·타이바로 지지 가능\n(19 지방 경채 9급)'},
+  {id:5345,cat:'PART2 · 일반구조 > CH01 구조계획 > S05 구조방식',type:'ox',q:'아치구조에서 추력의 크기는 아치의 높이(rise)에 비례한다',a:'X',note:'⚠ 비례 X → 반비례!\n아치가 낮고 납작할수록 추력 ↑\n아치가 높고 뾰족할수록 추력 ↓\n\n직관: 납작한 아치일수록 옆으로 더 밀어냄\n(19 지방 경채 9급)'},
   {id:5143,cat:'PART2 · 일반구조 > CH01 구조계획 > S05 구조방식',type:'ox',q:'철근콘크리트 전단벽 형식은 골조의 위치변경이 용이하고\n질량 증가로 고유진동수가 증가한다',a:'X',note:'전단벽: 위치변경 곤란 + 질량 증가 → 고유진동수 감소'},
   {id:5144,cat:'PART2 · 일반구조 > CH01 구조계획 > S05 구조방식',type:'ox',q:'내력벽방식은 수직하중과 횡력을 전단벽이 부담하는 구조방식이다',a:'O'},
   {id:5145,cat:'PART2 · 일반구조 > CH01 구조계획 > S05 구조방식',type:'cloze',q:'[모멘트골조방식] 수평보와 수직기둥이 동일 선상에 강접합한 장방형 격자\n분류: ___ 모멘트골조, ___ 모멘트골조, ___ 모멘트골조',a:'보통 | 중간 | 특수'},
@@ -4751,8 +4753,8 @@ const DEFAULT_CARDS = [
 {id:6035,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'[슬럼프시험] 슬럼프콘의 상부지경 100mm·하부지경 ___mm·높이 ___mm의 철제 형틀을 평평한 수밀판 위에 놓고, 비빈 콘크리트를 3회로 나누어 넣고 매회 다짐막대로 ___회 다져서 시험 / 콘크리트의 ___을 측정하고 워커빌리티를 비교하는 데 이용된다.',a:'200 | 300 | 25 | 반죽질기'},
 {id:6152,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'[콘크리트 탄성계수]\n할선탄성계수 Ec = 8,500 × ∛(___)\nEci = ___ × Ec',a:'fcm(=fck+Δf) | 1.18'},
 {id:6153,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'[콘크리트 탄성계수 Δf]\nfck ≤ 40MPa → Δf = ___MPa\nfck ≥ 60MPa → Δf = ___MPa\n중간값은 직선보간',a:'4 | 6'},
-{id:6152,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'[할선탄성계수] Ec = 8,500 × ∛(fck + Δf)\nΔf: fck ≤ 40MPa → ___ / fck ≥ 60MPa → ___ / 사이는 직선보간',a:'4MPa | 6MPa'},
-{id:6153,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'[초기접선탄성계수] Eci = ___ × Ec',a:'1.18'},
+{id:6406,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'[할선탄성계수] Ec = 8,500 × ∛(fck + Δf)\nΔf: fck ≤ 40MPa → ___ / fck ≥ 60MPa → ___ / 사이는 직선보간',a:'4MPa | 6MPa'},
+{id:6407,type:'cloze',cat:'PART3 · RC구조 > CH01 총론 > S01 일반사항',q:'[초기접선탄성계수] Eci = ___ × Ec',a:'1.18'},
 
 // ===================== CH02 사용성 및 내구성 230~240 =====================
 {id:6036,type:'cloze',cat:'PART3 · RC구조 > CH02 사용성 및 내구성',q:'[사용성 설계] 사용성 검토는 균열, 처짐, 피로의 영향 등을 고려 / 부재의 안전성은 ___하중에 의하여 검토하지만, 처짐이나 균열 또는 피로 등 사용성은 ___하중에 의하여 검토한다.',a:'계수 | 사용'},
@@ -4959,10 +4961,10 @@ const DEFAULT_CARDS = [
 {id:6245,type:'ox',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S06 정착 및 이음 설계',q:'압축 이형철근의 정착길이는 항상 200mm 이상이어야 한다',a:'O',note:'압축 이형철근: 200mm\n인장은 300mm이므로 압축이 더 짧음 (17 지방 9급)'},
 {id:6246,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[T형보 유효폭 기출 계산]\n슬래브 두께 t=100mm, 보 폭 bw=300mm\n보 경간 L=10m, 양쪽 인접보까지 5m씩\n① 16t + bw = ___ mm\n② L/4 = ___ mm\n③ 인접보 중심선 간 거리 = ___ mm\n→ 유효폭 = 최솟값 = ___ mm',a:'1900 | 2500 | 5000 | 1900',note:'T형보 유효폭: 3개 값 중 최솟값\n16×100 + 300 = 1900mm가 지배\n(16 국가 7급)'},
 {id:6247,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[T형보 유효폭 공식 정리]\n대칭 T형보 — 다음 3가지 중 최솟값:\n① 양쪽 내민 플랜지 두께의 ___ 배 + bw (= 16t + bw)\n② 양쪽 슬래브 ___ 간 거리\n③ 보 경간의 ___',a:'8 | 중심 | 1/4',note:'양쪽 각각 8t씩이므로 합쳐서 16t\n반T형보는 한쪽만이라 8t (반=대칭의 절반)'},
-{id:6241,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 슬래브 설계',q:'[슬래브 두께·배근 종합 수치]\n1방향 슬래브 최소 두께: ___ mm 이상\n철근 수평 순간격: 공칭지름 이상, ___ mm 이상\n굵은 골재 최대치수의 ___ 이상\n2방향 슬래브 위험단면 철근 간격: 슬래브 두께의 ___ 이하, 또한 ___ mm 이하\n슬래브 최소 피복두께(옥외 공기 직접 접하지 X): ___ mm 이상',a:'100 | 25 | 4/3 | 2배 | 300 | 20',note:'⚠ 최소 두께 100mm (120mm 아님)\n⚠ 순간격 25mm (22mm 아님)\n⚠ 굵은 골재 4/3 (5/3 아님)\n⚠ 피복 20mm (10mm 아님)\n(11 국가 9급)'},
-{id:6242,type:'ox',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 슬래브 설계',q:'1방향 슬래브의 두께는 최소 120mm 이상으로 하여야 한다',a:'X',note:'1방향 슬래브 최소 두께: 100mm 이상\n120mm는 오답 함정\n(11 국가 9급)'},
-{id:6243,type:'ox',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 슬래브 설계',q:'2방향 슬래브의 위험단면에서 철근 간격은 슬래브 두께의 2배 이하 또한 300mm 이하로 하여야 한다. 단 와플구조나 리브구조로 된 부분은 예외로 한다',a:'O',note:'위험단면 = 기둥 주변 펀칭 전단 집중구간\n2방향 슬래브 철근 최대 간격 = 슬래브 두께 2배 & 300mm 이하\n(11 국가 9급 정답)'},
-{id:6244,type:'ox',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 슬래브 설계',q:'슬래브 철근의 피복 두께는 10mm 이상으로 한다',a:'X',note:'옥외 공기 직접 접하지 않는 슬래브 피복: 20mm 이상\n(D35 초과는 40mm) 10mm는 오답\n(11 국가 9급)'},
+{id:6408,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 슬래브 설계',q:'[슬래브 두께·배근 종합 수치]\n1방향 슬래브 최소 두께: ___ mm 이상\n철근 수평 순간격: 공칭지름 이상, ___ mm 이상\n굵은 골재 최대치수의 ___ 이상\n2방향 슬래브 위험단면 철근 간격: 슬래브 두께의 ___ 이하, 또한 ___ mm 이하\n슬래브 최소 피복두께(옥외 공기 직접 접하지 X): ___ mm 이상',a:'100 | 25 | 4/3 | 2배 | 300 | 20',note:'⚠ 최소 두께 100mm (120mm 아님)\n⚠ 순간격 25mm (22mm 아님)\n⚠ 굵은 골재 4/3 (5/3 아님)\n⚠ 피복 20mm (10mm 아님)\n(11 국가 9급)'},
+{id:6409,type:'ox',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 슬래브 설계',q:'1방향 슬래브의 두께는 최소 120mm 이상으로 하여야 한다',a:'X',note:'1방향 슬래브 최소 두께: 100mm 이상\n120mm는 오답 함정\n(11 국가 9급)'},
+{id:6410,type:'ox',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 슬래브 설계',q:'2방향 슬래브의 위험단면에서 철근 간격은 슬래브 두께의 2배 이하 또한 300mm 이하로 하여야 한다. 단 와플구조나 리브구조로 된 부분은 예외로 한다',a:'O',note:'위험단면 = 기둥 주변 펀칭 전단 집중구간\n2방향 슬래브 철근 최대 간격 = 슬래브 두께 2배 & 300mm 이하\n(11 국가 9급 정답)'},
+{id:6411,type:'ox',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S04 슬래브 설계',q:'슬래브 철근의 피복 두께는 10mm 이상으로 한다',a:'X',note:'옥외 공기 직접 접하지 않는 슬래브 피복: 20mm 이상\n(D35 초과는 40mm) 10mm는 오답\n(11 국가 9급)'},
 {id:6183,type:'cloze',cat:'PART3 · RC구조 > CH04 내진설계 > S02 특수전단벽',q:'[특수경계요소 범위]\n압축단부에서 ___ 와 ___ 중 큰 값 이상이어야 한다',a:'c-0.1lw | c/2'},
 {id:6184,type:'cloze',cat:'PART3 · RC구조 > CH04 내진설계 > S02 특수전단벽',q:'[플랜지를 가진 벽체의 경계요소]\n유효플랜지폭과 복부 쪽으로 적어도 ___ mm 이상 포함해야 한다',a:'300'},
 {id:6185,type:'cloze',cat:'PART3 · RC구조 > CH04 내진설계 > S03 연결보',q:'[연결보 대각선 묶음철근]\n각 방향 최소 ___ 개의 철근으로 이루어져야 한다',a:'4'},
@@ -5323,8 +5325,11 @@ const DEFAULT_CARDS = [
 {id:6282,type:'ox',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'압축연단 콘크리트가 가정된 극한변형률에 도달할 때, 최외단 인장철근의 순인장변형률이 압축지배변형률 한계 이하인 단면을 인장지배단면이라 한다',a:'X',note:'압축지배단면 설명임!\n인장지배단면 = εt ≥ 0.005 (15 지방 9급 함정)\n\n⚠ KDS 개정: 옛 εcu=0.003 → 현행 0.0033 (fck≤40)\n시험 출제연도에 따라 값 다름'},
 
 {id:6283,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[벽돌 설계 관련 - 2012년 구기준]\n지름 10mm 용접철망 벽체 전단면 최소수평철근비: ___\n벽체 수직철근 간격: 벽두께 3배 이하, 또한 ___mm 이하\n수평철근 간격: 벽두께 3배 이하, 또한 ___mm 이하',a:'0.0012 | 450 | 450',note:'2012년 구기준 (현재는 변경됨)\n(14 지방 9급 출제)'},
-{id:6285,type:'cloze',cat:'PART3 · RC구조 > CH02 사용성 및 내구성',q:'[콘크리트 줄눈(Joint) 4종 구별 - 계획 vs 비계획]\n● 계획적(의도적) 3종\n시공이음(시공량 분리): ___ Joint\n조절줄눈(균열 유도): ___ Joint\n지연줄눈(수축 안정 후 채움): ___ Joint\n\n● 비계획적(시공실패) 1종\n응결 후 이어침으로 부착 X: ___ Joint',a:'Construction | Control | Delay | Cold',note:'⚠ Cold Joint = 시공 실패의 결과 (의도 X)\n원인: 운반 지연·날씨 등으로 먼저 친 콘크리트가 굳어버림\n방지: 응결지연제, 빠른 타설'},
-{id:6286,type:'ox',cat:'PART3 · RC구조 > CH02 사용성 및 내구성',q:'Cold Joint는 콘크리트 시공 시 의도적으로 두는 계획적 줄눈이다',a:'X',note:'Cold Joint = 시공 실패! 의도치 않게 생긴 이음\n계획적 줄눈: Construction Joint, Control Joint, Delay Joint\n(20 해경 1차)'},
+{id:6412,type:'cloze',cat:'PART3 · RC구조 > CH02 사용성 및 내구성',q:'[콘크리트 줄눈(Joint) 4종 구별 - 계획 vs 비계획]\n● 계획적(의도적) 3종\n시공이음(시공량 분리): ___ Joint\n조절줄눈(균열 유도): ___ Joint\n지연줄눈(수축 안정 후 채움): ___ Joint\n\n● 비계획적(시공실패) 1종\n응결 후 이어침으로 부착 X: ___ Joint',a:'Construction | Control | Delay | Cold',note:'⚠ Cold Joint = 시공 실패의 결과 (의도 X)\n원인: 운반 지연·날씨 등으로 먼저 친 콘크리트가 굳어버림\n방지: 응결지연제, 빠른 타설'},
+{id:6413,type:'ox',cat:'PART3 · RC구조 > CH02 사용성 및 내구성',q:'Cold Joint는 콘크리트 시공 시 의도적으로 두는 계획적 줄눈이다',a:'X',note:'Cold Joint = 시공 실패! 의도치 않게 생긴 이음\n계획적 줄눈: Construction Joint, Control Joint, Delay Joint\n(20 해경 1차)'},
+{id:6323,type:'ox',cat:'PART3 · RC구조 > CH07 특수구조 > S01 프리캐스트 콘크리트',q:'3층 이상 프리캐스트콘크리트 내력벽 구조에서 각 층 바닥 또는 지붕층 바닥 주위의 둘레 연결철근은 모서리에서 ___ 이내에 있어야 한다',a:'1.2m',note:'⚠ 빈출 함정: 1.5m (X) → 1.2m (O)\n둘레 연결철근 = 각 층 테두리 묶는 철근 (모서리가 가장 약해서 1.2m 안에 필수)\n공칭인장강도 71,000N 이상\n(15 국가 7급 ④ 함정)'},
+{id:6324,type:'cloze',cat:'PART3 · RC구조 > CH07 특수구조 > S01 프리캐스트 콘크리트',q:'[3층 이상 PC 내력벽 구조 연결철근 수치]\n● 종방향 연결철근: 바닥슬래브·지붕바닥과 평행, 중심간격 ___ 이내\n● 수직연결철근: 각 벽 패널당 ___ 이상 설치, 중심간격 ___ 이하\n● 둘레 연결철근: 각 층 바닥 모서리에서 ___ 이내',a:'3.0m | 2개 | 3.6m | 1.2m',note:'⭐ 거리 암기: "종3.0 / 수직3.6 / 둘레1.2"\n수직연결철근은 "패널당 2개 + 간격 3.6" 세트로\n둘레 1.2를 1.5로 바꾸는 게 단골 함정\n(15 국가 7급)'},
+{id:6325,type:'ox',cat:'PART3 · RC구조 > CH07 특수구조 > S01 프리캐스트 콘크리트',q:'수직연결철근은 각 프리캐스트콘크리트 벽 패널당 2개 이상 설치하여야 하며, 그 중심 간격은 ___ 이하로 하여야 한다',a:'3.6m',note:'수직연결철근: 패널당 2개 이상 + 중심간격 3.6m 이하\n벽 조각을 위아래로 꿰매 고정 (못 1개면 돌아감 → 최소 2개)\n건물 전체 높이에 연속, 수평방향 인장강도 44,000N/m 이상\n(15 국가 7급 ③ — 옳은 선지)'},
 
 
 
@@ -5418,9 +5423,9 @@ const DEFAULT_CARDS = [
 {id:8062,type:'cloze',cat:'PART5 · 구조역학 > 기출 OX',q:'[캔틸레버 부분 구간에 하중 - 처짐 계산 공식]\n하중이 길이 a 지점(자유단에서)에 있을 때:\n하중점 처짐 δ_b = ___\n하중점 처짐각 θ_b = ___\n자유단까지 거리 c만큼 떨어졌을 때\n자유단 처짐 = δ_b + θ_b × c',a:'Pa³/3EI | Pa²/2EI',note:'고정단에서 길이 a까지만 휘고, 그 이후는 직선 회전\n시험에 자주 나오는 유형'},
 {id:8063,type:'ox',cat:'PART5 · 구조역학 > 기출 OX',q:'캔틸레버 중앙에 집중하중이 작용하면, 자유단 처짐 = 하중점 처짐(PL³/24EI)과 같다',a:'X',note:'캔틸레버 중앙(L/2)에 P 작용\n\n● 하중점(L/2) 처짐\n= 길이 L/2짜리 캔틸레버 자유단 처짐\n= P(L/2)³/3EI = PL³/24EI\n\n● 하중점 처짐각 θ\n= P(L/2)²/2EI = PL²/8EI\n\n● 자유단 처짐 = 하중점 처짐 + θ×(남은 L/2)\n= PL³/24EI + PL²/8EI × L/2\n= PL³/24EI + PL³/16EI\n= 5PL³/48EI\n\n→ 자유단 처짐은 하중점 처짐의 2.5배!\n하중점 이후는 힘 없으니 안 휘고 직선으로 회전만 함'},
 {id:8064,type:'cloze',cat:'PART5 · 구조역학 > 기출 OX',q:'[유효좌굴길이 이론 k값]\n양단힌지: ___\n양단고정: ___\n일단고정 일단힌지: ___\n일단고정 일단자유(캔틸레버): ___\n일단고정 일단이동자유(비횡구속): ___',a:'1.0 | 0.5 | 0.7 | 2.0 | 1.0',note:'비횡구속(sidesway) 조건: 회전은 구속되지만 횡방향 이동 자유 → k=1.0\n유효좌굴길이 KL = k × L'},
-{id:8065,type:'cloze',cat:'PART5 · 구조역학 > 기출 OX',q:'[유효좌굴길이 기출]\nL=3m 강재기둥, 비횡구속 골조\n기둥하단: 회전구속·이동구속 (고정)\n기둥상단: 회전구속·이동자유\n이론 k = ___\n유효좌굴길이 KL = ___ m',a:'1.0 | 3',note:'비횡구속 + 양단 회전구속 = 이론 k=1.0\nKL = 1.0 × 3 = 3m\n(16 국가 7급, 정답 ①)'},
-{id:8066,type:'cloze',cat:'PART5 · 구조역학 > 기출 OX',q:'[캔틸레버 단면 회전 영향 - 자유단 P 집중하중]\n단면 (가) a×2a → (나) 2a×a (폭·높이 바뀜)\n면적 A = 동일 (2a²)\n최대 전단응력(V/A): ___ 배\n최대 휨응력(M/Z): Z가 1/2 → ___ 배\n최대 처짐(1/I): I가 1/4 → ___ 배\n최대 휨모멘트(PL): ___ 배',a:'1 | 2 | 4 | 1',note:'⚠ 단면적 동일 → 전단응력·휨모멘트는 변화 없음\n⚠ Z = bh²/6, I = bh³/12 → h가 반이 되면 큰 영향\n(22 국가 7급 2차)'},
-{id:8067,type:'ox',cat:'PART5 · 구조역학 > 기출 OX',q:'캔틸레버 보의 단면이 a×2a에서 2a×a로 바뀌면 최대 전단응력은 2배 증가한다',a:'X',note:'면적 A는 동일 (2a²) → 전단응력(V/A) 변화 없음\n높이가 반으로 줄면 Z(휨응력)·I(처짐)만 변화\n(22 국가 7급 2차)'}];
+{id:6414,type:'cloze',cat:'PART5 · 구조역학 > 기출 OX',q:'[유효좌굴길이 기출]\nL=3m 강재기둥, 비횡구속 골조\n기둥하단: 회전구속·이동구속 (고정)\n기둥상단: 회전구속·이동자유\n이론 k = ___\n유효좌굴길이 KL = ___ m',a:'1.0 | 3',note:'비횡구속 + 양단 회전구속 = 이론 k=1.0\nKL = 1.0 × 3 = 3m\n(16 국가 7급, 정답 ①)'},
+{id:6415,type:'cloze',cat:'PART5 · 구조역학 > 기출 OX',q:'[캔틸레버 단면 회전 영향 - 자유단 P 집중하중]\n단면 (가) a×2a → (나) 2a×a (폭·높이 바뀜)\n면적 A = 동일 (2a²)\n최대 전단응력(V/A): ___ 배\n최대 휨응력(M/Z): Z가 1/2 → ___ 배\n최대 처짐(1/I): I가 1/4 → ___ 배\n최대 휨모멘트(PL): ___ 배',a:'1 | 2 | 4 | 1',note:'⚠ 단면적 동일 → 전단응력·휨모멘트는 변화 없음\n⚠ Z = bh²/6, I = bh³/12 → h가 반이 되면 큰 영향\n(22 국가 7급 2차)'},
+{id:6416,type:'ox',cat:'PART5 · 구조역학 > 기출 OX',q:'캔틸레버 보의 단면이 a×2a에서 2a×a로 바뀌면 최대 전단응력은 2배 증가한다',a:'X',note:'면적 A는 동일 (2a²) → 전단응력(V/A) 변화 없음\n높이가 반으로 줄면 Z(휨응력)·I(처짐)만 변화\n(22 국가 7급 2차)'}];
 
 // ═══════════════════ ENGLISH CARDS ═══════════════════
 const DEFAULT_ENG_CARDS = [
@@ -5540,7 +5545,7 @@ const DEFAULT_ENG_CARDS = [
 {id:9118,cat:"영단어",type:"flash",q:"suspect",a:"의심하다(동) / 용의자(명) / 의심스러운(형)\nsuspect A of B = A를 B로 의심하다\nsuspicion(명) / suspicious(형)",pron:"səˈspekt",note:"Police suspect him of being involved in the crime."},
 {id:9120,cat:"영단어",type:"flash",q:"look up",a:"찾아보다 / 조회하다(구동사)\n⚠ look up to(존경하다)와 구별!\nlook up a word = 단어를 찾아보다\nlook up information = 정보를 검색하다",pron:"lʊk ʌp",note:"If you don't know the word, look it up in the dictionary."},
 {id:9119,cat:"영단어",type:"flash",q:"throat",a:"목구멍 / 인후(명)\n⚠ voice(목소리)와 혼동 주의\nclear one's throat = 헛기침하다\nsore throat = 인후염·목 아픔",pron:"θroʊt",note:"She cleared her throat before speaking."},
-{id:9120,cat:"영단어",type:"flash",q:"cooperation",a:"협동 / 협력 / 협조(명)\n⚠ corporation(기업)과 혼동 주의\nin cooperation with = ~와 협력하여\ncooperate(동) / cooperative(형)",pron:"koʊˌɒpəˈreɪʃən",note:"The project succeeded through international cooperation."},
+{id:9200,cat:"영단어",type:"flash",q:"cooperation",a:"협동 / 협력 / 협조(명)\n⚠ corporation(기업)과 혼동 주의\nin cooperation with = ~와 협력하여\ncooperate(동) / cooperative(형)",pron:"koʊˌɒpəˈreɪʃən",note:"The project succeeded through international cooperation."},
 {id:9121,cat:"영단어",type:"flash",q:"journal",a:"일지 / 학술지 / 잡지(명)\n⚠ diary(개인 일기)보다 공식적 뉘앙스\nacademic journal = 학술지\njournal ≠ 여행일기",pron:"ˈdʒɜːrnəl",note:"She published her research in a prestigious academic journal."},
 {id:9122,cat:"영단어",type:"flash",q:"inductive",a:"귀납적인(형) / 유도하는\n↔ deductive(연역적인)\ninductive reasoning = 귀납적 추론\n(특수→일반 방향)",pron:"ɪnˈdʌktɪv",note:"The scientist used inductive reasoning to form a general theory."},
 {id:9123,cat:"영단어",type:"flash",q:"captive",a:"포로(명) / 사로잡힌(형)\ncaptive audience = 어쩔 수 없이 듣는 청중\ncapture(동) / captivity(명 = 포로 상태)",pron:"ˈkæptɪv",note:"The captive was held in a remote location for weeks."},
@@ -5902,6 +5907,18 @@ const DEFAULT_ENG_CARDS = [
 {id:9492,cat:"영단어",type:"flash",q:"globe",a:"지구·세계 / 지구본 (명사)\n\n⚠ '지구본'만 외우면 부족! 주된 의미는 '지구·세계'\n\n두 의미:\n① 지구·세계 (= the Earth, the world) ⭐\n② 지구본 (= a model of the Earth)\n\n• around the globe = 전 세계 곳곳에\n• across the globe = 전 세계에 걸쳐\n• travel the globe = 세계를 여행하다\n\n동족어:\n• global = 세계적인 (형)\n• globalization = 세계화\n• globally = 세계적으로\n\n9급 독해는 '지구·세계' 의미로 더 많이 출제!\n\n≒ world, Earth, planet",pron:"ɡloʊb",note:"People from around the globe gathered for the event."},
 {id:9493,cat:"영단어",type:"flash",q:"register",a:"등록하다·기록하다(동) / 등록부(명)\n⚠ resist(저항하다)와 혼동 주의! ⭐\n• register [레지스터] = 등록\n• resist [리지스트] = 저항\n\nregister for ~ = ~에 등록하다\ncash register = 금전등록기\nregistration(명) 등록\n≒ enroll, sign up",pron:"ˈredʒɪstər",note:"You need to register for the exam by next Friday."},
 {id:9495,cat:"영단어",type:"flash",q:"deadly",a:"치명적인 (형용사) ⭐\n⚠ -ly로 끝나는데 형용사! (부사 아님)\n\n-ly인데 형용사: friendly, lovely, lonely, elderly, deadly\n\ndeadly weapon = 치명적인 무기\ndeadly disease = 치명적 질병\n부사 '치명적으로' = fatally\n≒ fatal, lethal, mortal",pron:"ˈdedli",note:"COVID-19 proved to be a deadly virus worldwide."},
+{id:9496,cat:"영단어",type:"flash",q:"flee",a:"도망치다·달아나다 (동)\n⚠ 불규칙: flee - fled - fled\n\nflee from ~ = ~에서 도망치다\nflee the country = 나라를 떠나 달아나다\n\n≒ escape, run away\n* free(자유로운)와 헷갈리지 말 것!",pron:"fliː",note:"They fled from the war-torn country."},
+{id:9497,cat:"영단어",type:"flash",q:"bondage",a:"속박·노예 상태 (명)\nbond(묶다) + age → 묶인 상태\n\nin bondage = 속박되어\nescape from bondage = 속박에서 벗어나다\n\n≒ slavery, captivity",pron:"ˈbɒndɪdʒ",note:"The slaves were freed from bondage."},
+{id:9498,cat:"영단어",type:"flash",q:"remorse",a:"회한·후회·양심의 가책 (명)\n\ndeep remorse = 깊은 후회\nwithout remorse = 죄책감 없이\nfeel remorse = 가책을 느끼다\n\n≒ regret, guilt, repentance",pron:"rɪˈmɔːrs",note:"He felt deep remorse for his mistake."},
+{id:9499,cat:"영단어",type:"flash",q:"committee",a:"위원회 (명) ⭐\n⚠ community(공동체)와 혼동 주의!\n• committee [커미티] = 위원회\n• community [커뮤니티] = 공동체\n\norganizing committee = 조직위원회\ncommittee member = 위원\n암기: commit(맡기다)+tee → 일을 맡은 사람들 모임",pron:"kəˈmɪti",note:"The committee will meet next week to discuss the issue."},
+{id:9500,cat:"영단어",type:"flash",q:"respiratory",a:"호흡의·호흡기의 (형) ⭐\n⚠ '반복적인'(repetitive) 아님!\n\nrespiratory system = 호흡기계\nrespiratory disease = 호흡기 질환\nrespire(숨쉬다) → respiratory\n\n* repetitive = 반복적인 (다른 단어)",pron:"ˈrespərətɔːri",note:"Smoking can cause serious respiratory problems."},
+{id:9501,cat:"영단어",type:"flash",q:"complaint",a:"불평·불만·항의 (명) ⭐⭐\n⚠ compliment(칭찬)와 혼동 주의!\n• complaint [plai] = 불평\n• compliment [pli] = 칭찬\n\nmake a complaint = 항의하다\nfile a complaint = 불만을 제기하다\n동사 complain = 불평하다",pron:"kəmˈpleɪnt",note:"The customer made a complaint about the service."},
+{id:9502,cat:"영단어",type:"flash",q:"compliment",a:"칭찬·찬사 (명) / 칭찬하다 (동) ⭐⭐\n⚠ complaint(불평)와 혼동 주의!\n• compliment [pli] = 칭찬\n• complaint [plai] = 불평\n\npay a compliment = 칭찬하다\n* complement(보완하다)와도 구별!",pron:"ˈkɑːmplɪmənt",note:"She gave me a nice compliment on my work."},
+{id:9503,cat:"영단어",type:"flash",q:"variety",a:"다양성·종류 (명) ⭐\n⚠ '변화'(change) 아님! '다양성'\n\na variety of ~ = 다양한 ~\nfor a variety of reasons = 여러 이유로\nvarious(형) 다양한 / vary(동) 다르다\n\n≒ diversity, range",pron:"vəˈraɪəti",note:"The store offers a wide variety of products."},
+{id:9504,cat:"영단어",type:"flash",q:"option",a:"선택·선택지·선택권 (명) ⭐\n⚠ '설정'(setting) 아님! '선택'\n\nhave the option to ~ = ~할 선택권이 있다\noptional(형) = 선택적인\n\n* setting = 설정\n* selection = 선정",pron:"ˈɑːpʃən",note:"You have several options to choose from."},
+{id:9505,cat:"영단어",type:"flash",q:"heritage",a:"유산·전통 (명) ⭐\n물려받은 문화·역사적 유산\n\ncultural heritage = 문화유산\nworld heritage = 세계유산\nnational heritage = 국가유산\n\n* legacy = 유산 (유사어)\n* inheritance = 상속(재산)\n* heir = 상속인",pron:"ˈherɪtɪdʒ",note:"The temple is part of our cultural heritage. (12 지방 9급 출제)"},
+{id:9506,cat:"영단어",type:"flash",q:"scholar",a:"학자 (명) ⭐\n학문 연구하는 사람\n\nscholarly(형) = 학문적인\nscholarship(명) = 장학금·학문\n\n* academic = 학자·학문적인\n* researcher = 연구자\n* intellectual = 지식인",pron:"ˈskɑːlər",note:"Scholars and poets sought the 'soul' of the nation. (12 지방 9급)"},
+{id:9507,cat:"영단어",type:"flash",q:"seek (sought-sought)",a:"찾다·추구하다 (동) ⭐\n⚠ 불규칙 변화: seek-sought-sought\n과거형 sought 형태로 빈출!\n\nseek to do = ~하려고 하다\nseek out = 찾아내다\nseek for = ~을 찾다\nsought-after(형) = 인기 있는·수요 많은\n\n* search = 찾다 (찾는 행위)\n* pursue = 추구하다",pron:"siːk / sɔːt",note:"They sought to find the soul of the nation. (12 지방 9급) - sought는 seek의 과거/과거분사"},
 ];
 
 // ═══════════════════ STATE ═══════════════════
