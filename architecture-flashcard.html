@@ -5968,6 +5968,27 @@ function load() {
 
     const defaults = getDefaultCards();
     const sc = localStorage.getItem(k.cards);
+
+    // ═══ 유령 history 정리 (새 카드 자동 인식) ═══
+    // stored에 없지만 defaults에 새로 추가된 카드의 가짜 history 삭제
+    // → 진짜 학습한 카드 history는 보존, 추가 직후 유령만 삭제
+    if (sc) {
+      const storedIds = new Set(JSON.parse(sc).map(c => c.id));
+      const defaultIds = new Set(defaults.map(d => d.id));
+      let cleaned = 0;
+      Object.keys(history).forEach(idStr => {
+        const idNum = parseInt(idStr, 10);
+        if (defaultIds.has(idNum) && !storedIds.has(idNum)) {
+          delete history[idStr];
+          cleaned++;
+        }
+      });
+      if (cleaned > 0) {
+        console.log(`[유령정리] 새 카드 ${cleaned}개의 가짜 history 제거됨`);
+      }
+    }
+    // ═══════════════════════════════════════
+
     if (!sc) {
       cards = JSON.parse(JSON.stringify(defaults));
     } else {
