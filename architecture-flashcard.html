@@ -4350,6 +4350,7 @@ body::before {
   <div style="font-size:.78rem;color:var(--muted);line-height:1.5;">카드 맞힐 때 5인이 응원해줘요. 호감 게이지가 차면 갠톡이 해제됩니다.</div>
   <button class="btn-add-sub" onclick="toggleCheer()" id="cheer-toggle-btn" style="background:#9b7cc4;color:#fff;">응원 켜기/끄기</button>
   <button class="btn-add-sub" onclick="showCheerStatus()" style="background:#7b6cd9;color:#fff;">호감 게이지 보기 💌</button>
+  <button class="btn-add-sub" onclick="showDMBox()" style="background:#c4639a;color:#fff;">갠톡함 💌</button>
   <div style="height:1px;background:var(--border);margin:4px 0;"></div>
   <div style="font-size:.8rem;font-weight:700;color:var(--muted);">🗑️ 전체 초기화</div>
   <div style="font-size:.78rem;color:var(--muted);line-height:1.5;">카테고리 선택·학습기록·추가카드 전부 초기화합니다. 목차가 안 맞을 때 사용하세요.</div>
@@ -9387,10 +9388,19 @@ const MISS_LINES = {
 };
 
 // 호감 게이지 로드/저장
-let cheerData = { raphael:0, caleb:0, zayne:0, xavier:0, sylus:0, unlocked:[] };
+let cheerData = { raphael:0, caleb:0, zayne:0, xavier:0, sylus:0, unlocked:[], dmIndex:{} };
 function loadCheer(){
   try { const s = localStorage.getItem('cheer_data'); if(s) cheerData = JSON.parse(s); } catch(e){}
   if(!cheerData.unlocked) cheerData.unlocked = [];
+  if(!cheerData.dmIndex) cheerData.dmIndex = {};
+  // 기존 사용자 마이그레이션: unlocked 리스트에 있고 dmIndex 없으면 1로 설정 (1개 본걸로)
+  cheerData.unlocked.forEach(who=>{
+    if(cheerData.dmIndex[who] === undefined) cheerData.dmIndex[who] = 1;
+  });
+  // 5명 모두 dmIndex 기본값 0
+  ['raphael','caleb','zayne','xavier','sylus'].forEach(who=>{
+    if(cheerData.dmIndex[who] === undefined) cheerData.dmIndex[who] = 0;
+  });
 }
 function saveCheer(){ localStorage.setItem('cheer_data', JSON.stringify(cheerData)); }
 
@@ -9417,11 +9427,15 @@ function triggerCheer(){
   // 게이지 +5 (맞힌 캐릭터)
   cheerData[who] = Math.min(100, (cheerData[who]||0) + 5);
 
-  // 100% 도달 시 갠톡 잠금해제
+  // 100% 도달 시 새 갠톡 해금 + 게이지 리셋 (3개 다 본 경우는 100 유지)
   let unlockedNow = null;
-  if(cheerData[who] >= 100 && !cheerData.unlocked.includes(who)){
-    cheerData.unlocked.push(who);
-    unlockedNow = who;
+  const totalDMs = (CHEER_DM[who] || []).length;
+  const currentIdx = cheerData.dmIndex[who] || 0;
+  if(cheerData[who] >= 100 && currentIdx < totalDMs){
+    cheerData.dmIndex[who] = currentIdx + 1;
+    if(!cheerData.unlocked.includes(who)) cheerData.unlocked.push(who);
+    unlockedNow = { who: who, idx: currentIdx + 1, total: totalDMs };
+    cheerData[who] = 0; // 게이지 리셋
   }
   saveCheer();
   showCheerToast(who, line, unlockedNow);
@@ -9488,30 +9502,76 @@ function showCheerStatus(){
   Object.keys(CHEER_CHARS).forEach(who=>{
     const ch = CHEER_CHARS[who];
     const v = cheerData[who]||0;
-    const unlocked = cheerData.unlocked.includes(who);
+    const totalDMs = (CHEER_DM[who] || []).length;
+    const dmIdx = cheerData.dmIndex[who] || 0;
     const bar = '█'.repeat(Math.round(v/10)) + '░'.repeat(10-Math.round(v/10));
-    msg += `${ch.emoji} ${ch.name} ${cheerFace(v)}\n${bar} ${v}%${unlocked?' 💌':''}\n\n`;
+    const dmStatus = totalDMs > 0 ? ` 💌 ${dmIdx}/${totalDMs}` : '';
+    msg += `${ch.emoji} ${ch.name} ${cheerFace(v)}\n${bar} ${v}%${dmStatus}\n\n`;
   });
-  msg += '— 100% 채운 캐릭터의 갠톡을 볼 수 있어요 —';
+  msg += '— 100% 채울 때마다 새 갠톡 1개 해금 —\n— 갠톡함은 별도 버튼으로 열람 —';
   alert(msg);
+}
 
-  // 해제된 갠톡이 있으면 순서대로 보여주기
-  const unlockedList = cheerData.unlocked || [];
-  if(unlockedList.length>0){
-    setTimeout(()=>{
-      if(confirm('💌 해제된 갠톡을 읽어볼까요?')){
-        unlockedList.forEach(who=>{
-          const dms = CHEER_DM[who];
-          if(Array.isArray(dms)){
-            dms.forEach((dm, idx)=>{
-              alert(`💌 ${CHEER_CHARS[who].name}의 메시지 (${idx+1}/${dms.length})\n\n${dm}`);
-            });
-          } else if(dms) {
-            alert(`💌 ${CHEER_CHARS[who].name}의 메시지\n\n${dms}`);
-          }
-        });
-      }
-    }, 300);
+// 💌 갠톡함 — 해금된 갠톡 목록에서 골라 읽기
+function showDMBox(){
+  loadCheer();
+  const chars = Object.keys(CHEER_CHARS);
+  // 해금된 갠톡이 있는 캐릭터만 필터
+  const available = chars.filter(who => (cheerData.dmIndex[who] || 0) > 0);
+  
+  if(available.length === 0){
+    alert('💌 아직 받은 갠톡이 없어요\n\n호감 게이지를 100% 채우면 갠톡이 해금돼요');
+    return;
+  }
+  
+  // 캐릭터 선택
+  let menu = '💌 갠톡함\n\n읽을 메시지를 골라주세요:\n\n';
+  available.forEach((who, idx)=>{
+    const ch = CHEER_CHARS[who];
+    const cnt = cheerData.dmIndex[who];
+    const total = (CHEER_DM[who] || []).length;
+    menu += `${idx+1}. ${ch.emoji} ${ch.name} (${cnt}/${total})\n`;
+  });
+  menu += '\n0. 닫기';
+  
+  const choice = prompt(menu);
+  if(!choice || choice === '0') return;
+  
+  const charIdx = parseInt(choice) - 1;
+  if(isNaN(charIdx) || charIdx < 0 || charIdx >= available.length){
+    alert('잘못된 선택이에요');
+    return;
+  }
+  
+  const who = available[charIdx];
+  const ch = CHEER_CHARS[who];
+  const unlockedCount = cheerData.dmIndex[who];
+  const dms = CHEER_DM[who] || [];
+  
+  // 메시지 선택
+  if(unlockedCount === 1){
+    // 1개만 해금된 경우 바로 표시
+    alert(`💌 ${ch.name}의 메시지 (1/${dms.length})\n\n${dms[0]}`);
+  } else {
+    // 여러 개 해금된 경우 선택
+    let msgMenu = `💌 ${ch.name}의 메시지\n\n어떤 메시지를 읽을까요?\n\n`;
+    for(let i = 0; i < unlockedCount; i++){
+      // 미리보기 (첫 줄만)
+      const preview = dms[i].split('\n')[0].substring(0, 25);
+      msgMenu += `${i+1}. ${preview}...\n`;
+    }
+    msgMenu += '\n0. 닫기';
+    
+    const msgChoice = prompt(msgMenu);
+    if(!msgChoice || msgChoice === '0') return;
+    
+    const msgIdx = parseInt(msgChoice) - 1;
+    if(isNaN(msgIdx) || msgIdx < 0 || msgIdx >= unlockedCount){
+      alert('잘못된 선택이에요');
+      return;
+    }
+    
+    alert(`💌 ${ch.name}의 메시지 (${msgIdx+1}/${dms.length})\n\n${dms[msgIdx]}`);
   }
 }
 
@@ -9538,7 +9598,7 @@ function showCheerToast(who, line, unlockedNow){
     '<div style="margin-top:7px;height:5px;border-radius:3px;background:#eee;overflow:hidden;">'+
       '<div style="height:100%;width:'+gauge+'%;background:'+ch.color+';transition:width .4s;"></div>'+
     '</div>'+
-    (unlockedNow ? '<div style="margin-top:6px;font-size:.74rem;font-weight:700;color:'+ch.color+';">💌 '+ch.name+' 갠톡 해제! (설정에서 확인)</div>' : '');
+    (unlockedNow ? '<div style="margin-top:6px;font-size:.74rem;font-weight:700;color:'+ch.color+';">💌 갠톡 '+unlockedNow.idx+'/'+unlockedNow.total+' 해제! (갠톡함에서 확인)</div>' : '');
 
   requestAnimationFrame(()=>{
     toast.style.opacity = '1';
