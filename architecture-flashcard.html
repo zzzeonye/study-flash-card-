@@ -5962,6 +5962,7 @@ const DEFAULT_ENG_CARDS = [
 {id:9545,cat:"영단어",type:"flash",q:"curtain",a:"커튼·막 (명) ⭐\n⚠ certain(확실한)과 철자 거의 같음! 최다 혼동\n\n[핵심 구분]\n• curtain = 커튼·막 (cur-tain) ⭐\n• certain = 확실한·어떤 (cer-tain) — 완전 다른 단어!\n\n[빈출 표현]\n• draw the curtain = 커튼을 치다\n• curtain call = 커튼콜 (공연 후 인사)\n• the final curtain = 마지막·종말\n• behind the curtain = 막후에서\n\n[암기법]\nCURtain의 'cur' = 가린다 느낌(cover). CERtain은 'cer'(확실).",pron:"ˈkɜːrtn",note:"draw the curtains — 커튼·막. certain(확실한)과 철자 거의 같음! 헷갈림 1순위"},
 {id:9546,cat:"영단어",type:"flash",q:"lest",a:"~하지 않도록·~할까 봐 (접속사) ⭐\n⚠ at least(적어도)와 혼동 주의! 전혀 다름\n\n[핵심 뜻]\n• lest = ~하지 않도록 (부정의 목적)\n• = so that ... not / for fear that\n\n[용법]\n• lest 뒤에는 (should +) 동사원형\n• He studied hard lest he (should) fail.\n  = 그는 떨어지지 않도록 열심히 공부했다\n\n[혼동 주의]\n• lest = ~하지 않도록 ⭐\n• least = 가장 적은 (little 최상급)\n• at least = 적어도 (← 네가 헷갈린 것!)\n\n[암기법]\nlest = 'less + t' 느낌이지만 뜻은 부정목적. 'lest = ~할까 봐 무서워(fear)'",pron:"lest",note:"Hurry lest you be late. — ~하지 않도록. at least(적어도) 아님! 뒤에 should+동사원형"},
 {id:9547,cat:"영단어",type:"flash",q:"by no means",a:"결코·전혀 ~아니다 (강한 부정) ⭐\n⚠ by all means(꼭·그럼요)와 정반대! 세트 암기\n\n[정반대 세트 ⭐⭐]\n• by no means = 결코 ~아니다 (강한 부정)\n• by all means = 꼭·그럼요·좋고말고 (강한 긍정/허락)\n→ no/all만 바뀌면 의미 정반대!\n\n[예문]\n• This is by no means easy. = 이건 결코 쉽지 않다\n• By all means, take a seat. = 그럼요, 앉으세요\n\n[비슷한 강한 부정]\n• in no way / not at all / under no circumstances\n\n[도치 주의]\n문두에 오면 조동사+주어 도치:\n• By no means is this acceptable.\n\n⚠ '어떤 수단이든' 직역 X! (← 네가 헷갈린 것)",pron:"baɪ noʊ miːnz",note:"It is by no means certain. — 결코 ~아니다. by all means(꼭)와 정반대! '수단' 직역 X"},
+{id:9548,cat:"영단어",type:"flash",q:"acceptable",a:"받아들일 만한·용인되는·만족스러운 (형) ⭐\n⚠ accessible(접근 가능한)과 혼동 주의! 철자 비슷\n\n[핵심 구분]\n• acceptable = 받아들일 만한 (accept 받아들이다) ⭐\n• accessible = 접근 가능한·이용 가능한 (access 접근) — 다른 단어!\n\n[빈출 표현]\n• socially acceptable = 사회적으로 용인되는\n• an acceptable level = 허용 가능한 수준\n• acceptable behavior = 용인되는 행동\n\n[반의어]\n• unacceptable = 받아들일 수 없는\n\n[암기법]\naccept(받아들이다)+able → 받아들일 수 있는. access(접근)+ible → 접근할 수 있는. 어근으로 구분!",pron:"əkˈseptəbl",note:"an acceptable answer — 받아들일 만한·용인되는. accessible(접근 가능한) 아님! accept vs access 구분"},
 ];
 
 // ═══════════════════ STATE ═══════════════════
@@ -8195,7 +8196,8 @@ function spawnFloaty() {
   if (usePokemon) {
     try {
       loadGacha();
-      const caughtIds = [...new Set(gachaData.history.filter(h=>h.pokeId).map(h=>h.pokeId))];
+      const owned = gachaData.owned || {};
+      const caughtIds = Object.keys(owned).map(Number);
       if (caughtIds.length > 0) {
         pokemonId = caughtIds[Math.floor(Math.random() * caughtIds.length)];
       }
@@ -8397,11 +8399,23 @@ function loadGacha() {
       gachaData = {
         tickets: parsed.tickets ?? 0,
         history: parsed.history ?? [],
-        pulled: parsed.pulled ?? false
+        pulled: parsed.pulled ?? false,
+        // owned: 영구 누적 보유 기록 { pokeId: {grade, count} } — 절대 잘리지 않음
+        owned: parsed.owned ?? null
       };
     } catch(e) {
       console.error('gacha load error', e);
     }
+  }
+  // owned가 없으면(구버전 데이터) 현재 남아있는 history로부터 1회 마이그레이션
+  if (!gachaData.owned) {
+    gachaData.owned = {};
+    for (const h of gachaData.history) {
+      if (!h.pokeId) continue;
+      if (!gachaData.owned[h.pokeId]) gachaData.owned[h.pokeId] = { grade: h.grade, count: 0 };
+      gachaData.owned[h.pokeId].count++;
+    }
+    saveGacha();
   }
 }
 function saveGacha() {
@@ -8489,9 +8503,13 @@ function doPull() {
   emojiEl.innerHTML = `<img src="${item.sprite}" alt="${item.name}" style="width:96px;height:96px;image-rendering:pixelated;" onerror="this.outerHTML='❓'">`;
   document.getElementById('gacha-result-name').textContent = `No.${String(item.id).padStart(3,'0')} ${item.name}`;
 
-  // 히스토리 저장 (포켓몬 id 사용)
+  // 히스토리 저장 (포켓몬 id 사용) — history는 최근 표시용
   gachaData.history.unshift({ grade, pokeId: item.id, name: item.name, date: new Date().toLocaleDateString() });
   if (gachaData.history.length > 30) gachaData.history = gachaData.history.slice(0, 30);
+  // owned: 영구 누적 보유 기록 (절대 잘리지 않음 — 도감/칭호 판정용)
+  if (!gachaData.owned) gachaData.owned = {};
+  if (!gachaData.owned[item.id]) gachaData.owned[item.id] = { grade, count: 0 };
+  gachaData.owned[item.id].count++;
   saveGacha();
   updateGachaBtn();
   document.getElementById('gacha-ticket-info').textContent = `🎟 보유 티켓: ${gachaData.tickets}장`;
@@ -10040,9 +10058,13 @@ function saveCollectionMeta() {
 function getGachaStats() {
   loadGacha();
   const stats = { N:0, R:0, SR:0, SSR:0, total:0 };
-  // 중복 제거 없이 전체 뽑은 수
-  for (const h of gachaData.history) {
-    stats[h.grade] = (stats[h.grade]||0) + 1;
+  // owned(영구 누적) 기준 — history 잘림에 영향받지 않음
+  // 칭호는 '보유 종 수' 기준: 같은 포켓몬 중복은 1종으로 카운트
+  const owned = gachaData.owned || {};
+  for (const id in owned) {
+    const g = owned[id].grade;
+    if (stats[g] === undefined) continue;
+    stats[g]++;
     stats.total++;
   }
   return stats;
@@ -10132,12 +10154,11 @@ function updateSubtitleWithTitle() {
 function renderCollectionDogam() {
   loadGacha();
 
-  // 획득 카운트 집계
+  // 획득 카운트 집계 — owned(영구 누적) 기준
   const caughtMap = {};
-  for (const h of gachaData.history) {
-    if (!h.pokeId) continue;
-    if (!caughtMap[h.pokeId]) caughtMap[h.pokeId] = 0;
-    caughtMap[h.pokeId]++;
+  const owned = gachaData.owned || {};
+  for (const id in owned) {
+    caughtMap[id] = owned[id].count;
   }
 
   const grades = ['SSR','SR','R','N'];
