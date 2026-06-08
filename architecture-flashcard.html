@@ -4059,6 +4059,7 @@ body::before {
           <div class="daily-period-row">
             <button class="period-btn" id="period-start-btn" onclick="toggleDailyState('periodStart')">시작일</button>
             <button class="period-btn" id="period-on-btn" onclick="toggleDailyState('period')">진행 중</button>
+            <button class="period-btn" id="period-end-btn" onclick="toggleDailyState('periodEnd')">종료일</button>
           </div>
           <div class="daily-period-info" id="daily-period-info"></div>
         </div>
@@ -10716,6 +10717,31 @@ function toggleDailyState(key) {
   if (key === 'periodStart' && newVal) {
     setStateForDate(dateKey, 'period', true);
   }
+  // 종료일 누르면: 가장 최근 시작일 ~ 이 종료일 사이를 전부 '진행 중'으로 자동 채움
+  if (key === 'periodEnd' && newVal) {
+    setStateForDate(dateKey, 'period', true);
+    const all = loadDailyState();
+    const endD = new Date(currentDailyDate); endD.setHours(0,0,0,0);
+    // 이 종료일 이전의 가장 최근 시작일 찾기
+    const startKeys = Object.keys(all).filter(k => all[k].periodStart);
+    let lastStart = null;
+    for (const k of startKeys) {
+      const p = k.split('-').map(Number);
+      const d = new Date(p[0], p[1]-1, p[2]); d.setHours(0,0,0,0);
+      if (d <= endD && (!lastStart || d > lastStart)) lastStart = d;
+    }
+    if (lastStart) {
+      // 시작일~종료일 사이 모든 날짜 period:true
+      for (let d = new Date(lastStart); d <= endD; d.setDate(d.getDate()+1)) {
+        const kk = getDailyKey(d);
+        setStateForDate(kk, 'period', true);
+      }
+    }
+  }
+  // 종료일 해제하면 진행중도 끄기(해당 날짜만)
+  if (key === 'periodEnd' && !newVal) {
+    setStateForDate(dateKey, 'period', false);
+  }
   renderDailyState();
   updateDailyWidget(); if (document.getElementById('calendar-view').style.display === 'block') renderCalendar();
 }
@@ -10742,6 +10768,19 @@ function getPeriodCycleInfo(date) {
 
   const dayOfCycle = Math.floor((target - lastStart) / (1000*60*60*24)) + 1;
 
+  // 이번 주기의 생리 종료일 찾기 (lastStart 이후~다음 시작 전의 periodEnd)
+  // 종료일 있으면 그날까지가 생리기, 없으면 기본 8일
+  let periodLength = 8; // 기본값 (사용자 평균)
+  const endKeys = Object.keys(all).filter(k => all[k].periodEnd);
+  for (const k of endKeys) {
+    const p = k.split('-').map(Number);
+    const ed = new Date(p[0], p[1]-1, p[2]); ed.setHours(0,0,0,0);
+    if (ed >= lastStart) {
+      const len = Math.floor((ed - lastStart) / (1000*60*60*24)) + 1;
+      if (len >= 1 && len <= 14) { periodLength = len; break; }
+    }
+  }
+
   // 평균 주기 (시작일 2개 이상이면 계산)
   let avgCycle = 28; // 기본값
   if (startDates.length >= 2) {
@@ -10760,7 +10799,7 @@ function getPeriodCycleInfo(date) {
   let phaseEmoji = '';
   let phaseDesc = '';
 
-  if (dayOfCycle <= 5) {
+  if (dayOfCycle <= periodLength) {
     phase = '생리기';
     phaseEmoji = '🌷';
     phaseDesc = '컨디션 낮음, 무리 X';
@@ -10788,7 +10827,7 @@ function getPeriodCycleInfo(date) {
     }
   }
 
-  return { dayOfCycle, avgCycle, lastStart, phase, phaseEmoji, phaseDesc, ovulationDay };
+  return { dayOfCycle, avgCycle, lastStart, phase, phaseEmoji, phaseDesc, ovulationDay, periodLength };
 }
 
 function renderDailyState() {
@@ -10887,6 +10926,7 @@ function renderDailyState() {
   // 생리
   document.getElementById('period-start-btn').classList.toggle('active', !!state.periodStart);
   document.getElementById('period-on-btn').classList.toggle('active', !!state.period);
+  document.getElementById('period-end-btn').classList.toggle('active', !!state.periodEnd);
 
   // 주기 정보
   const cycInfo = getPeriodCycleInfo(currentDailyDate);
@@ -10897,8 +10937,9 @@ function renderDailyState() {
     const today = new Date(currentDailyDate); today.setHours(0,0,0,0);
     const daysToNext = Math.floor((next - today) / (1000*60*60*24));
 
-    // 생리 진행 중이면 "생리 N일째" 표시 (1일째부터 시작), 아니면 안 표시
-    const periodDayLabel = state.period ? `생리 ${cycInfo.dayOfCycle}일째 · ` : '';
+    // 생리기(출혈기간) 안이면 "생리 N일째" 표시
+    const inPeriod = cycInfo.dayOfCycle <= cycInfo.periodLength;
+    const periodDayLabel = inPeriod ? `생리 ${cycInfo.dayOfCycle}일째 · ` : '';
 
     // 시기 표시 (이모지 + 시기 이름)
     const phaseLabel = `${cycInfo.phaseEmoji} ${cycInfo.phase}`;
