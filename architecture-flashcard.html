@@ -10634,41 +10634,45 @@ function openDailyModal() {
 }
 
 function exportDailyData() {
-  const daily = loadDailyData();
-  // 날짜순 정렬
-  const keys = Object.keys(daily).sort((a,b)=>{
+  const check = loadDailyData();        // dailyCheck: 공부 과목 토글
+  let state = {};
+  try { state = JSON.parse(localStorage.getItem('dailyState')||'{}'); } catch(e){}  // 수면/기분/생리/메모
+
+  // 두 키의 모든 날짜 합치기
+  const allKeys = [...new Set([...Object.keys(check), ...Object.keys(state)])].sort((a,b)=>{
     const pa=a.split('-').map(Number), pb=b.split('-').map(Number);
     return new Date(pa[0],pa[1]-1,pa[2]) - new Date(pb[0],pb[1]-1,pb[2]);
   });
-  let lines = ['=== 데일리 체크 데이터 ==='];
-  for (const k of keys) {
-    const d = daily[k];
+
+  const moodMap = {1:'😢',2:'😟',3:'😐',4:'🙂',5:'😄'};
+  let lines = ['=== 데일리 종합 데이터 ==='];
+  for (const k of allKeys) {
+    const d = state[k] || {};
+    const c = check[k] || {};
     const parts = [];
-    if (d.sleep !== undefined) parts.push('수면'+d.sleep+'h');
-    if (d.mood !== undefined) parts.push('기분'+d.mood);
+    if (d.sleepHours !== undefined) parts.push('수면'+d.sleepHours+'h');
+    if (d.sleepQuality !== undefined) parts.push('수면질'+d.sleepQuality);
+    if (d.mood !== undefined && d.mood !== null) parts.push('기분'+d.mood);
     if (d.drowsy !== undefined) parts.push('졸림'+d.drowsy);
+    if (d.lunch) parts.push('점심:'+d.lunch);
     if (d.periodStart) parts.push('생리시작');
     if (d.period) parts.push('생리중');
     if (d.periodEnd) parts.push('생리종료');
     if (d.saju) parts.push('사주:'+d.saju);
-    if (d.note) parts.push('메모:'+d.note.replace(/\n/g,' '));
-    // 기타 불린 항목들
+    // 기타 불린 상태
     for (const key in d) {
-      if (['sleep','mood','drowsy','periodStart','period','periodEnd','saju','note','weekly_eval'].includes(key)) continue;
+      if (['sleepHours','sleepQuality','mood','drowsy','lunch','periodStart','period','periodEnd','saju','note'].includes(key)) continue;
       if (d[key]===true) parts.push(key);
     }
+    // 공부 과목
+    const subjects = Object.keys(c).filter(x=>c[x]===true);
+    if (subjects.length) parts.push('[공부:'+subjects.join('/')+']');
+    // 메모는 맨 뒤에
+    if (d.note) parts.push('메모:'+d.note.replace(/\n/g,' '));
     if (parts.length) lines.push(k + ' | ' + parts.join(', '));
   }
-  // 카드 학습 통계도 첨부
-  try {
-    const arch = JSON.parse(localStorage.getItem('arch5_history')||'[]');
-    const eng = JSON.parse(localStorage.getItem('eng1_history')||'[]');
-    lines.push('', '=== 학습 기록 요약 ===');
-    lines.push('건축 히스토리 기록수: '+arch.length+' / 영어: '+eng.length);
-  } catch(e){}
 
   const text = lines.join('\n');
-  // 클립보드 복사 시도 + 화면 표시
   const ta = document.createElement('textarea');
   ta.value = text;
   ta.style.cssText = 'position:fixed;top:5%;left:5%;width:90%;height:80%;z-index:99999;font-size:12px;padding:10px;';
