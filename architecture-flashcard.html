@@ -4092,6 +4092,7 @@ body::before {
     </div>
 
     <div id="daily-items-wrap"></div>
+    <button class="daily-modal-close" onclick="exportDailyData()" style="background:rgba(138,111,46,.12);border:1px solid rgba(138,111,46,.35);color:#8a6f2e;margin-bottom:8px;">📊 데이터 내보내기 (분석용)</button>
     <button class="daily-modal-close" onclick="closeDailyModal()">닫기</button>
   </div>
 </div>
@@ -5986,6 +5987,11 @@ const DEFAULT_ENG_CARDS = [
 {id:9568,cat:"영단어",type:"flash",q:"confine",a:"가두다·한정하다·제한하다 (동) ⭐\n\n[핵심 뜻]\n1. 가두다·감금하다 — confined to a room\n2. 한정하다·국한하다 — confine to ~에 한정하다\n\n[빈출 표현]\n• be confined to bed = 몸져눕다\n• confine oneself to = ~에 국한하다\n\n[파생] confined = 좁은·갇힌 / confinement = 감금",pron:"kənˈfaɪn",note:"confine to a small area — 가두다/한정하다. confined(좁은/갇힌)"},
 {id:9569,cat:"영단어",type:"flash",q:"leap",a:"뛰다·도약하다 / 도약·급증 (동·명) ⭐\n\n[핵심 뜻]\n• 뛰다·껑충 뛰다·도약하다\n• (명) 도약·급증\n\n[빈출 표현]\n• a great leap = 큰 도약\n• leap year = 윤년\n• by leaps and bounds = 급속도로\n• Look before you leap = 돌다리도 두들겨 보고 건너라\n\n[변화형] leap-leapt(leaped)-leapt",pron:"liːp",note:"a giant leap — 뛰다/도약. leap year 윤년. 과거형 leapt"},
 {id:9570,cat:"영단어",type:"flash",q:"rigorous",a:"엄격한·철저한·정밀한 (형) ⭐\n\n[핵심 뜻]\n• 엄격한·철저한·혹독한\n• (방법이) 정밀한·엄밀한\n\n[빈출 표현]\n• rigorous testing = 철저한 검사\n• rigorous standards = 엄격한 기준\n• rigorous training = 혹독한 훈련\n\n[관련] rigor = 엄격함·정확함\n≒ strict, thorough",pron:"ˈrɪɡərəs",note:"rigorous testing — 엄격한·철저한. rigor(엄격함). strict와 비슷"},
+{id:9571,cat:"영단어",type:"flash",q:"crush",a:"으깨다·짓누르다·뭉개다 (동) / 홀딱 반함 (명) ⭐\n\n⚠ crash(충돌·추락)와 혼동 1순위! 한 글자 차이\n\n[핵심 구분 ⭐⭐]\n• crush = 으깨다·짓누르다 (u)\n• crash = 충돌·추락·(컴퓨터) 멈춤 (a)\n→ u/a 한 글자!\n\n[주요 뜻]\n1. 으깨다·뭉개다 — crush garlic 마늘을 으깨다\n2. (명) 홀딱 반함 — have a crush on ~에게 반하다\n3. 진압하다 — crush a rebellion\n\n[빈출] crushed ice 분쇄 얼음 / be crushed 으스러지다",pron:"krʌʃ",note:"crush the can — 으깨다. crash(충돌)와 u/a 한 글자! have a crush on 반하다"},
+{id:9572,cat:"영단어",type:"flash",q:"shame",a:"수치심·부끄러움 / 유감스러운 일 (명) ⭐\n\n⚠ scheme(계획·책략)과 혼동 주의! 발음·철자 다름\n\n[핵심 구분]\n• shame = 수치심·부끄러움 ⭐\n• scheme [스킴] = 계획·책략·제도 (별개 단어!)\n\n[주요 뜻]\n1. 수치심·창피 — feel shame\n2. 유감스러운 일 — What a shame! 참 안됐다/아깝다\n\n[빈출 표현]\n• put to shame = 무색하게 하다\n• shameful = 부끄러운 / shameless = 뻔뻔한",pron:"ʃeɪm",note:"What a shame! — 수치심/유감. scheme(계획)과 다름! What a shame=참 안됐다"},
+{id:9573,cat:"영단어",type:"flash",q:"warrior",a:"전사·무사·용사 (명) ⭐\n\n⚠ war(전쟁)와 혼동 주의! warrior는 전쟁하는 '사람'\n\n[핵심 구분]\n• war = 전쟁 (사건)\n• warrior = 전사·무사 (사람) — war + or(사람)\n\n[빈출 표현]\n• a brave warrior = 용감한 전사\n• warrior spirit = 투지·전사 정신\n\n[연관] warfare 전투·전쟁 / warlord 군벌",pron:"ˈwɔːriər",note:"a fierce warrior — 전사·무사. war(전쟁)는 사건, warrior는 사람(-or)"},
+{id:9574,cat:"영단어",type:"flash",q:"devise",a:"고안하다·궁리하다·발명하다 (동) ⭐\n\n⚠ revise(수정·개정)와 혼동 1순위! 한 글자 차이\n⚠ device(장치, 명사)와도 구분!\n\n[핵심 구분 ⭐⭐]\n• devise = 고안하다 (동사, -se)\n• revise = 수정·개정하다 (동사)\n• device = 장치 (명사, -ce)\n→ devise(동,고안) / device(명,장치) 짝!\n\n[빈출 표현]\n• devise a plan = 계획을 고안하다\n• devise a method = 방법을 궁리하다",pron:"dɪˈvaɪz",note:"devise a strategy — 고안하다. revise(개정)와 한 글자! device(장치,명) 짝"},
+{id:9575,cat:"영단어",type:"flash",q:"excessive",a:"과도한·지나친·과excessive한 (형) ⭐\n\n⚠ '확장하는'(expansive) 아님! excess(초과)에서 파생\n\n[핵심 뜻]\n• 과도한·지나친·과잉의\n\n[관련어 세트]\n• excess = 초과·과잉 (명)\n• exceed = 초과하다 (동)\n• excessive = 과도한 (형) ⭐\n\n[빈출 표현]\n• excessive use = 과도한 사용\n• excessive force = 과도한 무력\n\n[어원] ex(밖) + ceed(가다) → 넘어감 → 초과",pron:"ɪkˈsesɪv",note:"excessive spending — 과도한·지나친. exceed(초과하다)/excess(초과) 세트"},
 ];
 
 // ═══════════════════ STATE ═══════════════════
@@ -10625,6 +10631,56 @@ function openDailyModal() {
   currentDailyDate = new Date();
   renderDailyModal();
   document.getElementById('daily-modal-overlay').classList.add('open');
+}
+
+function exportDailyData() {
+  const daily = loadDailyData();
+  // 날짜순 정렬
+  const keys = Object.keys(daily).sort((a,b)=>{
+    const pa=a.split('-').map(Number), pb=b.split('-').map(Number);
+    return new Date(pa[0],pa[1]-1,pa[2]) - new Date(pb[0],pb[1]-1,pb[2]);
+  });
+  let lines = ['=== 데일리 체크 데이터 ==='];
+  for (const k of keys) {
+    const d = daily[k];
+    const parts = [];
+    if (d.sleep !== undefined) parts.push('수면'+d.sleep+'h');
+    if (d.mood !== undefined) parts.push('기분'+d.mood);
+    if (d.drowsy !== undefined) parts.push('졸림'+d.drowsy);
+    if (d.periodStart) parts.push('생리시작');
+    if (d.period) parts.push('생리중');
+    if (d.periodEnd) parts.push('생리종료');
+    if (d.saju) parts.push('사주:'+d.saju);
+    if (d.note) parts.push('메모:'+d.note.replace(/\n/g,' '));
+    // 기타 불린 항목들
+    for (const key in d) {
+      if (['sleep','mood','drowsy','periodStart','period','periodEnd','saju','note','weekly_eval'].includes(key)) continue;
+      if (d[key]===true) parts.push(key);
+    }
+    if (parts.length) lines.push(k + ' | ' + parts.join(', '));
+  }
+  // 카드 학습 통계도 첨부
+  try {
+    const arch = JSON.parse(localStorage.getItem('arch5_history')||'[]');
+    const eng = JSON.parse(localStorage.getItem('eng1_history')||'[]');
+    lines.push('', '=== 학습 기록 요약 ===');
+    lines.push('건축 히스토리 기록수: '+arch.length+' / 영어: '+eng.length);
+  } catch(e){}
+
+  const text = lines.join('\n');
+  // 클립보드 복사 시도 + 화면 표시
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;top:5%;left:5%;width:90%;height:80%;z-index:99999;font-size:12px;padding:10px;';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); } catch(e){}
+  if (navigator.clipboard) { navigator.clipboard.writeText(text).catch(()=>{}); }
+  const close = document.createElement('button');
+  close.textContent = '✕ 닫기 (복사됨! Claude에게 붙여넣으세요)';
+  close.style.cssText = 'position:fixed;top:1%;left:5%;z-index:100000;padding:8px 14px;background:#c9838a;color:#fff;border:none;border-radius:8px;font-size:13px;';
+  close.onclick = ()=>{ ta.remove(); close.remove(); };
+  document.body.appendChild(close);
 }
 
 function closeDailyModal(e) {
