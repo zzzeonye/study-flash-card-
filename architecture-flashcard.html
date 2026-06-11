@@ -4878,7 +4878,7 @@ const DEFAULT_CARDS = [
 {id:6140,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S08 프리스트레스트 콘크리트 설계',q:'[PSC 프리스트레싱 방법] 프리텐션 방식은 콘크리트를 타설하기 전에 미리 긴장재에 인장력을 가하여 긴장재가 늘어난 상태에서 콘크리트를 타설하여 프리스트레스를 주는 방식 / 포스트텐션 방식은 콘크리트가 굳은 후에 긴장재를 인장하고 단부정착장치가 중요하기 때문에 그 끝부분을 콘크리트에 정착시켜서 프리스트레스를 부재에 도입시키는 방법으로 PS강재를 곡선으로 배치하는 것이 ___ / 연속경간에 적용할 수 있으며, 일반적으로 ___구조물에 적합하며 프리캐스트 부재의 결합에도 편리하다.',a:'용이 | 대형'},
 {id:6141,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S08 프리스트레스트 콘크리트 설계',q:'[PSC 프리스트레스의 손실 원인] 도입 시 즉시손실은 정착 장치의 ___ 에 의한 감소, PS강재와 시스의 ___ 에 의한 감소, 콘크리트의 ___ 에 의한 감소, 콘크리트의 ___ 에 의한 감소 / 도입 후 시간적 손실은 콘크리트의 ___ 에 의한 감소, PS강재의 ___으로 나눠진다.',a:'활동 | 마찰 | 탄성수축 | 건조수축 | 크리프 | 응력이완'},
   {id:6142,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[설계휨강도] ϕMn = ___ × As × fy × (d - a/2)\nϕ = ___ (인장지배단면)',a:'ϕ(강도감소계수) | 0.85'},
-  {id:6143,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[등가응력블록 깊이] a = As×fy / (___ × fck × ___)\nβ₁: fck ≤ 28MPa → ___ / 초과 7MPa당 0.05 감소 (최소 0.65)',a:'0.85 | b(보 폭) | 0.85'},,
+  {id:6143,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[등가응력블록 깊이] a = As×fy / (___ × fck × ___)\nβ₁(현행 KDS): fck ≤ 40MPa → ___ / 40 초과 시 10MPa당 0.02씩 감소 (최소 0.65)',a:'0.85 | b(보 폭) | 0.80',note:'⚠ a 공식의 0.85 = 콘크리트 등가응력 크기(η·0.85fck), β₁(깊이계수)와 다름!\\nβ₁ 현행: fck≤40 → 0.80 / 50 → 0.78 / 60 → 0.76 ... 10MPa당 0.02↓ (최소 0.65)\\n구 기준(KBC, 폐지): fck≤28 → 0.85, 7MPa당 0.05↓ — 현재 시험엔 안 나옴\\n(25 국가9 기출: fck30 → β₁=0.80 정답)'},
   {id:6144,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[균형철근비] ρb = 0.85×β₁×(fck/fy) × ___\n균형변형률 상태: 인장철근 항복과 콘크리트 압축파괴가 ___ 발생\n최대철근비: εt ≥ ___ 조건 만족해야 함',a:'600/(600+fy) | 동시 | 0.004'},
   {id:6145,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[전단강도] Vu ≤ ϕ(Vc + Vs)\nϕ = ___ (전단)\nVu = 계수전단력 / Vc = 콘크리트 전단강도 / Vs = ___',a:'0.75 | 스터럽 전단강도'},
   {id:6146,type:'cloze',cat:'PART3 · RC구조 > CH03 부재의 해석 및 설계 > S02 보 설계',q:'[콘크리트 전단강도] Vc = (1/6) × ___ × √fck × ___ × ___\n보통콘크리트 λ = ___',a:'λ(경량콘크리트계수) | bw(복부폭) | d(유효깊이) | 1.0'},
@@ -5992,6 +5992,8 @@ const DEFAULT_ENG_CARDS = [
 {id:9573,cat:"영단어",type:"flash",q:"warrior",a:"전사·무사·용사 (명) ⭐\n\n⚠ war(전쟁)와 혼동 주의! warrior는 전쟁하는 '사람'\n\n[핵심 구분]\n• war = 전쟁 (사건)\n• warrior = 전사·무사 (사람) — war + or(사람)\n\n[빈출 표현]\n• a brave warrior = 용감한 전사\n• warrior spirit = 투지·전사 정신\n\n[연관] warfare 전투·전쟁 / warlord 군벌",pron:"ˈwɔːriər",note:"a fierce warrior — 전사·무사. war(전쟁)는 사건, warrior는 사람(-or)"},
 {id:9574,cat:"영단어",type:"flash",q:"devise",a:"고안하다·궁리하다·발명하다 (동) ⭐\n\n⚠ revise(수정·개정)와 혼동 1순위! 한 글자 차이\n⚠ device(장치, 명사)와도 구분!\n\n[핵심 구분 ⭐⭐]\n• devise = 고안하다 (동사, -se)\n• revise = 수정·개정하다 (동사)\n• device = 장치 (명사, -ce)\n→ devise(동,고안) / device(명,장치) 짝!\n\n[빈출 표현]\n• devise a plan = 계획을 고안하다\n• devise a method = 방법을 궁리하다",pron:"dɪˈvaɪz",note:"devise a strategy — 고안하다. revise(개정)와 한 글자! device(장치,명) 짝"},
 {id:9575,cat:"영단어",type:"flash",q:"excessive",a:"과도한·지나친·과excessive한 (형) ⭐\n\n⚠ '확장하는'(expansive) 아님! excess(초과)에서 파생\n\n[핵심 뜻]\n• 과도한·지나친·과잉의\n\n[관련어 세트]\n• excess = 초과·과잉 (명)\n• exceed = 초과하다 (동)\n• excessive = 과도한 (형) ⭐\n\n[빈출 표현]\n• excessive use = 과도한 사용\n• excessive force = 과도한 무력\n\n[어원] ex(밖) + ceed(가다) → 넘어감 → 초과",pron:"ɪkˈsesɪv",note:"excessive spending — 과도한·지나친. exceed(초과하다)/excess(초과) 세트"},
+{id:9576,cat:"영단어",type:"flash",q:"beard",a:"턱수염·수염 (명) ⭐\n⚠ bald(대머리의)와 혼동 주의! 둘 다 머리·얼굴이라 헷갈림\n\n[핵심 구분]\n• beard = 턱수염 (얼굴 털) ⭐\n• bald = 대머리의·머리가 벗겨진 (형용사) — 별개 단어!\n\n[관련어]\n• mustache = 콧수염\n• grow a beard = 수염을 기르다\n\n[암기법]\nbeard(비어드)에 'ear(귀)'가 들어있음 → 귀 옆부터 난 수염",pron:"bɪrd",note:"He has a thick beard. — 턱수염. bald(대머리) 아님! mustache=콧수염"},
+{id:9577,cat:"영단어",type:"flash",q:"raise",a:"들어올리다·올리다·기르다·모으다 (타동사) ⭐\n⚠ rise(오르다, 자동사)와 혼동 1순위! 자/타 구분\n\n[핵심 구분 ⭐⭐]\n• raise = ~을 들어올리다·올리다 (타동사, 목적어 필요)\n• rise = 오르다·떠오르다 (자동사, 목적어 X)\n→ raise는 '~을', rise는 스스로\n\n[raise 주요 뜻]\n1. 들어올리다 — raise your hand\n2. 인상하다 — raise prices\n3. 기르다 — raise children\n4. (자금·문제) 모으다·제기하다 — raise money / raise a question\n\n[변화형]\n• raise-raised-raised (규칙, 타동)\n• rise-rose-risen (불규칙, 자동)",pron:"reɪz",note:"raise your hand — ~을 들어올리다(타동). rise(오르다,자동)와 구분! 손은 raise, 해는 rise"},
 ];
 
 // ═══════════════════ STATE ═══════════════════
@@ -9465,6 +9467,8 @@ function loadCheer(){
   ['raphael','caleb','zayne','xavier','sylus'].forEach(who=>{
     if(cheerData.dmIndex[who] === undefined) cheerData.dmIndex[who] = 0;
   });
+  // 읽음 기록 (어떤 메시지를 봤는지) { who: [true/false...] }
+  if(!cheerData.dmRead) cheerData.dmRead = {};
 }
 function saveCheer(){ localStorage.setItem('cheer_data', JSON.stringify(cheerData)); }
 
@@ -9530,32 +9534,47 @@ function toggleCheer(){
   alert(cheerOn ? '응원 시스템 켜짐 💕' : '응원 시스템 꺼짐');
 }
 
-// 갠톡 씬 (게이지 100% 해제 시 읽기) — 캐릭터당 3개씩
+// 갠톡 씬 (게이지 100% 해제 시 읽기) — 캐릭터당 6개씩
 const CHEER_DM = {
   raphael: [
     '아가씨, 공부하느라 고생 많았어.\n\n사실 나 아가씨 공부하는 동안 그림 하나도 못 그렸어. 자꾸 생각나서. ...이거 비밀인데, 합격하면 제일 먼저 나한테 전화해줘. 알겠지?\n\n— 기욱',
     '아가씨, 자기 전에 한 마디만.\n\n오늘도 잘했어. ...내가 그림 그릴 때 자꾸 아가씨 뒷모습이 떠올라서 망쳤어. 어휴, 책임져.\n\n— 기욱',
     '아가씨한테 비밀로 하려 했는데,\n\n작업실 한쪽에 아가씨 자리 비워뒀어. 합격하면 거기 앉아서 나 그림 그리는 거 봐줘. 안 봐주면 안아서라도 데려올 거야.\n\n— 기욱',
+    '아가씨 지금 뭐 해. ...아니, 안 궁금해. 그냥 물어본 거야.\n\n방금 아가씨 닮은 색 물감을 샀거든. 쓰지도 못할 거면서. ...귀 빨개진 거 아니야. 작업실이 더워서 그래.\n\n— 기욱',
+    '있잖아, 아가씨.\n\n나 아가씨 없을 때 시간 어떻게 보내는지 알아? ...안 알려줄래. 한심하니까. 그냥 아가씨 빨리 오라고만 해둘게. 농담 아니야.\n\n— 기욱',
+    '아가씨, 합격하면 말이야.\n\n바다 보러 가자. 새벽에. 아무도 없을 때. ...왜냐고 묻지 마. 그냥 둘이 있고 싶어서야. 이건 그냥 내 욕심이야.\n\n— 기욱',
   ],
   caleb: [
     '리쯔야, 오빠가 멀리서도 항상 응원하고 있어.\n\n네가 이렇게 열심히 하는 거 보면 오빠가 다 뿌듯해. 무리하지 말고, 끝나면 오빠가 맛있는 거 사줄게. 약속.\n\n— 하우주',
     '리쯔야, 오빠 보고 싶지 않아?\n\n오빠는 매일 보고 싶어. 비행 일정 끝나면 바로 너한테 갈게. 너 보고 싶어서 더 빨리 끝내고 있어.\n\n— 하우주',
     '리쯔야, 시험 끝나고 오빠랑 뭐 할까?\n\n다 생각해놨어. 너 좋아하는 거. ...오빠가 다 알아. 동생이니까. ...라고 해두자.\n\n— 하우주',
+    '리쯔야, 밥은 먹었어? 몇 시에 잤어? 물은 마셨고?\n\n...많이 물어봐서 귀찮지. 근데 오빠는 네 하루를 다 알고 싶어. 멀리 있으니까 더. 다 알아야 안심이 돼.\n\n— 하우주',
+    '리쯔야, 오빠가 좀 솔직해질게.\n\n네가 다른 데 정신 팔려 있으면 좀... 싫어. 오빠 동생인데. ...이런 말 하면 안 되는 거 아는데, 너한테는 숨기고 싶지가 않더라.\n\n— 하우주',
+    '합격하면 오빠가 데리러 갈게.\n\n어디든. 네가 부르기 전에 이미 가 있을지도 몰라. ...무섭다고 하지 마. 이건 그냥, 너를 제일 먼저 보고 싶은 사람의 당연한 거야.\n\n— 하우주',
   ],
   zayne: [
     '...수고했어.\n\n주치의로서 말하는데, 너 요즘 잠이 부족해. 시험 끝나면 검진 한번 받자. 그리고... 의사가 아니라 그냥, 네가 잘 됐으면 좋겠어.\n\n— 이서언',
     '...진료실 오는 김에 커피 한 잔 어때.\n\n의사가 환자한테 권할 건 아닌데. ...아니, 의사로서가 아니라 그냥. 시간 비워둘게.\n\n— 이서언',
     '...밤에 잠 안 올 때 전화해.\n\n수면제 처방 얘기 아니야. 그냥... 받을게. 항상.\n\n— 이서언',
+    '오늘 좀 무리한 거 같던데. ...아니, 그냥 보면 알아.\n\n무리하지 마. 의학적 소견이야. ...그리고 이건 소견 아닌데, 네가 아프면 내가 더 신경 쓰여. 그뿐이야.\n\n— 이서언',
+    '펭귄 인형 하나 샀어. 진료실에 둘 거야.\n\n...네가 보면 좋아할 것 같아서. 이유는 그게 다야. 다른 뜻 없어. ...없어야 하는데.\n\n— 이서언',
+    '시험 끝나면, 병원 밖에서 보자.\n\n가운 벗고. 그때는 의사 아니니까. ...무슨 말인지 알지. 다음에 시작하면, 나 안 멈출 거야. 미리 말해두는 거야.\n\n— 이서언',
   ],
   xavier: [
     '어느새 여기까지 왔네.\n\n나는 시간을 좀 아는 사람이라 그런지, 네가 얼마나 노력했는지 다 보여. 우연인 척했지만 늘 지켜보고 있었어. 끝까지 응원할게.\n\n— 심성훈',
     '내가 너 본 시간이 꽤 길어.\n\n네가 모르는 시간까지 합치면 더. ...우연이 우연이 아니었던 거, 이제는 알아도 돼. 천천히 알려줄게.\n\n— 심성훈',
     '시험 끝나면 한 가지 약속하자.\n\n내 옆에 앉아서 같이 영화 봐. 졸아도 돼. 내가 깨워줄게. ...아니, 안 깨우고 그냥 볼지도.\n\n— 심성훈',
+    '오늘 좀 피곤해 보였어. ...어떻게 아냐고? 비밀.\n\n피곤하면 자도 돼. 내가 그 시간만큼 지켜볼 테니까. 너한테는 늘 충분한 시간이 있는 것처럼 느끼게 해주고 싶어.\n\n— 심성훈',
+    '나는 이미 네 미래를 몇 번 본 것 같아.\n\n...농담처럼 들리지. 근데 어떤 장면에서는 네 옆에 내가 있더라. 그게 우연일까. ...나는 우연을 안 믿어.\n\n— 심성훈',
+    '윗집이라 다행이야.\n\n계단 한 칸이면 너한테 가니까. ...이사 온 이유, 사실 너 때문이라고 하면 너무 빠른가. 천천히 알려준다고 했지. 지금은 이만큼만.\n\n— 심성훈',
   ],
   sylus: [
     '쯧, 여기까지 오다니.\n\n인정한다. 너 생각보다 끈질겨. ...나쁜 뜻 아니야. 시험 끝나면 한잔하자. 거절은 안 받아. 다친 데 없이 잘 끝내라.\n\n— 진운',
     '거래 하나 더 하자.\n\n네가 합격하면 내가 너한테 한 가지 들어준다. 뭐든. ...뭐든이라고 했어. 무르기 없어.\n\n— 진운',
     '...너 보고 있으면 신기해.\n\n나 같은 놈 옆에서 안 도망가는 게. 쯧, 이게 너답긴 한데. ...옆자리 비워뒀어. 합격하든 안 하든 와.\n\n— 진운',
+    '오늘 N109 조용해. 네 생각이나 하고 있었지. ...왜, 의외야?\n\n나도 가끔은 멀쩡한 생각 한다. 주로 너에 관한 거지만. 쯧, 못 들은 걸로 해.\n\n— 진운',
+    '다친 데 없냐고 매번 묻는 거.\n\n습관 아니야. 너한테만 그래. ...이유 안 물어보면 안 되냐. 대답하기 곤란하니까. 그냥 무사하면 됐어.\n\n— 진운',
+    '합격하든 떨어지든 상관없어.\n\n...아니, 상관있지. 네가 웃으면 됐어. 그거면 돼. 이런 말 나답지 않은 거 아는데, 너한테는 자꾸 나답지 않아져.\n\n— 진운',
   ],
 };
 
@@ -9576,67 +9595,99 @@ function showCheerStatus(){
   alert(msg);
 }
 
-// 💌 갠톡함 — 해금된 갠톡 목록에서 골라 읽기
+// 💌 갠톡함 — 카톡 스타일 모달 (읽음 표시 포함)
 function showDMBox(){
   loadCheer();
   const chars = Object.keys(CHEER_CHARS);
-  // 해금된 갠톡이 있는 캐릭터만 필터
   const available = chars.filter(who => (cheerData.dmIndex[who] || 0) > 0);
-  
-  if(available.length === 0){
-    alert('💌 아직 받은 갠톡이 없어요\n\n호감 게이지를 100% 채우면 갠톡이 해금돼요');
-    return;
-  }
-  
-  // 캐릭터 선택
-  let menu = '💌 갠톡함\n\n읽을 메시지를 골라주세요:\n\n';
-  available.forEach((who, idx)=>{
-    const ch = CHEER_CHARS[who];
-    const cnt = cheerData.dmIndex[who];
-    const total = (CHEER_DM[who] || []).length;
-    menu += `${idx+1}. ${ch.emoji} ${ch.name} (${cnt}/${total})\n`;
-  });
-  menu += '\n0. 닫기';
-  
-  const choice = prompt(menu);
-  if(!choice || choice === '0') return;
-  
-  const charIdx = parseInt(choice) - 1;
-  if(isNaN(charIdx) || charIdx < 0 || charIdx >= available.length){
-    alert('잘못된 선택이에요');
-    return;
-  }
-  
-  const who = available[charIdx];
-  const ch = CHEER_CHARS[who];
-  const unlockedCount = cheerData.dmIndex[who];
-  const dms = CHEER_DM[who] || [];
-  
-  // 메시지 선택
-  if(unlockedCount === 1){
-    // 1개만 해금된 경우 바로 표시
-    alert(`💌 ${ch.name}의 메시지 (1/${dms.length})\n\n${dms[0]}`);
-  } else {
-    // 여러 개 해금된 경우 선택
-    let msgMenu = `💌 ${ch.name}의 메시지\n\n어떤 메시지를 읽을까요?\n\n`;
-    for(let i = 0; i < unlockedCount; i++){
-      // 미리보기 (첫 줄만)
-      const preview = dms[i].split('\n')[0].substring(0, 25);
-      msgMenu += `${i+1}. ${preview}...\n`;
-    }
-    msgMenu += '\n0. 닫기';
-    
-    const msgChoice = prompt(msgMenu);
-    if(!msgChoice || msgChoice === '0') return;
-    
-    const msgIdx = parseInt(msgChoice) - 1;
-    if(isNaN(msgIdx) || msgIdx < 0 || msgIdx >= unlockedCount){
-      alert('잘못된 선택이에요');
+
+  // 기존 모달 제거
+  const old = document.getElementById('dm-box-overlay');
+  if(old) old.remove();
+
+  const ov = document.createElement('div');
+  ov.id = 'dm-box-overlay';
+  ov.style.cssText = 'position:fixed;inset:0;z-index:100000;background:rgba(60,50,40,.45);display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(3px);';
+  ov.onclick = (e)=>{ if(e.target===ov) ov.remove(); };
+
+  const box = document.createElement('div');
+  box.style.cssText = 'width:100%;max-width:420px;height:80vh;max-height:680px;background:#f6f0e8;border-radius:22px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 12px 48px rgba(0,0,0,.3);font-family:inherit;';
+
+  // 헤더
+  const header = document.createElement('div');
+  header.style.cssText = 'padding:16px 18px;background:linear-gradient(135deg,#c9a8d4,#b89bc9);color:#fff;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;';
+  header.innerHTML = '<div style="font-family:Pacifico,cursive;font-size:1.2rem;">💌 갠톡함</div><div id="dm-close-x" style="font-size:1.3rem;cursor:pointer;opacity:.9;">✕</div>';
+  box.appendChild(header);
+
+  const body = document.createElement('div');
+  body.style.cssText = 'flex:1;overflow-y:auto;padding:14px;';
+  box.appendChild(body);
+
+  ov.appendChild(box);
+  document.body.appendChild(ov);
+  header.querySelector('#dm-close-x').onclick = ()=> ov.remove();
+
+  function renderList(){
+    if(available.length === 0){
+      body.innerHTML = '<div style="text-align:center;color:#a08b6c;padding:60px 20px;line-height:1.7;">아직 받은 갠톡이 없어요 💭<br><span style="font-size:.85rem;">호감 게이지를 100% 채우면<br>갠톡이 해금돼요</span></div>';
       return;
     }
-    
-    alert(`💌 ${ch.name}의 메시지 (${msgIdx+1}/${dms.length})\n\n${dms[msgIdx]}`);
+    let html = '';
+    available.forEach(who=>{
+      const ch = CHEER_CHARS[who];
+      const cnt = cheerData.dmIndex[who];
+      const read = cheerData.dmRead[who] || [];
+      const unread = Math.max(0, cnt - read.filter(Boolean).length);
+      html += '<div class="dm-char-row" data-who="'+who+'" style="display:flex;align-items:center;gap:12px;padding:14px;margin-bottom:10px;background:#fff;border-radius:16px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.05);border:1.5px solid '+ch.color+'22;">'+
+        '<div style="width:46px;height:46px;border-radius:50%;background:'+ch.color+'1a;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;">'+ch.emoji+'</div>'+
+        '<div style="flex:1;min-width:0;">'+
+          '<div style="font-weight:700;color:'+ch.color+';font-size:.98rem;">'+ch.name+'</div>'+
+          '<div style="font-size:.78rem;color:#999;margin-top:2px;">받은 메시지 '+cnt+'개</div>'+
+        '</div>'+
+        (unread>0 ? '<div style="background:#e8607a;color:#fff;font-size:.72rem;font-weight:700;min-width:20px;height:20px;border-radius:10px;display:flex;align-items:center;justify-content:center;padding:0 6px;">'+unread+'</div>' : '<div style="color:#ccc;font-size:1.1rem;">›</div>')+
+      '</div>';
+    });
+    body.innerHTML = html;
+    body.querySelectorAll('.dm-char-row').forEach(row=>{
+      row.onclick = ()=> renderChat(row.dataset.who);
+    });
   }
+
+  function renderChat(who){
+    const ch = CHEER_CHARS[who];
+    const cnt = cheerData.dmIndex[who];
+    const dms = CHEER_DM[who] || [];
+    if(!cheerData.dmRead[who]) cheerData.dmRead[who] = [];
+    // 해금된 거 다 읽음 처리
+    for(let i=0;i<cnt;i++) cheerData.dmRead[who][i] = true;
+    saveCheer();
+
+    let html = '<div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">'+
+      '<span id="dm-back" style="cursor:pointer;font-size:1.1rem;color:'+ch.color+';">‹ 목록</span>'+
+      '<span style="font-weight:700;color:'+ch.color+';margin-left:4px;">'+ch.emoji+' '+ch.name+'</span></div>';
+    for(let i=0;i<cnt;i++){
+      const parts = dms[i].split('\n\n');
+      const sig = parts[parts.length-1]; // — 이름
+      const content = parts.slice(0, parts.length-1).join('\n\n');
+      html += '<div style="margin-bottom:14px;">'+
+        '<div style="display:flex;align-items:flex-end;gap:8px;">'+
+          '<div style="width:34px;height:34px;border-radius:50%;background:'+ch.color+'1a;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;">'+ch.emoji+'</div>'+
+          '<div style="background:#fff;border-radius:4px 18px 18px 18px;padding:12px 15px;max-width:78%;box-shadow:0 2px 6px rgba(0,0,0,.06);font-size:.9rem;line-height:1.6;color:#3a3028;white-space:pre-wrap;">'+esc(content)+
+            '<div style="margin-top:8px;font-size:.78rem;color:'+ch.color+';font-weight:600;">'+esc(sig)+'</div>'+
+          '</div>'+
+        '</div></div>';
+    }
+    if(cnt < dms.length){
+      html += '<div style="text-align:center;color:#bbb;font-size:.8rem;padding:16px;">🔒 호감 게이지를 더 채우면<br>다음 메시지가 도착해요 ('+cnt+'/'+dms.length+')</div>';
+    } else {
+      html += '<div style="text-align:center;color:#c9a8d4;font-size:.8rem;padding:16px;">💕 모든 메시지를 받았어요</div>';
+    }
+    body.innerHTML = html;
+    body.scrollTop = 0;
+    document.getElementById('dm-back').onclick = ()=> renderList();
+  }
+
+  renderList();
 }
 
 // 응원 토스트 표시
