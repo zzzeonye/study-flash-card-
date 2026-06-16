@@ -1506,6 +1506,29 @@ body::before {
   box-shadow: 0 6px 20px rgba(201,131,138,0.4) !important;
 }
 .cloze-blank:hover::after { left: 125% !important; }
+/* ⭐ 즐겨찾기 별 버튼 */
+.fav-star{
+  position:absolute; top:10px; left:10px; z-index:10;
+  width:30px; height:30px; border-radius:50%;
+  border:none; background:transparent;
+  font-size:1.15rem; line-height:1; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  color:#d9b84a; padding:0; transition:transform .12s;
+  filter:grayscale(0.4) opacity(0.6);
+}
+.fav-star.on{ filter:none; text-shadow:0 0 8px rgba(217,184,74,0.5); }
+.fav-star:active{ transform:scale(0.82); }
+.fav-toggle-btn{
+  width:100%; padding:9px 12px; margin-bottom:6px;
+  border-radius:9px; border:1.5px solid rgba(217,184,74,0.4);
+  background:rgba(217,184,74,0.08); color:#a8842a;
+  font-family:'Quicksand',sans-serif; font-weight:700; font-size:.85rem;
+  cursor:pointer; transition:all .15s;
+}
+.fav-toggle-btn.on{
+  background:linear-gradient(135deg,rgba(217,184,74,0.25),rgba(247,202,201,0.2));
+  border-color:#d9b84a; color:#8a6f1e; box-shadow:0 0 10px rgba(217,184,74,0.3);
+}
 /* ★ 열렸을 때 잘 보이게 ★ */
 .cloze-blank.revealed {
   background: linear-gradient(135deg,
@@ -5399,6 +5422,8 @@ const DEFAULT_CARDS = [
 {id:8035,type:'cloze',cat:'PART5 · 구조역학 > CH08 부정정구조물',q:'[일단고정 일단힌지보 — 등분포하중]\n고정단 반력: RA = ___ / 힌지단: RB = ___',a:'5wl/8 | 3wl/8'},
 {id:8036,type:'cloze',cat:'PART5 · 구조역학 > CH08 부정정구조물',q:'[모멘트 분배법]\n분배모멘트 = 균형M × ___\n도달모멘트 = 분배M × ___\n도달율: 고정단=___ / 힌지·자유단=___',a:'분배율(해당부재강비/전체강비합) | 도달율 | 1/2 | 0'},
 {id:8037,type:'cloze',cat:'PART5 · 구조역학 > CH08 부정정구조물',q:'[분배율 강비]\n고정단: k = ___\n힌지단: k = ___\n자유단: k = ___',a:'EI/l | 3EI/4l | 0'},
+{id:8075,type:'cloze',cat:'PART5 · 구조역학 > CH08 부정정구조물',q:'[대칭 2경간 등분포 연속보 — 각 경간 L, 등분포 w]\n중간지점(B) 휨모멘트 MB = ___\n단부반력 RA = RC = ___\n중앙반력 RB = ___',a:'−wL²/8 | 3wL/8 | 10wL/8(=5wL/4)',note:'예: L=4m, w=3kN/m → MB=−3×16/8=−6kN·m\n검산: RA+RB+RC = 3wL/8+10wL/8+3wL/8 = 16wL/8 = 2wL = 총하중✓\nMB는 중간지점이라 부(−)모멘트(윗면 인장)'},
+{id:8076,type:'ox',cat:'PART5 · 구조역학 > CH08 부정정구조물',q:'대칭 2경간 연속보(각 경간 4m)에 등분포하중 3kN/m가 작용할 때\n중간지점 B의 휨모멘트는 −6kN·m이다',a:'O',note:'MB = −wL²/8 = −3×4²/8 = −48/8 = −6kN·m'},
 {id:8038,type:'cloze',cat:'PART5 · 구조역학 > CH09 기둥',q:'[오일러 좌굴하중]\nPe = π²EI / (kL)²\nk값: 양단힌지=___ / 일단고정일단힌지=___ / 양단고정=___ / 일단고정일단자유=___',a:'1.0 | 0.7 | 0.5 | 2.0'},
 {id:8039,type:'cloze',cat:'PART5 · 구조역학 > CH09 기둥',q:'[좌굴하중 배수 비교 — 양단힌지 기준]\n양단고정: ___ 배\n일단고정일단힌지: ___ 배\n일단고정일단자유: ___ 배',a:'4 | 2 | 1/4'},
 {id:8040,type:'ox',cat:'PART5 · 구조역학 > CH09 기둥',q:'양단힌지 기둥의 좌굴하중이 100kN이면, 양단고정으로 바꾸면 400kN이 된다',a:'O',note:'k: 1.0→0.5 → 분모 (kL)²가 1/4 → 하중 4배\nPe = π²EI/(0.5L)² = 4×π²EI/L²'},
@@ -6048,6 +6073,8 @@ let addOXAns = 'O';
 let currentSubject = 'arch';
 let selectedCats = new Set();
 let reviewSelectedCats = new Set();
+let favSet = new Set();      // 즐겨찾기 카드 id (건축구조 전용)
+let favOnly = false;         // 즐겨찾기만 보기 모드
 
 // ═══════════════════ PERSIST ═══════════════════
 function getKeys() {
@@ -6143,6 +6170,34 @@ function loadCats() {
   } catch(e) { selectedCats = new Set(cards.map(c => c.cat)); }
 }
 
+// ═══════════════════ 즐겨찾기 (건축구조 전용) ═══════════════════
+function loadFav() {
+  try {
+    const sf = localStorage.getItem('arch5_fav');
+    favSet = sf ? new Set(JSON.parse(sf)) : new Set();
+  } catch(e) { favSet = new Set(); }
+}
+function saveFav() {
+  try { localStorage.setItem('arch5_fav', JSON.stringify([...favSet])); } catch(e) {}
+}
+function toggleFav(id) {
+  if (favSet.has(id)) favSet.delete(id); else favSet.add(id);
+  saveFav();
+  // 현재 화면의 별 버튼 즉시 갱신
+  document.querySelectorAll('.fav-star[data-fav-id="'+id+'"]').forEach(btn=>{
+    btn.classList.toggle('on', favSet.has(id));
+    btn.textContent = favSet.has(id) ? '⭐' : '☆';
+  });
+  // 즐겨찾기만 보기 중이면 목록/큐 갱신
+  if (favOnly && currentTab==='list') renderList();
+}
+function favStarHTML(id){
+  const on = favSet.has(id);
+  return `<button class="fav-star${on?' on':''}" data-fav-id="${id}"
+    onclick="event.stopPropagation();toggleFav(${id})"
+    title="즐겨찾기">${on?'⭐':'☆'}</button>`;
+}
+
 // ═══════════════════ WEIGHT ═══════════════════
 function getWeight(id) {
   const h = history[id];
@@ -6181,10 +6236,12 @@ function weightedShuffle(pool) {
 // ═══════════════════ CATEGORY ═══════════════════
 function getCats() { return ["전체", ...new Set(cards.map(c => c.cat))]; }
 function filtered() {
+  if (favOnly && currentSubject==='arch') return cards.filter(c => favSet.has(c.id));
   if (selectedCats.size > 0) return cards.filter(c => selectedCats.has(c.cat));
   return [...cards];
 }
 function reviewFiltered() {
+  if (favOnly && currentSubject==='arch') return cards.filter(c => favSet.has(c.id));
   if (selectedCats.size > 0) return cards.filter(c => selectedCats.has(c.cat));
   return [...cards];
 }
@@ -6432,6 +6489,7 @@ function renderFlashCard(c) {
   document.getElementById('card-back').style.display = 'none';
 
   document.getElementById('card-front').innerHTML = `
+    ${currentSubject==='arch' ? favStarHTML(c.id) : ''}
     ${currentSubject==='eng' ? `
     <button onclick="event.stopPropagation();speakWord('${esc(c.q).split('\\n')[0].trim()}')"
       title="발음 듣기"
@@ -6498,6 +6556,7 @@ function renderOXCard(c) {
 
   const hasMemoOX = !!localStorage.getItem('memo_'+c.id);
   document.getElementById('ox-card').innerHTML = `
+    <button class="fav-star${favSet.has(c.id)?' on':''}" data-fav-id="${c.id}" onclick="event.stopPropagation();toggleFav(${c.id})" title="즐겨찾기" style="left:auto;right:10px;">${favSet.has(c.id)?'⭐':'☆'}</button>
     <div class="ox-type-badge">OX 문제</div>
     <div class="card-cat">${esc(c.cat)}</div>
     <div class="ox-statement">${esc(c.q).replace(/\n/g,'<br>')}</div>
@@ -6531,6 +6590,7 @@ function renderClozeCard(c) {
       <tr><td>${esc(r.label)}</td>
       <td><span class="cloze-blank" id="cb-${i}" onclick="revealBlank(${i},'${esc(r.value)}')">?</span></td></tr>`).join('');
     document.getElementById('cloze-card').innerHTML = `
+      <button class="fav-star${favSet.has(c.id)?' on':''}" data-fav-id="${c.id}" onclick="event.stopPropagation();toggleFav(${c.id})" title="즐겨찾기" style="left:auto;right:10px;">${favSet.has(c.id)?'⭐':'☆'}</button>
       <div class="cloze-type-badge">빈칸 채우기</div>
       <div class="cloze-title">${esc(c.cat)}</div>
       <div style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:14px;align-self:center;">${esc(c.q)}</div>
@@ -6548,6 +6608,7 @@ function renderClozeCard(c) {
     });
     const noteHTML = c.note ? `<div class="cloze-note" id="cloze-note-${c.id}" style="display:none;margin-top:12px;padding:10px 14px;background:rgba(138,111,46,.08);border-left:3px solid rgba(138,111,46,.4);border-radius:8px;font-size:.8rem;color:var(--text);line-height:1.7;white-space:pre-line;"><b style="color:#8a6f2e;">📖 풀이노트</b><br>${esc(c.note)}</div>` : '';
     document.getElementById('cloze-card').innerHTML = `
+      <button class="fav-star${favSet.has(c.id)?' on':''}" data-fav-id="${c.id}" onclick="event.stopPropagation();toggleFav(${c.id})" title="즐겨찾기" style="left:auto;right:10px;">${favSet.has(c.id)?'⭐':'☆'}</button>
       <div class="cloze-type-badge">빈칸 채우기</div>
       <div class="cloze-title">${esc(c.cat)}</div>
       <div style="font-size:.98rem;font-weight:500;color:var(--text);line-height:1.9;word-break:keep-all;margin-bottom:14px;align-self:flex-start;">${qHtml}</div>
@@ -6912,7 +6973,7 @@ function renderList(){
           return esc(a).replace(/\n/g,' ');
         })()}</div>
       </div>
-      <div class="list-right">${badge}${selectMode?'':`<button class="list-edit-btn" onclick="event.stopPropagation();openEdit(${c.id})">수정</button>`}</div>
+      <div class="list-right">${currentSubject==='arch'?`<button class="fav-star${favSet.has(c.id)?' on':''}" data-fav-id="${c.id}" onclick="event.stopPropagation();toggleFav(${c.id})" title="즐겨찾기" style="position:static;width:26px;height:26px;font-size:1rem;">${favSet.has(c.id)?'⭐':'☆'}</button>`:''}${badge}${selectMode?'':`<button class="list-edit-btn" onclick="event.stopPropagation();openEdit(${c.id})">수정</button>`}</div>
     </div>`;
   }).join('');
   updateSelToolbar();
@@ -7722,6 +7783,13 @@ function renderCatCheckGroups() {
   const wrap = document.getElementById('cat-check-groups');
   const allCats = [...new Set(cards.map(c => c.cat))].sort();
 
+  // ⭐ 건축구조 전용 즐겨찾기 토글 (패널 맨 위)
+  const favBtnHTML = (currentSubject==='arch')
+    ? `<button class="fav-toggle-btn${favOnly?' on':''}" onclick="toggleFavOnly()">
+         ⭐ 즐겨찾기만 보기 (${favSet.size}장)${favOnly?' · ON':''}
+       </button>`
+    : '';
+
   if (currentSubject === 'eng') {
     wrap.innerHTML = `<div class="cat-select-items">${
       allCats.map(cat => `<button class="cat-check-btn${selectedCats.has(cat)?' checked':''}"
@@ -7739,7 +7807,7 @@ function renderCatCheckGroups() {
     parts[key].push(cat);
   });
 
-  wrap.innerHTML = Object.keys(parts).sort().map(pk => {
+  wrap.innerHTML = favBtnHTML + Object.keys(parts).sort().map(pk => {
     const partCats = parts[pk];
     const allChecked = partCats.every(c => selectedCats.has(c));
     return `
@@ -7790,6 +7858,16 @@ function catCheckAll(val) {
   renderCatCheckGroups();
 }
 
+function toggleFavOnly() {
+  if (currentSubject !== 'arch') return;
+  if (!favOnly && favSet.size === 0) {
+    alert('아직 즐겨찾기한 카드가 없어요!\n학습/복습 화면에서 카드의 ☆ 별을 눌러 추가하세요.');
+    return;
+  }
+  favOnly = !favOnly;
+  renderCatCheckGroups();
+}
+
 function applyCatSelect() {
   updateCatSelectLabel();
   document.getElementById('cat-select-panel').classList.remove('open');
@@ -7799,6 +7877,10 @@ function applyCatSelect() {
 
 function updateCatSelectLabel() {
   const label = document.getElementById('cat-select-label');
+  if (favOnly && currentSubject==='arch') {
+    label.textContent = `⭐ 즐겨찾기 (${favSet.size}장)`;
+    return;
+  }
   const allCats = [...new Set(cards.map(c => c.cat))];
   if (selectedCats.size === 0 || selectedCats.size === allCats.length) {
     label.textContent = '📚 단원 선택 (전체)';
@@ -7840,6 +7922,7 @@ function switchSubject(subj) {
   if (subj === currentSubject) return;
   saveSubjState();
   currentSubject = subj;
+  if (subj === 'eng') favOnly = false;  // 영단어엔 즐겨찾기 없음
   document.getElementById('subj-arch').classList.toggle('active', subj==='arch');
   document.getElementById('subj-eng').classList.toggle('active', subj==='eng');
   document.getElementById('app-title').textContent = subj==='arch' ? '🍬 마법 플래시카드' : '🍬 마법 영단어';
@@ -12077,7 +12160,7 @@ function onCardCorrect() {
 
 
 document.getElementById('modal-type').addEventListener('change', toggleModalType);
-load(); loadCats(); renderCats(); updateTrashBadge(); updateCatSelectLabel(); switchTab('study');
+load(); loadCats(); loadFav(); renderCats(); updateTrashBadge(); updateCatSelectLabel(); switchTab('study');
 initTier();
 checkAttendancePenalty();
 initQuest();
